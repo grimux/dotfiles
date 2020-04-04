@@ -1,0 +1,1 @@
+-o /mnt/x/Videos/%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s --add-metadata --merge-output-format mkv

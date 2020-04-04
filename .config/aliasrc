@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+alias sch="cd /mnt/s/Documents/School/20sp" \
+	fo="cd /mnt/s/Documents/School/20sp/CS\ 565" \
+	net="cd /mnt/s/Documents/School/20sp/IS\ 473" \
+	os="cd /mnt/s/Documents/School/20sp/CS\ 433" \
+	hm="cd ~" \
+	ka="killall" \
+	ls="ls -l --color=auto --group-directories-first" \
+	la="ls -lA --color=auto --group-directories-first" \
+	f="ranger" \
+	sf="sudo ranger" \
+	e="explorer.exe ." \
+	x="exit" \
+	t="tmux" \
+	c="calcurse" \
+	vim="nvim" \
+	yt="youtube-dl" \
+	ytm="youtube-dl --config-location ~/.config/youtube-dl/music" \
+	ytp="youtube-dl --config-location ~/.config/youtube-dl/playlist" \
