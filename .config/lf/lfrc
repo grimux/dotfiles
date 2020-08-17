@@ -1,0 +1,12 @@
+# Jacob's lf settings
+
+# Basic setup
+set shell zsh
+set ifs "\n"
+set color256
+set icons
+set period 1
+
+# Bindings
+map D delete
+
