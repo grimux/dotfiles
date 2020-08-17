@@ -10,16 +10,24 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'iCyMind/NeoSolarized'
 Plug 'tomasr/molokai'
 Plug 'tpope/vim-fugitive'
+Plug 'dracula/vim',{'as':'dracula'}
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'nanotech/jellybeans.vim'
+Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+Plug 'turbio/bracey.vim'
 call plug#end()
 
 "--- Color and theme options ---"
 set termguicolors
-"set bg=light
+set bg=dark
 
 " NeoSolarized theme
 "colorscheme NeoSolarized
+
+" Dracula
+"colorscheme dracula
+"let g:airline_theme='dracula'
+"let g:dracula_terminal_italica=1
 
 " onedark theme
 "colorscheme onedark
@@ -69,17 +77,10 @@ function TrimWhiteSpace()
 	%s/\s*$//
 	''
 endfunction
-
 map <F3> :call TrimWhiteSpace()<CR>
 
 " Open corresponding .pdf/.html or preview
 map <leader>p :!opout <c-r>%<CR><CR>
-
-" Skip multiple lines
-nmap <S-j> 15j
-nmap <S-k> 15k
-nmap <S-l> 5w
-nmap <S-h> 5b
 
 " Splits open at the bottom and right, which is non-retarded, unlike vim 
 set splitbelow splitright
@@ -90,12 +91,19 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-" Run make command on Makefile
+" Run make command
 map <leader>m :w \| !make<CR>
 map <leader>c :w \| !make clean<CR>
 
 " Replace all is aliased to S.
 	nnoremap S :%s//g<Left><Left>
+
+" Insert date and timestamp
+ 	nnoremap <F5> "=strftime("%m/%d/%Y %I:%M %p")<CR>P
+	inoremap <F5> <C-R>=strftime("%m/%d/%Y %I:%M %p")<CR>
+
+" Start Bracey (html live server)
+nnoremap <F4> :Bracey<CR>
 
 " Setting syntax of unknown files
 au BufRead,BufNewFile *.ys set filetype=asm
@@ -113,3 +121,4 @@ else
 	let &t_SI = "\e[5 q"
 	let &t_EI = "\e[5 q"
 endif
+
