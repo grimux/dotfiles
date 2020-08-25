@@ -1,0 +1,37 @@
+#!/usr/bin/env sh
+# This scrip will start the VsXsrv X server and then start dwm-gaps
+# It will also close the X server after a ctrl-c interupt
+
+close() {
+	killall dwm
+	cmd.exe /C taskkill /F /T /IM vcxsrv.exe
+	cmd.exe /C SystemTrayRefresh.exe
+	clear
+}
+
+server=/mnt/c/Program\ Files/VcXsrv/vcxsrv.exe
+
+if [ ! -f "$server" ] ; then
+	echo warning!
+	echo "$server" not found!
+	exit
+fi
+
+if (( ! cmd.exe /C tasklist | grep vcxsrv )); 
+then
+	"$server" -fullscreen -wgl -keyhook -ac >/dev/null 2>&1 &
+fi
+
+~/.fehbg
+xcompmgr >/dev/null 2>&1 &
+dwm >/dev/null 2>&1 &
+
+trap '{ close; exit 0; }' INT
+while (( ps | grep dwm ))
+do
+	clear
+	echo dwm is running...
+	echo CTRL-C to exit.
+	sleep 1h
+done
+
