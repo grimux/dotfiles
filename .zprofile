@@ -7,7 +7,7 @@ export EDITOR="nvim"
 export READER="SumatraPDF.exe"
 export FILE="ranger"
 #export PAGER="most"
-export GITCSS="$HOME/Documents/Resources/github-pandoc.css"
+export GITCSS="/mnt/s/tools/web/github-pandoc.css"
 export ZDOTDIR="$HOME/.config/zsh"
 #export TERMINAL="xterm-256color"
 export TERMINAL="st"
@@ -15,26 +15,6 @@ export WSLENV="/mnt/s/tools:/mnt/c/Program\ Files/SumatraPDF"
 
 # WSL 2 Configuration
 export DISPLAY=$(grep nameserver /etc/resolv.conf | awk '{print $2}'):0
-
-# Prompt Colors
-#orange=$(tput setaf 202);
-#yellow=$(tput setaf 003);
-#green=$(tput setaf 012);
-#red=$(tput setaf 009);
-#blue=$(tput setaf 004);
-#purple=$(tput setaf 005);
-#white=$(tput setaf 007);
-#grey=$(tput setaf 236);
-#bold=$(tput bold);
-#reset=$(tput sgr0);
-#
-#PS1="\[${green}\]\u";	# username
-#PS1+="\[${blue}\]@";			# @ symbol
-#PS1+="\[${purple}\]\h: ";		# host (computer name)
-#PS1+="\[${yellow}\]\W";			# working dir
-#PS1+="\[${green}\]\\$ ";		# '$' prompt
-#PS1+="\[${reset}\]";			# color reset
-export PS1;
 
 # less/man colors
 export LESS=-R
@@ -75,7 +55,3 @@ stty -ixon
 alias load_nvm='export NVM_DIR="$HOME/.local/nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"'
 alias node='unalias node npm && load_nvm && node'
 alias npm='unalias node npm && load_nvm && npm'
-
-# Automatically start the Windows X-server
-$HOME/.local/bin/startx
-clear
