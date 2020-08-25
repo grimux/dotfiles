@@ -7,27 +7,25 @@ Plug 'junegunn/goyo.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'joshdick/onedark.vim'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'iCyMind/NeoSolarized'
 Plug 'tomasr/molokai'
 Plug 'tpope/vim-fugitive'
 Plug 'dracula/vim',{'as':'dracula'}
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'nanotech/jellybeans.vim'
 Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' }
+Plug 'vimwiki/vimwiki'
 Plug 'turbio/bracey.vim'
+Plug 'ap/vim-css-color'
 call plug#end()
 
 "--- Color and theme options ---"
 set termguicolors
-set bg=dark
-
-" NeoSolarized theme
-"colorscheme NeoSolarized
+set bg=light
 
 " Dracula
 "colorscheme dracula
 "let g:airline_theme='dracula'
-"let g:dracula_terminal_italica=1
+"let g:dracula_terminal_italics=1
 
 " onedark theme
 "colorscheme onedark
@@ -38,11 +36,10 @@ set bg=dark
 colorscheme palenight
 let g:airline_theme='palenight'
 let g:palenight_terminal_italics=1
-
+"----------------------------------"
 
 " Some basic things
-let &t_SI = "\e[6 q"
-let &t_EI = "\e[2 q"
+set nocompatible
 set autoindent
 syntax on
 set encoding=utf-8
@@ -55,19 +52,21 @@ nnoremap <SPACE> @q
 " Enable autocompletion:
 set wildmode=longest,list,full
 
+" vimwiki settings
+let g:vimwiki_list = [{
+	\ 'automatic_nested_syntaxes': 1,
+	\ 'path_html': '$HOME/Documents/vimwiki/_site',
+	\ 'path': '$HOME/Documents/vimwiki',
+	\ 'template_path': '$HOME/Documents/vimwiki/templates',
+	\ 'syntax': 'markdown',
+	\ 'ext': '.md',
+	\ 'custom_wiki2html': 'vimwiki_markdown'
+\}]
+map <leader>wm :VimwikiAll2HTML<CR>
+let g:vimwiki_global_ext = 0
+
 " Goyo plugin makes text more readable when writing prose:
 map <leader>f :Goyo \| set linebreak \| set bg=dark<CR>
-function! s:goyo_enter()
-	set bg=dark
-endfunction
-
-function! s:goyo_leave()
-	set bg=dark
-endfunction
-autocmd User GoyoEnter nested call <SID>goyo_enter()
-autocmd User GoyoEnter nested call <SID>goyo_leave()
-
-map <leader>q :set bg=dark<CR>
 
 " Spell-check set to <leader>o, 'o' for 'orthography':
 map <leader>o :setlocal spell! spelllang=en_us<CR>
@@ -96,11 +95,11 @@ map <leader>m :w \| !make<CR>
 map <leader>c :w \| !make clean<CR>
 
 " Replace all is aliased to S.
-	nnoremap S :%s//g<Left><Left>
+nnoremap S :%s//g<Left><Left>
 
 " Insert date and timestamp
- 	nnoremap <F5> "=strftime("%m/%d/%Y %I:%M %p")<CR>P
-	inoremap <F5> <C-R>=strftime("%m/%d/%Y %I:%M %p")<CR>
+nnoremap <F5> "=strftime("%m/%d/%Y %I:%M %p")<CR>P
+inoremap <F5> <C-R>=strftime("%m/%d/%Y %I:%M %p")<CR>
 
 " Start Bracey (html live server)
 nnoremap <F4> :Bracey<CR>
@@ -113,12 +112,3 @@ vmap <C-c> y:new ~/.config/nvim/.vimbuffer<CR>VGp:x<CR> \| :!cat ~/.config/nvim/
 
 " Paste from vimbuffer into vim
 "map <C-v> :r ~/.config/nvim/.vimbuffer<CR>
-
-if exists('$TMUX')
-	let &t_SI = "\ePtumx;\e\e[5 q\e\\"
-	let &t_EI = "\ePtumx;\e\e[5 q\e\\"
-else
-	let &t_SI = "\e[5 q"
-	let &t_EI = "\e[5 q"
-endif
-
