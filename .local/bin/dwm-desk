@@ -22,12 +22,17 @@ then
 	"$server" -fullscreen -wgl -keyhook -ac >/dev/null 2>&1 &
 fi
 
-~/.fehbg
-xcompmgr >/dev/null 2>&1 &
-dwm >/dev/null 2>&1 &
+# Startup
+#------------------------------------------------------------------------
+~/.fehbg				# set background
+xcompmgr >/dev/null 2>&1 &		# start xcompmgr for transparency
+dwm >/dev/null 2>&1 &			# start dwm
+~/.local/bin/dwmbar >/dev/null 2>&1 &	# start dwmbar script to control status bar
+#------------------------------------------------------------------------
 
-trap '{ close; exit 0; }' INT
-while (( ps | grep dwm ))
+# Wait for <C-c> to close
+trap '{ close; exit 0; }' INT	# when ctrl-c is pressed, call the close() function
+while (( ps | grep dwm ))	
 do
 	clear
 	echo dwm is running...
