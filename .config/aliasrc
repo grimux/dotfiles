@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-alias sch="cd /mnt/s/Documents/School/20sp" \
-	fo="cd /mnt/s/Documents/School/20sp/CS\ 565" \
-	net="cd /mnt/s/Documents/School/20sp/IS\ 473" \
-	os="cd /mnt/s/Documents/School/20sp/CS\ 433" \
-	hm="cd ~" \
+alias \
 	ka="killall" \
 	ls="ls -l --color=auto --group-directories-first" \
 	la="ls -lA --color=auto --group-directories-first" \
@@ -12,9 +8,11 @@ alias sch="cd /mnt/s/Documents/School/20sp" \
 	sf="sudo ranger" \
 	e="explorer.exe ." \
 	x="exit" \
-	t="tmux" \
-	c="calcurse" \
+	t="tmux -f ~/.config/tmux/tmux.conf" \
+	c="calcurse -D ~/.config/calcurse" \
 	vim="nvim" \
 	yt="youtube-dl" \
 	ytm="youtube-dl --config-location ~/.config/youtube-dl/music" \
 	ytp="youtube-dl --config-location ~/.config/youtube-dl/playlist" \
+	wiki="nvim -c VimwikiIndex" \
+	cfx="sudo nvim /etc/xrdp/startwm.sh"

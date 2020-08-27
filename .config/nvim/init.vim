@@ -20,7 +20,7 @@ call plug#end()
 
 "--- Color and theme options ---"
 set termguicolors
-set bg=light
+set bg=dark
 
 " Dracula
 "colorscheme dracula

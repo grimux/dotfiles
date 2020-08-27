@@ -1,6 +1,13 @@
 #!/bin/sh
 
+# Time and date function
+time_and_date() {
+	tad="$(date +"%A, %B %d - %I:%M %p")"
+	echo "🕒 $tad"
+}
+
+# Loop to call all status functions
 while :; do
-	xsetroot -name "$(date)"
+	xsetroot -name "$(time_and_date)"
 	sleep 1m
 done

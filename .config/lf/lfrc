@@ -2,11 +2,12 @@
 
 # Basic setup
 set shell zsh
-set ifs "\n"
+set drawbox
 set color256
-set icons
-set period 1
 
 # Bindings
 map D delete
-
+map gmn cd /mnt/
+map gcf cd ~/.config
+map gsc cd ~/.local/bin
+map <f-7> push $mkdir<space>
