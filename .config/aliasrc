@@ -15,4 +15,5 @@ alias \
 	ytm="youtube-dl --config-location ~/.config/youtube-dl/music" \
 	ytp="youtube-dl --config-location ~/.config/youtube-dl/playlist" \
 	wiki="nvim -c VimwikiIndex" \
-	cfx="sudo nvim /etc/xrdp/startwm.sh"
+	y="yadm $*" \
+	sdn="shutdown now" \
