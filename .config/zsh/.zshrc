@@ -2,6 +2,9 @@
 
 # Enable colors and change prompt:
 autoload -U colors && colors
+# My Colors
+#PS1="%B%{$fg[blue][%{$fg[yellow]%}%n%{$fg[cyan]%}@%{$fg[white]%}%M %{$fg[black]%}%1~%{$fg[blue]%}]%{$reset_color%}$%b "
+# Luke Colors
 PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}]%{$reset_color%}$%b "
 #PS1="%B%{$fg[blue]%}[%{$fg[magenta]%}%n%{$fg[green]%}@%{$fg[orange]%}%M %{$fg[yellow]%}%~%{$fg[blue]%}]%{$reset_color%}$%b "
 
@@ -71,6 +74,3 @@ bindkey '^e' edit-command-line
 
 # Load zsh-syntax-highlighting; should be last.
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
