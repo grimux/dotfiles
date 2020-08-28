@@ -4,6 +4,7 @@
 set shell zsh
 set drawbox
 set color256
+#set icons
 
 # Bindings
 map D delete
