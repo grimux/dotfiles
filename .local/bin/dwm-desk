@@ -4,6 +4,8 @@
 
 close() {
 	killall dwm
+	killall dwmbar
+	killall xcompmgr
 	cmd.exe /C taskkill /F /T /IM vcxsrv.exe
 	cmd.exe /C SystemTrayRefresh.exe
 	clear
