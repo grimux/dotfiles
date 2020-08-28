@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+# Script to toggle my home wifi on and off
+
+card=wlp12s0:
+discon="$card disconnected"
+home="J&S Wifi"
+note="Note8 Wifi"
+
+if ( false ); # need to find a way to properly check when my network is not avalible
+then
+	echo "$home not avalible.  Are you at home?"
+	exit
+elif ( nmcli | grep -q "$card connected to $note" );
+then
+	ntwifi
+	echo "Connecting to $home..."
+	nmcli con up "$home" >/dev/null
+elif ( nmcli | grep -q "$discon" );
+then
+	echo "Connecting to $home..."
+	nmcli con up "$home" >/dev/null
+elif ( nmcli | grep -q "$home" );
+then
+	echo "Disconnecting from $home..."
+	nmcli con down "$home" >/dev/null
+fi
+
+echo "Success!"

@@ -1,0 +1,64 @@
+#!/usr/bin/env sh
+# Script to toggle on and off the share drive
+# must be connected to the home wifi
+
+# Variables
+card=wlp12s0:
+discon="$card disconnected"
+wifi="J&S Wifi"
+conect="$card connected to $wifi"
+
+# Fuctions
+mountit() {
+	echo "Mounting share drive into /mnt/..."
+	sudo mount -t cifs -o username=Jake,password=deutschland,gid=users,file_mode=0777,dir_mode=0777 //10.10.10.10/Share\ Drive /mnt/x
+	echo "Share drive mounted!"
+}
+
+umountit() {
+	echo "Unmounting share drive..."
+	sudo umount /mnt/
+	echo "Share drive unmounted!"
+}
+
+# Check wifi connection
+# Activate home wifi if not connected
+echo "Checking connection..."
+
+if ( ( nmcli | grep -q "$discon" ) || ( nmcli | grep -q "$card connected to Note8 Wifi" ) );
+then
+	echo "Not connected to $wifi!"
+	hmwifi
+elif ( nmcli | grep -q "$conect" );
+then
+	echo "Connection okay!"
+else
+	echo "Connected to unknown network!  Please disconnect."
+	exit
+fi
+
+# Check the /mnt/ directory
+# if share drive is already mounted, will umount it
+# if somthing else is mounted in /mnt/, it will be umounted and share drive will be mounted
+echo "Checking /mnt/..."
+if  [[ "$(find /mnt -maxdepth 1)" = '/mnt' ]];
+then
+	echo "/mnt/ is empty."
+	mountit
+elif [ -d "/mnt/Archive (Jake)" ] ;
+then
+	echo "Share drive found!"
+	umountit
+else
+	echo "/mnt/ is not empty!"
+	echo "It contains..."
+	for i in /mnt/*;
+	do
+		echo $i
+	done
+	echo "/mnt/ will be unmounted. Save work."
+	read -p "Press enter to continue."
+	sudo umount /mnt/
+	echo "/mnt/ unmounted!"
+	mountit
+fi

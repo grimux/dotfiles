@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+# Script to toggle my note8 wifi on and off
+
+card=wlp12s0:
+discon="$card disconnected"
+home="J&S Wifi"
+note="Note8 Wifi"
+
+if ( ! nmcli device wifi list | grep -q "86B8" );
+then
+	echo "$note not avalible.  Is your hotspot turned on?"
+	exit
+elif ( nmcli | grep -q "$card connected to $home" );
+then
+	hmwifi
+	echo "Connecting to $note..."
+	nmcli con up "$note" >/dev/null
+elif ( nmcli | grep -q "$discon" );
+then
+	echo "Connecting to $note..."
+	nmcli con up "$note" >/dev/null
+elif ( nmcli | grep -q "$note" );
+then
+	echo "Disconnecting from $note..."
+	nmcli con down "$note" >/dev/null
+fi
+
+echo "Success!"

@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+# This script will connect to the Home wifi (if not connected) and then run syncthing
+
+card=wlp12s0
+
+if ( ! nmcli | grep -q 'J&S Wifi' );
+then
+	hmwifi
+	syncthing -no-browser
+else
+	syncthing -no-browser
+fi
+
