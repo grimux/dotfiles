@@ -10,14 +10,14 @@ conect="$card connected to $wifi"
 
 # Fuctions
 mountit() {
-	echo "Mounting share drive into /mnt/..."
-	sudo mount -t cifs -o username=Jake,password=deutschland,gid=users,file_mode=0777,dir_mode=0777 //10.10.10.10/Share\ Drive /mnt/x
+	echo "Mounting share drive into /mnt/x..."
+	sudo mount -t cifs -o username=Jake,password=deutschland,gid=users,file_mode=0777,dir_mode=0777 //10.10.10.10/Share\ Drive /mnt/x/
 	echo "Share drive mounted!"
 }
 
 umountit() {
 	echo "Unmounting share drive..."
-	sudo umount /mnt/
+	sudo umount /mnt/x
 	echo "Share drive unmounted!"
 }
 
@@ -40,25 +40,25 @@ fi
 # Check the /mnt/ directory
 # if share drive is already mounted, will umount it
 # if somthing else is mounted in /mnt/, it will be umounted and share drive will be mounted
-echo "Checking /mnt/..."
-if  [[ "$(find /mnt -maxdepth 1)" = '/mnt' ]];
+echo "Checking /mnt/x..."
+if  [[ "$(find /mnt/x -maxdepth 1)" = '/mnt/x' ]];
 then
-	echo "/mnt/ is empty."
+	echo "/mnt/x is empty."
 	mountit
-elif [ -d "/mnt/Archive (Jake)" ] ;
+elif [ -d "/mnt/x/Archive (Jake)" ] ;
 then
 	echo "Share drive found!"
 	umountit
 else
-	echo "/mnt/ is not empty!"
+	echo "/mnt/x is not empty!"
 	echo "It contains..."
-	for i in /mnt/*;
+	for i in /mnt/x/*;
 	do
 		echo $i
 	done
-	echo "/mnt/ will be unmounted. Save work."
+	echo "/mnt/x will be unmounted. Save work."
 	read -p "Press enter to continue."
-	sudo umount /mnt/
-	echo "/mnt/ unmounted!"
+	sudo umount /mnt/x
+	echo "/mnt/x unmounted!"
 	mountit
 fi
