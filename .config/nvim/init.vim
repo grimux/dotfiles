@@ -48,6 +48,7 @@ set mouse=a
 map <F1> :Magit<CR>
 map <F2> :NERDTree<CR>
 nnoremap <SPACE> @q
+map Q gq
 
 " Enable autocompletion:
 set wildmode=longest,list,full
