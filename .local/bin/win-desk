@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Startup
+#------------------------------------------------------------------------
+cd ~
+~/.fehbg				# set background
+xcompmgr >/dev/null 2>&1 &		# start xcompmgr for transparency
+~/.local/bin/dwmbar >/dev/null 2>&1 &	# start dwmbar script to control status bar
+dwm					# start dwm
+#------------------------------------------------------------------------
