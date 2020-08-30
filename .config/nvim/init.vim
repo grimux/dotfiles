@@ -36,6 +36,8 @@ set bg=dark
 colorscheme palenight
 let g:airline_theme='palenight'
 let g:palenight_terminal_italics=1
+" Transparent background when using themes
+autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
 "----------------------------------"
 
 " Some basic things
@@ -82,7 +84,7 @@ map <F3> :call TrimWhiteSpace()<CR>
 " Open corresponding .pdf/.html or preview
 map <leader>p :!opout <c-r>%<CR><CR>
 
-" Splits open at the bottom and right, which is non-retarded, unlike vim 
+" Splits open at the bottom and right, which is non-retarded, unlike vim
 set splitbelow splitright
 
 " Shortcutting split navigation, saving a keypress:
