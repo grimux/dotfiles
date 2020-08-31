@@ -69,7 +69,11 @@ map <leader>wm :VimwikiAll2HTML<CR>
 let g:vimwiki_global_ext = 0
 
 " Goyo plugin makes text more readable when writing prose:
-map <leader>f :Goyo \| set linebreak \| set bg=dark<CR>
+map <leader>f :Goyo <BAR> set linebreak<CR>
+function! s:goyo_leave()
+	hi Normal guibg=NONE
+endfunction
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " Spell-check set to <leader>o, 'o' for 'orthography':
 map <leader>o :setlocal spell! spelllang=en_us<CR>
