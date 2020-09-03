@@ -61,6 +61,8 @@ let g:vimwiki_list = [{
 	\ 'path_html': '$HOME/Documents/vimwiki/_site',
 	\ 'path': '$HOME/Documents/vimwiki',
 	\ 'template_path': '$HOME/Documents/vimwiki/templates',
+	\ 'template_default': 'default',
+	\ 'template_ext': '.html',
 	\ 'syntax': 'markdown',
 	\ 'ext': '.md',
 	\ 'custom_wiki2html': 'vimwiki_markdown'
@@ -70,9 +72,13 @@ let g:vimwiki_global_ext = 0
 
 " Goyo plugin makes text more readable when writing prose:
 map <leader>f :Goyo <BAR> set linebreak<CR>
-function! s:goyo_leave()
-	hi Normal guibg=NONE
+function! s:goyo_enter()
+	hi Normal guibg=NONE ctermbg=NONE
 endfunction
+function! s:goyo_leave()
+	hi Normal guibg=NONE ctermbg=NONE
+endfunction
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " Spell-check set to <leader>o, 'o' for 'orthography':
@@ -107,6 +113,8 @@ nnoremap S :%s//g<Left><Left>
 " Insert date and timestamp
 nnoremap <F5> "=strftime("%m/%d/%Y %I:%M %p")<CR>P
 inoremap <F5> <C-R>=strftime("%m/%d/%Y %I:%M %p")<CR>
+nnoremap <F6> "=strftime("%I:%M %p")<CR>P
+inoremap <F6> <C-R>=strftime("%I:%M %p")<CR>
 
 " Start Bracey (html live server)
 nnoremap <F4> :Bracey<CR>
