@@ -19,7 +19,7 @@ if [ ! -f "$server" ] ; then
 	exit
 fi
 
-if (( ! cmd.exe /C tasklist | grep vcxsrv )); 
+if [[ ! $(cmd.exe /C tasklist | grep vcxsrv) ]]; 
 then
 	"$server" -fullscreen -wgl -keyhook -ac >/dev/null 2>&1 &
 fi
@@ -34,7 +34,7 @@ dwm >/dev/null 2>&1 &			# start dwm
 
 # Wait for <C-c> to close
 trap '{ close; exit 0; }' INT	# when ctrl-c is pressed, call the close() function
-while (( ps | grep dwm ))	
+while [[ $(ps | grep dwm) ]]
 do
 	clear
 	echo dwm is running...
