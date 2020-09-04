@@ -56,17 +56,25 @@ map Q gq
 set wildmode=longest,list,full
 
 " vimwiki settings
-let g:vimwiki_list = [{
-	\ 'automatic_nested_syntaxes': 1,
-	\ 'path_html': '$HOME/Documents/vimwiki/_site',
-	\ 'path': '$HOME/Documents/vimwiki',
-	\ 'template_path': '$HOME/Documents/vimwiki/templates',
-	\ 'template_default': 'default',
-	\ 'template_ext': '.html',
-	\ 'syntax': 'markdown',
-	\ 'ext': '.md',
-	\ 'custom_wiki2html': 'vimwiki_markdown'
-\}]
+let vimwiki_jake = {}
+let vimwiki_jake.path = '$HOME/Documents/vimwiki'
+let vimwiki_jake.path_html = '$HOME/Documents/vimwiki/_site'
+let vimwiki_jake.template_path = '$HOME/Documents/vimwiki/templates'
+let vimwiki_jake.template_default = 'default'
+let vimwiki_jake.syntax = 'markdown'
+let vimwiki_jake.ext = '.md'
+let vimwiki_jake.custom_wiki2html = 'vimwiki_markdown'
+
+let vimwiki_serena = {}
+let vimwiki_serena.path = '$HOME/Documents/vimwiki-serena'
+let vimwiki_serena.path_html = '$HOME/Documents/vimwiki-serena/_site'
+let vimwiki_serena.template_path = '$HOME/Documents/vimwiki-serena/templates'
+let vimwiki_serena.template_default = 'default'
+let vimwiki_serena.syntax = 'markdown'
+let vimwiki_serena.ext = '.md'
+let vimwiki_serena.custom_wiki2html = 'vimwiki_markdown'
+
+let g:vimwiki_list = [vimwiki_jake, vimwiki_serena]
 map <leader>wm :VimwikiAll2HTML<CR>
 let g:vimwiki_global_ext = 0
 
@@ -111,10 +119,12 @@ map <leader>c :w \| !make clean<CR>
 nnoremap S :%s//g<Left><Left>
 
 " Insert date and timestamp
-nnoremap <F5> "=strftime("%m/%d/%Y %I:%M %p")<CR>P
-inoremap <F5> <C-R>=strftime("%m/%d/%Y %I:%M %p")<CR>
+nnoremap <F5> "=strftime("%A, %B %d, %Y")<CR>P
+inoremap <F5> <C-R>=strftime("%A, %B %d, %Y")<CR>
+map <leader>d "=strftime("%A, %B %d, %Y")<CR>P
 nnoremap <F6> "=strftime("%I:%M %p")<CR>P
 inoremap <F6> <C-R>=strftime("%I:%M %p")<CR>
+map <leader>t "=strftime("%I:%M %p")<CR>P
 
 " Start Bracey (html live server)
 nnoremap <F4> :Bracey<CR>
