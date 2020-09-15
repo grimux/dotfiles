@@ -1,10 +1,16 @@
 "---People---"
+https://www.thejimquisition.com/blog-feed.xml
 http://lukesmith.xyz/rss.xml
 
 " "
 "---Tech---"
 https://www.archlinux.org/feeds/packages/
 https://ubuntu.com/blog/feed "~Ubuntu News"
+
+" "
+"---Repos---"
+https://github.com/Synthlight/Hellpoint-Save-Editor/commits/master.atom
+https://github.com/mburbea/koar-item-editor/commits/master.atom
 
 " "
 "---Gaming---"
