@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/bin/bash
 # This scrip will start the VsXsrv X server and then start dwm-gaps
 # It will also close the X server after a ctrl-c interupt
 
