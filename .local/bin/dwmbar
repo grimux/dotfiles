@@ -6,8 +6,13 @@ time_and_date() {
 	echo "🕒 $tad"
 }
 
+battery() {
+	batt=$(cat /sys/class/power_supply/BAT0/capacity)
+	echo "🔋$batt"
+}
+
 # Loop to call all status functions
 while :; do
-	xsetroot -name "$(time_and_date)"
+	xsetroot -name "$(battery) | $(time_and_date)"
 	sleep 1m
 done
