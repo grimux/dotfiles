@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Time and date function
 time_and_date() {

@@ -5,7 +5,8 @@
 
 export EDITOR="nvim"
 export READER="SumatraPDF.exe"
-export FILE="ranger"
+export FILE="lf"
+export BROWSER="brave.exe"
 #export PAGER="most"
 export GITCSS="/mnt/s/tools/web/github-pandoc.css"
 export ZDOTDIR="$HOME/.config/zsh"

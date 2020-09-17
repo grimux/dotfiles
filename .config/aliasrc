@@ -17,3 +17,4 @@ alias \
 	wiki="nvim -c VimwikiIndex" \
 	y="yadm $*" \
 	sdn="shutdown now" \
+	n="notes $*" \

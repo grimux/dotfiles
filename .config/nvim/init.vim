@@ -36,6 +36,8 @@ set bg=dark
 colorscheme palenight
 let g:airline_theme='palenight'
 let g:palenight_terminal_italics=1
+" Transparent background when using themes
+autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
 "----------------------------------"
 
 " Some basic things
@@ -48,25 +50,45 @@ set mouse=a
 map <F1> :Magit<CR>
 map <F2> :NERDTree<CR>
 nnoremap <SPACE> @q
+map Q gq
 
 " Enable autocompletion:
 set wildmode=longest,list,full
 
 " vimwiki settings
-let g:vimwiki_list = [{
-	\ 'automatic_nested_syntaxes': 1,
-	\ 'path_html': '$HOME/Documents/vimwiki/_site',
-	\ 'path': '$HOME/Documents/vimwiki',
-	\ 'template_path': '$HOME/Documents/vimwiki/templates',
-	\ 'syntax': 'markdown',
-	\ 'ext': '.md',
-	\ 'custom_wiki2html': 'vimwiki_markdown'
-\}]
+let vimwiki_jake = {}
+let vimwiki_jake.path = '$HOME/Documents/vimwiki'
+let vimwiki_jake.path_html = '$HOME/Documents/vimwiki/_site'
+let vimwiki_jake.template_path = '$HOME/Documents/vimwiki/templates'
+let vimwiki_jake.template_default = 'default'
+let vimwiki_jake.template_ext = '.html'
+let vimwiki_jake.syntax = 'markdown'
+let vimwiki_jake.ext = '.md'
+let vimwiki_jake.custom_wiki2html = 'vimwiki_markdown'
+
+let vimwiki_serena = {}
+let vimwiki_serena.path = '$HOME/Documents/vimwiki-serena'
+let vimwiki_serena.path_html = '$HOME/Documents/vimwiki-serena/_site'
+let vimwiki_serena.template_path = '$HOME/Documents/vimwiki-serena/templates'
+let vimwiki_serena.template_default = 'default'
+let vimwiki_serena.syntax = 'markdown'
+let vimwiki_serena.ext = '.md'
+let vimwiki_serena.custom_wiki2html = 'vimwiki_markdown'
+
+let g:vimwiki_list = [vimwiki_jake, vimwiki_serena]
 map <leader>wm :VimwikiAll2HTML<CR>
 let g:vimwiki_global_ext = 0
 
 " Goyo plugin makes text more readable when writing prose:
-map <leader>f :Goyo \| set linebreak \| set bg=dark<CR>
+map <leader>f :Goyo <BAR> set linebreak<CR>
+function! s:goyo_enter()
+	hi Normal guibg=NONE ctermbg=NONE
+endfunction
+function! s:goyo_leave()
+	hi Normal guibg=NONE ctermbg=NONE
+endfunction
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " Spell-check set to <leader>o, 'o' for 'orthography':
 map <leader>o :setlocal spell! spelllang=en_us<CR>
@@ -81,7 +103,7 @@ map <F3> :call TrimWhiteSpace()<CR>
 " Open corresponding .pdf/.html or preview
 map <leader>p :!opout <c-r>%<CR><CR>
 
-" Splits open at the bottom and right, which is non-retarded, unlike vim 
+" Splits open at the bottom and right, which is non-retarded, unlike vim
 set splitbelow splitright
 
 " Shortcutting split navigation, saving a keypress:
@@ -98,8 +120,12 @@ map <leader>c :w \| !make clean<CR>
 nnoremap S :%s//g<Left><Left>
 
 " Insert date and timestamp
-nnoremap <F5> "=strftime("%m/%d/%Y %I:%M %p")<CR>P
-inoremap <F5> <C-R>=strftime("%m/%d/%Y %I:%M %p")<CR>
+nnoremap <F5> "=strftime("%A, %B %d, %Y")<CR>P
+inoremap <F5> <C-R>=strftime("%A, %B %d, %Y")<CR>
+map <leader>d "=strftime("%A, %B %d, %Y")<CR>P
+nnoremap <F6> "=strftime("%I:%M %p")<CR>P
+inoremap <F6> <C-R>=strftime("%I:%M %p")<CR>
+map <leader>t "=strftime("%I:%M %p")<CR>P
 
 " Start Bracey (html live server)
 nnoremap <F4> :Bracey<CR>

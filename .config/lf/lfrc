@@ -11,4 +11,9 @@ map D delete
 map gmn cd /mnt/
 map gcf cd ~/.config
 map gsc cd ~/.local/bin
-map <f-7> push $mkdir<space>
+map <f-7> push :mkdir<space>
+map B bulkrename
+
+# Custom commands
+cmd bulkrename $vidir
+cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
