@@ -47,6 +47,7 @@ syntax on
 set encoding=utf-8
 set number relativenumber
 set mouse=a
+set pastetoggle=<F8>
 map <F1> :Magit<CR>
 map <F2> :NERDTree<CR>
 nnoremap <SPACE> @q
