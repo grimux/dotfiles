@@ -16,5 +16,6 @@ alias \
 	ytp="youtube-dl --config-location ~/.config/youtube-dl/playlist" \
 	wiki="nvim -c VimwikiIndex" \
 	y="yadm $*" \
+	ys="yadm status" \
 	sdn="shutdown now" \
 	n="notes $*" \
