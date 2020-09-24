@@ -82,7 +82,7 @@ static Key keys[] = {
 	{ MODKEY,                       XK_space,  zoom,           {0} },
 	//{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ MODKEY,	                XK_q,      killclient,     {0} },
-	{ MODKEY|ShiftMask,             XK_q,      spawn,          SHCMD("st -e killall Xorg") },
+	{ MODKEY,                       XK_F7,     spawn,          SHCMD("toggle-alpha") },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
