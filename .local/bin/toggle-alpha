@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Script to toggle window alpha inside of a window manager
+compositor=xcompmgr
+if pgrep $compositor &>/dev/null; then
+	echo "Turning $compositor OFF"
+	pkill $compositor &
+else
+	echo "Turning $compositor ON"
+	$compositor &
+fi
+
+exit 0
