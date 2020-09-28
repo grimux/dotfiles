@@ -118,9 +118,9 @@ endfunction
 "--- vimwiki settings
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 let vimwiki_jake = {}
-let vimwiki_jake.path = '$HOME/Documents/vimwiki'
-let vimwiki_jake.path_html = '$HOME/Documents/vimwiki/_site'
-let vimwiki_jake.template_path = '$HOME/Documents/vimwiki/templates'
+let vimwiki_jake.path = '$HOME/vimwiki'
+let vimwiki_jake.path_html = '$HOME/vimwiki/_site'
+let vimwiki_jake.template_path = '$HOME/vimwiki/templates'
 let vimwiki_jake.template_default = 'default'
 let vimwiki_jake.template_ext = '.html'
 let vimwiki_jake.syntax = 'markdown'
