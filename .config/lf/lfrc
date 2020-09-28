@@ -17,3 +17,4 @@ map B bulkrename
 # Custom commands
 cmd bulkrename $vidir
 cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
+cmd chmod $chmod $* "$(echo $fx | tr ' ' '\ ')"
