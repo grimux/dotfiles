@@ -8,7 +8,7 @@ time_and_date() {
 
 battery() {
 	batt=$(cat /sys/class/power_supply/BAT0/capacity)
-	echo "🔋$batt"
+	echo " $batt%"
 }
 
 # Loop to call all status functions
