@@ -19,3 +19,4 @@ alias \
 	ys="yadm status" \
 	sdn="shutdown now" \
 	n="notes $*" \
+	bat="cmd.exe /c $*" \
