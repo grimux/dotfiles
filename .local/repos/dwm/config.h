@@ -1,24 +1,40 @@
+/*
+	DWM config
+	Jacob Meredith
+*/
+
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 3;        /* border pixel of windows */
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int gappx     = 11;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
+static const char *fonts[]          = { "Inconsolata Nerd Font:size=10" };
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
+static const char col_gray2[]       = "#44475a";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
-static const unsigned int baralpha = 0xd0;
+static const char col_white[]       = "#ffffff";
+static const char col_black[]       = "#000000";
+static const char col_purple[]      = "#bd93f9";
+static const char col_green[]       = "#50fa7b";
+static const char col_yellow[]      = "#f1fa8c";
+static const char col_magenta[]     = "#ff79c6";
+static const char col_bg_d[]        = "#282a36";
+static const char col_bg_c[]        = "#1C1C1C";
+static const char col_fg_w[]        = "#F8F8F2";
+static const char col_fg_y[]        = "#F9CE74";
+static const char col_fg_o[]        = "#EA7217";
+static const char col_cyan[]        = "#8be9fd";
+static const unsigned int baralpha = 0xee;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeNorm] = { col_fg_w, col_bg_c, col_bg_c },
+	[SchemeSel]  = { col_bg_c, col_fg_y,  col_purple },
 };
 static const unsigned int alphas[][3]      = {
 	/*               fg      bg        border     */
@@ -27,7 +43,8 @@ static const unsigned int alphas[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+//static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -40,6 +57,7 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
+#include "layouts.c"
 static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
@@ -49,6 +67,7 @@ static const Layout layouts[] = {
 	{ "[]=",      tile },    /* first entry is default */
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+	{ "HHH",      grid },
 };
 
 /* key definitions */
@@ -68,43 +87,63 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
-	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,	                XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	//{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
-	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,			XK_n,	   spawn,	   SHCMD("st -e nvim -c VimwikiIndex") },
-	{ MODKEY,                       XK_space,  zoom,           {0} },
-	//{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY,	                XK_q,      killclient,     {0} },
-	{ MODKEY,                       XK_F7,     spawn,          SHCMD("toggle-alpha") },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
-	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-	{ MODKEY,                       XK_minus,  setgaps,        {.i = -1 } },
-	{ MODKEY,                       XK_equal,  setgaps,        {.i = +1 } },
-	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = 0  } },
-	TAGKEYS(                        XK_1,                      0)
-	TAGKEYS(                        XK_2,                      1)
-	TAGKEYS(                        XK_3,                      2)
-	TAGKEYS(                        XK_4,                      3)
-	TAGKEYS(                        XK_5,                      4)
-	TAGKEYS(                        XK_6,                      5)
-	TAGKEYS(                        XK_7,                      6)
-	TAGKEYS(                        XK_8,                      7)
-	TAGKEYS(                        XK_9,                      8)
+	/* modifier            key            function        argument */
+	{ MODKEY|ShiftMask,    XK_Return,     spawn,          {.v = dmenucmd } },
+	{ MODKEY,	       XK_Return,     spawn,          {.v = termcmd } },
+	{ MODKEY,              XK_b,          togglebar,      {0} },
+	{ MODKEY,              XK_j,          focusstack,     {.i = +1 } },
+	{ MODKEY,              XK_k,          focusstack,     {.i = -1 } },
+	{ MODKEY|ShiftMask,    XK_j,          rotatestack,    {.i = +1 } },
+	{ MODKEY|ShiftMask,    XK_k,          rotatestack,    {.i = -1 } },
+	{ MODKEY,              XK_i,          incnmaster,     {.i = +1 } },
+	{ MODKEY,              XK_d,          incnmaster,     {.i = -1 } },
+	{ MODKEY,              XK_h,          setmfact,       {.f = -0.05} },
+	{ MODKEY,              XK_l,          setmfact,       {.f = +0.05} },
+	{ MODKEY,              XK_space,      zoom,           {0} },
+	{ MODKEY,              XK_Tab,        view,           {0} },
+	{ MODKEY,              XK_q,          killclient,     {0} },
+	
+	// Layout manipulation
+	{ ControlMask,         XK_t,          cyclelayout,      {.i = -1 } },
+	{ ControlMask,         XK_f,          cyclelayout,      {.i = +1 } },
+	{ MODKEY,              XK_space,      setlayout,        {0} },
+	{ MODKEY|ShiftMask,    XK_space,      togglefloating,   {0} },
+	{ MODKEY,              XK_0,          view,             {.ui = ~0 } },
+	{ MODKEY|ShiftMask,    XK_0,          tag,              {.ui = ~0 } },
+
+	// Switching to specific layouts
+	{ MODKEY,              XK_t,          setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,              XK_f,          setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,              XK_m,          setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,              XK_g,          setlayout,      {.v = &layouts[3]} },
+
+	{ MODKEY,              XK_comma,      focusmon,       {.i = -1 } },
+	{ MODKEY,              XK_period,     focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,    XK_comma,      tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,    XK_period,     tagmon,         {.i = +1 } },
+	{ MODKEY,              XK_minus,      setgaps,        {.i = -1 } },
+	{ MODKEY,              XK_equal,      setgaps,        {.i = +1 } },
+	{ MODKEY|ShiftMask,    XK_equal,      setgaps,        {.i = 0  } },
+	{ MODKEY|ShiftMask,    XK_q,          quit,           {0} },
+
+	// Switching between monitors
+	
+
+	// Program launching
+	{ MODKEY,              XK_F7,         spawn,          SHCMD("toggle-alpha") },			// toggle alpha
+	{ MODKEY,              XK_n,          spawn,          SHCMD("st -e nvim -c VimwikiIndex") },	// Launch vimwiki
+	{ MODKEY|ShiftMask,    XK_p,          spawn,          SHCMD("passmenu") },
+	
+	// Workspaces
+	TAGKEYS(               XK_1,                      0)
+	TAGKEYS(               XK_2,                      1)
+	TAGKEYS(               XK_3,                      2)
+	TAGKEYS(               XK_4,                      3)
+	TAGKEYS(               XK_5,                      4)
+	TAGKEYS(               XK_6,                      5)
+	TAGKEYS(               XK_7,                      6)
+	TAGKEYS(               XK_8,                      7)
+	TAGKEYS(               XK_9,                      8)
 };
 
 /* button definitions */
