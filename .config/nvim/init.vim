@@ -58,6 +58,7 @@ set mouse=a
 set pastetoggle=<F8>
 set splitbelow splitright
 let mapleader = ","
+set wildmode=longest,list,full
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Remaps
@@ -104,6 +105,9 @@ map <leader>t "=strftime("%I:%M %p")<CR>P
 map <leader>bb :Bracey<CR>
 map <leader>bs :BraceyStop<CR>
 map <leader>br :BraceyReload<CR>
+
+" Run output script
+map <leader>p :!opout <c-r>%<CR><CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Functions
