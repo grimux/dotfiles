@@ -13,28 +13,17 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Inconsolata Nerd Font:size=10" };
 static const char dmenufont[]       = "monospace:size=10";
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#44475a";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_white[]       = "#ffffff";
-static const char col_black[]       = "#000000";
-static const char col_purple[]      = "#bd93f9";
-static const char col_green[]       = "#50fa7b";
-static const char col_yellow[]      = "#f1fa8c";
-static const char col_magenta[]     = "#ff79c6";
-static const char col_bg_d[]        = "#282a36";
-static const char col_bg_c[]        = "#1C1C1C";
-static const char col_fg_w[]        = "#F8F8F2";
-static const char col_fg_y[]        = "#F9CE74";
-static const char col_fg_o[]        = "#EA7217";
-static const char col_cyan[]        = "#8be9fd";
+static const char col_1[]	    = "#282c34"; // background color of bar
+static const char col_2[]	    = "#282c34"; // border color unfocused windows
+static const char col_3[]	    = "#d7d7d7"; //
+static const char col_purple[]	    = "#bd93f9"; // border color focused windows and tags
+static const char col_red[]	    = "#ff5555";
 static const unsigned int baralpha = 0xee;
 static const unsigned int borderalpha = OPAQUE;
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_fg_w, col_bg_c, col_bg_c },
-	[SchemeSel]  = { col_bg_c, col_fg_y,  col_purple },
+	[SchemeNorm] = { col_3, col_1, col_2 },
+	[SchemeSel]  = { col_1, col_purple,  col_red },
 };
 static const unsigned int alphas[][3]      = {
 	/*               fg      bg        border     */
@@ -71,7 +60,7 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -83,7 +72,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
