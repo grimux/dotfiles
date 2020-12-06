@@ -3,10 +3,10 @@
 # It will also close the X server after a ctrl-c interupt
 
 close() {
-	killall dwm
-	killall dwmbar
-	killall xcompmgr
-	killall sleep
+	pkill dwm
+	pkill dwmblocks
+	pkill xcompmgr
+	pkill sleep
 	cmd.exe /C taskkill /F /T /IM vcxsrv.exe
 	cmd.exe /C SystemTrayRefresh.exe
 	clear
@@ -30,7 +30,7 @@ fi
 ~/.fehbg				# set background
 xcompmgr >/dev/null 2>&1 &		# start xcompmgr for transparency
 dwm >/dev/null 2>&1 &			# start dwm
-~/.local/bin/dwmbar >/dev/null 2>&1 &	# start dwmbar script to control status bar
+dwmblocks >/dev/null 2>&1 &		# start dwmblocks
 #------------------------------------------------------------------------
 
 # Wait for <C-c> to close
