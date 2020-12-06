@@ -1,1 +1,1 @@
--o /mnt/x/Videos/%(title)s.%(ext)s --add-metadata --merge-output-format mkv
+-o /mnt/h/Videos/%(title)s.%(ext)s --add-metadata --merge-output-format mkv
