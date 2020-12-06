@@ -18,6 +18,7 @@ alias \
 	y="yadm $*" \
 	ys="yadm status" \
 	yc="yadm commit" \
+	ya="yadm add $*" \
 	sdn="shutdown now" \
 	n="notes $*" \
 	bat="cmd.exe /c $*" \
