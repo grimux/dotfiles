@@ -17,6 +17,7 @@ alias \
 	wiki="nvim -c VimwikiIndex" \
 	y="yadm $*" \
 	ys="yadm status" \
+	yc="yadm commit" \
 	sdn="shutdown now" \
 	n="notes $*" \
 	bat="cmd.exe /c $*" \
