@@ -44,7 +44,8 @@ static const Rule rules[] = {
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 	{ "Brave",    NULL,       NULL,       2,            0,           -1 },
-	{ "Signal",   NULL,       NULL,       6,            0,           -1 },
+	{ "Signal",   NULL,       NULL,       1 << 5,       0,           -1 },
+	{ "Pcmanfm",  "pcmanfm",  NULL,       1 << 2,       0,           -1 },
 };
 
 /* layout(s) */
@@ -77,6 +78,7 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *filemgr[]  = { "pcmanfm", NULL };
+static const char *browser[]  = { "brave", NULL };
 
 static Key keys[] = {
 	/* modifier            key            function        argument */
@@ -95,6 +97,7 @@ static Key keys[] = {
 	{ MODKEY,              XK_Tab,        view,           {0} },
 	{ MODKEY,              XK_q,          killclient,     {0} },
 	{ MODKEY,              XK_e,          spawn,          {.v = filemgr } },
+	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
 	
 	// Layout manipulation
 	{ ControlMask,         XK_t,          cyclelayout,      {.i = -1 } },
@@ -134,9 +137,9 @@ static Key keys[] = {
 	TAGKEYS(               XK_4,                      3)
 	TAGKEYS(               XK_5,                      4)
 	TAGKEYS(               XK_6,                      5)
-	TAGKEYS(               XK_7,                      6)
-	TAGKEYS(               XK_8,                      7)
-	TAGKEYS(               XK_9,                      8)
+	//TAGKEYS(               XK_7,                      6)
+	//TAGKEYS(               XK_8,                      7)
+	//TAGKEYS(               XK_9,                      8)
 };
 
 /* button definitions */
