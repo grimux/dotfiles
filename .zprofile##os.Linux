@@ -6,7 +6,7 @@
 export EDITOR="nvim"
 export READER="zathura"
 export FILE="lf"
-export BROWSER="firefox"
+export BROWSER="brave"
 #export PAGER="most"
 export GITCSS="/mnt/s/tools/web/github-pandoc.css"
 export ZDOTDIR="$HOME/.config/zsh"
