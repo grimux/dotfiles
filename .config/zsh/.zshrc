@@ -17,6 +17,7 @@ HISTFILE=~/.cache/zsh/history
 autoload -U compinit
 zstyle ':completion:*' menu select
 zmodload zsh/complist
+compinit
 
 # vi mode
 bindkey -v
