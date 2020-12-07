@@ -4,14 +4,16 @@
 
 # Variables
 card=wlp12s0:
+cable=enp9s0:
 discon="$card disconnected"
 wifi="J&S Wifi"
 conect="$card connected to $wifi"
+ethernet="$cable connected to Wired"
 
 # Fuctions
 mountit() {
 	echo "Mounting share drive into /mnt/x..."
-	sudo mount -t cifs -o username=Jake,password=deutschland,gid=users,file_mode=0777,dir_mode=0777 //10.10.10.10/Share\ Drive /mnt/x/
+	sudo mount -t cifs -o username=user,password=malte,gid=users,file_mode=0777,dir_mode=0777 //10.10.10.10/Share\ Drive /mnt/x/
 	echo "Share drive mounted!"
 }
 
@@ -25,7 +27,10 @@ umountit() {
 # Activate home wifi if not connected
 echo "Checking connection..."
 
-if ( ( nmcli | grep -q "$discon" ) || ( nmcli | grep -q "$card connected to Note8 Wifi" ) );
+if ( nmcli | grep -q "$ethernet" );
+then
+	echo "Connected to ethernet"
+elif ( ( nmcli | grep -q "$discon" ) || ( nmcli | grep -q "$card connected to Note8 Wifi" ) );
 then
 	echo "Not connected to $wifi!"
 	hmwifi
@@ -45,7 +50,7 @@ if  [[ "$(find /mnt/x -maxdepth 1)" = '/mnt/x' ]];
 then
 	echo "/mnt/x is empty."
 	mountit
-elif [ -d "/mnt/x/Archive (Jake)" ] ;
+elif [ -d "/mnt/x/archive-jake" ] ;
 then
 	echo "Share drive found!"
 	umountit
