@@ -99,11 +99,12 @@ static Key keys[] = {
 	{ MODKEY,              XK_e,          spawn,          {.v = filemgr } },
 	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
 	{ MODKEY,              XK_f,          togglefullscr,  {0} },
+	{ MODKEY,              XK_f,          togglebar,      {0} },
 	{ MODKEY,              XK_grave,      spawn,          SHCMD("dmenuunicode") },
 	
 	// Layout manipulation
-	{ ControlMask,         XK_t,          cyclelayout,      {.i = -1 } },
-	{ ControlMask,         XK_f,          cyclelayout,      {.i = +1 } },
+	{ MODKEY|ControlMask,  XK_t,          cyclelayout,      {.i = -1 } },
+	{ MODKEY|ControlMask,  XK_f,          cyclelayout,      {.i = +1 } },
 	{ MODKEY,              XK_space,      setlayout,        {0} },
 	{ MODKEY|ShiftMask,    XK_space,      togglefloating,   {0} },
 	{ MODKEY,              XK_0,          view,             {.ui = ~0 } },
@@ -151,7 +152,6 @@ static Button buttons[] = {
 	/* click                event mask      button          function        argument */
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
-	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
