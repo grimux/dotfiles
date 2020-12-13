@@ -1,5 +1,5 @@
 #!/bin/sh
 
-[ $(sensors) ] || exit
+#[ $(sensors) ] || exit
 
-sensors | awk '/Core 0/ print "🌡"$3}'
+sensors | awk '/Core 0/ {print "🌡"$3}'
