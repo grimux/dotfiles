@@ -1,0 +1,17 @@
+#!/usr/bin/sh
+
+cd $HOME/.local/repos/$1
+case $1 in
+	dwm)
+		;&
+	dmenu)
+		;&
+	st)
+		nvim config.h
+		;;
+	dwmblocks)
+		nvim blocks.h
+		;;
+esac
+sudo make install
+make clean
