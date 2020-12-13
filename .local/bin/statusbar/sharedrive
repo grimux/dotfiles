@@ -7,4 +7,4 @@ icon=""
 
 [ -d "$location" ] || exit
 
-printf "%s: %s\n" "$icon" "Share Drive"
+printf "%s %s\n" "$icon" "Share Drive"
