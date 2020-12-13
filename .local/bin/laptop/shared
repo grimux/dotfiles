@@ -67,3 +67,4 @@ else
 	echo "/mnt/x unmounted!"
 	mountit
 fi
+pkill -RTMIN+12 dwmblocks
