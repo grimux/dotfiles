@@ -1,0 +1,5 @@
+#!/bin/sh
+
+[ $(sensors) ] || exit
+
+sensors | awk '/Core 0/ print "🌡"$3}'
