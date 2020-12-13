@@ -89,8 +89,8 @@ static Key keys[] = {
 	{ MODKEY,              XK_k,          focusstack,     {.i = -1 } },
 	{ MODKEY|ShiftMask,    XK_j,          rotatestack,    {.i = +1 } },
 	{ MODKEY|ShiftMask,    XK_k,          rotatestack,    {.i = -1 } },
-	{ MODKEY,              XK_i,          incnmaster,     {.i = +1 } },
-	{ MODKEY,              XK_d,          incnmaster,     {.i = -1 } },
+	{ MODKEY,              XK_o,          incnmaster,     {.i = +1 } },
+	{ MODKEY|ShiftMask,    XK_o,          incnmaster,     {.i = -1 } },
 	{ MODKEY,              XK_h,          setmfact,       {.f = -0.05} },
 	{ MODKEY,              XK_l,          setmfact,       {.f = +0.05} },
 	{ MODKEY,              XK_space,      zoom,           {0} },
@@ -98,6 +98,7 @@ static Key keys[] = {
 	{ MODKEY,              XK_q,          killclient,     {0} },
 	{ MODKEY,              XK_e,          spawn,          {.v = filemgr } },
 	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
+	{ MODKEY,              XK_f,          togglefullscr,  {0} },
 	
 	// Layout manipulation
 	{ ControlMask,         XK_t,          cyclelayout,      {.i = -1 } },
@@ -109,7 +110,7 @@ static Key keys[] = {
 
 	// Switching to specific layouts
 	{ MODKEY,              XK_t,          setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,              XK_f,          setlayout,      {.v = &layouts[1]} },
+	{ MODKEY|ShiftMask,    XK_f,          setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,              XK_m,          setlayout,      {.v = &layouts[2]} },
 	{ MODKEY,              XK_g,          setlayout,      {.v = &layouts[3]} },
 
@@ -117,10 +118,11 @@ static Key keys[] = {
 	{ MODKEY,              XK_period,     focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,    XK_comma,      tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,    XK_period,     tagmon,         {.i = +1 } },
-	{ MODKEY,              XK_minus,      setgaps,        {.i = -1 } },
-	{ MODKEY,              XK_equal,      setgaps,        {.i = +1 } },
-	{ MODKEY|ShiftMask,    XK_equal,      setgaps,        {.i = 0  } },
-	{ MODKEY|ShiftMask,    XK_q,          quit,           {0} },
+	{ MODKEY,              XK_x,          setgaps,        {.i = -3 } },
+	{ MODKEY,              XK_z,          setgaps,        {.i = +3 } },
+	{ MODKEY,              XK_a,          setgaps,        {.i = 0  } },
+	{ MODKEY|ShiftMask,    XK_a,          setgaps,        {.i = 11 } },
+	//{ MODKEY|ShiftMask,    XK_a,          quit,           {0} },
 
 	// Switching between monitors
 	
