@@ -2,6 +2,7 @@
 static const Block blocks[] = {
 	/*Icon*/	/*Command*/		/*Update Interval*/	/*Update Signal*/
 	{ "",   "sharedrive",                                                   0,              12},
+	{ "",   "forecast",                                                     18000,          5},
 	{"  ", "free -h | awk '/^Mem/ { print $3\"/\"$2 }' | sed s/i//g",	30,		0},
 
 	{"  ", "date '+%b %d (%a) %I:%M%p'",					5,		0},

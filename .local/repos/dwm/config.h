@@ -11,7 +11,7 @@ static const unsigned int gappx     = 11;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "Inconsolata Nerd Font:size=10" };
+static const char *fonts[]          = { "Inconsolata Nerd Font:size=10", "JoyPixels:pixelsize=10:antialias=true:autohint=true" };
 static const char dmenufont[]       = "monospace:size=10";
 static const char col_1[]	    = "#282c34"; // background color of bar
 static const char col_2[]	    = "#282c34"; // border color unfocused windows
@@ -32,8 +32,8 @@ static const unsigned int alphas[][3]      = {
 };
 
 /* tagging */
-//static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-static const char *tags[] = { "", "", "", "", "", "" };
+static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+//static const char *tags[] = { "", "", "", "", "", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -99,6 +99,7 @@ static Key keys[] = {
 	{ MODKEY,              XK_e,          spawn,          {.v = filemgr } },
 	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
 	{ MODKEY,              XK_f,          togglefullscr,  {0} },
+	{ MODKEY,              XK_grave,      spawn,          SHCMD("dmenuunicode") },
 	
 	// Layout manipulation
 	{ ControlMask,         XK_t,          cyclelayout,      {.i = -1 } },
@@ -139,9 +140,9 @@ static Key keys[] = {
 	TAGKEYS(               XK_4,                      3)
 	TAGKEYS(               XK_5,                      4)
 	TAGKEYS(               XK_6,                      5)
-	//TAGKEYS(               XK_7,                      6)
-	//TAGKEYS(               XK_8,                      7)
-	//TAGKEYS(               XK_9,                      8)
+	TAGKEYS(               XK_7,                      6)
+	TAGKEYS(               XK_8,                      7)
+	TAGKEYS(               XK_9,                      8)
 };
 
 /* button definitions */
