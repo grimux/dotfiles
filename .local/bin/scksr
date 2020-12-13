@@ -1,17 +1,29 @@
 #!/usr/bin/sh
 
-cd $HOME/.local/repos/$1
+repos="$HOME/.local/repos"
 case $1 in
 	dwm)
-		;&
-	dmenu)
-		;&
-	st)
+		cd $repos/dwm
 		nvim config.h
 		;;
+	dmenu)
+		cd $repos/dmenu
+		nvim config.h
+		;;
+	st)
+		cd $repos/st
+		nvim config.h
+		;;
+	dwmb)
+		;&
 	dwmblocks)
+		cd $repos/dwmblocks
 		nvim blocks.h
 		;;
+	*)
+		printf "Options: dwm dmenu st dwmblocks\n"
+		exit
 esac
+
 sudo make install
 make clean
