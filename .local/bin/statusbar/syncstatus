@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Status bar module for checking on syncthing
+
+statuscheck=$(pgrep syncthing)
+icon=""
+
+[[ $statuscheck ]] || exit
+
+printf "%s %s\n" "$icon" "Syncthing"

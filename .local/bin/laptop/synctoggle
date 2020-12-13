@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# This script is used to toggle on and off both syncthing and syncthing-gtk
+# It is also used to communicate with dwmblocks to show a status bar module "syncstatus"
+
+# Check if a syncthing process is running
+# is it an empty string?
+if [ -z $(pgrep syncthing) ]
+then
+	syncthing -no-browser &
+	syncthing-gtk &
+else
+	killall syncthing syncthing-gtk
+fi
+
+# Need to wait a second after killing the process, otherwise the status bar won't update
+sleep 1
+
+# Signal for dwmblocks
+pkill -RTMIN+15 dwmblocks
