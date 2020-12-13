@@ -134,8 +134,7 @@ static Key keys[] = {
 	{ MODKEY,              XK_F7,         spawn,          SHCMD("toggle-alpha") },			// toggle alpha
 	{ MODKEY,              XK_n,          spawn,          SHCMD("st -e nvim -c VimwikiIndex") },	// Launch vimwiki
 	{ MODKEY|ShiftMask,    XK_p,          spawn,          SHCMD("passmenu") },
-	{ MODKEY,              XK_s,          spawn,          SHCMD("syncthing-gtk") },			// syncthing-gtk
-	{ MODKEY|ShiftMask,    XK_s,          spawn,          SHCMD("st -e killall syncthing syncthing-gtk") },			// syncthing-gtk
+	{ MODKEY|ShiftMask,    XK_s,          spawn,          SHCMD("synctoggle") },			// syncthing-gtk
 	
 	// Workspaces
 	TAGKEYS(               XK_1,                      0)
