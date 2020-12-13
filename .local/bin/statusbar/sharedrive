@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Status bar module for showing conection to Share Drive
+
+location=/mnt/x/archive-jake
+icon=""
+
+[ -d "$location" ] || exit
+
+printf "%s: %s\n" "$icon" "Share Drive"
