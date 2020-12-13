@@ -3,11 +3,9 @@
 cd $HOME/.local/repos/$1
 case $1 in
 	dwm)
-		nvim config.h
-		;;
+		;&
 	dmenu)
-		nvim config.h
-		;;
+		;&
 	st)
 		nvim config.h
 		;;
