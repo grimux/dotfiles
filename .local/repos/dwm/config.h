@@ -102,6 +102,7 @@ static Key keys[] = {
 	{ MODKEY,              XK_f,          togglefullscr,  {0} },
 	{ MODKEY,              XK_f,          togglebar,      {0} },
 	{ MODKEY,              XK_grave,      spawn,          SHCMD("dmenuunicode") },
+	{ MODKEY|ShiftMask,    XK_r,          spawn,          SHCMD("killall dwm && setsid -f dwm") },
 	
 	// Layout manipulation
 	{ MODKEY|ControlMask,  XK_t,          cyclelayout,      {.i = -1 } },
