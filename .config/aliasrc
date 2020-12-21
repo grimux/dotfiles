@@ -2,7 +2,7 @@
 
 alias \
 	ka="killall" \
-	ls="ls -l --color=auto --group-directories-first" \
+	ls="ls --color=auto --group-directories-first" \
 	la="ls -lA --color=auto --group-directories-first" \
 	f="ranger" \
 	sf="sudo ranger" \
