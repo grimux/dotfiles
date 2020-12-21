@@ -1,0 +1,6 @@
+#!/bin/sh
+
+[ "$(stat -c %y ~/.cache/corona 2>/dev/null | cut -d' ' -f1)" != "$(date '+%Y-%m-%d')" ] &&
+	curl -s https://corona-stats.online/states/us > ~/.cache/corona
+
+grep "Kansas" ~/.cache/corona | sed -r "s/\x1B\[(([0-9]{1,2})?(;)?([0-9]{1,2})?)?[m,K,H,f,J]//g ; s/\s*//g ; s/║//g ; s/│/;/g" | awk -F';' '{print "😷" $3 " (" $4")"}'

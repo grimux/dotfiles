@@ -3,6 +3,7 @@ static const Block blocks[] = {
 	/*Icon*/	/*Command*/		                                        /*Update Interval*/	/*Update Signal*/
 	{"",            "syncstatus",                                                   0,                      15},
 	{"",            "sharedrive",                                                   0,                      12},
+	{"",            "corona",                                                     0,                  30},
 	{"",            "forecast",                                                     18000,                  5},
 	{"🌡",           "sensors | awk '/Core 0/ {print $3}'",                          5,                      4},
 	{"CPU: ",       "mpstat | awk '/all/ {print $4 \"%\"}'",                          5,                      6},
