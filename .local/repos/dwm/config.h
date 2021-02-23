@@ -102,6 +102,10 @@ static Key keys[] = {
 	{ MODKEY,              XK_f,          togglefullscr,  {0} },
 	{ MODKEY,              XK_f,          togglebar,      {0} },
 	{ MODKEY,              XK_grave,      spawn,          SHCMD("dmenuunicode") },
+	{ MODKEY,              XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 5"; pkill -RTMIN+40 dwmblocks) },
+	{ MODKEY|ShiftMask,    XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 15" pkill -RTMIN+40 dwmblocks) },
+	{ MODKEY,              XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 5" pkill -RTMIN+40 dwmblocks) },
+	{ MODKEY|ShiftMask,    XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 15" pkill -RTMIN+40 dwmblocks) },
 	
 	// Layout manipulation
 	{ MODKEY|ControlMask,  XK_t,          cyclelayout,      {.i = -1 } },
@@ -135,6 +139,7 @@ static Key keys[] = {
 	{ MODKEY,              XK_n,          spawn,          SHCMD("st -e nvim -c VimwikiIndex") },	// Launch vimwiki
 	{ MODKEY|ShiftMask,    XK_p,          spawn,          SHCMD("passmenu") },
 	{ MODKEY|ShiftMask,    XK_s,          spawn,          SHCMD("synctoggle") },			// syncthing-gtk
+	{ MODKEY,              XK_F1,         spawn,          SHCMD("groff -mom /usr/local/share/dwm/jarbs.mom -Tpdf | zathura -") },
 	
 	// Workspaces
 	TAGKEYS(               XK_1,                      0)
