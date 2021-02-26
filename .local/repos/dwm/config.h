@@ -102,10 +102,10 @@ static Key keys[] = {
 	{ MODKEY,              XK_f,          togglefullscr,  {0} },
 	{ MODKEY,              XK_f,          togglebar,      {0} },
 	{ MODKEY,              XK_grave,      spawn,          SHCMD("dmenuunicode") },
-	{ MODKEY,              XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 5"; pkill -RTMIN+40 dwmblocks) },
-	{ MODKEY|ShiftMask,    XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 15" pkill -RTMIN+40 dwmblocks) },
-	{ MODKEY,              XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 5" pkill -RTMIN+40 dwmblocks) },
-	{ MODKEY|ShiftMask,    XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 15" pkill -RTMIN+40 dwmblocks) },
+	{ MODKEY,              XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 5; pkill -RTMIN+40 dwmblocks") },
+	{ MODKEY|ShiftMask,    XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 15; pkill -RTMIN+40 dwmblocks") },
+	{ MODKEY,              XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 5; pkill -RTMIN+40 dwmblocks") },
+	{ MODKEY|ShiftMask,    XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 15; pkill -RTMIN+40 dwmblocks") },
 	
 	// Layout manipulation
 	{ MODKEY|ControlMask,  XK_t,          cyclelayout,      {.i = -1 } },
