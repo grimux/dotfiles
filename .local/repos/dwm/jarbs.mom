@@ -1,0 +1,31 @@
+.TITLE "My Keyboard Shortcuts"
+.AUTHOR "Jake Meredith"
+.DOCTYPE DEFAULT
+.PRINTSTYLE TYPESET
+.START
+.PP
+.HEADING 1 "Navigation"
+.LIST
+.ITEM
+\f(CWMod+F1\fP \(en Opens this manual
+.ITEM
+\f(CWMod+Enter\fP \(en Spawn terminal
+.ITEM
+\f(CWMod+q\fP \(en Close window
+.ITEM
+\f(CWMod+j/k\fP \(en Cycle through windows depending on their stack
+.LIST OFF
+.HEADING 1 "Programs"
+.LIST
+.ITEM
+\f(CWMod+F7\fP \(en Toggle alpha for terminal
+.ITEM
+\f(CWMod+n\fP \(en Open Vimwiki
+.ITEM
+\f(CWMod+Shift+p\fP \(en passmenu
+.ITEM
+\f(CWMod+Shift+s\fP \(en Toggle syncthing
+.LIST OFF
+.PP
+.FT B
+this is bold
