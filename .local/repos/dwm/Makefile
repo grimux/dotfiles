@@ -44,12 +44,12 @@ install: all
 	sed "s/VERSION/${VERSION}/g" < dwm.1 > ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	chmod 644 ${DESTDIR}${MANPREFIX}/man1/dwm.1
 	mkdir -p ${DESTDIR}${PREFIX}/share/dwm
-	cp -f jarbs.mom ${DESTDIR}${PREFIX}/share/dwm
-	chmod 644 ${DESTDIR}${PREFIX}/share/dwm/jarbs.mom
+	cp -f jman.mom ${DESTDIR}${PREFIX}/share/dwm
+	chmod 644 ${DESTDIR}${PREFIX}/share/dwm/jman.mom
 
 uninstall:
 	rm -f ${DESTDIR}${PREFIX}/bin/dwm\
-		${DESTDIR}${PREFIX}/share/dwm/jarbs.mom\
+		${DESTDIR}${PREFIX}/share/dwm/jman.mom\
 		${DESTDIR}${MANPREFIX}/man1/dwm.1
 
 .PHONY: all options clean dist install uninstall

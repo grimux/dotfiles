@@ -24,7 +24,7 @@ case $1 in
 		;&
 	man)
 		cd $repos/dwm
-		nvim jarbs.mom
+		nvim jman.mom
 		;;
 	*)
 		printf "Options: dwm dmenu st dwmblocks manual\n"

@@ -42,10 +42,10 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
-	{ "Brave",    NULL,       NULL,       2,            0,           -1 },
+	//{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	//{ "Brave",    NULL,       NULL,       2,            0,           -1 },
 	{ "Signal",   NULL,       NULL,       1 << 5,       0,           -1 },
-	{ "Pcmanfm",  "pcmanfm",  NULL,       1 << 2,       0,           -1 },
+	//{ "Pcmanfm",  "pcmanfm",  NULL,       1 << 2,       0,           -1 },
 	{ "Syncthing GTK", NULL,  NULL,       1 << 8,       0,           -1 },
 };
 
@@ -100,7 +100,6 @@ static Key keys[] = {
 	{ MODKEY,              XK_e,          spawn,          {.v = filemgr } },
 	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
 	{ MODKEY,              XK_f,          togglefullscr,  {0} },
-	{ MODKEY,              XK_f,          togglebar,      {0} },
 	{ MODKEY,              XK_grave,      spawn,          SHCMD("dmenuunicode") },
 	{ MODKEY,              XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 5; pkill -RTMIN+40 dwmblocks") },
 	{ MODKEY|ShiftMask,    XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 15; pkill -RTMIN+40 dwmblocks") },
@@ -139,7 +138,7 @@ static Key keys[] = {
 	{ MODKEY,              XK_n,          spawn,          SHCMD("st -e nvim -c VimwikiIndex") },	// Launch vimwiki
 	{ MODKEY|ShiftMask,    XK_p,          spawn,          SHCMD("passmenu") },
 	{ MODKEY|ShiftMask,    XK_s,          spawn,          SHCMD("synctoggle") },			// syncthing-gtk
-	{ MODKEY,              XK_F1,         spawn,          SHCMD("groff -mom /usr/local/share/dwm/jarbs.mom -Tpdf | zathura -") },
+	{ MODKEY,              XK_F1,         spawn,          SHCMD("groff -mom /usr/local/share/dwm/jman.mom -Tpdf | zathura -") },
 	
 	// Workspaces
 	TAGKEYS(               XK_1,                      0)
