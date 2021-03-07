@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Script for displaying the volume in my status bar
+
+vol=$(pamixer --get-volume-human)
+icon="🔈"
+
+[ $(pamixer --get-mute) = true ] && echo 🔇 && exit
+
+printf "%s%s\n" "$icon" "$vol"

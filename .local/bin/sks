@@ -20,8 +20,14 @@ case $1 in
 		cd $repos/dwmblocks
 		nvim blocks.h
 		;;
+	manual)
+		;&
+	man)
+		cd $repos/dwm
+		nvim jman.mom
+		;;
 	*)
-		printf "Options: dwm dmenu st dwmblocks\n"
+		printf "Options: dwm dmenu st dwmblocks manual\n"
 		exit
 esac
 

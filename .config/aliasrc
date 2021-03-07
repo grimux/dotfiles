@@ -22,3 +22,4 @@ alias \
 	sdn="shutdown now" \
 	n="notes $*" \
 	bat="cmd.exe /c $*" \
+	trem="transmission-remote $*" \
