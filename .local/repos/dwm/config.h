@@ -42,8 +42,13 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+<<<<<<< HEAD
 	//{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 	//{ "Brave",    NULL,       NULL,       2,            0,           -1 },
+=======
+	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	{ "Brave",    NULL,       NULL,       0,            0,           -1 },
+>>>>>>> b8ea01f30e71790832f33efe21f9a4fb1dec9246
 	{ "Signal",   NULL,       NULL,       1 << 5,       0,           -1 },
 	//{ "Pcmanfm",  "pcmanfm",  NULL,       1 << 2,       0,           -1 },
 	{ "Syncthing GTK", NULL,  NULL,       1 << 8,       0,           -1 },
@@ -94,6 +99,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_o,          incnmaster,     {.i = -1 } },
 	{ MODKEY,              XK_h,          setmfact,       {.f = -0.05} },
 	{ MODKEY,              XK_l,          setmfact,       {.f = +0.05} },
+	{ MODKEY,              XK_semicolon,          setmfact,       {.f = +0.05} },
 	{ MODKEY,              XK_space,      zoom,           {0} },
 	{ MODKEY,              XK_Tab,        view,           {0} },
 	{ MODKEY,              XK_q,          killclient,     {0} },
