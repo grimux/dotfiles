@@ -101,10 +101,14 @@ static Key keys[] = {
 	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
 	{ MODKEY,              XK_f,          togglefullscr,  {0} },
 	{ MODKEY,              XK_grave,      spawn,          SHCMD("dmenuunicode") },
+<<<<<<< HEAD
 	{ MODKEY,              XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 5; pkill -RTMIN+40 dwmblocks") },
 	{ MODKEY|ShiftMask,    XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 15; pkill -RTMIN+40 dwmblocks") },
 	{ MODKEY,              XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 5; pkill -RTMIN+40 dwmblocks") },
 	{ MODKEY|ShiftMask,    XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 15; pkill -RTMIN+40 dwmblocks") },
+=======
+	{ MODKEY|ShiftMask,    XK_r,          spawn,          SHCMD("killall dwm && setsid -f dwm") },
+>>>>>>> 8ec209032a704bf667f413d488b4c4d5a03b6a3c
 	
 	// Layout manipulation
 	{ MODKEY|ControlMask,  XK_t,          cyclelayout,      {.i = -1 } },
