@@ -1,6 +1,7 @@
 # vim: filetype=sh
 alias h="clear && cd ~/ && ls -a" \
 d="clear && cd ~/documents && ls -a" \
+sch="clear && cd ~/documents/school && ls -a" \
 D="clear && cd ~/downloads && ls -a" \
 m="clear && cd ~/Music && ls -a" \
 pp="clear && cd ~/Pictures && ls -a" \

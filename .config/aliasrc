@@ -14,6 +14,8 @@ alias \
 	yt="youtube-dl" \
 	ytm="youtube-dl --config-location ~/.config/youtube-dl/music" \
 	ytp="youtube-dl --config-location ~/.config/youtube-dl/playlist" \
+	ytpod="youtube-dl --config-location ~/.config/youtube-dl/podcast" \
+	ytpodq="youtube-dl --config-location ~/.config/youtube-dl/podcast \"https://soundcloud.com/jimquisition\"" \
 	wiki="nvim -c VimwikiIndex" \
 	y="yadm $*" \
 	ys="yadm status" \
@@ -23,3 +25,5 @@ alias \
 	n="notes $*" \
 	bat="cmd.exe /c $*" \
 	trem="transmission-remote $*" \
+	py="python" \
+	mit="cd /mnt/s/Documents/school/MIT\ OpenCourseWare/6.0001/" \
