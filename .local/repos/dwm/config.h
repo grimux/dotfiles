@@ -6,7 +6,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int gappx     = 11;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
@@ -66,9 +66,11 @@ static const Layout layouts[] = {
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 	{ "HHH",      grid },
+	{ NULL,       NULL },
 };
 
 #include <X11/XF86keysym.h>
+#include "selfrestart.c"
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
@@ -82,19 +84,20 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[]    = { "dmenu_run", "-p", "Run:", NULL };
-static const char *termcmd[]     = { "st", NULL };
-static const char *filemgr[]     = { "pcmanfm", NULL };
-static const char *termfilemgr[] = { "st", "-e", "ranger", NULL };
-static const char *browser[]     = { "brave", NULL };
-static const char *music[]       = { "deadbeef", NULL};
-static const char *upvol[]       = { "pamixer", "-i", "5", ";", "pkill", "-RTMIN+40", "dwmblocks", NULL};
-static const char *downvol[]     = { "pamixer", "-d", "5", ";", "pkill", "-RTMIN+40", "dwmblocks", NULL};
-static const char *mutevol[]     = { "pamixer", "-t", "pkill", "-RTMIN+40", "dwmblocks", NULL};
-static const char *mustog[]      = { "deadbeef", "--toggle-pause", NULL};
-static const char *musnext[]     = { "deadbeef", "--next", NULL};
-static const char *musprev[]     = { "deadbeef", "--prev", NULL};
-static const char *musstop[]     = { "deadbeef", "--stop", NULL};
+static const char *dmenucmd[]     = { "dmenu_run", "-p", "Run:", NULL };
+static const char *sudodmenucmd[] = { "sudo", "dmenu_run", "-p", "sudo:", NULL };
+static const char *termcmd[]      = { "st", NULL };
+static const char *filemgr[]      = { "pcmanfm", NULL };
+static const char *termfilemgr[]  = { "st", "-e", "ranger", NULL };
+static const char *browser[]      = { "brave", NULL };
+static const char *music[]        = { "deadbeef", NULL};
+static const char *upvol[]        = { "pamixer", "-i", "5", ";", "pkill", "-RTMIN+40", "dwmblocks", NULL};
+static const char *downvol[]      = { "pamixer", "-d", "5", ";", "pkill", "-RTMIN+40", "dwmblocks", NULL};
+static const char *mutevol[]      = { "pamixer", "-t", "pkill", "-RTMIN+40", "dwmblocks", NULL};
+static const char *mustog[]       = { "deadbeef", "--toggle-pause", NULL};
+static const char *musnext[]      = { "deadbeef", "--next", NULL};
+static const char *musprev[]      = { "deadbeef", "--prev", NULL};
+static const char *musstop[]      = { "deadbeef", "--stop", NULL};
 
 /* Hotkeys */
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -112,12 +115,13 @@ static Key keys[] = {
 	{ MODKEY,              XK_o,          incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,    XK_o,          incnmaster,     {.i = -1 } },
 	{ MODKEY,              XK_q,          killclient,     {0} },
-	{ MODKEY|ShiftMask,    XK_r,          spawn,          SHCMD("pkill dwm && dwm &") },
+	{ MODKEY|ShiftMask,    XK_r,          self_restart,   {0} },
 	//{ MODKEY|ShiftMask,    XK_r,          spawn,          SHCMD("pkill dwm && setsid -f dwm") },
 	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
 	{ MODKEY,              XK_grave,      spawn,          SHCMD("dmenuunicode") },
 	{ MODKEY,	       XK_Return,     spawn,          {.v = termcmd }  },
 	{ MODKEY,              XK_space,      spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,    XK_space,      spawn,          {.v = sudodmenucmd } },
 	{ MODKEY,              XK_semicolon,  setmfact,       {.f = +0.05} },
 	//{ MODKEY,              XK_space,      zoom,           {0} },
 	//{ MODKEY,              XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 5; pkill -RTMIN+40 dwmblocks") },
@@ -132,6 +136,7 @@ static Key keys[] = {
 	{ MODKEY,              XK_e,          spawn,          {.v = filemgr } },
 	{ MODKEY,              XK_r,          spawn,          {.v = termfilemgr } },
 	{ MODKEY,              XK_m,          spawn,          {.v = music } },
+	{ MODKEY,              XK_g,          spawn,          SHCMD("lutris") },
 	{ MODKEY,              XK_F7,         spawn,          SHCMD("toggle-alpha") },			// toggle alpha
 	{ MODKEY,              XK_n,          spawn,          SHCMD("st -e nvim -c VimwikiIndex") },	// Launch vimwiki
 	{ MODKEY|ShiftMask,    XK_Return,     spawn,          {.v = filemgr }  }, 
@@ -154,10 +159,10 @@ static Key keys[] = {
 	// ----------------------------------------------------------------------------------------------------------------------------
 
 	// Layout manipulation
-	//{ MODKEY,              XK_Tab,        cyclelayout,      {.i = +1 } },
+	{ MODKEY,              XK_Tab,        cyclelayout,      {.i = +1 } },
 	//{ MODKEY|ControlMask,  XK_f,          cyclelayout,      {.i = -1 } },
 	//{ MODKEY,              XK_space,      setlayout,        {0} },
-	{ MODKEY|ShiftMask,    XK_space,      togglefloating,   {0} },
+	//{ MODKEY|ShiftMask,    XK_space,      togglefloating,   {0} },
 	{ MODKEY,              XK_0,          view,             {.ui = ~0 } },
 	{ MODKEY|ShiftMask,    XK_0,          tag,              {.ui = ~0 } },
 
@@ -196,7 +201,7 @@ static Key keys[] = {
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
 	/* click                event mask      button          function        argument */
-	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
+	{ ClkLtSymbol,          0,              Button1,        cyclelayout,    {.i = +1} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
@@ -207,4 +212,3 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-
