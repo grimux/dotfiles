@@ -42,15 +42,16 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class           instance    title       tags mask     switchtotag     isfloating   monitor */
-	//{ "Gimp",          NULL,       NULL,       0,            0,              1,           -1 },
+	//{ "Gimp",        NULL,       NULL,       0,            0,              1,           -1 },
 	{ "Brave",         "brave",    NULL,       1 << 1,       1,              0,           -1 },
 	{ "Pcmanfm",       "pcmanfm",  NULL,       1 << 2,       1,              0,           -1 },
 	{ "Notepadqq",     NULL,       NULL,       1 << 3,       1,              0,           -1 },
 	//{ "Brave",       NULL,       NULL,       1 << 4,       0,              0,           -1 },
 	{ "Signal",        NULL,       NULL,       1 << 5,       1,              0,           -1 },
-	//{ "Brave",       NULL,       NULL,       1 << 6,       0,              0,           -1 },
-	{ "deadbeef",      NULL,       NULL,       1 << 7,       1,              0,           -1 },
+	{ "Deadbeef",      NULL,       NULL,       1 << 6,       1,              0,           -1 },
+	//{ "deadbeef",    NULL,       NULL,       1 << 7,       1,              0,           -1 },
 	{ "Syncthing GTK", NULL,       NULL,       1 << 8,       0,              0,           -1 },
+	{ "Lutris",        NULL,       NULL,       1 << 8,       1,              0,           -1 },
 };
 
 /* layout(s) */
@@ -67,6 +68,7 @@ static const Layout layouts[] = {
 	{ "HHH",      grid },
 };
 
+#include <X11/XF86keysym.h>
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
@@ -80,42 +82,77 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-p", "Run:", NULL };
-static const char *termcmd[]  = { "st", NULL };
-static const char *filemgr[]  = { "pcmanfm", NULL };
+static const char *dmenucmd[]    = { "dmenu_run", "-p", "Run:", NULL };
+static const char *termcmd[]     = { "st", NULL };
+static const char *filemgr[]     = { "pcmanfm", NULL };
 static const char *termfilemgr[] = { "st", "-e", "ranger", NULL };
-static const char *browser[]  = { "brave", NULL };
-static const char *fullscreen[] = { togglefullscr, togglebar, NULL };
+static const char *browser[]     = { "brave", NULL };
+static const char *music[]       = { "deadbeef", NULL};
+static const char *upvol[]       = { "pamixer", "-i", "5", ";", "pkill", "-RTMIN+40", "dwmblocks", NULL};
+static const char *downvol[]     = { "pamixer", "-d", "5", ";", "pkill", "-RTMIN+40", "dwmblocks", NULL};
+static const char *mutevol[]     = { "pamixer", "-t", "pkill", "-RTMIN+40", "dwmblocks", NULL};
+static const char *mustog[]      = { "deadbeef", "--toggle-pause", NULL};
+static const char *musnext[]     = { "deadbeef", "--next", NULL};
+static const char *musprev[]     = { "deadbeef", "--prev", NULL};
+static const char *musstop[]     = { "deadbeef", "--stop", NULL};
 
+/* Hotkeys */
+// ----------------------------------------------------------------------------------------------------------------------------
 static Key keys[] = {
 	/* modifier            key            function        argument */
-	{ MODKEY,              XK_space,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,	       XK_Return,     spawn,          {.v = termcmd }  },
-	{ MODKEY|ShiftMask,    XK_Return,     spawn,          {.v = filemgr }  }, 
-	{ MODKEY,              XK_r,          spawn,          {.v = termfilemgr } },
 	{ MODKEY,              XK_b,          togglebar,      {0} },
-	{ MODKEY,              XK_j,          focusstack,     {.i = +1 } },
-	{ MODKEY,              XK_k,          focusstack,     {.i = -1 } },
-	{ MODKEY|ShiftMask,    XK_j,          rotatestack,    {.i = +1 } },
-	{ MODKEY|ShiftMask,    XK_k,          rotatestack,    {.i = -1 } },
-	{ MODKEY,              XK_o,          incnmaster,     {.i = +1 } },
-	{ MODKEY|ShiftMask,    XK_o,          incnmaster,     {.i = -1 } },
-	{ MODKEY,              XK_h,          setmfact,       {.f = -0.05} },
-	{ MODKEY,              XK_l,          setmfact,       {.f = +0.05} },
-	{ MODKEY,              XK_semicolon,  setmfact,       {.f = +0.05} },
-	//{ MODKEY,              XK_space,      zoom,           {0} },
-	{ MODKEY,              XK_q,          killclient,     {0} },
-	{ MODKEY,              XK_e,          spawn,          {.v = filemgr } },
-	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
 	{ MODKEY,              XK_f,          togglefullscr,  {0} },
 	{ MODKEY,              XK_f,          togglebar,      {0} },
+	{ MODKEY,              XK_h,          setmfact,       {.f = -0.05} },
+	{ MODKEY,              XK_j,          focusstack,     {.i = +1 } },
+	{ MODKEY|ShiftMask,    XK_j,          rotatestack,    {.i = +1 } },
+	{ MODKEY,              XK_k,          focusstack,     {.i = -1 } },
+	{ MODKEY|ShiftMask,    XK_k,          rotatestack,    {.i = -1 } },
+	{ MODKEY,              XK_l,          setmfact,       {.f = +0.05} },
+	{ MODKEY,              XK_o,          incnmaster,     {.i = +1 } },
+	{ MODKEY|ShiftMask,    XK_o,          incnmaster,     {.i = -1 } },
+	{ MODKEY,              XK_q,          killclient,     {0} },
+	{ MODKEY|ShiftMask,    XK_r,          spawn,          SHCMD("pkill dwm && dwm &") },
+	//{ MODKEY|ShiftMask,    XK_r,          spawn,          SHCMD("pkill dwm && setsid -f dwm") },
+	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
 	{ MODKEY,              XK_grave,      spawn,          SHCMD("dmenuunicode") },
-	{ MODKEY,              XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 5; pkill -RTMIN+40 dwmblocks") },
-	{ MODKEY|ShiftMask,    XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 15; pkill -RTMIN+40 dwmblocks") },
-	{ MODKEY,              XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 5; pkill -RTMIN+40 dwmblocks") },
-	{ MODKEY|ShiftMask,    XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 15; pkill -RTMIN+40 dwmblocks") },
-	{ MODKEY|ShiftMask,    XK_r,          spawn,          SHCMD("killall dwm && setsid -f dwm") },
+	{ MODKEY,	       XK_Return,     spawn,          {.v = termcmd }  },
+	{ MODKEY,              XK_space,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,              XK_semicolon,  setmfact,       {.f = +0.05} },
+	//{ MODKEY,              XK_space,      zoom,           {0} },
+	//{ MODKEY,              XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 5; pkill -RTMIN+40 dwmblocks") },
+	//{ MODKEY|ShiftMask,    XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 15; pkill -RTMIN+40 dwmblocks") },
+	//{ MODKEY,              XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 5; pkill -RTMIN+40 dwmblocks") },
+	//{ MODKEY|ShiftMask,    XK_equal,      spawn,          SHCMD("pamixer --allow-boost -i 15; pkill -RTMIN+40 dwmblocks") },
+	// ----------------------------------------------------------------------------------------------------------------------------
 	
+
+	// Program launching
+	// ----------------------------------------------------------------------------------------------------------------------------
+	{ MODKEY,              XK_e,          spawn,          {.v = filemgr } },
+	{ MODKEY,              XK_r,          spawn,          {.v = termfilemgr } },
+	{ MODKEY,              XK_m,          spawn,          {.v = music } },
+	{ MODKEY,              XK_F7,         spawn,          SHCMD("toggle-alpha") },			// toggle alpha
+	{ MODKEY,              XK_n,          spawn,          SHCMD("st -e nvim -c VimwikiIndex") },	// Launch vimwiki
+	{ MODKEY|ShiftMask,    XK_Return,     spawn,          {.v = filemgr }  }, 
+	{ MODKEY|ShiftMask,    XK_p,          spawn,          SHCMD("passmenu") },
+	{ MODKEY|ShiftMask,    XK_s,          spawn,          SHCMD("synctoggle") },			// syncthing-gtk
+	{ MODKEY,              XK_F1,         spawn,          SHCMD("groff -mom /usr/local/share/dwm/jman.mom -Tpdf | zathura -") },
+	{ MODKEY|ShiftMask,    XK_n,          spawn,          SHCMD("notepadqq") },
+	// ----------------------------------------------------------------------------------------------------------------------------
+	
+	
+	// Media Keys
+	// ----------------------------------------------------------------------------------------------------------------------------
+	{ 0,                   XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
+	{ 0,                   XF86XK_AudioMute,        spawn, {.v = mutevol } },
+	{ 0,                   XF86XK_AudioRaiseVolume, spawn, {.v = upvol   } },
+	{ 0,                   XF86XK_AudioPlay,        spawn, {.v = mustog  } },
+	{ 0,                   XF86XK_AudioNext,        spawn, {.v = musnext } },
+	{ 0,                   XF86XK_AudioPrev,        spawn, {.v = musprev } },
+	{ 0,                   XF86XK_AudioStop,        spawn, {.v = musstop } },
+	// ----------------------------------------------------------------------------------------------------------------------------
+
 	// Layout manipulation
 	//{ MODKEY,              XK_Tab,        cyclelayout,      {.i = +1 } },
 	//{ MODKEY|ControlMask,  XK_f,          cyclelayout,      {.i = -1 } },
@@ -125,32 +162,24 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_0,          tag,              {.ui = ~0 } },
 
 	// Switching to specific layouts
-	{ MODKEY,              XK_t,          setlayout,      {.v = &layouts[0]} },
-	{ MODKEY|ShiftMask,    XK_f,          setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,              XK_m,          setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,              XK_g,          setlayout,      {.v = &layouts[3]} },
+	//{ MODKEY,              XK_t,          setlayout,      {.v = &layouts[0]} },
+	//{ MODKEY|ShiftMask,    XK_f,          setlayout,      {.v = &layouts[1]} },
+	//{ MODKEY,              XK_m,          setlayout,      {.v = &layouts[2]} },
+	//{ MODKEY,              XK_g,          setlayout,      {.v = &layouts[3]} },
 
-	{ MODKEY,              XK_comma,      focusmon,       {.i = -1 } },
-	{ MODKEY,              XK_period,     focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,    XK_comma,      tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,    XK_period,     tagmon,         {.i = +1 } },
-	{ MODKEY,              XK_x,          setgaps,        {.i = -3 } },
-	{ MODKEY,              XK_z,          setgaps,        {.i = +3 } },
-	{ MODKEY,              XK_a,          setgaps,        {.i = 0  } },
-	{ MODKEY|ShiftMask,    XK_a,          setgaps,        {.i = 11 } },
-	{ MODKEY|ShiftMask,    XK_x,          quit,           {0} },
+	//{ MODKEY,              XK_comma,      focusmon,       {.i = -1 } },
+	//{ MODKEY,              XK_period,     focusmon,       {.i = +1 } },
+	//{ MODKEY|ShiftMask,    XK_comma,      tagmon,         {.i = -1 } },
+	//{ MODKEY|ShiftMask,    XK_period,     tagmon,         {.i = +1 } },
+	//{ MODKEY,              XK_x,          setgaps,        {.i = -3 } },
+	//{ MODKEY,              XK_z,          setgaps,        {.i = +3 } },
+	//{ MODKEY,              XK_a,          setgaps,        {.i = 0  } },
+	//{ MODKEY|ShiftMask,    XK_a,          setgaps,        {.i = 11 } },
+	//{ MODKEY|ShiftMask,    XK_x,          quit,           {0} },
 
 	// Switching between monitors
 	
 
-	// Program launching
-	{ MODKEY,              XK_F7,         spawn,          SHCMD("toggle-alpha") },			// toggle alpha
-	{ MODKEY,              XK_n,          spawn,          SHCMD("st -e nvim -c VimwikiIndex") },	// Launch vimwiki
-	{ MODKEY|ShiftMask,    XK_p,          spawn,          SHCMD("passmenu") },
-	{ MODKEY|ShiftMask,    XK_s,          spawn,          SHCMD("synctoggle") },			// syncthing-gtk
-	{ MODKEY,              XK_F1,         spawn,          SHCMD("groff -mom /usr/local/share/dwm/jman.mom -Tpdf | zathura -") },
-	{ MODKEY|ShiftMask,    XK_n,          spawn,          SHCMD("notepadqq") },
-	
 	// Workspaces
 	TAGKEYS(               XK_1,                      0)
 	TAGKEYS(               XK_2,                      1)
