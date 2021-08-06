@@ -32,7 +32,8 @@ static const unsigned int alphas[][3]      = {
 };
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { " dev ", " www ", " sys ", " doc ", " vbox ", " chat ", " mus ", " vid ", " gfx " };
+//static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 //static const char *tags[] = { "", "", "", "", "", "" };
 
 static const Rule rules[] = {
@@ -40,13 +41,16 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	//{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
-	//{ "Brave",    NULL,       NULL,       2,            0,           -1 },
-	{ "Signal",   NULL,       NULL,       1 << 5,       0,           -1 },
-	//{ "Pcmanfm",  "pcmanfm",  NULL,       1 << 2,       0,           -1 },
-	{ "Syncthing GTK", NULL,  NULL,       1 << 8,       0,           -1 },
+	/* class           instance    title       tags mask     switchtotag     isfloating   monitor */
+	//{ "Gimp",          NULL,       NULL,       0,            0,              1,           -1 },
+	{ "Brave",         "brave",    NULL,       1 << 1,       1,              0,           -1 },
+	{ "Pcmanfm",       "pcmanfm",  NULL,       1 << 2,       1,              0,           -1 },
+	{ "Notepadqq",     NULL,       NULL,       1 << 3,       1,              0,           -1 },
+	//{ "Brave",       NULL,       NULL,       1 << 4,       0,              0,           -1 },
+	{ "Signal",        NULL,       NULL,       1 << 5,       1,              0,           -1 },
+	//{ "Brave",       NULL,       NULL,       1 << 6,       0,              0,           -1 },
+	{ "deadbeef",      NULL,       NULL,       1 << 7,       1,              0,           -1 },
+	{ "Syncthing GTK", NULL,       NULL,       1 << 8,       0,              0,           -1 },
 };
 
 /* layout(s) */
@@ -96,7 +100,6 @@ static Key keys[] = {
 	{ MODKEY,              XK_l,          setmfact,       {.f = +0.05} },
 	{ MODKEY,              XK_semicolon,          setmfact,       {.f = +0.05} },
 	{ MODKEY,              XK_space,      zoom,           {0} },
-	{ MODKEY,              XK_Tab,        view,           {0} },
 	{ MODKEY,              XK_q,          killclient,     {0} },
 	{ MODKEY,              XK_e,          spawn,          {.v = filemgr } },
 	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
@@ -109,8 +112,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_r,          spawn,          SHCMD("killall dwm && setsid -f dwm") },
 	
 	// Layout manipulation
-	{ MODKEY|ControlMask,  XK_t,          cyclelayout,      {.i = -1 } },
-	{ MODKEY|ControlMask,  XK_f,          cyclelayout,      {.i = +1 } },
+	{ MODKEY,              XK_Tab,        cyclelayout,      {.i = +1 } },
+	{ MODKEY|ControlMask,  XK_f,          cyclelayout,      {.i = -1 } },
 	{ MODKEY,              XK_space,      setlayout,        {0} },
 	{ MODKEY|ShiftMask,    XK_space,      togglefloating,   {0} },
 	{ MODKEY,              XK_0,          view,             {.ui = ~0 } },
@@ -130,7 +133,7 @@ static Key keys[] = {
 	{ MODKEY,              XK_z,          setgaps,        {.i = +3 } },
 	{ MODKEY,              XK_a,          setgaps,        {.i = 0  } },
 	{ MODKEY|ShiftMask,    XK_a,          setgaps,        {.i = 11 } },
-	//{ MODKEY|ShiftMask,    XK_a,          quit,           {0} },
+	{ MODKEY|ShiftMask,    XK_x,          quit,           {0} },
 
 	// Switching between monitors
 	
@@ -141,6 +144,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_p,          spawn,          SHCMD("passmenu") },
 	{ MODKEY|ShiftMask,    XK_s,          spawn,          SHCMD("synctoggle") },			// syncthing-gtk
 	{ MODKEY,              XK_F1,         spawn,          SHCMD("groff -mom /usr/local/share/dwm/jman.mom -Tpdf | zathura -") },
+	{ MODKEY|ShiftMask,    XK_n,          spawn,          SHCMD("notepadqq") },
 	
 	// Workspaces
 	TAGKEYS(               XK_1,                      0)
