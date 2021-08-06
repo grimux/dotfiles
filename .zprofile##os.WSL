@@ -30,6 +30,9 @@ export LESS_TERMCAP_se="$(printf '%b' '[0m')"; a="${a%_}"
 export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"; a="${a%_}"
 export LESS_TERMCAP_ue="$(printf '%b' '[0m')"; a="${a%_}"
 
+# qt theme-ing from gtk
+export QT_QPA_PLATFORMTHEME="qt5ct"
+
 # My Custom Aliases
 # Use this to create custom commands that can run various other commands
 if [ -f $HOME/.config/aliasrc ]; then
