@@ -15,7 +15,7 @@ export TERMINAL="st"
 export WSLENV="/mnt/s/tools:/mnt/c/Program\ Files/SumatraPDF"
 
 # WSL 2 Configuration
-export DISPLAY=$(grep nameserver /etc/resolv.conf | awk '{print $2}'):0
+#export DISPLAY=$(grep nameserver /etc/resolv.conf | awk '{print $2}'):0
 
 # less/man colors
 export LESS=-R
@@ -43,6 +43,7 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
     PATH="$HOME/.local/bin/laptop:$PATH"
     PATH="$HOME/.local/bin/statusbar:$PATH"
+    PATH="$HOME/.local/bin/games:$PATH"
 fi
 
 # Disable the ctrl-s and ctrl-q shortcuts, which disable/enable keyboard input in vim
