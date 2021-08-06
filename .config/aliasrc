@@ -27,3 +27,4 @@ alias \
 	trem="transmission-remote $*" \
 	py="python" \
 	mit="cd /mnt/s/Documents/school/MIT\ OpenCourseWare/6.0001/" \
+	xrr="xmonad --recompile && xmonad --restart && arcolinux-restart-polybar && notify-send 'xmonad rebuild'" \

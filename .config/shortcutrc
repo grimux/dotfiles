@@ -30,5 +30,5 @@ cfB="$EDITOR ~/.config/i3blocks/config" \
 cfk="$EDITOR ~/.config/sxhkd/sxhkdrc" \
 cfr="$EDITOR ~/.config/ranger/rc.conf" \
 cfp="$EDITOR ~/.zprofile" \
-cfx="$EDITOR ~/.config/xmonad/xmonad.hs" \
-cfxb="$EDITOR ~/.config/xmobar/xmobarrc" \
+cfx="$EDITOR ~/.xmonad/xmonad.hs" \
+cfxb="$EDITOR ~/.xmobarrc" \
