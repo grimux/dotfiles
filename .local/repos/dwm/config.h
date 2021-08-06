@@ -80,15 +80,19 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-p", "Run:", NULL };
 static const char *termcmd[]  = { "st", NULL };
 static const char *filemgr[]  = { "pcmanfm", NULL };
+static const char *termfilemgr[] = { "st", "-e", "ranger", NULL };
 static const char *browser[]  = { "brave", NULL };
+static const char *fullscreen[] = { togglefullscr, togglebar, NULL };
 
 static Key keys[] = {
 	/* modifier            key            function        argument */
-	{ MODKEY|ShiftMask,    XK_Return,     spawn,          {.v = dmenucmd } },
-	{ MODKEY,	       XK_Return,     spawn,          {.v = termcmd } },
+	{ MODKEY,              XK_space,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,	       XK_Return,     spawn,          {.v = termcmd }  },
+	{ MODKEY|ShiftMask,    XK_Return,     spawn,          {.v = filemgr }  }, 
+	{ MODKEY,              XK_r,          spawn,          {.v = termfilemgr } },
 	{ MODKEY,              XK_b,          togglebar,      {0} },
 	{ MODKEY,              XK_j,          focusstack,     {.i = +1 } },
 	{ MODKEY,              XK_k,          focusstack,     {.i = -1 } },
@@ -98,12 +102,13 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_o,          incnmaster,     {.i = -1 } },
 	{ MODKEY,              XK_h,          setmfact,       {.f = -0.05} },
 	{ MODKEY,              XK_l,          setmfact,       {.f = +0.05} },
-	{ MODKEY,              XK_semicolon,          setmfact,       {.f = +0.05} },
-	{ MODKEY,              XK_space,      zoom,           {0} },
+	{ MODKEY,              XK_semicolon,  setmfact,       {.f = +0.05} },
+	//{ MODKEY,              XK_space,      zoom,           {0} },
 	{ MODKEY,              XK_q,          killclient,     {0} },
 	{ MODKEY,              XK_e,          spawn,          {.v = filemgr } },
 	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
 	{ MODKEY,              XK_f,          togglefullscr,  {0} },
+	{ MODKEY,              XK_f,          togglebar,      {0} },
 	{ MODKEY,              XK_grave,      spawn,          SHCMD("dmenuunicode") },
 	{ MODKEY,              XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 5; pkill -RTMIN+40 dwmblocks") },
 	{ MODKEY|ShiftMask,    XK_minus,      spawn,          SHCMD("pamixer --allow-boost -d 15; pkill -RTMIN+40 dwmblocks") },
@@ -112,9 +117,9 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,    XK_r,          spawn,          SHCMD("killall dwm && setsid -f dwm") },
 	
 	// Layout manipulation
-	{ MODKEY,              XK_Tab,        cyclelayout,      {.i = +1 } },
-	{ MODKEY|ControlMask,  XK_f,          cyclelayout,      {.i = -1 } },
-	{ MODKEY,              XK_space,      setlayout,        {0} },
+	//{ MODKEY,              XK_Tab,        cyclelayout,      {.i = +1 } },
+	//{ MODKEY|ControlMask,  XK_f,          cyclelayout,      {.i = -1 } },
+	//{ MODKEY,              XK_space,      setlayout,        {0} },
 	{ MODKEY|ShiftMask,    XK_space,      togglefloating,   {0} },
 	{ MODKEY,              XK_0,          view,             {.ui = ~0 } },
 	{ MODKEY|ShiftMask,    XK_0,          tag,              {.ui = ~0 } },
