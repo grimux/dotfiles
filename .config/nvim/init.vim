@@ -59,7 +59,7 @@ set pastetoggle=<F8>
 set splitbelow splitright
 let mapleader = ","
 set wildmode=longest,list,full
-set clipboard=unnamed			" when yanking, send to system clipboard ("*) instead of normal buffer
+set clipboard=unnamedplus			" when yanking, send to system clipboard ("*) instead of normal buffer
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Remaps
