@@ -5,17 +5,16 @@
 
 export EDITOR="nvim"
 export READER="zathura"
-export FILE="lf"
+export FILE="ranger"
 export BROWSER="brave"
 #export PAGER="most"
 export GITCSS="/mnt/s/tools/web/github-pandoc.css"
 export ZDOTDIR="$HOME/.config/zsh"
 #export TERMINAL="xterm-256color"
 export TERMINAL="st"
-export WSLENV="/mnt/s/tools:/mnt/c/Program\ Files/SumatraPDF"
 
-# WSL 2 Configuration
-#export DISPLAY=$(grep nameserver /etc/resolv.conf | awk '{print $2}'):0
+# java application fix when using DWM
+export _JAVA_AWT_WM_NONREPARENTING=1
 
 # less/man colors
 export LESS=-R
@@ -49,13 +48,10 @@ fi
 # Disable the ctrl-s and ctrl-q shortcuts, which disable/enable keyboard input in vim
 stty -ixon
 
-# Output monitor for X-server (GUI applications)
-#export display=:0
-
 # Automatically start tmux at login
 #[ -z "$TMUX" ] && { tmux attach || exec tmux new-session && exit;}
 
 # Alias to load up nvm.  Usefull for avoiding long wsl startup time
-alias load_nvm='export NVM_DIR="$HOME/.local/nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"'
-alias node='unalias node npm && load_nvm && node'
-alias npm='unalias node npm && load_nvm && npm'
+#alias load_nvm='export NVM_DIR="$HOME/.local/nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"'
+#alias node='unalias node npm && load_nvm && node'
+#alias npm='unalias node npm && load_nvm && npm'
