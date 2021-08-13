@@ -70,7 +70,6 @@ static const Layout layouts[] = {
 };
 
 #include <X11/XF86keysym.h>
-#include "selfrestart.c"
 /* key definitions */
 #define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
@@ -115,7 +114,6 @@ static Key keys[] = {
 	{ MODKEY,              XK_o,          incnmaster,     {.i = +1 } },
 	{ MODKEY|ShiftMask,    XK_o,          incnmaster,     {.i = -1 } },
 	{ MODKEY,              XK_q,          killclient,     {0} },
-	{ MODKEY|ShiftMask,    XK_r,          self_restart,   {0} },
 	//{ MODKEY|ShiftMask,    XK_r,          spawn,          SHCMD("pkill dwm && setsid -f dwm") },
 	{ MODKEY,              XK_w,          spawn,          {.v = browser } },
 	{ MODKEY,              XK_grave,      spawn,          SHCMD("dmenuunicode") },
