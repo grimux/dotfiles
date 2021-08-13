@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+cpuload=$(mpstat | awk '/all/ {print $4 "%"}')
+printf "%s\n" "$cpuload"

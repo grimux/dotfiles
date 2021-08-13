@@ -1,10 +1,17 @@
 #!/bin/sh
 
-# Script for displaying the volume in my status bar
+# Prints the current volume or 🔇 if muted.
 
-vol=$(pamixer --get-volume-human)
-icon="🔈"
+[ $(pacmd list-sinks | awk '/muted/ {print $2}') = "yes" ] && echo 🔇 && exit
 
-[ $(pamixer --get-mute) = true ] && echo 🔇 && exit
+vol="$(awk -F"[][]" '/Left:/ { print $2 }' <(amixer sget Master))"
 
-printf "%s%s\n" "$icon" "$vol"
+if [ "$vol" -gt "70%" ]; then
+	icon="🔊"
+elif [ "$vol" -lt "30%" ]; then
+	icon="🔈"
+else
+	icon="🔉"
+fi
+
+echo "$icon$vol"

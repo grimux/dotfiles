@@ -1,5 +1,3 @@
-#!/bin/sh
-
-#[ $(sensors) ] || exit
-
-sensors | awk '/Core 0/ {print "🌡"$3}'
+#!/usr/bin/env bash
+cputemp=$(sensors | awk '/Tdie:/ {print $2}')
+printf "%s\n" "$cputemp"

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# Status bar module for xow
+
+statuscheck=$(pgrep xow)
+icon="🎮 "
+[[ $statuscheck ]] || exit
+
+#printf "%s %s\n" "$icon" "xow"
+echo $icon xow
