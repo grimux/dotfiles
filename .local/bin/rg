@@ -1,0 +1,57 @@
+#!/bin/bash
+# When the environment is set to '/bin/sh' the regex if statement would not compute...
+# A script to select a random file in the current directory.  I will use this to help select a random game for myself
+# Now with a new and improved formula!
+
+# Test the first argument if it is empty, if it is set the value to 1
+[ -z "$1" ] && repeat=1 || repeat=$1
+[ "$1" == "-s" ] && flag=1
+[ "$1" == "-e" ] && flag=2
+[ "$1" == "-f" ] && flag=3
+[ "$1" == "-n" ] && flag=4
+[ "$1" == "-h" ] && flag=0
+
+# Main function to control loops and logic, with recursion!
+gamelist() {
+	cd "$1"
+	for n in *;
+	do
+		# If the directory contains the word "Series"
+		# This will be the case when there are multiple games inside of one folder, i.e. The Sims Series
+		if [[ $n =~ .*Series.* ]];
+		then
+			gamelist "$1/$n"
+		else
+			# Base case for recursion
+			printf '%s\n' "$n"
+		fi
+	done
+}
+
+# Run the function and pipe it into `shuf`.  `shuf` will then randomly pick $repeat number of games
+case $flag in
+	# Help message
+	0)
+		printf "usage: rg (int) (flag)\n-s:\tGame Shortcuts\n-e:\tEmulators\n-f:\tEndless\n-n:\tNot Currently Playing\n-h:\tPrint this message\n"
+		;;
+	# Games Currently Playing
+	1)
+		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games" | shuf -n1 | sed 's/.lnk//'
+		;;
+	# Emulators
+	2)
+		gamelist "/mnt/x/game-stuff/Emulation" | shuf -n1 | sed 's/.lnk//'
+		;;
+	# Endless games
+	3)
+		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games/endless" | shuf -n1 | sed 's/.lnk//'
+		;;
+	4)
+		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games/Not Currently Playing" | shuf -n1 | sed 's/.lnk//'
+		;;
+	# Default case
+	*)
+		gamelist "/mnt/x/game-stuff/Games" | shuf -n$repeat
+		;;
+esac
+
