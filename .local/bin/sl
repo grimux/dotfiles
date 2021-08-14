@@ -1,18 +1,19 @@
 #!/usr/bin/sh
 
 repos="$HOME/.local/repos"
+config=config.def.h
 case $1 in
 	dwm)
 		cd $repos/dwm
-		nvim config.h
+		nvim $config
 		;;
 	dmenu)
 		cd $repos/dmenu
-		nvim config.h
+		nvim $config
 		;;
 	st)
 		cd $repos/st
-		nvim config.h
+		nvim $config
 		;;
 	dwmb)
 		;&
