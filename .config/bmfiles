@@ -16,5 +16,6 @@ cfB	~/.config/i3blocks/config
 cfk	~/.config/sxhkd/sxhkdrc
 cfr	~/.config/ranger/rc.conf
 cfp	~/.zprofile
-cfx	~/.config/xmonad.hs
+cfx	~/.xmonad/xmonad.hs
 cfxb	~/.config/xmobar/xmobarrc
+cfal	~/.config/alacritty/alacritty.yml
