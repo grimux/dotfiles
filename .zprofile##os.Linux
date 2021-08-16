@@ -16,6 +16,8 @@ export TERMINAL="st"
 # java application fix when using DWM
 export _JAVA_AWT_WM_NONREPARENTING=1
 
+export CM_IGNORE_WINDOW=qtpass
+
 # less/man colors
 export LESS=-R
 export LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"; a="${a%_}"
