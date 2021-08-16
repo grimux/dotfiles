@@ -25,12 +25,13 @@ case $1 in
 		;&
 	man)
 		cd $repos/dwm
-		nvim jman.mom
+		nvim manual.mom
 		;;
 	*)
-		printf "Options: dwm dmenu st dwmblocks manual\n"
+		printf "Options:\ndwm\ndmenu\nst\ndwmblocks, dwmb\nmanual, man\n"
 		exit
 esac
 
+rm -f config.h
 sudo make install
 make clean
