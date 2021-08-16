@@ -1,0 +1,6 @@
+game:
+  args: -iddqd
+  exe: /home/jacob/Games/darkwood/game/Darkwood.x86_64
+  working_dir: ~/Games/darkwood
+linux: {}
+system: {}

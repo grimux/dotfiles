@@ -1,0 +1,8 @@
+game:
+  exe: /home/jacob/Games/cloudpunk/Cloudpunk.exe
+  prefix: ~/Games/cloudpunk/prefix
+  working_dir: ~/Games/cloudpunk
+system: {}
+wine:
+  esync: true
+  version: Proton-6.14-GE-2

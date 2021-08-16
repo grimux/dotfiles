@@ -1,0 +1,7 @@
+game:
+  exe: /home/jacob/Games/Autonauts/Autonauts.exe
+  prefix: ~/Games/Autonauts
+  working_dir: ~/Games/Autonauts
+system: {}
+wine:
+  version: system

@@ -1,0 +1,5 @@
+game:
+  exe: /home/jacob/Games/stardew-valley/game/StardewModdingAPI
+  working_dir: ~/Games/stardew-valley/game
+linux: {}
+system: {}

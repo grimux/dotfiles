@@ -1,0 +1,6 @@
+game:
+  exe: /home/jacob/Games/factorio/drive_c/Games/Factorio/bin/x64/factorio.exe
+  prefix: ~/Games/factorio
+  working_dir: ~/Games/factorio
+system: {}
+wine: {}

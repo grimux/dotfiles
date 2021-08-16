@@ -1,0 +1,6 @@
+game:
+  args: --nogui --elf /home/jacob/Games/persona3/elf/SLUS_216.21.elf
+  exe: /home/jacob/Games/persona3/PCSX2
+  working_dir: ~/Games/persona3
+linux: {}
+system: {}

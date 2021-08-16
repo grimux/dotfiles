@@ -1,0 +1,5 @@
+game:
+  exe: /home/jacob/Games/basingstoke/start.sh
+  working_dir: ~/Games/basingstoke
+linux: {}
+system: {}

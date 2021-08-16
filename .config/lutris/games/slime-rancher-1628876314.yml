@@ -1,0 +1,5 @@
+game:
+  exe: /home/jacob/Games/slime-rancher/start.sh
+  working_dir: ~/Games/slime-rancher/game
+linux: {}
+system: {}

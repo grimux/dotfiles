@@ -1,0 +1,8 @@
+game:
+  exe: /home/jacob/Games/blasphemous/drive_c/Games/Blasphemous/Blasphemous.exe
+  prefix: ~/Games/blasphemous
+system: {}
+wine:
+  overrides:
+    winhttp: native,builtin
+  version: Proton-6.14-GE-2
