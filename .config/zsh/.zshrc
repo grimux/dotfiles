@@ -2,16 +2,16 @@
 
 # Enable colors and change prompt:
 autoload -U colors && colors
-# My Colors
-#PS1="%B%{$fg[blue][%{$fg[yellow]%}%n%{$fg[cyan]%}@%{$fg[white]%}%M %{$fg[black]%}%1~%{$fg[blue]%}]%{$reset_color%}$%b "
-# Luke Colors
+# My favorite
 #PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}]%{$reset_color%}$%b "
+
+# Not my favorite
 #PS1="%B%{$fg[blue]%}[%{$fg[magenta]%}%n%{$fg[green]%}@%{$fg[orange]%}%M %{$fg[yellow]%}%~%{$fg[blue]%}]%{$reset_color%}$%b "
 
-# History in cache directory:
+# History in .config/zsh:
 HISTSIZE=10000
 SAVEHIST=10000
-HISTFILE=~/.cache/zsh/history
+HISTFILE=$ZDOTDIR/history
 
 # Basic auto/tab complete:
 autoload -U compinit
@@ -77,3 +77,6 @@ source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 
 # starship prompt
 eval "$(starship init zsh)"
+
+# colorscript on launch
+colorscript random

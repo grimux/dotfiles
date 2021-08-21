@@ -81,7 +81,7 @@ window:
 scrolling:
   # Maximum number of lines in the scrollback buffer.
   # Specifying '0' will disable scrolling.
-  history: 5000
+  history: 10000
 
   # Number of lines the viewport will move for every line scrolled when
   # scrollback is enabled (history > 0).
@@ -111,6 +111,7 @@ font:
     #   - (Windows) Consolas
     # family: Source Code Pro
     family: Inconsolata Nerd Font Mono
+    
     # family: CodeNewRoman Nerd Font
     # family: RobotoMono Nerd Font
     # family: Hack
@@ -626,9 +627,8 @@ key_bindings:
   - { key: C,         mods: Control|Shift, action: Copy                        }
   - { key: Insert,    mods: Shift,         action: PasteSelection              }
   - { key: Key0,      mods: Control,       action: ResetFontSize               }
-  - { key: Equals,    mods: Control,       action: IncreaseFontSize            }
-  - { key: Plus,      mods: Control,       action: IncreaseFontSize            }
-  - { key: Minus,     mods: Control,       action: DecreaseFontSize            }
+  - { key: J,         mods: Control,       action: IncreaseFontSize            }
+  - { key: K,         mods: Control,       action: DecreaseFontSize            }
   - { key: F11,       mods: None,          action: ToggleFullscreen            }
   - { key: Paste,     mods: None,          action: Paste                       }
   - { key: Copy,      mods: None,          action: Copy                        }

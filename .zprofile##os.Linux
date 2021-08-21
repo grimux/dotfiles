@@ -11,7 +11,7 @@ export BROWSER="brave"
 export GITCSS="/mnt/s/tools/web/github-pandoc.css"
 export ZDOTDIR="$HOME/.config/zsh"
 #export TERMINAL="xterm-256color"
-export TERMINAL="st"
+export TERMINAL="alacritty"
 
 # java application fix when using DWM
 export _JAVA_AWT_WM_NONREPARENTING=1
