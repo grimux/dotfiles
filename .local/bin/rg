@@ -1,14 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # When the environment is set to '/bin/sh' the regex if statement would not compute...
 # A script to select a random file in the current directory.  I will use this to help select a random game for myself
 # Now with a new and improved formula!
 
-# Test the first argument if it is empty, if it is set the value to 1
-[ -z "$1" ] && repeat=1 || repeat=$1
+# Complex if statments.  Used to parse arguments passed to the script
+# if arg1 empty and arg2 empty then repeat is 1
+[ -z "$1" ] && [ -z "$2" ] && repeat=1
+# if arg1 full and arg2 empty then repeat is arg1
+[ -n "$1" ] && [ -z "$2" ] && repeat=$1
+# if arg1 full and arg2 full then repeat is arg2
+[ -n "$1" ] && [ -n "$2" ] && repeat=$2
+# if arg1 is not a number and arg2 is empty then repeat is 1
+! [[ $1 =~ ^[0-9]+$ ]] && [ -z "$2" ] && repeat=1
+
+# Flags used to control the `case` flow
 [ "$1" == "-s" ] && flag=1
 [ "$1" == "-e" ] && flag=2
 [ "$1" == "-f" ] && flag=3
 [ "$1" == "-n" ] && flag=4
+[ "$1" == "-l" ] && flag=5
 [ "$1" == "-h" ] && flag=0
 
 # Main function to control loops and logic, with recursion!
@@ -32,22 +42,26 @@ gamelist() {
 case $flag in
 	# Help message
 	0)
-		printf "usage: rg (int) (flag)\n-s:\tGame Shortcuts\n-e:\tEmulators\n-f:\tEndless\n-n:\tNot Currently Playing\n-h:\tPrint this message\n"
+		printf "usage: rg (flag) (int)\n-s:\tGame Shortcuts\n-e:\tEmulators\n-f:\tEndless\n-n:\tNot Currently Playing\n-l:\tLutris Games\n-h:\tPrint this message\n"
 		;;
 	# Games Currently Playing
 	1)
-		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games" | shuf -n1 | sed 's/.lnk//'
+		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games" | shuf -n$repeat | sed 's/.lnk//'
 		;;
 	# Emulators
 	2)
-		gamelist "/mnt/x/game-stuff/Emulation" | shuf -n1 | sed 's/.lnk//'
+		gamelist "/mnt/x/game-stuff/Emulation" | shuf -n$repeat | sed 's/.lnk//'
 		;;
 	# Endless games
 	3)
-		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games/endless" | shuf -n1 | sed 's/.lnk//'
+		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games/endless" | shuf -n$repeat | sed 's/.lnk//'
 		;;
 	4)
-		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games/Not Currently Playing" | shuf -n1 | sed 's/.lnk//'
+		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games/Not Currently Playing" | shuf -n$repeat | sed 's/.lnk//'
+		;;
+	# Lutris
+	5)
+		gamelist "$HOME/.config/lutris/games" | sed 's/-*[0-9]*.yml//' | shuf -n$repeat
 		;;
 	# Default case
 	*)
