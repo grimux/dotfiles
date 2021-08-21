@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+scrot screenshot_%Y_%m_%d_%H_%M_%S.png -e 'mv $f $$(xdg-user-dir PICTURES); notify-send "Screenshot Taken\n$f"'
