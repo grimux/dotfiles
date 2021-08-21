@@ -1,5 +1,7 @@
 game:
-  exe: /home/jacob/Games/grime/drive_c/Games/GRIME/GRIME.exe
+  exe: /home/jacob/Games/grime/game/files/GRIME.exe
+  prefix: ~/Games/grime/game/prefix
+  working_dir: ~/Games/grime/game/files
 system: {}
 wine:
   version: Proton-6.14-GE-2
