@@ -1,0 +1,50 @@
+#!/bin/sh
+
+#
+# ~/.xsession
+#
+# Startup stuff for dwm
+#
+# Executed by xdm/gdm/kdm at login
+
+
+# Function to check and see if process is already running, if so send to null
+start() {
+	pidof "$1" > /dev/null 2> /dev/null || "$@" &
+}
+
+# dwmblocks status bar
+dwmblocks &
+
+# notifications
+start dunst
+
+# Compositor
+start picom -b
+
+# Bluelight filter, only for dwm
+start redshift
+
+# volume icon
+# start volumeicon
+
+# imwheel, because scroll speed is too slow
+start imwheel -b 45
+
+# network manager applet
+start nm-applet
+
+# hide mouse after some idle time
+# start unclutter
+
+# remap caps to escape
+setxkbmap -option caps:escape
+
+# Nirogen for wallpaper
+# nitrogen --restore
+
+# Or use Variety, for auto wallpaper switching
+start variety
+
+# Screen blankout time, in seconds
+xset s 900
