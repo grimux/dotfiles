@@ -4,7 +4,7 @@
 	<icon>utilities-terminal</icon>
 	<name>Open Terminal Here</name>
 	<unique-id>1488955845049151-1</unique-id>
-	<command>st</command>
+	<command>alacritty</command>
 	<description>Opens the terminal</description>
 	<patterns>*</patterns>
 	<startup-notify/>
@@ -20,6 +20,15 @@
 	<directories/>
 	<other-files/>
 	<text-files/>
+</action>
+<action>
+	<icon>file-manager-green</icon>
+	<name>Open in Ranger</name>
+	<unique-id>1629427193897654-1</unique-id>
+	<command>alacritty -e ranger %f</command>
+	<description></description>
+	<patterns>*</patterns>
+	<directories/>
 </action>
 <action>
 	<icon>final-term</icon>
