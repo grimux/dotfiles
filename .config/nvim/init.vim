@@ -13,6 +13,7 @@ Plug 'preservim/nerdtree'
 Plug 'jreybert/vimagit'
 Plug 'junegunn/goyo.vim'
 Plug 'itchyny/lightline.vim'
+Plug 'francoiscabrol/ranger.vim'
 Plug 'vifm/vifm.vim'
 "Plug 'vim-airline/vim-airline'
 Plug 'joshdick/onedark.vim'
@@ -76,7 +77,7 @@ map <F1> :Magit<CR>
 map <F2> :NERDTree<CR>
 
 " Goyo
-map <leader>f :Goyo <BAR> set linebreak<CR>
+map <leader>g :Goyo <BAR> set linebreak<CR>
 
 " vimwiki
 map <leader>wm :VimwikiAll2HTML<CR>
