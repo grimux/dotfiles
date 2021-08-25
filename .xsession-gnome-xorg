@@ -16,5 +16,7 @@ start() {
 # Screensaver for X.  Gnome power settings don't work for some reason, probably because of using Gnome-xorg instead of wayland
 start xscreensaver --no-splash
 
+start imwheel -b 45
+
 # remap caps to escape
 setxkbmap -option caps:escape
