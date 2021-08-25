@@ -11,6 +11,7 @@ echo "WM-Switcher (SDDM)"
 echo "1. XMonad"
 echo "2. dwm"
 echo "3. Gnome-xorg"
+echo "4. Awesome"
 
 read -p "Please make a choice: " input
 
@@ -23,6 +24,9 @@ case $input in
 		;;
 	3)
 		wms gnome-xorg
+		;;
+	4)
+		wms awesome
 		;;
 	*)
 		echo "Invalid input"
