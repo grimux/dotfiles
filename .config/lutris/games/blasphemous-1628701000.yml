@@ -1,6 +1,7 @@
 game:
-  exe: /home/jacob/Games/blasphemous/drive_c/Games/Blasphemous/Blasphemous.exe
-  prefix: ~/Games/blasphemous
+  exe: /home/jacob/Games/blasphemous/game/files/Blasphemous.exe
+  prefix: ~/Games/blasphemous/game/prefix
+  working_dir: ~/Games/blasphemous/game/files
 system: {}
 wine:
   overrides:
