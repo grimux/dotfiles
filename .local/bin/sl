@@ -27,6 +27,12 @@ case $1 in
 		cd $repos/dwm
 		nvim manual.mom
 		;;
+	cheat)
+		;&
+	txt)
+		cd $repos/dwm
+		nvim cheatsheet.txt
+		;;
 	*)
 		printf "Options:\ndwm\ndmenu\nst\ndwmblocks, dwmb\nmanual, man\n"
 		exit
