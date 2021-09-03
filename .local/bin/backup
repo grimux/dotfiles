@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+# My backup script, ported to linux
+
+# vars
+USBFILE=/dev/$(lsblk -f | awk '/E1B1-20D6/ {print $1}')
+DESTINATION="/run/media/jacob/backup"
+
+# Setup
+if [ ! -d $DESTINATION ]; then
+	sudo mkdir $DESTINATION
+	sudo mount -o uid=1000 $USBFILE $DESTINATION
+	echo mounted
+fi
+
+# Backup documents
+rsync -r -t -v --progress --delete --modify-window=1 -l -H -s /home/jacob/Documents/ $DESTINATION/documents-jake
+rsync -r -t -v --progress --delete --modify-window=1 -l -H -s /home/jacob/serena-docs/ $DESTINATION/documents-serena
+
+# Backup wallpapers
+rsync -r -t -v --progress --delete --modify-window=1 -l -H -s /home/jacob/Pictures/wallpapers $DESTINATION
+
+# Backup game screenshots
+rsync -r -t -v --progress --delete --modify-window=1 -l -H -s /home/jacob/Pictures/game-screenshots $DESTINATION
+
+# Clean up
+sudo umount -r $DESTINATION
+rmdir $DESTINATION
