@@ -14,7 +14,7 @@ start() {
 }
 
 # dwmblocks status bar
-dwmblocks &
+start dwmblocks
 
 # notifications
 start dunst
@@ -28,6 +28,13 @@ start redshift
 # volume icon
 # start volumeicon
 
+# remap caps to escape
+setxkbmap -option caps:escape
+setleds -D +num
+
+# clipmenu for clipboard managment
+start clipmenud
+
 # imwheel, because scroll speed is too slow
 start imwheel -b 45
 
@@ -36,9 +43,6 @@ start nm-applet
 
 # hide mouse after some idle time
 # start unclutter
-
-# remap caps to escape
-setxkbmap -option caps:escape
 
 # Nirogen for wallpaper
 # nitrogen --restore

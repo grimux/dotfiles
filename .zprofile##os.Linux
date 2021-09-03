@@ -19,7 +19,11 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 # Export GTK themes to Qt
 export QT_QPA_PLATFORMTHEME=gtk2
 
-export CM_IGNORE_WINDOW=qtpass
+# Clipmenu settings
+# clipmenu history location
+export CM_DIR=$HOME/.cache/clipmenu
+# Ignore copy from qtpass
+export CM_IGNORE_WINDOW=QtPass
 
 # less/man colors
 export LESS=-R
@@ -52,6 +56,10 @@ fi
 
 # Disable the ctrl-s and ctrl-q shortcuts, which disable/enable keyboard input in vim
 stty -ixon
+
+# MangoHud
+#export MANGOHUD=1
+#export MANGOHUD_DLSYM=1
 
 # Automatically start tmux at login
 #[ -z "$TMUX" ] && { tmux attach || exec tmux new-session && exit;}
