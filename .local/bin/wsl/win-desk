@@ -5,6 +5,9 @@
 cd ~
 ~/.fehbg				# set background
 xcompmgr &				# start xcompmgr for transparency
+imwheel -b 45 &				# Faster scolling
+#variety &				# Wallpaper
+nitrogen --restore			# Wallpaper
 #~/.local/bin/dwmbar >/dev/null 2>&1 &	# start dwmbar script to control status bar
 dwmblocks &				# start dwmblocks status bar
 dwm	 				# start dwm
