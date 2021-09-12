@@ -1,1 +1,1 @@
--o /mnt/x/Music/%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s --add-metadata -x --audio-format mp3
+-o /mnt/s/music/%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s --add-metadata -x --audio-format mp3

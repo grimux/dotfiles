@@ -1,0 +1,1 @@
+-o /mnt/s/music/Podcasts/%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s --add-metadata --playlist-reverse -i
