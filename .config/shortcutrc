@@ -11,6 +11,7 @@ sc="clear && cd ~/.local/bin && ls -a" \
 mn="clear && cd /mnt && ls -a" \
 web="clear && cd ~/Documents/source/websites && ls -a" \
 inv="clear && cd ~/Documents/therapy/inventory && ls -a" \
+tool="clear && cd /mnt/s/tools && ls -a" \
 bf="$EDITOR ~/.config/bmfiles" \
 bd="$EDITOR ~/.config/bmdirs" \
 cfa="$EDITOR ~/.config/aliasrc" \
