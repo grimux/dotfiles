@@ -17,6 +17,10 @@ export WSLENV="/mnt/s/tools:/mnt/c/Program\ Files/SumatraPDF"
 # password location, on the Windows side
 #export PASSWORD_STORE_DIR="/mnt/s/.password-store"
 
+# RVM and ruby paths
+export GEM_HOME="$HOME/.rvm/gems"
+export GEM_PATH="$HOME/.rvm/gems/ruby-3.0.0/bin"
+
 # WSL 2 Configuration
 export DISPLAY=$(grep nameserver /etc/resolv.conf | awk '{print $2}'):0
 
@@ -50,6 +54,8 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin/laptop:$PATH"
     PATH="$HOME/.local/bin/statusbar:$PATH"
     PATH="$HOME/.local/bin/wsl:$PATH"
+    PATH="$HOME/.rvm/gems/ruby-3.0.0/bin:$PATH"
+    PATH="$HOME/.rvm/gems/ruby-3.0.0/wrappers:$PATH"
 fi
 
 # Disable the ctrl-s and ctrl-q shortcuts, which disable/enable keyboard input in vim
