@@ -81,6 +81,7 @@ map <leader>g :Goyo <BAR> set linebreak<CR>
 
 " vimwiki
 map <leader>wm :VimwikiAll2HTML<CR>
+map <leader>wa :VimwikiGoto personal/mental-health/autism/autism-notes<CR>
 
 " Shortcut split navigation
 map <C-h> <C-w>h
@@ -132,6 +133,7 @@ let vimwiki_jake.template_ext = '.html'
 let vimwiki_jake.syntax = 'markdown'
 let vimwiki_jake.ext = '.md'
 let vimwiki_jake.custom_wiki2html = 'vimwiki_markdown'
+let vimwiki_jake.html_filename_parameterization = 1
 
 let vimwiki_serena = {}
 let vimwiki_serena.path = '$HOME/Documents/vimwiki-serena'
