@@ -65,7 +65,7 @@ case $flag in
 		;;
 	# Default case
 	*)
-		gamelist "/mnt/x/game-stuff/Games" | shuf -n$repeat
+		gamelist "/mnt/x/game-stuff/game-collection" | shuf -n$repeat
 		;;
 esac
 
