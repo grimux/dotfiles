@@ -1,32 +1,37 @@
 #!/usr/bin/env bash
 
-wms() {
+sddm-switch() {
 	sudo sed -i".bak" "s/Session=.*/Session=$1/" /etc/sddm.conf
 	printf "\n%s\n" "$1 selected"
 	ln -sfv $HOME/.xsession-$1 $HOME/.xsession
 	printf "%s\n\n%s\n" "sddm.conf written" "Please restart xsession"
 }
 
-echo "WM-Switcher (SDDM)"
-echo "1. XMonad"
-echo "2. dwm"
-echo "3. Gnome-xorg"
+startx-switch() {
+	ln -sfv $HOME/.xinitrc-$1 $HOME/.xinitrc
+	printf "%s\n\n%s\n" ".xinitrc written" "Please restart xxsession"
+}
+
+echo "WM-Switcher (startx)"
+echo "1. dwm"
+echo "2. Gnome-xorg"
+echo "3. XMonad"
 echo "4. Awesome"
 
 read -p "Please make a choice: " input
 
 case $input in
 	1)
-		wms xmonad
+		startx-switch dwm
 		;;
 	2)
-		wms dwm
+		startx-switch gnome
 		;;
 	3)
-		wms gnome-xorg
+		echo not installed
 		;;
 	4)
-		wms awesome
+		echo not installed
 		;;
 	*)
 		echo "Invalid input"
