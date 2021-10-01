@@ -1,0 +1,10 @@
+# Startx
+
+export XDG_SESSION_TYPE=x11
+export GDK_BACKEND=x11
+
+redshift-gtk &
+clipmenud &
+variety &
+xscreensaver --no-splash &
+exec gnome-session

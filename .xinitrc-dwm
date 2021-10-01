@@ -1,0 +1,11 @@
+# Startx
+
+redshift &
+dwmblocks &
+dunst &
+picom &
+setxkbmap -option caps:escape
+clipmenud &
+nitrogen --restore
+xset s 900
+exec dwm
