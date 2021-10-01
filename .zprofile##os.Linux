@@ -68,3 +68,8 @@ stty -ixon
 #alias load_nvm='export NVM_DIR="$HOME/.local/nvm" && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"'
 #alias node='unalias node npm && load_nvm && node'
 #alias npm='unalias node npm && load_nvm && npm'
+
+# auto run startx on tty1 login
+#if [[ -z $DISPLAY && $(tty) == /dev/tty1 ]]; then
+#	exec startx
+#fi
