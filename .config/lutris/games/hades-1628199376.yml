@@ -1,7 +1,0 @@
-game:
-  exe: /home/jacob/Games/hades/drive_c/Games/Hades/x64/Hades.exe
-  prefix: ~/Games/hades
-  working_dir: ~/Games/hades/drive_c/Games/Hades/x64
-system: {}
-wine:
-  version: Proton-6.14-GE-2

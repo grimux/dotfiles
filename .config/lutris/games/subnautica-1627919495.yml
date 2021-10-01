@@ -1,7 +1,0 @@
-game:
-  exe: /home/jacob/Games/Subnautica/drive_c/Games/Subnautica/Subnautica.exe
-  prefix: ~/Games/Subnautica
-  working_dir: ~/Games/Subnautica
-system: {}
-wine:
-  version: Proton-6.14-GE-2
