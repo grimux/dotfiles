@@ -15,12 +15,13 @@ alias \
 	ytm="youtube-dl --config-location ~/.config/youtube-dl/music" \
 	ytp="youtube-dl --config-location ~/.config/youtube-dl/playlist" \
 	ytpod="youtube-dl --config-location ~/.config/youtube-dl/podcast" \
-	ytpodq="youtube-dl --config-location ~/.config/youtube-dl/podcast \"https://soundcloud.com/jimquisition\"" \
 	wiki="nvim -c VimwikiIndex" \
 	y="yadm $*" \
 	ys="yadm status" \
 	yc="yadm commit" \
 	ya="yadm add $*" \
+	yp="yadm push"\
+	updatecal="yadm add -A $HOME/.local/share/calcurse && yadm commit -m \"Calcurse Update\"" \
 	sdn="shutdown now" \
 	n="notes $*" \
 	bat="cmd.exe /c $*" \
