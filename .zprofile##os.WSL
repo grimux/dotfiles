@@ -21,8 +21,13 @@ export WSLENV="/mnt/s/tools:/mnt/c/Program\ Files/SumatraPDF"
 export GEM_HOME="$HOME/.rvm/gems"
 export GEM_PATH="$HOME/.rvm/gems/ruby-3.0.0/bin"
 
-# WSL 2 Configuration
-export DISPLAY=$(grep nameserver /etc/resolv.conf | awk '{print $2}'):0
+### WSL 2 Configuration ###
+# IP address of WSL
+export HOST_NAME=$(grep nameserver /etc/resolv.conf | awk '{print $2}')
+# Display for VcxSrv
+export DISPLAY=$HOST_NAME:0
+# PulseAudio server
+export PULSE_SERVER=tcp:$HOST_NAME
 
 # less/man colors
 export LESS=-R
