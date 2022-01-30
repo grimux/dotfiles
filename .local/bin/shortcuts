@@ -3,7 +3,7 @@
 shell_shortcuts="$HOME/.config/shortcutrc"
 ranger_shortcuts="$HOME/.config/ranger/shortcuts.conf"
 qute_shortcuts="/dev/null"
-fish_shortcuts="/dev/null"
+fish_shortcuts="$HOME/.config/fish/shortcuts.config"
 vifm_shortcuts="/dev/null"
 
 # Remove, prepare files

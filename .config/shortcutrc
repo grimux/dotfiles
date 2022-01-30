@@ -33,3 +33,4 @@ cfp="$EDITOR ~/.zprofile" \
 cfx="$EDITOR ~/.xmonad/xmonad.hs" \
 cfxb="$EDITOR ~/.config/xmobar/xmobarrc" \
 cfal="$EDITOR ~/.config/alacritty/alacritty.yml" \
+cff="$EDITOR ~/.config/fish/config.fish" \
