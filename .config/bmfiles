@@ -19,3 +19,4 @@ cfp	~/.zprofile
 cfx	~/.xmonad/xmonad.hs
 cfxb	~/.config/xmobar/xmobarrc
 cfal	~/.config/alacritty/alacritty.yml
+cff	~/.config/fish/config.fish
