@@ -61,6 +61,7 @@ set splitbelow splitright
 let mapleader = ","
 set wildmode=longest,list,full
 set clipboard=unnamedplus			" when yanking, send to system clipboard ("*) instead of normal buffer
+autocmd FileType markdown set linebreak
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Remaps
