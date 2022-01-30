@@ -1,31 +1,37 @@
 #!/usr/bin/env bash
 
-alias \
-	ka="killall" \
-	ls="ls --color=auto --group-directories-first" \
-	la="ls -lA --color=auto --group-directories-first" \
-	f="ranger" \
-	sf="sudo ranger" \
-	e="explorer.exe ." \
-	x="exit" \
-	t="tmux -f ~/.config/tmux/tmux.conf" \
-	c="calcurse -D ~/.config/calcurse" \
-	vim="nvim" \
-	yt="youtube-dl" \
-	ytm="youtube-dl --config-location ~/.config/youtube-dl/music" \
-	ytp="youtube-dl --config-location ~/.config/youtube-dl/playlist" \
-	ytpod="youtube-dl --config-location ~/.config/youtube-dl/podcast" \
-	wiki="nvim -c VimwikiIndex" \
-	y="yadm $*" \
-	ys="yadm status" \
-	yc="yadm commit" \
-	ya="yadm add $*" \
-	yp="yadm push"\
-	updatecal="yadm add -A $HOME/.local/share/calcurse && yadm commit -m \"Calcurse Update\"" \
-	sdn="shutdown now" \
-	n="notes $*" \
-	bat="cmd.exe /c $*" \
-	trem="transmission-remote $*" \
-	py="python" \
-	mit="cd /mnt/s/Documents/school/MIT\ OpenCourseWare/6.0001/" \
-	xrr="xmonad --recompile && xmonad --restart && arcolinux-restart-polybar && notify-send 'xmonad rebuild'" \
+alias ka="killall"
+alias ls="ls --color=auto --group-directories-first"
+alias la="ls -lA --color=auto --group-directories-first"
+alias f="ranger"
+alias sf="sudo ranger"
+alias e="explorer.exe ."
+alias x="exit"
+alias t="tmux -f ~/.config/tmux/tmux.conf"
+alias c="calcurse -D ~/.config/calcurse"
+alias vim="nvim"
+alias yt="yt-dlp"
+alias ytm="yt-dlp --config-location ~/.config/youtube-dl/music"
+alias ytp="yt-dlp --config-location ~/.config/youtube-dl/playlist"
+alias ytpod="yt-dlp --config-location ~/.config/youtube-dl/podcast"
+alias wiki="nvim -c VimwikiIndex"
+alias g="git"
+alias gs="git status"
+alias ga="git add"
+alias gc="git commit"
+alias gac="git commit -a"
+alias gf="git fetch"
+alias gp="git pull"
+alias y="yadm"
+alias ys="yadm status"
+alias yc="yadm commit"
+alias ya="yadm add"
+alias yp="yadm push"
+alias updatecal="yadm add -A $HOME/.local/share/calcurse && yadm commit -m \"Calcurse Update\""
+alias sdn="shutdown now"
+alias n="notes"
+alias bat="cmd.exe /c"
+alias trem="transmission-remote"
+alias py="python"
+alias mit="cd /mnt/s/Documents/school/MIT\ OpenCourseWare/6.0001/"
+alias xrr="xmonad --recompile && xmonad --restart && arcolinux-restart-polybar && notify-send 'xmonad rebuild'"
