@@ -14,12 +14,13 @@
 ! [[ $1 =~ ^[0-9]+$ ]] && [ -z "$2" ] && repeat=1
 
 # Flags used to control the `case` flow
-[ "$1" == "-s" ] && flag=1
-[ "$1" == "-e" ] && flag=2
-[ "$1" == "-f" ] && flag=3
-[ "$1" == "-n" ] && flag=4
-[ "$1" == "-l" ] && flag=5
-[ "$1" == "-h" ] && flag=0
+[ "$1" == "-s" ] && flag=1	# Game shortcuts folder
+[ "$1" == "-e" ] && flag=2	# Emulators
+[ "$1" == "-f" ] && flag=3	# Endless games
+[ "$1" == "-n" ] && flag=4	# Not currently playing
+[ "$1" == "-l" ] && flag=5	# Lutris games
+[ "$1" == "-d" ] && flag=6	# Desktop shortcuts
+[ "$1" == "-h" ] && flag=0	# Help message
 
 # Main function to control loops and logic, with recursion!
 gamelist() {
@@ -42,27 +43,39 @@ gamelist() {
 case $flag in
 	# Help message
 	0)
-		printf "usage: rg (flag) (int)\n-s:\tGame Shortcuts\n-e:\tEmulators\n-f:\tEndless\n-n:\tNot Currently Playing\n-l:\tLutris Games\n-h:\tPrint this message\n"
+		printf "usage: rg (flag) (int)\n-s:\tGame Shortcuts\n-e:\tEmulators\n-f:\tEndless\n-n:\tNot Currently Playing\n-l:\tLutris Games\n-d:\tDesktop games\n-h:\tPrint this message\n"
 		;;
+
 	# Games Currently Playing
 	1)
 		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games" | shuf -n$repeat | sed 's/.lnk//'
 		;;
+
 	# Emulators
 	2)
 		gamelist "/mnt/x/game-stuff/Emulation" | shuf -n$repeat | sed 's/.lnk//'
 		;;
+
 	# Endless games
 	3)
 		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games/endless" | shuf -n$repeat | sed 's/.lnk//'
 		;;
+		
+	# Not Currently Playing
 	4)
 		gamelist "/mnt/c/ProgramData/Microsoft/Windows/Start Menu/Programs/Games/Not Currently Playing" | shuf -n$repeat | sed 's/.lnk//'
 		;;
+
 	# Lutris
 	5)
 		gamelist "$HOME/.config/lutris/games" | sed 's/-*[0-9]*.yml//' | shuf -n$repeat
 		;;
+
+	# Desktop shortcuts
+	6)
+		gamelist "/mnt/c/Users/user/Desktop" | shuf -n$repeat | sed 's/.lnk//'
+		;;
+
 	# Default case
 	*)
 		gamelist "/mnt/x/game-stuff/game-collection" | shuf -n$repeat
