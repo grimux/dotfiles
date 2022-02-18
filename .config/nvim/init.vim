@@ -66,7 +66,7 @@ autocmd FileType markdown set linebreak
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Remaps
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>o :setlocal spell! spelllang=en_us<CR>	" Spellcheck
+map <leader>o :setlocal spell! spell?<CR>		" Spellcheck, spell? will show current status
 nnoremap <SPACE> @q					" Use spacebar for marco at 'q'
 map Q gq						" Q is unset
 map <F3> :call TrimWhiteSpace()<CR>			" Call trim white space function
@@ -120,6 +120,11 @@ map <leader>p :!opout <c-r>%<CR><CR>
 function TrimWhiteSpace()
 	%s/\s*$//
 	''
+endfunction
+
+" Spell check
+function SpellCheck()
+	setlocal spell! spell?
 endfunction
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
