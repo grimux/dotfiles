@@ -66,7 +66,8 @@ autocmd FileType markdown set linebreak
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Remaps
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>o :setlocal spell! spell?<CR>		" Spellcheck, spell? will show current status
+map <leader>o :call SpellCheck()<CR>	" Spellcheck
+"map <leader>o :<CR>	" Spellcheck
 nnoremap <SPACE> @q					" Use spacebar for marco at 'q'
 map Q gq						" Q is unset
 map <F3> :call TrimWhiteSpace()<CR>			" Call trim white space function
