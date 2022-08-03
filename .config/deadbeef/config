@@ -11,7 +11,7 @@ filebrowser.coverart_files cover.jpg;folder.jpg;front.jpg
 filebrowser.coverart_size 24
 filebrowser.defaultpath /home/jacob/Music/
 filebrowser.enabled 1
-filebrowser.expanded_rows file:///home/jacob/Music file:///home/jacob/Music/Industrial/KMFDM/Adios file:///home/jacob/Music/Game%20Soundtracks/Half-Life%202
+filebrowser.expanded_rows file:///home/jacob/Music file:///home/jacob/Music/Industrial/KMFDM/Adios file:///home/jacob/Music/Game%20Soundtracks/Half-Life%202 file:///home/jake/Music file:///home/jake/Music/study-music file:///home/jake/Music/study-music/ambiance file:///home/jake/Music/Game%20Soundtracks
 filebrowser.fgcolor 
 filebrowser.fgcolor_selected 
 filebrowser.filter 
@@ -78,11 +78,11 @@ network.proxy.port 8080
 output_plugin alsa
 playback.loop 1
 playback.volume 0.0000000
-playlist.current 2
+playlist.current 1
 playlist.cursor.0 0
 playlist.cursor.1 0
-playlist.cursor.2 2
-playlist.cursor.3 0
+playlist.cursor.2 3
+playlist.cursor.3 3
 playlist.cursor.4 3
 playlist.scroll.0 0
 playlist.scroll.1 0
@@ -90,18 +90,15 @@ playlist.scroll.2 0
 playlist.scroll.3 0
 playlist.scroll.4 0
 playlist.scroll.cursorfollowplayback 1
-playlist.tab.00000 Darkwood
-playlist.tab.00001 Silent Chill
-playlist.tab.00002 hl2 ambience
-playlist.tab.00003 Jak and Daxter
-playlist.tab.00004 Study Music
-prefwin.geometry.h 590
-prefwin.geometry.w 717
-prefwin.geometry.x 598
-prefwin.geometry.y 242
+playlist.tab.00000 Default
+playlist.tab.00001 New Playlist
+prefwin.geometry.h 597
+prefwin.geometry.w 733
+prefwin.geometry.x 590
+prefwin.geometry.y 238
 resume.paused 0
-resume.playlist 2
-resume.position 539.03930
+resume.playlist 1
+resume.position 0.0000000
 resume.track 0
 streamer.samplerate 44100
 streamer.samplerate_mult_44 44100
