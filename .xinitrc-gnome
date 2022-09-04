@@ -1,10 +1,13 @@
 # Startx
+# Xorg Gnome session
+# 
 
-export XDG_SESSION_TYPE=x11
-export GDK_BACKEND=x11
+export XDG_SESSION_TYPE=x11		# Set session to xorg
+export GDK_BACKEND=x11			# Set session to xorg
 
-redshift-gtk &
-clipmenud &
-variety &
-xscreensaver --no-splash &
-exec gnome-session
+redshift-gtk &				# Start redshift with icon
+clipmenud &				# Start clipmenu daemon
+#variety &				# For wallpaper
+#imwheel -b 45 &			# Faster scroll speed
+xscreensaver --no-splash &		# Turn on screensaver
+exec gnome-session			# Start the session

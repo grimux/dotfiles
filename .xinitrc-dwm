@@ -1,11 +1,16 @@
 # Startx
 
-redshift &
-dwmblocks &
-dunst &
-picom &
-setxkbmap -option caps:escape
-clipmenud &
-nitrogen --restore
-xset s 900
-exec dwm
+redshift &					# Redshift for bluelight filter
+dwmblocks &					# Start dwmblocks
+dunst &						# Dunst for notifications
+picom &						# Picom for transparency
+mpd &						# music player daemon
+mpDris2 &					# control mpd with playerctl
+setxkbmap -option caps:escape			# Set caps lock to escape
+#imwheel -b 45 &					# Faster scroll speed
+clipmenud &					# Clipmenu
+nitrogen --restore				# Restore wallpaper
+conky -c ~/.config/conky/conkyrc		# Start conky
+xset s 900					# Blankout screen after 15 minutes
+xrandr --output HDMI-0 --same-as DVI-D-0	# Set TV (hdmi) to be the same as main monitor
+exec dwm					# Start dwm
