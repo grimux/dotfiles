@@ -2,7 +2,8 @@
 
 # Script to toggle window alpha inside of a window manager
 #compositor=picom
-compositor=xcompmgr
+#compositor=xcompmgr
+compositor=picom
 if pgrep $compositor &>/dev/null; then
 	echo "Turning $compositor OFF"
 	notify-send "Turning $compositor OFF"
@@ -10,8 +11,8 @@ if pgrep $compositor &>/dev/null; then
 else
 	echo "Turning $compositor ON"
 	notify-send "Turning $compositor ON"
-	#$compositor -b
-	$compositor
+	$compositor -b
+	#$compositor
 fi
 
 exit 0
