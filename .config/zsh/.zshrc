@@ -80,4 +80,4 @@ source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.
 eval "$(starship init zsh)"
 
 # colorscript on launch
-#colorscript random
+colorscript random
