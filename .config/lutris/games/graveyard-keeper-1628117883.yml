@@ -1,5 +1,0 @@
-game:
-  exe: /home/jacob/Games/graveyard-keeper/start.sh
-  working_dir: ~/Games/graveyard-keeper
-linux: {}
-system: {}

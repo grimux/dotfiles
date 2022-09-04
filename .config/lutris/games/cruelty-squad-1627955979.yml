@@ -1,9 +1,0 @@
-game:
-  exe: /home/jacob/Games/Cruelty Squad/crueltysquad.exe
-  prefix: ~/Games/Cruelty Squad
-  working_dir: ~/Games/Cruelty Squad
-system:
-  mangohud: gl64
-wine:
-  Desktop: false
-  version: Proton-6.14-GE-2

@@ -1,6 +1,0 @@
-game:
-  exe: /home/jacob/Games/no-mans-sky/Binaries/NMS.exe
-  prefix: /home/jacob/.local/share/wineprefixes/win-games
-  working_dir: /home/jacob/Games/no-mans-sky/
-system: {}
-wine: {}

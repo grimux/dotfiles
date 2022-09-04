@@ -1,6 +1,0 @@
-game:
-  exe: /home/jacob/Games/crosscode/game/CrossCode
-  working_dir: ~/Games/crosscode
-linux: {}
-system:
-  mangohud: vk64

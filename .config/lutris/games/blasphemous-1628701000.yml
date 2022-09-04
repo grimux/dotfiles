@@ -1,9 +1,0 @@
-game:
-  exe: /home/jacob/Games/blasphemous/game/files/Blasphemous.exe
-  prefix: ~/Games/blasphemous/game/prefix
-  working_dir: ~/Games/blasphemous/game/files
-system: {}
-wine:
-  overrides:
-    winhttp: native,builtin
-  version: Proton-6.14-GE-2

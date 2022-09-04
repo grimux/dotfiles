@@ -1,9 +1,0 @@
-game:
-  exe: /home/jacob/Games/The.Binding.Of.Isaac.Wrath.of.the.lamb.+.Afterbirth.Repentance/The.Binding
-    Of.Isaac.Wrath.of.the.lamb/start.sh
-  prefix: ~/Games/The.Binding.Of.Isaac.Wrath.of.the.lamb.+.Afterbirth.Repentance/The.Binding
-    Of.Isaac.Wrath.of.the.lamb/game/prefix
-  working_dir: ~/Games/The.Binding.Of.Isaac.Wrath.of.the.lamb.+.Afterbirth.Repentance/The.Binding
-    Of.Isaac.Wrath.of.the.lamb/game/files
-system: {}
-wine: {}

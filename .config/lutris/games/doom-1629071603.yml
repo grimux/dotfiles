@@ -1,7 +1,0 @@
-game:
-  appid: '379720'
-  args: +com_skipIntroVideo 1
-steam:
-  quit_steam_on_exit: true
-system:
-  mangohud: vk64
