@@ -34,7 +34,7 @@ case $1 in
 		nvim cheatsheet.txt
 		;;
 	*)
-		printf "Options:\ndwm\ndmenu\nst\ndwmblocks, dwmb\nmanual, man\n"
+		printf "Options:\ndwm\ndmenu\nst\ndwmblocks, dwmb\nmanual, man\ncheat, txt\n"
 		exit
 esac
 
