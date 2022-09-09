@@ -6,7 +6,7 @@
 export EDITOR="nvim"
 export READER="zathura"
 export FILE="ranger"
-export BROWSER="brave"
+export BROWSER="firefox"
 #export PAGER="most"
 export GITCSS="/mnt/s/documents/writing/github-pandoc.css"
 export ZDOTDIR="$HOME/.config/zsh"
@@ -69,7 +69,5 @@ stty -ixon
 #alias node='unalias node npm && load_nvm && node'
 #alias npm='unalias node npm && load_nvm && npm'
 
-# auto run startx on tty1 login
-#if [[ -z $DISPLAY && $(tty) == /dev/tty1 ]]; then
-#	exec startx
-#fi
+# Start graphical server on user's current tty if not already running.
+[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
