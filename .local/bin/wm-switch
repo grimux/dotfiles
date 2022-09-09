@@ -9,7 +9,7 @@ sddm-switch() {
 
 startx-switch() {
 	ln -sfv $HOME/.xinitrc-$1 $HOME/.xinitrc
-	printf "%s\n\n%s\n" ".xinitrc written" "Please restart xxsession"
+	printf "%s\n\n%s\n" ".xinitrc written" "Please restart xsession"
 }
 
 echo "WM-Switcher (startx)"
@@ -31,7 +31,7 @@ case $input in
 		echo not installed
 		;;
 	4)
-		echo not installed
+		startx-switch awesome
 		;;
 	*)
 		echo "Invalid input"
