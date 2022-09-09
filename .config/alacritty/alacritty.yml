@@ -13,6 +13,12 @@ env:
   TERM: xterm-256color
 
 window:
+  # Background opacity
+  #
+  # Window opacity as a floating point number from `0.0` to `1.0`.
+  # The value `0.0` is completely transparent and `1.0` is opaque.
+  opacity: 0.90
+
   # Window dimensions (changes require restart)
   #
   # Specified in number of columns/lines, not pixels.
@@ -110,8 +116,7 @@ font:
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
     # family: Source Code Pro
-    family: Inconsolata Nerd Font Mono
-    
+    # family: Inconsolata Nerd Font Mono
     # family: CodeNewRoman Nerd Font
     # family: RobotoMono Nerd Font
     # family: Hack
@@ -119,7 +124,7 @@ font:
     # family: UbuntuMono Nerd Font
     # family: Monofur Nerd Font
     # family: TerminessTTF Nerd Font
-    # family: Mononoki Nerd Font
+    family: Mononoki Nerd Font
 
     # The `style` can be specified to pick a specific face.
     style: Regular
@@ -131,7 +136,7 @@ font:
     # If the bold family is not specified, it will fall back to the
     # value specified for the normal font.
     # family: Source Code Pro
-    family: Inconsolata Nerd Font Mono
+    # family: Inconsolata Nerd Font Mono
     # family: CodeNewRoman Nerd Font
     # family: RobotoMono Nerd Font
     # family: Hack
@@ -139,7 +144,7 @@ font:
     # family: UbuntuMono Nerd Font
     # family: Monofur Nerd Font
     # family: TerminessTTF Nerd Font
-    # family: Mononoki Nerd Font
+    family: Mononoki Nerd Font
 
     # The `style` can be specified to pick a specific face.
     style: Bold
@@ -151,7 +156,7 @@ font:
     # If the italic family is not specified, it will fall back to the
     # value specified for the normal font.
     # family: Source Code Pro
-    family: Inconsolata Nerd Font Mono
+    # family: Inconsolata Nerd Font Mono
     # family: CodeNewRoman Nerd Font
     # family: RobotoMono Nerd Font
     # family: Hack
@@ -159,7 +164,7 @@ font:
     # family: UbuntuMono Nerd Font
     # family: Monofuritalic Nerd Font Mono
     # family: TerminessTTF Nerd Font
-    # family: Mononoki Nerd Font
+    family: Mononoki Nerd Font
 
     # The `style` can be specified to pick a specific face.
     style: Italic
@@ -184,7 +189,7 @@ font:
     style: Bold Italic
 
   # Point size
-  size: 12.0
+  size: 11.0
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -375,14 +380,6 @@ colors:
 #  animation: EaseOutExpo
 #  duration: 0
 #  color: '0xffffff'
-
-# Background opacity
-#
-# Window opacity as a floating point number from `0.0` to `1.0`.
-# The value `0.0` is completely transparent and `1.0` is opaque.
-# background_opacity: 1.0
-#background_opacity: 0.85
-  window.opacity: 0.85
 
 #selection:
   #semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
