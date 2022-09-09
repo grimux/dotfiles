@@ -20,6 +20,7 @@ cfz="$EDITOR ~/.config/zsh/.zshrc" \
 cfv="$EDITOR ~/.config/nvim/init.vim" \
 cfi="$EDITOR ~/.config/i3/config" \
 cfm="$EDITOR ~/.config/mutt/muttrc" \
+cfawe="$EDITOR ~/.config/awesome/rc.lua" \
 eb="$EDITOR ~/documents/writing/uni.bib" \
 cv="$EDITOR ~/documents/writing/cv.tex" \
 cfu="$EDITOR ~/.config/newsboat/urls" \
