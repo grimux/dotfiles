@@ -1,27 +1,83 @@
 #!/usr/bin/env sh
 # My backup script, ported to linux
 
-# vars
-USBFILE=/dev/$(lsblk -f | awk '/E1B1-20D6/ {print $1}')
-DESTINATION="/run/media/jacob/backup"
+# Debug
+debug=0
+STATUS="live"
 
-# Setup
-if [ ! -d $DESTINATION ]; then
-	sudo mkdir $DESTINATION
+# vars
+USBFILE=$(lsblk -f | awk '/small-drive/ {print $1}')
+USBFILE=/dev/"${USBFILE:2}"	# Cut first two characters from ouput of last command
+DESTINATION="/run/media/jake/small-drive"
+DRY_RUN=""
+
+# Check for dry run flag
+if [ "$1" == "-n" ];
+then
+	echo Initiating dry run...
+	DRY_RUN="-n";
+	STATUS="dry-run"
+fi
+
+# Check if directory exists, if not, mount the drive
+if [ ! -d $DESTINATION/Backups ]; then
+	echo Not mounted
+	sudo mkdir -p $DESTINATION
 	sudo mount -o uid=1000 $USBFILE $DESTINATION
 	echo mounted
 fi
 
+# Debug mode check
+if [ $debug -eq 1 ];
+then
+	echo Debug mode on, dry runs only
+	DRY_RUN="-n";
+	STATUS="dry-run"
+fi
+
+echo ========================================================
+echo Rsync backups...
+echo Status: $STATUS
+#
+# rsync
+#
 # Backup documents
-rsync -r -t -v --progress --delete --modify-window=1 -l -H -s /home/jacob/Documents/ $DESTINATION/documents-jake
-rsync -r -t -v --progress --delete --modify-window=1 -l -H -s /home/jacob/serena-docs/ $DESTINATION/documents-serena
+echo -------------------------------------------------------
+echo Backing up documents...
+rsync -r $DRY_RUN -t --progress --delete --modify-window=1 -l -H -s /home/jake/Documents/ $DESTINATION/Backups/docs-jake
+echo -------------------------------------------------------
 
 # Backup wallpapers
-rsync -r -t -v --progress --delete --modify-window=1 -l -H -s /home/jacob/Pictures/wallpapers $DESTINATION
+echo -------------------------------------------------------
+echo Backing up wallpapers
+rsync -r $DRY_RUN -t --progress --delete --modify-window=1 -l -H -s /home/jake/Pictures/wallpapers $DESTINATION/Backups/wallpapers
+echo -------------------------------------------------------
+
+# Backup screenshots
+echo -------------------------------------------------------
+echo Backing up screenshots
+rsync -r $DRY_RUN -t --progress --delete --modify-window=1 -l -H -s /home/jake/Pictures/screenshots $DESTINATION/Backups/screenshots
+echo -------------------------------------------------------
 
 # Backup game screenshots
-rsync -r -t -v --progress --delete --modify-window=1 -l -H -s /home/jacob/Pictures/game-screenshots $DESTINATION
+echo -------------------------------------------------------
+echo Backing up game screenshots
+rsync -r $DRY_RUN -t --progress --delete --modify-window=1 -l -H -s /home/jake/Pictures/game-screenshots $DESTINATION/Backups/game-screenshots
+echo -------------------------------------------------------
+
+echo ========================================================
+echo 7zip backups...
+# Backup .local/share folder
+# A lot of saved information is stored here by programs.  I don't want to track it with
+# git, so I will just archive it.
+#
+# calcurse
+7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$DESTINATION/Backups/linux/calcurse.7z" "$HOME/.local/share/calcurse"
+7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$DESTINATION/Backups/linux/lutris.7z" "$HOME/.local/share/lutris"
+echo ========================================================
 
 # Clean up
+echo All done.  Waiting for a few seconds
+sleep 5
 sudo umount -r $DESTINATION
-rmdir $DESTINATION
+sudo rmdir $DESTINATION
