@@ -24,7 +24,7 @@ Plug 'vimwiki/vimwiki'
 Plug 'turbio/bracey.vim'
 Plug 'frazrepo/vim-rainbow'
 Plug 'ryanoasis/vim-devicons'
-Plug 'ap/vim-css-color'
+Plug 'chrisbra/Colorizer'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -167,12 +167,3 @@ endfunction
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"--- Vifm
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>vv :Vifm<CR>
-map <leader>vs :VsplitVifm<CR>
-map <leader>sp :SplitVifm<CR>
-map <leader>dv :DiffVifm<CR>
-map <leader>tv :TabVifm<CR>
