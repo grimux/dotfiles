@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
 alias ka="killall"
-alias ls="ls --color=auto --group-directories-first"
-alias la="ls -lA --color=auto --group-directories-first"
+#alias ls="ls --color=auto --group-directories-first"
+#alias la="ls -lA --color=auto --group-directories-first"
+alias ls="lsd -1 --group-directories-first"
+alias la="lsd -lA --group-directories-first"
 alias grep="grep --color=auto"
 alias f="ranger"
 alias sf="sudo ranger"
@@ -35,3 +37,5 @@ alias trem="transmission-remote"
 alias py="python"
 alias mit="cd /mnt/s/Documents/school/MIT\ OpenCourseWare/6.0001/"
 alias xrr="xmonad --recompile && xmonad --restart && arcolinux-restart-polybar && notify-send 'xmonad rebuild'"
+alias config="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME"
+alias clist="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME ls-tree --full-tree -r --name-only HEAD"
