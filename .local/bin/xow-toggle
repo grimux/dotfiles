@@ -3,12 +3,11 @@
 if pgrep xow; 
 then
 	pkill xow && notify-send "xow shutdown";
-	xset dpms;	# Turn on power managment for monitors
 	xset s 900;	# Set monitor sleep time to 15 minutes
 else
 	xow &
 	notify-send "xow startup";
-	xset -dpms;	# Turn off display power managment system.  Prevents monitor from sleeping
+	xset s off;	# Turn off monitor blanking.  Prevents monitor from sleeping
 fi
 
 sleep 1
