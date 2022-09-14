@@ -13,10 +13,14 @@ alias x="exit"
 alias t="tmux -f ~/.config/tmux/tmux.conf"
 alias c="calcurse -D ~/.config/calcurse"
 alias vim="nvim"
-alias yt="yt-dlp"
-alias ytm="yt-dlp --config-location ~/.config/youtube-dl/music"
-alias ytp="yt-dlp --config-location ~/.config/youtube-dl/playlist"
+
+# yt-dlp
+alias ytv="yt-dlp"
+alias yta="yt-dlp --config-location ~/.config/youtube-dl/audio"
+alias ytap="yt-dlp --config-location ~/.config/youtube-dl/playlist_audio"
+alias ytvp="yt-dlp --config-location ~/.config/youtube-dl/playlist_video"
 alias ytpod="yt-dlp --config-location ~/.config/youtube-dl/podcast"
+
 alias wiki="nvim -c VimwikiIndex"
 alias g="git"
 alias ga="git add"
