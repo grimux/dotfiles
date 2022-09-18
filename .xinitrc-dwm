@@ -21,7 +21,7 @@ setxkbmap -option caps:escape			# Set caps lock to escape
 #imwheel -b 45 &					# Faster scroll speed
 clipmenud &					# Clipmenu
 nitrogen --restore				# Restore wallpaper
-conky -c ~/.config/conky/conkyrc.dwm		# Start conky
+conky -c ~/.config/conky/conkyrc.dwm &		# Start conky
 xset s 900					# Blankout screen after 15 minutes
 lxsession &					# Start policy kit
 #exec dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY &		# temp fix for slow application startup
