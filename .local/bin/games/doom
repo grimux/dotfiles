@@ -1,0 +1,117 @@
+#!/usr/bin/env bash
+# Script for launching doom and the vairous mods I play
+
+# Variables
+doomdir="$HOME/Games/doom"
+modsdir="$doomdir/mods"
+savedir="$doomdir/save"
+
+# Mods List
+mods_list=(
+	"chill_doom"
+	"elementalism"
+	"golden_souls"
+	"guncaster"
+	"project_brutality"
+	"reelism2"
+	"russian_overkill"
+	"siren"
+	"spooktober"
+)
+
+# Functions
+# Help Section
+help_section() {
+	echo "A script to launch Doom and its various mods."
+	echo
+	echo "Syntax: doom [-h|l] [mod name]"
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "l     List installed mods."
+	echo
+}
+
+# List the mods
+list_mods() {
+	for i in "${mods_list[@]}"; do
+		echo "$i"
+	done
+}
+
+# Get arguments
+while getopts ":hl" option; do
+	case $option in
+		h)
+			help_section
+			exit
+			;;
+		l)
+			list_mods
+			exit
+			;;
+		\?)
+			echo "Error: Invalid option"
+			exit
+			;;
+	esac
+done
+
+
+# Main Script
+case "$1" in
+	# If doom is called with no arguments, fall through to chill_doom
+	"")
+		# fallthrough
+		;&
+
+	chill_doom)
+		iwad=DOOM.WAD
+		wads="SmoothDoom.pk3 /DoomMetalVol5.wad"
+		maps="+map e1m1"
+		savedir="$savedir/chill_doom"
+		cheats="+buddha2 +give keys"
+		skill="+skill 3"
+		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
+		exit
+		;;
+
+	elementalism)
+		iwad=DOOM2.WAD
+		wads="Elementalism_Phase1_RC1_1.01.pk3"
+		maps=""
+		savedir="$savedir/elementalism"
+		cheats=""
+		skill=""
+		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
+		exit
+		;;
+
+	golden_souls)
+		iwad=DOOM.WAD
+		wads="GoldenSouls_Full_1.4.pk3"
+		maps=""
+		savedir="$savedir/golden_souls"
+		cheats=""
+		skill=""
+		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
+		exit
+		;;
+
+	spooktober)
+		iwad=DOOM2.WAD
+		wads="SmoothDoom.pk3 spooktober.pk3 STEVE_FLASHLIGHT_PLUS.PK7"
+		maps=""
+		savedir="$savedir/spooktober"
+		cheats=""
+		skill=""
+		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
+		exit
+		;;
+
+	*)
+		echo "Invalid mod"
+		exit
+		;;
+esac
+		
+

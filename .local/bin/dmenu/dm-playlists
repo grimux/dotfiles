@@ -1,0 +1,28 @@
+#!/usr/bin/bash
+
+# MPD playlist directory
+playlist_dir="$HOME/.config/mpd/playlists"
+
+# Array of playlists.
+# Takes all the files from the playlist directory and adds them to the array.
+playlists=($playlist_dir/*)
+
+# Piping the array into dmenu.
+# awk is used to strip the file path and leave just the file name. -F'/' sets the delimiter to /
+# sed is used to strip the file extension.
+choice=$(printf '%s\n' "${playlist_two[@]}" | awk -F'/' '{print $NF}' | sed 's/.m3u//g' | dmenu -i -l 10 -p 'Playlist:')
+
+# What to do when we choose quit.
+if [[ "$choice" == "quit" ]]; then
+	echo "Program terminated." && exit 1
+
+# What to do when we choose a file to edit.
+elif [ "$choice" ]; then
+	mpc clear
+	mpc load "${choice}"
+	mpc play
+
+# What to do if we just escape without choosing anything.
+else
+	echo "Program terminated." && exit 1
+fi
