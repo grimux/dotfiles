@@ -10,7 +10,7 @@ playlists=($playlist_dir/*)
 # Piping the array into dmenu.
 # awk is used to strip the file path and leave just the file name. -F'/' sets the delimiter to /
 # sed is used to strip the file extension.
-choice=$(printf '%s\n' "${playlist_two[@]}" | awk -F'/' '{print $NF}' | sed 's/.m3u//g' | dmenu -i -l 10 -p 'Playlist:')
+choice=$(printf '%s\n' "${playlists[@]}" | awk -F'/' '{print $NF}' | sed 's/.m3u//g' | dmenu -i -l 10 -p 'Playlist:')
 
 # What to do when we choose quit.
 if [[ "$choice" == "quit" ]]; then
