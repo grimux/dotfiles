@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+# Script for launching quake and the vairous mods I play
+
+# Variables
+quakedir="$HOME/Games/quake"
+flag=0
+
+# Mods List
+mods_list=(
+	"ad"
+	"bbelief"
+	"copper"
+	"dopa"
+	"evilexhumed"
+	"hipnotic"
+	"honey"
+	"hwjam"
+	"hwjam2"
+	"hwjam3"
+	"quake15"
+	"quake64"
+	"rogue"
+	"slayertest"
+	"travail"
+	"xmasjam2018"
+	"xmasjam2019"
+	"xmasjam2020"
+)
+
+# Functions
+# Help Section
+help_section() {
+	echo "A script to launch Quake and its various mods."
+	echo
+	echo "Syntax: quake [-h|l] [mod name]"
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "l     List installed mods."
+	echo
+}
+
+# List the mods
+list_mods() {
+	for i in "${mods_list[@]}"; do
+		echo "$i"
+	done
+}
+
+# Launch Quake
+launch_quake() {
+	mangohud --dlsym gamemoderun quakespasm -game $1
+}
+
+# Get arguments
+while getopts ":hl" option; do
+	case $option in
+		h)
+			help_section
+			exit
+			;;
+		l)
+			list_mods
+			exit
+			;;
+		\?)
+			echo "Error: Invalid option"
+			exit
+			;;
+	esac
+done
+
+# Main script
+for i in "${mods_list[@]}"; do
+	if [ "$i" == "$1" ]; then
+		flag=0
+		launch_quake "$i"
+		break
+	fi
+
+	# Set flag 1, meaning error
+	flag=1
+done
+
+# If the mod is not in the list
+if [ $flag -eq 1 ]; then
+	echo "Invalid mod."
+fi
