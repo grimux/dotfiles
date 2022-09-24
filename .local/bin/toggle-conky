@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if pidof conky &>/dev/null
+then
+	echo "Turning conky off"
+	notify-send "Turning conky off"
+	pkill conky &
+else
+	echo "Turning conky on"
+	notify-send "Turning conky on"
+	conky -c $HOME/.config/conky/conkyrc.awesome
+fi
+
+exit 0
