@@ -2,82 +2,212 @@
 # My backup script, ported to linux
 
 # Debug
-debug=0
+debug=1
 STATUS="live"
 
 # vars
 USBFILE=$(lsblk -f | awk '/small-drive/ {print $1}')
 USBFILE=/dev/"${USBFILE:2}"	# Cut first two characters from ouput of last command
 DESTINATION="/run/media/jake/small-drive"
-DRY_RUN=""
+DRY_RUN=0
+
+# Yes or no prompt
+# call by: yes_or_no "$message" && command
+function yes_or_no {
+    while true; do
+        read -p "$* [y/n]: " yn
+        case $yn in
+            [Yy]*) return 0  ;;  
+            [Nn]*) echo "Aborted" ; return  1 ;;
+        esac
+    done
+}
+
+# Function call to rsync
+call_rsync() {
+	rsync -r $3 -t --progress --delete --modify-window=1 -l -H -s $1 $2
+}
+
+call_7zip() {
+	7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$1" "$2"
+}
+
+# Spacer, for pretty output
+spacer_big() {
+	echo ========================================================
+}
+
+spacer_small() {
+	echo --------------------------------------------------------
+}
+
+backing_up() {
+	echo "Backing up $1..."
+}
+
+backup_files() {
+	if dry_run_check; then
+		dry_run_flag="-n"
+		echo "Initalizing dry run..."
+	else
+		dry_run_flag=""
+	fi
+	echo
+	# Documents
+	spacer_big
+	backing_up "Documents"
+	spacer_small
+	call_rsync "/home/jake/Documents/" "$DESTINATION/Backups/docs-jake" $dry_run_flag
+	echo
+
+	# Music
+	spacer_big
+	backing_up "Music"
+	spacer_small
+	call_rsync "/home/jake/Music/" "$DESTINATION/Backups/music" $dry_run_flag
+	echo
+
+	# Wallpapers
+	spacer_big
+	backing_up "Wallpapers"
+	spacer_small
+	call_rsync "/home/jake/Pictures/wallpapers" "$DESTINATION/Backups/wallpapers" $dry_run_flag
+	echo
+
+	# Screenshots
+	spacer_big
+	backing_up "Screenshots"
+	spacer_small
+	call_rsync "/home/jake/Pictures/screenshots" "$DESTINATION/Backups/screenshots" $dry_run_flag
+	echo
+
+	# Game screenshots
+	spacer_big
+	backing_up "Game Screeenshots"
+	spacer_small
+	call_rsync "/home/jake/Pictures/game-screenshots" "$DESTINATION/Backups/game-screenshots" $dry_run_flag
+	echo
+}
+
+# 7zip archive backups
+backup_archives() {
+	# Backup some folders in .local/share
+	# A lot of saved information is stored here by programs.  I don't want to track it with
+	# git, so I will just archive it.
+	spacer_big
+	echo 7zip backups...
+	spacer_small
+
+	# Calcurse
+	spacer_small
+	backing_up "Calcurse"
+	#call_7zip "$DESTINATION/Backups/linux/calcurse.7z" "$HOME/.local/share/calcurse"
+	spacer_small
+
+	# Lutris
+	spacer_small
+	backing_up "Lutris"
+	#call_7zip "$DESTINATION/Backups/linux/lutris.7z" "$HOME/.local/share/lutris"
+	spacer_small
+}
 
 # Check for dry run flag
-if [ "$1" == "-n" ];
-then
-	echo Initiating dry run...
-	DRY_RUN="-n";
-	STATUS="dry-run"
-fi
-
-# Check if directory exists, if not, mount the drive
-if [ ! -d $DESTINATION/Backups ]; then
-	echo Not mounted
-	sudo mkdir -p $DESTINATION
-	sudo mount -o uid=1000 $USBFILE $DESTINATION
-	echo mounted
-fi
+dry_run_check() {
+	if [ $DRY_RUN -eq 1 ];
+	then
+		return 0
+	else
+		return 1
+	fi
+}
 
 # Debug mode check
-if [ $debug -eq 1 ];
-then
-	echo Debug mode on, dry runs only
-	DRY_RUN="-n";
-	STATUS="dry-run"
-fi
+debug_check() {
+	if [ $debug -eq 1 ];
+	then
+		echo Debug mode on, dry runs only
+		DRY_RUN="-n";
+		STATUS="dry-run"
+	fi
+}
 
-echo ========================================================
-echo Rsync backups...
-echo Status: $STATUS
-#
-# rsync
-#
-# Backup documents
-echo -------------------------------------------------------
-echo Backing up documents...
-rsync -r $DRY_RUN -t --progress --delete --modify-window=1 -l -H -s /home/jake/Documents/ $DESTINATION/Backups/docs-jake
-echo -------------------------------------------------------
+mount_check() {
+	if [ ! -d $DESTINATION/Backups ]; then
+		return 1
+	else
+		return 0
+	fi
+}
 
-# Backup wallpapers
-echo -------------------------------------------------------
-echo Backing up wallpapers
-rsync -r $DRY_RUN -t --progress --delete --modify-window=1 -l -H -s /home/jake/Pictures/wallpapers $DESTINATION/Backups/wallpapers
-echo -------------------------------------------------------
+plugged_in_check() {
+	if [ "$USBFILE" == "/dev/" ]; then
+		return 1
+	else
+		return 0
+	fi
+}
 
-# Backup screenshots
-echo -------------------------------------------------------
-echo Backing up screenshots
-rsync -r $DRY_RUN -t --progress --delete --modify-window=1 -l -H -s /home/jake/Pictures/screenshots $DESTINATION/Backups/screenshots
-echo -------------------------------------------------------
+mount_drive() {
+	sudo mkdir -p $DESTINATION
+	sudo mount -o uid=1000 $USBFILE $DESTINATION && echo "Drive mounted successfully."
+}
 
-# Backup game screenshots
-echo -------------------------------------------------------
-echo Backing up game screenshots
-rsync -r $DRY_RUN -t --progress --delete --modify-window=1 -l -H -s /home/jake/Pictures/game-screenshots $DESTINATION/Backups/game-screenshots
-echo -------------------------------------------------------
 
-echo ========================================================
-echo 7zip backups...
-# Backup .local/share folder
-# A lot of saved information is stored here by programs.  I don't want to track it with
-# git, so I will just archive it.
-#
-# calcurse
-7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$DESTINATION/Backups/linux/calcurse.7z" "$HOME/.local/share/calcurse"
-7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$DESTINATION/Backups/linux/lutris.7z" "$HOME/.local/share/lutris"
-echo ========================================================
+cleanup() {
+	echo All done.  Waiting for a few seconds...
+	sleep 5
+	sudo umount -r $DESTINATION && echo "Drive unmounted."
+	sudo rmdir $DESTINATION && echo "Mount directory removed."
+	echo "Completed backup."
+}
 
-# Clean up
-echo All done.  Waiting for a few seconds
-sleep 5
-sudo umount -r $DESTINATION
-sudo rmdir $DESTINATION
+get_args() {
+	while getopts ":hn" option; do
+		case $option in
+			h)
+				help_section
+				exit
+				;;
+			n)
+				DRY_RUN=1
+				main "files"
+				;;
+			\?)
+				echo "Invalid option"
+				exit 1
+				;;
+		esac
+	done
+}
+
+
+main() {
+	case "$1" in
+		"")
+			# fallthrough
+			;&
+		files)
+			plugged_in_check || exit 1
+			if ! mount_check; then
+				echo "Drive not mounted"
+				yes_or_no "Would you like to mount it?" || exit 1
+				mount_drive
+			fi
+			backing_up "Files"
+			backup_files
+			cleanup
+			exit
+			;;
+		archives)
+			backing_up "Archives"
+			exit
+			;;
+		*)
+			echo "Invalid command"
+			;;
+	esac
+}
+
+
+get_args "$@"
+main "$@"
