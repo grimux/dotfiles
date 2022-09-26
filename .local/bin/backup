@@ -46,6 +46,7 @@ backing_up() {
 }
 
 backup_files() {
+	# Check if we want to do a dry run.
 	if dry_run_check; then
 		dry_run_flag="-n"
 		echo "Initalizing dry run..."
@@ -190,11 +191,12 @@ main() {
 			plugged_in_check || exit 1
 			if ! mount_check; then
 				echo "Drive not mounted"
-				yes_or_no "Would you like to mount it?" || exit 1
+				yes_or_no "Would you like to mount it?" || exit
 				mount_drive
 			fi
 			backing_up "Files"
 			backup_files
+			yes_or_no "Would you like to unmount the drive?" || exit
 			cleanup
 			exit
 			;;
