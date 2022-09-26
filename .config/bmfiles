@@ -4,8 +4,10 @@ cfa	~/.config/aliasrc
 cfz	~/.config/zsh/.zshrc
 cfv	~/.config/nvim/init.vim
 cfi	~/.config/i3/config
+cfg	~/.config/game/game_save_locations.txt
 cfm	~/.config/mutt/muttrc
 cfawe	~/.config/awesome/rc.lua
+cfawet	~/.config/awesome/themes/dracula/theme.lua
 eb	~/documents/writing/uni.bib
 cv	~/documents/writing/cv.tex
 cfu	~/.config/newsboat/urls
