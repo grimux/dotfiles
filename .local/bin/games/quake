@@ -70,6 +70,12 @@ while getopts ":hl" option; do
 done
 
 # Main script
+# If no argument, then launch copper
+if [ -z "$1" ]; then
+	launch_quake "copper"
+fi
+
+# Loop through array, searching for a match
 for i in "${mods_list[@]}"; do
 	if [ "$i" == "$1" ]; then
 		flag=0
