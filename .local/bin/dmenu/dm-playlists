@@ -14,8 +14,11 @@ choice=$(printf '%s\n' "${playlists[@]}" | awk -F'/' '{print $NF}' | sed 's/.m3u
 
 # What to do when we choose a playlist.
 # Check if array contains the choice.
-if [[ "${playlists[*]}" =~ "$choice" ]]; then
+# If no choice is entered (pressed ESC), else is triggered.
+if [[ "${playlists[*]}" =~ "$choice" ]] && [[ "$choice" != "" ]]; then
 	mpc clear
+	mpc random on
+	mpc repeat on
 	mpc load "${choice}"
 	mpc play
 
