@@ -1,0 +1,75 @@
+#!/usr/bin/python
+
+import os, getopt, sys
+
+# Remove 1st argument from the
+# list of command line arguments.
+argument_list = sys.argv[1:]
+
+# short options
+options = "hn"
+
+# long options
+long_options = ["help", "files", "archives"]
+
+# Help section
+def help_section():
+    print("A script for backing up files.")
+    print()
+    print("Syntax: backup [-h] [command]")
+    print("options:")
+    print("h, help     Print this help screen.")
+
+
+# Backup files
+def backup_files(other_options=""):
+    docs_loc = "$HOME/Documents/"
+    docs_backup = "$HOME/test3"
+    loc_music = "$HOME/Music/"
+    loc_wall = "$HOME/Pictures/wallpapers/"
+
+    if check_mount == True:
+        call_rsync(docs_loc, docs_backup, other_options)
+    else:
+        print("Drive is not mounted.  Be sure to mount it first")
+
+
+# Check mount point
+def check_mount():
+    return os.path.ismount('/run/media/jake/small-drive')
+
+
+# Mount drive
+def mount_drive():
+    small_drive = os.system("lsblk -f | awk '/small-drive/ {print $1}'")
+    print(small_drive)
+
+
+# Call rsync
+def call_rsync(source, dest, other_options=""):
+    os.system(f'rsync -r {other_options} -t --progress --delete --modify-window=1 {source} {dest}')
+
+
+# Main Script
+try:
+    arguments, values = getopt.getopt(argument_list, options, long_options)
+
+    for current_argument, current_value in arguments:
+        if current_argument in ("-h", "--help", ""):
+            help_section()
+            sys.exit()
+        elif current_argument in ("--files"):
+            backup_files()
+            sys.exit()
+        elif current_argument in ("-n"):
+            print("dry run")
+            backup_files("-n")
+            sys.exit()
+        else:
+            print("Invalid command")
+
+except getopt.error as err:
+    print(str(err))
+
+mount_drive
+#backup_files()
