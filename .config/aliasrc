@@ -11,7 +11,7 @@ alias sf="sudo ranger"
 alias e="explorer.exe ."
 alias x="exit"
 alias t="tmux -f ~/.config/tmux/tmux.conf"
-alias c="calcurse -D ~/.config/calcurse"
+alias c="calcurse"
 alias vim="nvim"
 
 # yt-dlp
@@ -22,24 +22,28 @@ alias ytvp="yt-dlp --config-location ~/.config/youtube-dl/playlist_video"
 alias ytpod="yt-dlp --config-location ~/.config/youtube-dl/podcast"
 
 alias wiki="nvim -c VimwikiIndex"
+
+# git
 alias g="git"
 alias ga="git add"
 alias gc="git commit"
 alias gac="git commit -a"
 alias gf="git fetch"
 alias gp="git pull"
+
+# yadm
 alias y="yadm"
 alias ys="yadm status"
 alias yc="yadm commit"
 alias ya="yadm add"
 alias yp="yadm push"
 alias updatecal="yadm add -A $HOME/.local/share/calcurse && yadm commit -m \"Calcurse Update\""
+
 alias sdn="shutdown now"
 alias n="notes"
 alias bat="cmd.exe /c"
 alias trem="transmission-remote"
 alias py="python"
-alias mit="cd /mnt/s/Documents/school/MIT\ OpenCourseWare/6.0001/"
 alias xrr="xmonad --recompile && xmonad --restart && arcolinux-restart-polybar && notify-send 'xmonad rebuild'"
 alias config="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME"
 alias clist="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME ls-tree --full-tree -r --name-only HEAD"
