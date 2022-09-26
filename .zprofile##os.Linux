@@ -17,7 +17,7 @@ export TERMINAL="alacritty"
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Export GTK themes to Qt
-export QT_QPA_PLATFORMTHEME=gtk2
+#export QT_QPA_PLATFORMTHEME=gtk2
 
 # Clipmenu settings
 # clipmenu history location
@@ -51,6 +51,7 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
     PATH="$HOME/.local/bin/laptop:$PATH"
     PATH="$HOME/.local/bin/statusbar:$PATH"
+    PATH="$HOME/.local/bin/dmenu:$PATH"
     PATH="$HOME/.local/bin/games:$PATH"
 fi
 
