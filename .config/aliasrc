@@ -21,6 +21,7 @@ alias ytap="yt-dlp --config-location ~/.config/youtube-dl/playlist_audio"
 alias ytvp="yt-dlp --config-location ~/.config/youtube-dl/playlist_video"
 alias ytpod="yt-dlp --config-location ~/.config/youtube-dl/podcast"
 
+# Vimwiki
 alias wiki="nvim -c VimwikiIndex"
 
 # git
@@ -45,5 +46,16 @@ alias bat="cmd.exe /c"
 alias trem="transmission-remote"
 alias py="python"
 alias xrr="xmonad --recompile && xmonad --restart && arcolinux-restart-polybar && notify-send 'xmonad rebuild'"
+
+# dotfiles
 alias config="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME"
 alias clist="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME ls-tree --full-tree -r --name-only HEAD"
+
+# Games
+alias factorio="lutris lutris:rungameid/2"
+alias gtav="lutris lutris:rungameid/10"
+alias saints="lutris lutris:rungameid/7"
+alias silent-hill=""
+alias terraria="lutris lutris:rungameid/1"
+alias witcher="lutris lutris:rungameid/12"
+alias xonotic="lutris lutris:rungameid/13"
