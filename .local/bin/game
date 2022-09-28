@@ -17,10 +17,17 @@ help_section() {
 	echo "l     List games."
 	echo
 	echo "commands:"
-	echo "backup     Backup game saves"
-	echo "archive    Compress game archives"
-	echo "list       List games"
+	echo "backup                   	Backup game saves"
+	echo "archive                   Compress game archives"
+	echo "restore (game title)      Restore game saves"
+	echo "delete (game title)       Delete game saves"
+	echo "list                      List games"
 	echo
+}
+
+# Just a spacer, for pretty output.
+spacer() {
+	echo ------------------------------------------------------
 }
 
 # List the tracked games and archives
@@ -40,9 +47,10 @@ list_games() {
 		game_title=$(echo $line | awk -F',' '{print $1}')
 		echo $game_title
 	done < $temp_file
-	#remove_temp_file
+	remove_temp_file
 }
 
+# Create a temporary file.  Will strip comments and format for awk
 create_temp_file() {
 	# sed command will ignore any line beginning with #
 	# tr will replace multiple tab characters with a single ,
@@ -51,10 +59,12 @@ create_temp_file() {
 	#sed 's/\s*#.*$//;/^\s*$/d' $save_locations | tr -s "\t" "\n" > $temp_file
 }
 
+# Remove the temp file
 remove_temp_file() {
 	rm -f $temp_file
 }
 
+# Testing a way to read file into an array
 read_file() {
 	create_temp_file "$save_locations"
 	mapfile -t -d'[\n]' game_array < $temp_file
@@ -64,6 +74,7 @@ read_file() {
 	#remove_temp_file
 }
 
+# Small check if a directory exists
 check_dir() {
 	if [ -d "$1" ]; then
 		return 0
@@ -72,19 +83,38 @@ check_dir() {
 	fi
 }
 
+# Get the game title
+get_game_title() {
+	game_title=$(echo $1 | awk -F',' '{print $1}')
+	echo "$game_title"
+}
+
+get_game_save() {
+	game_save=$(echo $1 | awk -F',' '{print $2}')
+	echo "$game_save"
+}
+
+get_game_backup() {
+	game_backup=$(echo $1 | awk -F',' '{print $3}')
+	echo "$game_backup"
+}
+
+# Backup saves function
 backup_saves() {
 	create_temp_file "$save_locations"
 	while read line; do
-		game_title=$(echo $line | awk -F',' '{print $1}')
-		game_save=$(echo $line | awk -F',' '{print $2}')
-		game_backup=$(echo $line | awk -F',' '{print $3}')
+		game_title=$(get_game_title "$line")
+		game_save=$(get_game_save "$line")
+		game_backup=$(get_game_backup "$line")
 		echo "Backing up $game_title..."
+		spacer
 		if ! check_dir "$game_save"; then
 			echo "'$game_save' not found.  Try restoring."
-			exit 1
+			echo
+			continue
 		fi
-		cp -r -p -v --update "$game_save/." "$game_backup"
-		#rsync -r -n --progress -t --delete --modify-window=1 "$game_save/" "$game_backup"
+		#cp -rpv --update "$game_save/." "$game_backup"
+		rsync -r -n --progress -t --delete --modify-window=1 "$game_save/" "$game_backup"
 		echo
 	done < $temp_file
 	remove_temp_file
@@ -95,9 +125,9 @@ archive_saves() {
 	echo
 	create_temp_file "$archive_locations"
 	while read line; do
-		game_title=$(echo $line | awk -F',' '{print $1}')
-		game_directory=$(echo $line | awk -F',' '{print $2}')
-		game_archive=$(echo $line | awk -F',' '{print $3}')
+		game_title=$(get_game_title "$line")
+		game_directory=$(get_game_save "$line")
+		game_archive=$(get_game_backup "$line")
 		echo "Backing up $game_title..."
 		7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$game_archive" "$game_directory"
 		echo
@@ -108,8 +138,100 @@ archive_saves() {
 # Restore a save game
 restore_save() {
 	# Remove last argument
-	unset 'argv[-1]'
-	grep -i "$@" "$save_locations" 
+	shift
+	create_temp_file "$save_locations"
+
+	# Set game_title to arguments
+	game_title="$@"
+
+	# Check if arguments were supplied.
+	# If not, prompt for input
+	if [ -z "$game_title" ]; then
+		read -p "Please enter game title: " game_title
+	fi
+
+	# Check file if game exists in the text file
+	check_title=$(grep "$game_title" "$temp_file")
+	if [ -z "$check_title" ]; then
+		echo "That game is not in the list."
+		exit 1
+	fi
+
+	# Setup variables
+	game_save=$(grep "$game_title" $temp_file | awk -F',' '{print $2}')
+	game_backup=$(grep "$game_title" $temp_file | awk -F',' '{print $3}')
+
+	# Small message
+	echo "Restoring $game_title..."
+
+	# Debug output
+	#echo $game_directory
+	#echo $game_backup
+
+	# Check if backup directory exists
+	# If not, exit
+	if ! check_dir "$game_backup"; then
+		echo "Backup location not found.  Aborting."
+		exit 1
+	fi
+
+	# Check if local save directory exists
+	# If already present, exit
+	if check_dir "$game_save"; then
+		echo "The save directory is already present."
+		exit 1
+	fi
+
+	# cp command
+	cp -rpv --update "$game_backup/." "$game_save"
+
+	# Remove the temporary file
+	remove_temp_file
+}
+
+restore_archive() {
+	shift
+	create_temp_file "$archive_locations"
+
+	remove_temp_file
+}
+
+# Delete local save
+delete_save() {
+	# Remove last argument
+	shift
+	create_temp_file "$save_locations"
+
+	# Set game_title to arguments
+	game_title="$@"
+
+	# Check if arguments were supplied.
+	# If not, prompt for input
+	if [ -z "$game_title" ]; then
+		read -p "Please enter game title: " game_title
+	fi
+
+	# Check file if game exists in the text file
+	check_title=$(grep "$game_title" "$temp_file")
+	if [ -z "$check_title" ]; then
+		echo "That game is not in the list."
+		exit 1
+	fi
+
+	# Setup variables
+	game_save=$(grep "$game_title" $temp_file | awk -F',' '{print $2}')
+
+	# Small message
+	echo "Deleting $game_title..."
+
+	# Debug output
+	echo "$game_save"
+
+	# Delete the game saves and folder
+	rm -rfv "$game_save"
+
+	# Delete the temp file
+	remove_temp_file
 }
 
 get_args() {
@@ -146,6 +268,15 @@ main() {
 			list_games
 			exit
 			;;
+		restore)
+			restore_save "$@"
+			exit
+			;;
+		delete)
+			delete_save "$@"
+			exit
+			;;
+
 		test)
 			read_file
 			exit
