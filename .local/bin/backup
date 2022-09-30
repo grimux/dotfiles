@@ -8,8 +8,12 @@ STATUS="live"
 # vars
 USBFILE=$(lsblk -f | awk '/small-drive/ {print $1}')
 USBFILE=/dev/"${USBFILE:2}"	# Cut first two characters from ouput of last command
+SHAREFILE=$(lsblk -f | awk '/backup-drive/ {print $1}')
+SHAREFILE=/dev/"${SHAREFILE:2}"
 DESTINATION="/run/media/jake/small-drive"
+SHAREDESTINATION="/run/media/jake/backup-drive/"
 DRY_RUN=0
+VERBOSE=0
 
 # Yes or no prompt
 # call by: yes_or_no "$message" && command
@@ -25,7 +29,7 @@ function yes_or_no {
 
 # Function call to rsync
 call_rsync() {
-	rsync -r $3 -t --progress --delete --modify-window=1 -l -H -s $1 $2
+	rsync -rtlHsv $3 --delete --modify-window=1 $1 $2
 }
 
 call_7zip() {
@@ -46,47 +50,48 @@ backing_up() {
 }
 
 backup_files() {
+	additional_flags=""
 	# Check if we want to do a dry run.
 	if dry_run_check; then
-		dry_run_flag="-n"
-		echo "Initalizing dry run..."
-	else
-		dry_run_flag=""
+		additional_flags+="-n "
 	fi
-	echo
+
+	if verbose_check; then
+		additional_flags+="-v "
+	fi
 	# Documents
 	spacer_big
 	backing_up "Documents"
 	spacer_small
-	call_rsync "/home/jake/Documents/" "$DESTINATION/Backups/docs-jake" $dry_run_flag
+	call_rsync "/home/jake/Documents/" "$DESTINATION/Backups/docs-jake" "$additional_flags"
 	echo
 
 	# Music
 	spacer_big
 	backing_up "Music"
 	spacer_small
-	call_rsync "/home/jake/Music/" "$DESTINATION/Backups/music" $dry_run_flag
+	call_rsync "/home/jake/Music/" "$DESTINATION/Backups/music" "$additional_flags"
 	echo
 
 	# Wallpapers
 	spacer_big
 	backing_up "Wallpapers"
 	spacer_small
-	call_rsync "/home/jake/Pictures/wallpapers" "$DESTINATION/Backups/wallpapers" $dry_run_flag
+	call_rsync "/home/jake/Pictures/wallpapers" "$DESTINATION/Backups/wallpapers" "$additional_flags"
 	echo
 
 	# Screenshots
 	spacer_big
 	backing_up "Screenshots"
 	spacer_small
-	call_rsync "/home/jake/Pictures/screenshots" "$DESTINATION/Backups/screenshots" $dry_run_flag
+	call_rsync "/home/jake/Pictures/screenshots" "$DESTINATION/Backups/screenshots" "$additional_flags"
 	echo
 
 	# Game screenshots
 	spacer_big
 	backing_up "Game Screeenshots"
 	spacer_small
-	call_rsync "/home/jake/Pictures/game-screenshots" "$DESTINATION/Backups/game-screenshots" $dry_run_flag
+	call_rsync "/home/jake/Pictures/game-screenshots" "$DESTINATION/Backups/game-screenshots" "$additional_flags"
 	echo
 }
 
@@ -112,9 +117,41 @@ backup_archives() {
 	spacer_small
 }
 
+# Backup share drive
+backup_share() {
+	additional_flags=""
+	# Check if we want to do a dry run.
+	if dry_run_check; then
+		additional_flags+="-n "
+		echo "Initalizing dry run..."
+	fi
+
+	if verbose_check; then
+		additonal_flags+="-v "
+		echo "rsync ran with -v"
+	fi
+	# Share drive
+	spacer_big
+	backing_up "Share"
+	spacer_small
+	call_rsync "/home/jake/share/" "$SHAREDESTINATION" "$additional_flags"
+	echo
+	
+}
+
 # Check for dry run flag
 dry_run_check() {
 	if [ $DRY_RUN -eq 1 ];
+	then
+		return 0
+	else
+		return 1
+	fi
+}
+
+# Check for verbose flag
+verbose_check() {
+	if [ $VERBOSE -eq 1 ];
 	then
 		return 0
 	else
@@ -133,7 +170,8 @@ debug_check() {
 }
 
 mount_check() {
-	if [ ! -d $DESTINATION/Backups ]; then
+	if [ ! -d "$1" ]; then
+		echo "Drive not mounted"
 		return 1
 	else
 		return 0
@@ -141,7 +179,8 @@ mount_check() {
 }
 
 plugged_in_check() {
-	if [ "$USBFILE" == "/dev/" ]; then
+	if [ "$1" == "/dev/" ]; then
+		echo "Drive not plugged in"
 		return 1
 	else
 		return 0
@@ -149,29 +188,37 @@ plugged_in_check() {
 }
 
 mount_drive() {
-	sudo mkdir -p $DESTINATION
-	sudo mount -o uid=1000 $USBFILE $DESTINATION && echo "Drive mounted successfully."
+	sudo mkdir -p $2
+	sudo mount -o uid=1000 $1 $2 && echo "Drive mounted successfully."
 }
 
+# all done message.
+all_done() {
+	echo "All finished."
+}
 
 cleanup() {
-	echo All done.  Waiting for a few seconds...
+	echo "Waiting for a few seconds..."
 	sleep 5
-	sudo umount -r $DESTINATION && echo "Drive unmounted."
-	sudo rmdir $DESTINATION && echo "Mount directory removed."
+	sudo umount -r "$1" && echo "Drive unmounted."
+	sudo rmdir "$1" && echo "Mount directory removed."
 	echo "Completed backup."
 }
 
 get_args() {
-	while getopts ":hn" option; do
+	while getopts ":hnv" option; do
 		case $option in
 			h)
 				help_section
 				exit
 				;;
 			n)
+				echo dry run on
 				DRY_RUN=1
-				main "files"
+				;;
+			v)
+				echo verbose on
+				VERBOSE=1
 				;;
 			\?)
 				echo "Invalid option"
@@ -183,25 +230,46 @@ get_args() {
 
 
 main() {
-	case "$1" in
+	# Set arguments to a variable
+	args="$@"
+
+	# If there are multiple arguments, strip all but the last
+	if [ $# -gt 1 ]; then
+		args="${@: -1}"
+	fi
+
+	# Case for checking arguments
+	case "$args" in
 		"")
 			# fallthrough
 			;&
 		files)
-			plugged_in_check || exit 1
-			if ! mount_check; then
-				echo "Drive not mounted"
-				yes_or_no "Would you like to mount it?" || exit
-				mount_drive
+			plugged_in_check "$USBFILE" || exit 1
+			if ! mount_check "$DESTINATION/Backups"; then
+				yes_or_no "Would you like to mount it?" || exit 1
+				mount_drive "$USBFILE" "$DESTINATION"
 			fi
 			backing_up "Files"
 			backup_files
-			yes_or_no "Would you like to unmount the drive?" || exit
-			cleanup
+			all_done
+			yes_or_no "Would you like to unmount the drive?" || exit 0
+			cleanup "$DESTINATION"
 			exit
 			;;
 		archives)
 			backing_up "Archives"
+			exit
+			;;
+		share)
+			plugged_in_check "$SHAREFILE" || exit 1
+			if ! mount_check "$SHAREDESTINATION"; then
+				yes_or_no "Would you like to mount it?" || exit 1
+				mount_drive "$SHAREFILE" "$SHAREDESTINATION"
+			fi
+			backup_share
+			all_done
+			yes_or_no "Would you like to unmount the drive?" || exit 0
+			cleanup "$SHAREDESTINATION"
 			exit
 			;;
 		*)
