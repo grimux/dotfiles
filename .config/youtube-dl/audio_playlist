@@ -1,0 +1,1 @@
+--paths $HOME/Music/yt-dlp --output "%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s" --embed-thumbnail --add-metadata --extract-audio --audio-format mp3

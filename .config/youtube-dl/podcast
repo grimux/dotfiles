@@ -1,1 +1,1 @@
--o $HOME/Music/Podcasts/%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s --add-metadata --playlist-reverse -i
+--paths $HOME/Music/Podcasts --output "%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s" --add-metadata --playlist-reverse --ignore-errors

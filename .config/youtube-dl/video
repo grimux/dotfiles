@@ -1,0 +1,1 @@
+--paths $HOME/Downloads --output "%(title)s.%(ext)s" --embed-subs --embed-thumbnail --add-metadata --merge-output-format mkv

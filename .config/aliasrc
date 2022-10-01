@@ -15,10 +15,11 @@ alias c="calcurse"
 alias vim="nvim"
 
 # yt-dlp
-alias ytv="yt-dlp"
+alias ytv="yt-dlp --config-location ~/.config/youtube-dl/video"
 alias yta="yt-dlp --config-location ~/.config/youtube-dl/audio"
-alias ytap="yt-dlp --config-location ~/.config/youtube-dl/playlist_audio"
-alias ytvp="yt-dlp --config-location ~/.config/youtube-dl/playlist_video"
+alias ytap="yt-dlp --config-location ~/.config/youtube-dl/audio_playlist"
+alias ytas="yt-dlp --config-location ~/.config/youtube-dl/audio_split"
+alias ytvp="yt-dlp --config-location ~/.config/youtube-dl/video_playlist"
 alias ytpod="yt-dlp --config-location ~/.config/youtube-dl/podcast"
 
 # Vimwiki
@@ -38,7 +39,6 @@ alias ys="yadm status"
 alias yc="yadm commit"
 alias ya="yadm add"
 alias yp="yadm push"
-alias updatecal="yadm add -A $HOME/.local/share/calcurse && yadm commit -m \"Calcurse Update\""
 
 alias sdn="shutdown now"
 alias n="notes"
@@ -53,9 +53,12 @@ alias clist="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME ls-tree --f
 
 # Games
 alias factorio="lutris lutris:rungameid/2"
+alias eldenring="gamemoderun mangohud ~/Games/Elden.Ring-jc141/start.w.sh"
+alias gtavc="lutris lutris:rungameid/16"
 alias gtav="lutris lutris:rungameid/10"
+alias hl2="lutris lutris:rungameid/18"
 alias saints="lutris lutris:rungameid/7"
-alias silent-hill=""
+alias silent-hill="lutris lutris:rungameid/14"
 alias terraria="lutris lutris:rungameid/1"
 alias witcher="lutris lutris:rungameid/12"
 alias xonotic="lutris lutris:rungameid/13"
