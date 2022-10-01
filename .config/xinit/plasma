@@ -1,0 +1,22 @@
+#!/bin/sh
+# Startx
+# kde plasma
+
+# ensure that xinit scripts are sourced
+# this should help with slow application startup
+if [ -d /etc/X11/xinit/xinitrc.d ] ; then
+ for f in /etc/X11/xinit/xinitrc.d/?*.sh ; do
+  [ -x "$f" ] && . "$f"
+ done
+ unset f
+fi
+
+export DESKTOP_SESSION=plasma
+xrandr --output HDMI-0 --same-as DVI-D-0	# Set TV (hdmi) to be the same as main monitor
+numlockx on &					# turn on the numlock key
+mpd &						# music player daemon
+playerctld daemon &				# Start playerctl daemon, tracks recent media players
+mpDris2 &
+setxkbmap -option caps:escape			# Set caps lock to escape
+clipmenud &					# Clipmenu
+exec startplasma-x11				# Start plasma

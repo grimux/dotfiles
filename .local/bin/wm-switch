@@ -1,40 +1,112 @@
 #!/usr/bin/env bash
 
+# Function to write to the sddm conf file
 sddm-switch() {
+	XSESSION_DIR="$HOME/.config/xsession"
 	sudo sed -i".bak" "s/Session=.*/Session=$1/" /etc/sddm.conf
 	printf "\n%s\n" "$1 selected"
-	ln -sfv $HOME/.xsession-$1 $HOME/.xsession
+	ln -sfv $XSESSION_DIR/.xsession-$1 $HOME/.xsession
 	printf "%s\n\n%s\n" "sddm.conf written" "Please restart xsession"
 }
 
+# Switches which file will be loaded by startx
 startx-switch() {
-	ln -sfv $HOME/.xinitrc-$1 $HOME/.xinitrc
+	XINIT_DIR="$HOME/.config/xinit"
+	ln -sfv $XINIT_DIR/$1 $HOME/.xinitrc
 	printf "%s\n\n%s\n" ".xinitrc written" "Please restart xsession"
 }
 
-echo "WM-Switcher (startx)"
-echo "1. dwm"
-echo "2. Gnome-xorg"
-echo "3. XMonad"
-echo "4. Awesome"
+# Array of window managers and desktop environments
+wm_list=(
+	"dwm"
+	"xmonad"
+	"awesome"
+	"gnome"
+	"plasma"
+)
 
-read -p "Please make a choice: " input
+# List window managers
+list_managers() {
+	j=1
+	for i in "${wm_list[@]}"; do
+		echo "$j. $i"
+		let j++
+	done
+}
 
-case $input in
-	1)
-		startx-switch dwm
-		;;
-	2)
-		startx-switch gnome
-		;;
-	3)
-		echo not installed
-		;;
-	4)
-		startx-switch awesome
-		;;
-	*)
-		echo "Invalid input"
-		;;
-esac
+# Help section
+help_section() {
+	echo "A script to quickly switch the window manager."
+	echo
+	echo "Syntax: wm-switch [-h|l] [wm name]"
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "l     List window managers."
+	echo
+	echo "You can supply an argument of the window manager"
+	echo "that you want.  Or just run the script and choose"
+	echo "from the list."
+}
 
+# Get flags supplied to the script
+get_flags() {
+	while getopts ":hl" option;do
+		case $option in
+			h)
+				help_section
+				exit
+				;;
+			l)
+				list_managers
+				exit
+				;;
+			\?)
+				echo "Error: Invalid option"
+				exit 1
+				;;
+		esac
+	done
+}
+
+# Get arguments supplied to the script
+# If the argument matches an item in the wm_list array, then switch
+# to that window manager.
+get_args() {
+	if [ ! -z "$@" ]; then
+		for i in "${wm_list[@]}"; do
+			[[ "$i" == "$1" ]] && startx-switch "$1" && exit
+		done
+	fi
+
+}
+
+# Main
+main() {
+	# get any flags supplied to the script
+	get_flags "$@"
+
+	# Welcome message
+	echo "WM-Switcher (startx)"
+
+	# get any arguments supplied to the script
+	get_args "$@"
+
+	# list out the array of managers
+	list_managers
+	echo
+
+	# get input
+	read -p "Please make a choice: " input
+
+	# Loop through array and check for a numerical match
+	# If there is a match, call the startx-switch function
+	# with the array element as an argument.
+	j=1
+	for i in "${wm_list[@]}"; do
+		[[ $j -eq $input ]] && startx-switch "$i" && exit
+		let j++
+		[[ $j -gt ${#wm_list[@]} ]] && echo "Invalid choice" && exit 1
+	done
+}	
+
+main "$@"

@@ -1,5 +1,6 @@
 #!/bin/sh
 # Startx
+# Awesome
 
 # ensure that xinit scripts are sourced
 # this should help with slow application startup
@@ -13,8 +14,6 @@ fi
 xrandr --output HDMI-0 --same-as DVI-D-0	# Set TV (hdmi) to be the same as main monitor
 redshift-gtk &					# Redshift for bluelight filter
 volumeicon &
-dwmblocks &					# Start dwmblocks
-dunst &						# Dunst for notifications
 picom &						# Picom for transparency
 mpd &						# music player daemon
 #mpDris2 &					# control mpd with playerctl
@@ -22,8 +21,7 @@ setxkbmap -option caps:escape			# Set caps lock to escape
 #imwheel -b 45 &					# Faster scroll speed
 clipmenud &					# Clipmenu
 nitrogen --restore				# Restore wallpaper
-conky -c ~/.config/conky/conkyrc.dwm &		# Start conky
 xset s 900					# Blankout screen after 15 minutes
 lxsession &					# Start policy kit
 #exec dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY &		# temp fix for slow application startup
-exec dwm					# Start dwm
+exec awesome					# Start awesome
