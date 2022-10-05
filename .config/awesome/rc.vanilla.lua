@@ -17,6 +17,8 @@ local beautiful = require("beautiful")
 local naughty = require("naughty")
 naughty.config.defaults['icon_size'] = 100
 
+local lain = require("lain")
+
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
@@ -49,8 +51,12 @@ end
 -- }}}
 
 -- {{{ Variable definitions
+--
+-- Themes
+--
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+--beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")	-- defualt theme
+beautiful.init(gears.filesystem.get_configuration_dir() .. "theme.lua")
 
 
 -- This is used later as the default terminal and editor to run.
@@ -68,6 +74,7 @@ editor_cmd = terminal .. " -e " .. editor
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
+altkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -80,7 +87,7 @@ awful.layout.layouts = {
     -- awful.layout.suit.fair.horizontal,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.spiral.dwindle,
-    -- awful.layout.suit.max,
+    awful.layout.suit.max,
     -- awful.layout.suit.max.fullscreen,
     awful.layout.suit.magnifier,
     -- awful.layout.suit.corner.nw,
@@ -126,7 +133,41 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock('%a %b %d, %I:%M %P')
 
---myseparator = wibox.widget.texbox(text = " | ")
+-- mpd widget
+local mpc = require("mpc")
+local textbox = require("wibox.widget.textbox")
+local timer = require("gears.timer")
+local mpd_widget = textbox()
+local state, title, artist, file = "stop", "", "", ""
+local function update_widget()
+    local text = " | MPD: "
+    text = text .. tostring(artist or "") .. " - " .. tostring(title or "")
+    if state == "pause" then
+        text = text .. " (paused)"
+    end
+    if state == "stop" then
+        text = text .. " (stopped)"
+    end
+    mpd_widget.text = text .. " | "
+end
+local connection
+local function error_handler(err)
+    mpd_widget:set_text("Error: " .. tostring(err))
+    -- Try a reconnect soon-ish
+    timer.start_new(10, function()
+        connection:send("ping")
+    end)
+end
+connection = mpc.new(nil, nil, nil, error_handler,
+    "status", function(_, result)
+        state = result.state
+    end,
+    "currentsong", function(_, result)
+        title, artist, file = result.title, result.artist, result.file
+        pcall(update_widget)
+    end)
+mpd_widget:buttons(awful.button({}, 1, function() connection:toggle_play() end))
+
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -316,6 +357,10 @@ globalkeys = gears.table.join(
               { description = "qtpass", group = "launcher"}),
     awful.key({ modkey,           }, "g",     function () awful.spawn("lutris") end,
               { description = "lutris", group = "launcher"}),
+    awful.key({ modkey, "Shift"   }, "n",     function () awful.spawn("notepadqq") end,
+              { description = "notepadqq", group = "launcher"}),
+    awful.key({ modkey,           }, "c",     function () awful.spawn("qalculate-gtk") end,
+              { description = "qalculate-gtk", group = "launcher"}),
 
     -- Script Launching
     awful.key({ modkey,        }, "F5",     function () awful.spawn("xow-toggle") end,
@@ -520,6 +565,8 @@ awful.rules.rules = {
           "copyq",  -- Includes session name in class.
           "pinentry",
 	  "lutris",
+	  "qalculate-gtk",
+	  "virt-manager",
         },
         class = {
           "Arandr",
@@ -527,6 +574,7 @@ awful.rules.rules = {
           "Gpick",
           "Kruler",
           "MessageWin",  -- kalarm.
+	  "Nm-connection-editor", -- network-manager-applet
           "Sxiv",
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
           "Wpa_gui",
@@ -543,15 +591,12 @@ awful.rules.rules = {
           "ConfigManager",  -- Thunderbird's about:config.
           "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
         }
-      }, properties = { floating = true }},
+      }, properties = { floating = true, placement = awful.placement.centered}},
 
     -- Add titlebars to normal clients and dialogs
     { rule_any = {type = { "normal", "dialog" }
-      }, properties = { titlebars_enabled = true }
+      }, properties = { titlebars_enabled = false }
     },
-
-    { rule_any = { }, properties = { size_hint_honor = false } },
-
 
     --
     -- Tag Rules
@@ -559,7 +604,7 @@ awful.rules.rules = {
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
     --   properties = { screen = 1, tag = "2" } },
-    { rule = { class = "Firefox" },
+    { rule = { class = "firefox" },
     	properties = { screen = 1, tag = "www" } },
     { rule = { class = "Pcmanfm" },
     	properties = { screen = 1, tag = "sys" } },
@@ -571,13 +616,19 @@ awful.rules.rules = {
     	properties = { screen = 1, tag = "mus" } },
     { rule = { class = "Sonata" },
     	properties = { screen = 1, tag = "mus" } },
+    { rule = { class = "Spotify" },
+    	properties = { screen = 1, tag = "mus" } },
     { rule = { class = "mpv" },
     	properties = { screen = 1, tag = "vid" } },
     { rule = { class = "vlc" },
     	properties = { screen = 1, tag = "vid" } },
     { rule = { class = "PolyMC" },
     	properties = { screen = 1, tag = "gfx" } },
+    { rule = { class = "Bottles" },
+    	properties = { screen = 1, tag = "gfx" } },
     { rule = { class = "Lutris" },
+    	properties = { screen = 1, tag = "gfx" } },
+    { rule = { class = "Virt-manager" },
     	properties = { screen = 1, tag = "gfx" } },
 }
 -- }}}
@@ -647,8 +698,10 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
 -- Appearance Stuff
-beautiful.useless_gap = 5
+beautiful.useless_gap = 10
 beautiful.notification_opacity = '100'
+--beautiful.border_width = 5
+--beautiful.border_focus = "#ff5555"
 --beautiful.notification_max_width = 200
 --beautiful.notification_max_height = 100
 
