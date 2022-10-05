@@ -17,7 +17,7 @@ help_section() {
 	echo "l     List games."
 	echo
 	echo "commands:"
-	echo "backup                   	Backup game saves"
+	echo "backup                    Backup game saves"
 	echo "archive                   Compress game archives"
 	echo "restore (game title)      Restore game saves"
 	echo "delete (game title)       Delete game saves"
@@ -114,7 +114,7 @@ backup_saves() {
 			continue
 		fi
 		#cp -rpv --update "$game_save/." "$game_backup"
-		rsync -r -n --progress -t --delete --modify-window=1 "$game_save/" "$game_backup"
+		rsync -rvth --delete --modify-window=1 "$game_save/" "$game_backup"
 		echo
 	done < $temp_file
 	remove_temp_file
@@ -161,9 +161,6 @@ restore_save() {
 	game_save=$(grep "$game_title" $temp_file | awk -F',' '{print $2}')
 	game_backup=$(grep "$game_title" $temp_file | awk -F',' '{print $3}')
 
-	# Small message
-	echo "Restoring $game_title..."
-
 	# Debug output
 	#echo $game_directory
 	#echo $game_backup
@@ -182,6 +179,9 @@ restore_save() {
 		exit 1
 	fi
 
+	# Small message
+	echo "Restoring $game_title..."
+
 	# cp command
 	cp -rpv --update "$game_backup/." "$game_save"
 
@@ -191,6 +191,9 @@ restore_save() {
 
 restore_archive() {
 	shift
+	shift
+	echo "$@"
+	echo here
 	create_temp_file "$archive_locations"
 
 	remove_temp_file
@@ -255,6 +258,10 @@ get_args() {
 
 main() {
 	case "$1" in
+		"")
+			help_section
+			exit
+			;;
 		backup)
 			backup_saves
 			exit
@@ -269,6 +276,7 @@ main() {
 			exit
 			;;
 		restore)
+			[[ "$2" == "-a" ]] && restore_archive "$@" && exit
 			restore_save "$@"
 			exit
 			;;
