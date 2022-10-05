@@ -5,6 +5,7 @@ cfz	~/.config/zsh/.zshrc
 cfv	~/.config/nvim/init.vim
 cfi	~/.config/i3/config
 cfg	~/.config/game/game_save_locations.txt
+cfga	~/.config/game/game_archive_locations.txt
 cfm	~/.config/mutt/muttrc
 cfawe	~/.config/awesome/rc.lua
 cfawet	~/.config/awesome/themes/dracula/theme.lua
@@ -19,6 +20,7 @@ cfB	~/.config/i3blocks/config
 cfk	~/.config/sxhkd/sxhkdrc
 cfr	~/.config/ranger/rc.conf
 cfp	~/.zprofile
+cfpi	~/.config/picom/picom.conf
 cfx	~/.xmonad/xmonad.hs
 cfxb	~/.config/xmobar/xmobarrc
 cfal	~/.config/alacritty/alacritty.yml
