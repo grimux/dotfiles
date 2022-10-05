@@ -2,16 +2,25 @@
 # My backup script, ported to linux
 
 # Debug
-debug=1
+debug=0
 STATUS="live"
 
-# vars
+# Directories
+DOCUMENTS="$HOME/Documents"
+MUSIC="$HOME/Music"
+PICTURES="$HOME/Pictures"
+
+# Drives
 USBFILE=$(lsblk -f | awk '/small-drive/ {print $1}')
 USBFILE=/dev/"${USBFILE:2}"	# Cut first two characters from ouput of last command
 SHAREFILE=$(lsblk -f | awk '/backup-drive/ {print $1}')
 SHAREFILE=/dev/"${SHAREFILE:2}"
+
+# Destination
 DESTINATION="/run/media/jake/small-drive"
 SHAREDESTINATION="/run/media/jake/backup-drive/"
+
+# Flags
 DRY_RUN=0
 VERBOSE=0
 
@@ -29,7 +38,7 @@ function yes_or_no {
 
 # Function call to rsync
 call_rsync() {
-	rsync -rtlHsv $3 --delete --modify-window=1 $1 $2
+	rsync -rtlHsv $3 --progress --human-readable --delete --modify-window=1 $1 $2
 }
 
 call_7zip() {
@@ -63,14 +72,14 @@ backup_files() {
 	spacer_big
 	backing_up "Documents"
 	spacer_small
-	call_rsync "/home/jake/Documents/" "$DESTINATION/Backups/docs-jake" "$additional_flags"
+	call_rsync "$DOCUMENTS" "$DESTINATION/Backups/docs-jake" "$additional_flags"
 	echo
 
 	# Music
 	spacer_big
 	backing_up "Music"
 	spacer_small
-	call_rsync "/home/jake/Music/" "$DESTINATION/Backups/music" "$additional_flags"
+	call_rsync "$MUSIC" "$DESTINATION/Backups/music" "$additional_flags"
 	echo
 
 	# Wallpapers
@@ -127,14 +136,14 @@ backup_share() {
 	fi
 
 	if verbose_check; then
-		additonal_flags+="-v "
+		additional_flags+="-v "
 		echo "rsync ran with -v"
 	fi
 	# Share drive
 	spacer_big
-	backing_up "Share"
+	backing_up "Archive drive"
 	spacer_small
-	call_rsync "/home/jake/share/" "$SHAREDESTINATION" "$additional_flags"
+	call_rsync "/mnt/x" "$SHAREDESTINATION" "$additional_flags"
 	echo
 	
 }
