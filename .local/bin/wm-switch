@@ -12,7 +12,7 @@ sddm-switch() {
 # Switches which file will be loaded by startx
 startx-switch() {
 	XINIT_DIR="$HOME/.config/xinit"
-	ln -sfv $XINIT_DIR/$1 $HOME/.xinitrc
+	ln -sfv "$XINIT_DIR/$1" "$HOME/.xinitrc"
 	printf "%s\n\n%s\n" ".xinitrc written" "Please restart xsession"
 }
 
@@ -109,4 +109,5 @@ main() {
 	done
 }	
 
+# Call to main function, with arguments
 main "$@"
