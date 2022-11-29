@@ -96,9 +96,6 @@ local markup = lain.util.markup
 -- Xow status
 local xow_status = awful.widget.watch('xowstatus', 5)
 
--- My cpu temp
-local cputemp = awful.widget.watch('cputemp', 2)
-
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
 local clockicon = wibox.widget.imagebox(theme.widget_clock)
@@ -120,14 +117,14 @@ theme.cal = lain.widget.cal({
 local weathericon = wibox.widget.imagebox(theme.widget_weather)
 theme.weather = lain.widget.weather({
     APPID = "3e321f9414eaedbfab34983bda77a66e",
-    units = "imperial",
-    city_id = 4905006, -- placeholder (London)
+    units = "metric",
+    city_id = 4276816, -- placeholder (London)
     notification_preset = { font = "Mononoki 10", fg = theme.fg_normal },
     weather_na_markup = markup.fontfg(theme.font, "#eca4c4", "N/A "),
     settings = function()
         descr = weather_now["weather"][1]["description"]:lower()
         units = math.floor(weather_now["main"]["temp"])
-        widget:set_markup(markup.fontfg(theme.font, "#eca4c4", descr .. " @ " .. units .. "°F "))
+        widget:set_markup(markup.fontfg(theme.font, "#eca4c4", descr .. " @ " .. units .. "°C"))
     end
 })
 
