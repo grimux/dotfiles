@@ -32,9 +32,10 @@ mods_list=(
 help_section() {
 	echo "A script to launch Quake and its various mods."
 	echo
-	echo "Syntax: quake [-h|l] [mod name]"
+	echo "Syntax: quake [-h|j|l] [mod name]"
 	echo "options:"
 	echo "h     Print this help screen."
+	echo "i     Run Quake-Injector."
 	echo "l     List installed mods."
 	echo
 }
@@ -51,8 +52,13 @@ launch_quake() {
 	mangohud --dlsym gamemoderun quakespasm -game $1
 }
 
+# Quake Injector
+quake_injector() {
+	$quakedir/quake-injector/bin/QuakeInjector
+}
+
 # Get arguments
-while getopts ":hl" option; do
+while getopts ":hil" option; do
 	case $option in
 		h)
 			help_section
@@ -60,6 +66,10 @@ while getopts ":hl" option; do
 			;;
 		l)
 			list_mods
+			exit
+			;;
+		i)
+			quake_injector
 			exit
 			;;
 		\?)
@@ -73,6 +83,7 @@ done
 # If no argument, then launch copper
 if [ -z "$1" ]; then
 	launch_quake "copper"
+	exit
 fi
 
 # Loop through array, searching for a match
