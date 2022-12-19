@@ -8,10 +8,13 @@ savedir="$doomdir/save"
 
 # Mods List
 mods_list=(
+	"brutal_minecraft"
 	"chill_doom"
 	"elementalism"
 	"golden_souls"
 	"guncaster"
+	"hedon"
+	"mower"
 	"project_brutality"
 	"reelism2"
 	"russian_overkill"
@@ -75,6 +78,17 @@ case "$1" in
 		exit
 		;;
 
+	brutal_minecraft)
+		iwad=DOOM2.WAD
+		wads="brutal_minecraft/BM_MAIN_v1.0.pk3 brutal_minecraft/BM_RES_v1.0.pk3  brutal_minecraft/BM_RES2_v1.0.pk3 brutal_minecraft/BM_MAP_v1.0.wad brutal_minecraft/BM_ElectricPlayer_v1.0.pk3 brutal_minecraft/BM_Inventory_v1.0.pk3 brutal_minecraft/TiltPlusPlus_v1.65.pk3"
+		maps=""
+		savedir="$savedir/brutal_minecraft"
+		cheats=""
+		skill=""
+		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
+		exit
+		;;
+
 	elementalism)
 		iwad=DOOM2.WAD
 		wads="Elementalism_Phase1_RC1_1.01.pk3"
@@ -97,11 +111,44 @@ case "$1" in
 		exit
 		;;
 
+	hedon)
+		iwad=DOOM2.WAD
+		wads="Hedon.ipk3 ThiccEdition.pk3"
+		maps=""
+		savedir="$savedir/hedon"
+		cheats=""
+		skill=""
+		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
+		exit
+		;;
+
 	spooktober)
 		iwad=DOOM2.WAD
 		wads="SmoothDoom.pk3 spooktober.pk3 STEVE_FLASHLIGHT_PLUS.PK7"
 		maps=""
 		savedir="$savedir/spooktober"
+		cheats=""
+		skill=""
+		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
+		exit
+		;;
+
+	reelism2)
+		iwad=DOOM2.WAD
+		wads="reelism2_v1.23.pk3"
+		maps=""
+		savedir="$savedir/reelism2"
+		cheats=""
+		skill=""
+		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
+		exit
+		;;
+
+	mower)
+		iwad=DOOM2.WAD
+		wads="doom_mower_v2.wad"
+		maps=""
+		savedir="$savedir/doom_mower"
 		cheats=""
 		skill=""
 		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
