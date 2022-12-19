@@ -52,6 +52,8 @@ alias config="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME"
 alias clist="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME ls-tree --full-tree -r --name-only HEAD"
 
 # Games
+alias blood="lutris lutris:rungameid/27"
+alias duke="lutris lutris:rungameid/28"
 alias factorio="lutris lutris:rungameid/2"
 alias eldenring="gamemoderun mangohud ~/Games/Elden.Ring-jc141/start.w.sh"
 alias gtavc="lutris lutris:rungameid/16"
