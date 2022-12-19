@@ -131,6 +131,7 @@ local browser      = "firefox"
 local music        = "cantata"
 local termfile     = terminal .. " -e ranger"
 local filemanager  = "pcmanfm"
+local pc_sink      = "alsa_output.pci-0000_0c_00.3.analog-stereo"
 
 awful.util.terminal = terminal
 awful.util.tagnames = { "term", "www", "sys", "doc", "torr", "chat", "mus", "vid", "gfx" }
@@ -289,7 +290,7 @@ awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) 
 -- {{{ Mouse bindings
 
 root.buttons(mytable.join(
-    awful.button({ }, 3, function () awful.util.mymainmenu:toggle() end)
+    --awful.button({ }, 3, function () awful.util.mymainmenu:toggle() end)
     --awful.button({ }, 4, awful.tag.viewnext),
     --awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -402,25 +403,25 @@ globalkeys = mytable.join(
             os.execute("mpc toggle")
             beautiful.mpd.update()
         end,
-        {description = "mpc toggle", group = "widgets"}),
+        {description = "mpc toggle", group = "mpd"}),
     awful.key({ altkey, "Control" }, "Down",
         function ()
             os.execute("mpc stop")
             beautiful.mpd.update()
         end,
-        {description = "mpc stop", group = "widgets"}),
+        {description = "mpc stop", group = "mpd"}),
     awful.key({ altkey, "Control" }, "Left",
         function ()
             os.execute("mpc prev")
             beautiful.mpd.update()
         end,
-        {description = "mpc prev", group = "widgets"}),
+        {description = "mpc prev", group = "mpd"}),
     awful.key({ altkey, "Control" }, "Right",
         function ()
             os.execute("mpc next")
             beautiful.mpd.update()
         end,
-        {description = "mpc next", group = "widgets"}),
+        {description = "mpc next", group = "mpd"}),
     awful.key({ altkey }, "0",
         function ()
             local common = { text = "MPD widget ", position = "top_middle", timeout = 2 }
@@ -433,12 +434,12 @@ globalkeys = mytable.join(
             end
             naughty.notify(common)
         end,
-        {description = "mpc on/off", group = "widgets"}),
-    awful.key({ altkey, "Control" }, "0",
+        {description = "mpd on/off", group = "widgets"}),
+    awful.key({ altkey }, "m",
         function ()
 		awful.spawn("mpd-status")
 	end,
-	{description = "mpd status", group = "widgets"}),
+	{description = "mpd status", group = "mpd"}),
 
     -- User programs
     awful.key({ modkey,           }, "w",     function () awful.spawn(browser) end,
@@ -469,10 +470,12 @@ globalkeys = mytable.join(
               { description = "transmission remote gtk", group = "programs"}),
     awful.key({ modkey, "Shift"   }, "d",     function () awful.spawn("jdownloader") end,
               { description = "jDownloader2", group = "programs"}),
+    awful.key({ modkey }, "v",     function () awful.spawn("pavucontrol --tab=3") end,
+              { description = "pavucontrol", group = "programs"}),
 
     -- Script Launching
-    awful.key({ modkey,        }, "F5",     function () awful.spawn("toggle-xow") end,
-              { description = "toggle xow", group = "scripts"}),
+    --awful.key({ modkey,        }, "F5",     function () awful.spawn("toggle-xow") end,
+    --          { description = "toggle xow", group = "scripts"}),
     awful.key({ modkey,        }, "F6",     function () awful.spawn("toggle-conky") end,
               { description = "toggle conky", group = "scripts"}),
     awful.key({ modkey,        }, "F7",     function () awful.spawn("toggle-alpha") end,
@@ -489,6 +492,8 @@ globalkeys = mytable.join(
               { description = "edit configs", group = "dmenu"}),
     awful.key({ modkey, "Shift" }, "s",     function () awful.spawn("dm-sounds") end,
               { description = "soundscapes", group = "dmenu"}),
+    awful.key({ modkey }, "s",     function () awful.spawn("dm-websearch") end,
+              { description = "web search", group = "dmenu"}),
 
    -- Functions
    -- Show desktop. My function for this is above.
@@ -504,6 +509,14 @@ globalkeys = mytable.join(
      awful.util.spawn("playerctl next", false) end),
    awful.key({}, "XF86AudioPrev", function()
      awful.util.spawn("playerctl previous", false) end),
+
+   -- Volume Keys
+   awful.key({}, "XF86AudioMute", function()
+     awful.util.spawn("amixer -D pulse set Master 1+ toggle", false) end),
+   awful.key({}, "XF86AudioLowerVolume", function()
+     awful.util.spawn("pactl set-sink-volume " .. pc_sink .. " -1%", false) end),
+   awful.key({}, "XF86AudioRaiseVolume", function()
+     awful.util.spawn("pactl set-sink-volume " .. pc_sink .. " +1%", false) end),
 
    -- Screenshot
    awful.key({}, "Print", function () awful.spawn("screenshooter") end),
@@ -684,6 +697,7 @@ awful.rules.rules = {
           "lutris",
           "qalculate-gtk",
   	  "virt-manager",
+	  "1964.exe",
         },
         class = {
           "Arandr",
