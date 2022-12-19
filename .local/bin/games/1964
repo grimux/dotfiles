@@ -1,0 +1,113 @@
+#!/usr/bin/env sh
+#
+# Wrapper script to run and manage the Nintendo 64 
+# emulator 1964 Goldeneye Perfect Dark build.
+#
+# Jake Meredith
+#
+
+# Location of emulator
+emudir="/mnt/s/emulators/1964"
+
+# Executable
+exe="1964.exe"
+
+# Error flag
+flag=0
+
+# List of N64 Games
+game_list=(
+	"ge"
+	"pd"
+)
+
+
+# Functions
+#
+# Help Section
+help_section() {
+	echo "A script to launch 1964 GEPD Edition"
+	echo
+	echo "Syntax: 1964 [-c|h|l] [game name]"
+	echo "options:"
+	echo "c     Configure 1964."
+	echo "h     Print this help screen."
+	echo "l     List installed mods."
+	echo "r     Open readme."
+	echo
+}
+
+# List the games
+list_games() {
+	for i in "${game_list[@]}"; do
+		echo "$i"
+	done
+}
+
+# Launch game
+launch_game() {
+	wine $emudir/$exe -g $1.z64 -f
+}
+
+# Launch config
+launch_config() {
+	wine $emudir/$exe
+}
+
+# Open Readme
+open_readme() {
+	less $emudir/BUNDLE_README.txt
+}
+
+# Get arguments
+while getopts ":hclr" option; do
+	case $option in
+		c)
+			launch_config
+			exit
+			;;
+		h)
+			help_section
+			exit
+			;;
+		l)
+			list_games
+			exit
+			;;
+		r)
+			open_readme
+			exit
+			;;
+		\?)
+			echo "Error: Invalid option"
+			exit
+			;;
+	esac
+done
+
+# Main script
+# If no argument, then list the games
+if [ -z "$1" ]; then
+	list_games
+	exit
+fi
+
+# Loop through array, searching for a match
+for i in "${game_list[@]}"; do
+	# if array[i] == arg
+	if [ "$i" == "$1" ]; then
+		# Unset error flag
+		flag=0
+		launch_game "$i"
+		break
+	fi
+
+	# if arg is not found in array
+	# Set error flag
+	flag=1
+done
+
+# If the mod is not in the list
+if [ $flag -eq 1 ]; then
+	echo "Invalid game."
+fi
