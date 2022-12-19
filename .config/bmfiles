@@ -6,7 +6,7 @@ cfv	~/.config/nvim/init.vim
 cfi	~/.config/i3/config
 cfg	~/.config/game/game_save_locations.txt
 cfga	~/.config/game/game_archive_locations.txt
-cfm	~/.config/mutt/muttrc
+cfm	~/.config/mpd/mpd.conf
 cfawe	~/.config/awesome/rc.lua
 cfawet	~/.config/awesome/themes/dracula/theme.lua
 eb	~/documents/writing/uni.bib
