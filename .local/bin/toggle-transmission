@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+if pgrep -x transmission-da >/dev/null ; then
+	pkill transmission-da
+	echo "Turning transmission-daemon off"
+	notify-send "Turning transmission-daemon off"
+else
+	transmission-daemon
+	echo "Turning transmission-daemon on"
+	notify-send "Turning transmission-daemon on"
+fi

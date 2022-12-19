@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+#
+# A simple script to print out the playerctl status.
+# Useful for seeing album art and album
+
+# Variables rely on playerctl
+artwork=$(playerctl metadata mpris:artUrl)
+artist=$(playerctl metadata artist)
+track=$(playerctl metadata title)
+album=$(playerctl metadata album)
+
+info=$(playerctl metadata --format '{{title}} by {{artist}} from {{album}}')
+
+# The format of the message to print
+message=$(printf "%s\n%s\n%s" "$track" "$artist" "$album")
+
+#echo $artwork
+#echo $message
+echo $info
+
+# Print the message using notify-send
+notify-send -i "$artwork" "MPD"  "$message"

@@ -1,0 +1,27 @@
+#!/usr/bin/env sh
+
+# vars
+USBFILE=$(lsblk -f | awk '/small-drive/ {print $1}')
+USBFILE=/dev/"${USBFILE:2}"	# Cut first two characters from ouput of last command
+DESTINATION="/run/media/jake/small-drive"
+NAME="Small drive"
+
+# Check if the small drive is plugged in
+# if not, exit
+if [ "$USBFILE" == "/dev/" ]; then
+	echo "$NAME is not plugged in."
+	exit 1
+fi
+
+# Check if directory exists, if not, mount the drive
+if [ ! -d $DESTINATION/Backups ]; then
+	sudo mkdir -p $DESTINATION
+	sudo mount -o uid=1000 $USBFILE $DESTINATION
+	echo "$NAME mounted"
+	notify-send "$NAME mounted"
+else
+	sudo umount -r $DESTINATION
+	sudo rmdir $DESTINATION
+	echo "$NAME unmounted."
+	notify-send "$NAME unmounted."
+fi

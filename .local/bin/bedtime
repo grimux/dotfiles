@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+
+# Start blood video playlist
+# Stop mpd if it is playing
+mpc stop
+#mpc load pro_blood
+#mpc play
+mpv --playlist="$HOME/Videos/Games/Pro_Blood/blood.list"
+
+# Start music
+mpc clear
+mpc random on
+#mpc load gta_radio_favs
+mpc load game_chill
+mpc play
+
+#
+echo "Good morning!"

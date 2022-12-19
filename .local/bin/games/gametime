@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+
+steam -nochatui -nofriendsui -silent &
+lutris &
