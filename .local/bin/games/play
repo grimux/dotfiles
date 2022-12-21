@@ -1,0 +1,84 @@
+#!/usr/bin/env sh
+#
+# A wrapper script to launch Lutris and Steam games from the terminal.
+#
+
+# Game list
+game_list=($(lutris -l | awk -F'|' '{print $3}'))
+
+# Functions
+# Help Section
+help_section() {
+	echo "A script to launch Lutris and Steam games."
+	echo
+	echo "Syntax: play [-h|l] [game name]"
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "l     List installed games."
+	echo "d     List games in dmenu."
+	echo
+}
+
+# List the games
+list_games() {
+	for i in "${game_list[@]}"; do
+		echo $i
+	done
+}
+
+# Launch game
+launch_game() {
+	lutris lutris:rungame/$1
+}
+
+# Dmenu
+choose_in_dmenu() {
+		choice=$(printf '%s\n' "${game_list[@]}" | dmenu -i -l 20 -p 'Game:')
+		launch_game $choice
+}
+
+# Get arguments
+while getopts ":dhl" option; do
+	case $option in
+		d)
+			choose_in_dmenu
+			exit
+			;;
+		h)
+			help_section
+			exit
+			;;
+		l)
+			list_games
+			exit
+			;;
+		\?)
+			echo "Error: Invalid option"
+			exit
+			;;
+	esac
+done
+
+# Main script
+# If no argument, then launch copper
+if [ -z "$1" ]; then
+	list_games
+	exit
+fi
+
+# Loop through array, searching for a match
+for i in "${game_list[@]}"; do
+	if [ "$i" == "$1" ]; then
+		flag=0
+		launch_game "$i"
+		break
+	fi
+
+	# Set flag 1, meaning error
+	flag=1
+done
+
+# If the mod is not in the list
+if [ $flag -eq 1 ]; then
+	echo "Invalid game."
+fi
