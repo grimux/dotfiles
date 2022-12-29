@@ -1,0 +1,153 @@
+#!/usr/bin/bash
+# 
+# A script to toggle autologin and autostartx
+#
+
+# Autologin variables
+drop_in_file=/etc/systemd/system/getty@tty1.service.d/autologin.conf
+backup_file=$HOME/.config/autologin.conf
+
+# Autostartx variables
+shell_profile=$HOME/.zprofile
+search_term_sed='\/dev\/tty1'
+search_term_grep="^#.*/dev/tty1"
+
+# Help Section
+help_section() {
+	echo "A script to toggle automatic PC login."
+	echo
+	echo "Syntax: toggle-login [-s|h]"
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "s     Show current status."
+	echo
+}
+
+# Enable autologin by copying the file from my .config to the system location
+autologin_enable() {
+	sudo cp $backup_file $drop_in_file
+}
+
+# Disable autologin by removing the system drop in file
+autologin_disable() {
+	sudo rm $drop_in_file
+}
+
+# Enable autostartx by uncommenting a line in .zprofile
+# sed expression will search for $search_term_sed, and remove the leading #.
+autostartx_enable() {
+	sed \
+		--in-place \
+		--expression="/$search_term_sed/s/^#//g" \
+		$shell_profile
+
+}
+
+# Disable autostartx by commenting out a line in .zprofile
+# sed expression will search for $search_term_sed, add # to the beginning of the line.
+autostartx_disable() {
+	sed \
+		--in-place \
+		--expression="/$search_term_sed/s/^/#/g" \
+		$shell_profile
+}
+
+# Check the status of autologin
+# Return 1 if autologin is enabled
+# Return 0 if autologin is disabled
+autologin_status() {
+	if [ -f $drop_in_file ]; then
+		echo 1
+	else
+		echo 0
+	fi
+}
+
+# Check the status of autostartx
+# Return 1 if autostartx is enabled
+# Return 0 is autostartx is disabled
+autostartx_status() {
+	grep "$search_term_grep" $shell_profile > /dev/null
+	is_line_commented=$?
+
+	if [ $is_line_commented -eq 1 ]; then
+		echo 1
+	else
+		echo 0
+	fi
+}
+
+# Get the status of both autologin and autostartx
+# Display the results
+get_status() {
+	# Check status of autologin
+	is_autologin_enabled=$(autologin_status)
+
+	# Check status of autostartx
+	is_autostartx_enabled=$(autostartx_status)
+
+
+	# Logic to control message for autologin status
+	if [ $is_autologin_enabled -eq 1 ]; then
+		echo "Autologin: enabled"
+	else
+		echo "Autologin: disabled"
+	fi
+
+	# Logic to control message for autostartx status
+	if [ $is_autostartx_enabled -eq 1 ]; then
+		echo "Autostartx: enabled"
+	else
+		echo "Autostartx: disabled"
+	fi
+}
+
+main() {
+	# Look for drop-in file
+	if [ -f $drop_in_file ]; then
+		# Remove the drop-in file
+		echo "Drop-in file present."
+		echo "Removing..."
+		autologin_disable && echo -e "File removed.\n"
+	
+		# Disable autostartx
+		echo "Autostartx enabled."
+		echo "Turning it off..."
+		autostartx_disable && echo "Done."
+	else
+		# Add the drop-in file
+		echo "Drop-in file not found."
+		echo "Adding..."
+		autologin_enable && echo -e "File added.\n"
+		
+		# Enable autostartx
+		echo "Autostartx disabled."
+		echo "Turning it on..."
+		autostartx_enable && echo "Done."
+	fi
+}
+
+# Entry Point
+# Get arguments
+while getopts ":sh" option; do
+	case $option in
+		s)
+			get_status
+			exit
+			;;
+		h)
+			help_section
+			exit
+			;;
+		\?)
+			echo "Error: Invalid option"
+			exit
+			;;
+	esac
+done
+
+# Call to main
+main
+
+# All done
+exit
