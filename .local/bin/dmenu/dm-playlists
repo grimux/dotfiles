@@ -1,29 +1,86 @@
 #!/usr/bin/bash
+# 
+# A script for using my playlists in mpd.
+# Uses mpc to load, configure, and play everything.
+#
 
+### Variables ###
+#
 # MPD playlist directory
 playlist_dir="$HOME/.config/mpd/playlists"
 
 # Array of playlists.
 # Takes all the files from the playlist directory and adds them to the array.
-playlists=($playlist_dir/*)
+playlist_files=($playlist_dir/*)
 
-# Piping the array into dmenu.
+# Array of playlist names
 # awk is used to strip the file path and leave just the file name. -F'/' sets the delimiter to /
 # sed is used to strip the file extension.
-choice=$(printf '%s\n' "${playlists[@]}" | awk -F'/' '{print $NF}' | sed 's/.m3u//' | dmenu -i -l 20 -p 'Playlist:')
+playlist_names=$(printf '%s\n' "${playlist_files[@]}" | awk -F'/' '{print $NF}' | sed 's/.m3u//')
 
-# What to do when we choose a playlist.
-# Check if array contains the choice.
-# If no choice is entered (pressed ESC), else is triggered.
-if [[ "${playlists[*]}" =~ "$choice" ]] && [[ "$choice" != "" ]]; then
-	mpc clear
-	mpc random on
-	mpc repeat on
-	mpc load "${choice}"
+
+### Functions ###
+#
+# Function to open playlist in dmenu
+open_in_dmenu() {
+	# Piping the array into dmenu.
+	printf '%s\n' "${playlist_names[@]}" | dmenu -i -l 20 -p 'Playlist:'
+}
+
+# Check if the playlist exists
+check_playlist() {
+	exist=0
+	name=$1
+
+	# Check for a match in the array
+	for i in ${playlist_names[@]}; do
+		if [ "$name" == "$i" ]; then
+			exist=1
+		fi
+	done
+
+	# Return 1 if exists, 0 if not
+	echo $exist
+}
+
+# Message if the playlist is not found
+no_playlist() {
+	echo "Playlist not found."
+	notify-send "playlist error" "That playlist does not exist."
+	exit 1
+}
+
+# Prepare mpd for playback and start
+load_mpc() {
+	argument=$1
+	mpc clear > /dev/null
+	mpc random on > /dev/null
+	mpc repeat on > /dev/null
+	mpc load "$argument"
 	mpc play
+}
 
-# What to do if we just escape without choosing anything,
-# or if the choice is not in the playlist array.
+### Entry point ###
+#
+# Check if the argument passed to the script is empty
+# If so, capture the output of open_in_dmenu into $choice
+if [ -z "$1" ]; then
+	choice=$(open_in_dmenu)
+# Otherwise use the argument as the playlist name
 else
-	echo "Program terminated." && exit 1
+	choice="$1"
 fi
+
+# Check to see if the playlist has a match in the array
+does_playlist_exist=$(check_playlist $choice)
+
+# If the playlist exists, pass it to load_mpc function
+if [ $does_playlist_exist -eq 1 ]; then
+	load_mpc $choice
+# If it doesn't exist, call the no_playlist function
+else
+	no_playlist
+fi
+
+### End ###
+exit 0
