@@ -1,0 +1,355 @@
+#!/usr/bin/bash
+# 
+### Description #####################################################################################
+# A script to toggle TV mode on my computer.  It switches my connected TV to be it's own monitor
+# and play videos on it.  This script uses a custom profile within Firefox, so its current tabs,
+# history, bookmarks, and window position will be separate from my normal Firefox profile.
+#####################################################################################################
+#
+#
+#
+### TODO ##########################################################################################
+# - Implement a pulseaudio function to switch sinks on Firefox
+# 	- https://askubuntu.com/questions/71863/how-to-change-pulseaudio-sink-with-pacmd-set-default-sink-during-playback
+#
+# BUGS
+###################################################################################################
+
+
+
+
+############################
+### Config and Variables ###
+############################
+
+# Debug mode
+debug_mode=0
+
+# Custom class name for the browser window.
+# Makes it easier to find with xdotool.
+custom_class_name="Piper"
+
+# Name of TV as seen in xrandr.
+tv_name="HDMI-0"
+
+# Name of monitor as seen in xrandr.
+monitor_name="DVI-D-0"
+
+# Temp file to tell if TV mode is active or not.
+tv_mode_file="$HOME/.cache/tv_mode_on"
+
+
+
+
+#################
+### Functions ###
+#################
+
+# Call to xrandr to setup TV as a secondary display.
+xrandr_tv_mode() {
+	xrandr --output $tv_name --right-of $monitor_name
+}
+
+# Call to xrandr to setup TV as a mirror of my main display.
+xrandr_mirror_mode() {
+	xrandr --output $tv_name --same-as $monitor_name
+}
+
+# Function to enable TV mode.
+enable_tv_mode() {
+	### TODO ###
+	#
+	
+	# Enter debug message
+	if [ $debug_mode -eq 1 ]; then
+		echo "Entering: ${FUNCNAME[0]}"
+	fi
+
+	# Use xrandr to setup TV as a second monitor.
+	xrandr_tv_mode
+
+	# Call to open a new firefox window
+	open_browser
+
+	# Make temporary file to flag that the mode is active.
+	touch $tv_mode_file
+
+	# Show enable message
+	enable_message
+
+	# Exit debug message
+	if [ $debug_mode -eq 1 ]; then
+		echo "Leaving: ${FUNCNAME[0]}"
+	fi
+}
+
+# Function to disable TV mode.
+disable_tv_mode() {
+	### TODO ###
+	# - Fix bugs with close_browser
+	
+	# Enter debug message
+	if [ $debug_mode -eq 1 ]; then
+		echo "Entering: ${FUNCNAME[0]}"
+	fi
+	
+	# Get the id of the browser with YouTube in it
+	local browser_window_id=$(get_browser_id)
+
+	# Call to close the firefow window with YouTube
+	close_browser "$browser_window_id"
+
+	# Use xrandr to set TV as a mirrored monitor.
+	xrandr_mirror_mode
+
+	# Remove the temporary file
+	rm $tv_mode_file
+
+	# Show disable message
+	disable_message
+	
+	# Exit debug message
+	if [ $debug_mode -eq 1 ]; then
+		echo "Leaving: ${FUNCNAME[0]}"
+	fi
+}
+
+# Launch the browser
+# This function will launch a new instance of Firefox using a custom profile.
+open_browser() {
+	# Enter debug message
+	if [ $debug_mode -eq 1 ]; then
+		echo "Entering: ${FUNCNAME[0]}"
+	fi
+
+	# Store the currently active window so we can switch back to it after opening firefox.
+	local previously_active_window=$(get_current_window)
+	
+	# Call to startup firefox.  Will use its own profile.
+	# Also inialized with its own custom class name so it can be easily found.
+	nohup \
+		firefox \
+		--new-instance \
+		-P tv_mode \
+		--class "$custom_class_name" \
+		&
+
+
+	# Prevent race war with starting the browser and getting its ID.
+	sleep 0.75
+	
+	# Get the ID of the newly created browser window.
+	local browser_id=$(get_browser_id)
+	
+	# NOTE: Since I am using a separate profile for firefox, it seems to remember the last
+	# monitor that was used, so the following command is not needed, and will actually move
+	# the firefox window back to my main screen, if it was previously on the TV
+	#
+	# Activate the browser window by ID and send to TV
+	#xdotool windowactivate --sync "$browser_id" key Super_L+o
+
+	# Return to the previous window
+	xdotool windowactivate --sync "$previously_active_window"
+
+	# Exit debug message
+	if [ $debug_mode -eq 1 ]; then
+		echo "browser_id: $browser_id"
+		echo "previously_active_window: $previously_active_window"
+		echo "Leaving: ${FUNCNAME[0]}"
+		#pause
+	fi
+}
+
+# Close browser
+close_browser() {
+	# Enter debug message
+	if [ $debug_mode -eq 1 ]; then
+		echo "Entering: ${FUNCNAME[0]}"
+	fi
+
+	# Local variable to store the browser id
+	local browser_id=$(get_browser_id)
+
+	# Store the currently active window so we can switch back to it after closing the
+	# firefox tab.
+	local previously_active_window=$(get_current_window)
+
+	# Give out some details about the variables.
+	if [ $debug_mode -eq 1 ]; then
+		echo "browser_id: $browser_id"
+		echo "previously_active_window: $previously_active_window"
+	fi
+
+	# xdotool quits the window based on id.
+	xdotool windowquit "$browser_id"
+	#xdotool search --class "$custom_class_name" windowquit
+
+	# Return to the previous window
+	xdotool windowactivate --sync "$previously_active_window"
+
+	# Return to the previous window
+	xdotool windowactivate --sync "$previously_active_window"
+
+	# Exit debug message
+	if [ $debug_mode -eq 1 ]; then
+		echo "Leaving: ${FUNCNAME[0]}"
+		#pause
+	fi
+}
+
+# A function to set the browsers sink to the TV
+change_browser_sink() {
+	local tv_alsa_name="alsa_output.pci-0000_0a_00.1.hdmi-stereo"
+	local browser_input_index=$(pacmd list-sink-inputs | grep index | tr -cd '0-9\n')
+	local tv_sink=$(pacmd list-sinks | grep -B 1 "$tv_alsa_name" | head -n 1 | tr -cd '0-9\n')
+
+	echo "tv_alsa_name: $tv_alsa_name"
+	echo "browser_input_index: $browser_input_index"
+	echo "tv_sink: $tv_sink"
+}
+
+pause() {
+	echo "Debug pause."
+	read -p "Press enter to continue."
+
+}
+
+
+
+
+########################
+### Helper Functions ###
+########################
+
+# Get window id of Firefox using xdotool
+# xdotool will search for our custom class name.  This will return several IDs, so tail
+# is used to grab just the last one.
+get_browser_id() {
+	xdotool search --class "$custom_class_name" | tail -n1
+}
+
+# Gets the currently focused window.  Useful to put it in a stack to go back to after switching windows.
+get_current_window() {
+	xdotool getactivewindow
+}
+
+# Check if TV mode is active.
+# 1 yes, 0 no.
+get_current_mode() {
+	# Check if $tv_mode_file exists.
+	if [ -f "$tv_mode_file" ]; then
+		# If it does, return 1.
+		echo 1
+	else
+		# If it does not, return 0.
+		echo 0
+	fi
+}
+
+# Print out some debug info
+get_debug_info() {
+	# Debug variables
+	local browser_id=$(get_browser_id)
+	local browser_class=$(xprop -id "$browser_id" | grep -i "class")
+
+	# Debug message
+	echo '### DEBUG INFO ###'
+	echo "browser_id: $browser_id"
+	echo "browser_class: $browser_class"
+	echo '##################'
+}
+
+
+
+
+################
+### Messages ###
+################
+
+# Message to display when enabling TV mode.
+enable_message() {
+	echo "TV mode enabled."
+	notify-send "xrandr" "TV mode enabled."
+}
+
+# Message to display when disabling TV mode.
+disable_message() {
+	echo "TV mode disabled."
+	notify-send "xrandr" "TV mode disabled."
+}
+
+# Help Section
+help_section() {
+	echo "A script to enable TV Mode."
+	echo
+	echo "Syntax: tv_mode [-h|d]"
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "d     Enable debug mode."
+	echo
+}
+##############
+
+### Post script run functions ###
+# Fix wallpaper.
+# Sometimes the wallpaper may not apply when switching monitors around.
+restore_wallpaper() {
+	nitrogen --restore
+}
+
+# Restart awesomewm.  This is to rearanged windows when leaving TV mode.
+restart_awesome() {
+	# The following command will echo the awesome restart function into awesome-client
+	echo 'awesome.restart()' | awesome-client
+}
+
+# Get arguments
+while getopts ":hd" option; do
+	case $option in
+		d)
+			debug_mode=1
+			;;
+		h)
+			help_section
+			exit
+			;;
+		\?)
+			echo "Error: Invalid option"
+			exit 1
+			;;
+	esac
+done
+
+### Main ###
+# Flag to check if TV mode is enabled or not.
+is_tv_mode_on=$(get_current_mode)
+
+# Case to control logic
+case $is_tv_mode_on in
+	# If TV mode is currently off.
+	0)
+		# Call to enable TV mode.
+		enable_tv_mode
+		;;
+
+	# If TV mode is currently on.
+	1)
+		disable_tv_mode
+		;;
+esac
+
+# Recheck flag to see which mode we are in.
+is_tv_mode_on=$(get_current_mode)
+
+# If TV mode has been disabled, do not get_debug_info() because the browser window is already closed.
+if [ $debug_mode -eq 1 ] && [ $is_tv_mode_on -eq 1 ]; then
+	get_debug_info
+fi
+
+# Ensure that the wallpaper is okay.
+restore_wallpaper
+
+# Ensure that windows are positioned according to my awesomewm config by restarting awesome
+# This function currently has a bug and won't work properly.
+#restart_awesome
+
