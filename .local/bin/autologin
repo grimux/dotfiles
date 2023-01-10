@@ -3,6 +3,14 @@
 # A script to toggle autologin and autostartx
 #
 
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
 # Autologin variables
 drop_in_file=/etc/systemd/system/getty@tty1.service.d/autologin.conf
 backup_file=$HOME/.config/autologin.conf
@@ -14,12 +22,27 @@ search_term_grep="^#.*/dev/tty1"
 
 # Help Section
 help_section() {
+	# Variable to store the name of the script.  For convenience.
+	local sn=$(basename $0)
+
+	# Help Message.  4 space offset.
 	echo "A script to toggle automatic PC login."
 	echo
-	echo "Syntax: toggle-login [-s|h]"
+	echo "usage:"
+	echo "    $(basename $0) [h]"
+	echo "    $(basename $0) [-s|h|t]"
+	echo "    $(basename $0) [-s|h|t]"
+	echo
 	echo "options:"
-	echo "h     Print this help screen."
 	echo "s     Show current status."
+	echo "h     Print this help screen."
+	echo "t     Toggle the status."
+	echo
+	echo "This script relies upon $backup_file.  Please make sure it is present."
+	echo
+	echo "Check this link for more details:"
+	echo
+	echo "    https://wiki.archlinux.org/title/Getty#Automatic_login_to_virtual_console"
 	echo
 }
 
@@ -86,6 +109,7 @@ get_status() {
 	# Check status of autostartx
 	is_autostartx_enabled=$(autostartx_status)
 
+	echo "=== Current Status ==="
 
 	# Logic to control message for autologin status
 	if [ $is_autologin_enabled -eq 1 ]; then
@@ -102,34 +126,31 @@ get_status() {
 	fi
 }
 
-main() {
+toggle_login() {
 	# Look for drop-in file
 	if [ -f $drop_in_file ]; then
 		# Remove the drop-in file
-		echo "Drop-in file present."
-		echo "Removing..."
-		autologin_disable && echo -e "File removed.\n"
+		echo "Disabling autologin..."
+		autologin_disable && echo "Done."
 	
 		# Disable autostartx
-		echo "Autostartx enabled."
-		echo "Turning it off..."
+		echo "Disabling autostartx..."
 		autostartx_disable && echo "Done."
 	else
 		# Add the drop-in file
-		echo "Drop-in file not found."
-		echo "Adding..."
-		autologin_enable && echo -e "File added.\n"
+		echo "Enabling autologin..."
+		autologin_enable && echo "Done."
 		
 		# Enable autostartx
-		echo "Autostartx disabled."
-		echo "Turning it on..."
+		echo "Enabling autostartx..."
 		autostartx_enable && echo "Done."
 	fi
+	echo
 }
 
 # Entry Point
 # Get arguments
-while getopts ":sh" option; do
+while getopts ":sht" option; do
 	case $option in
 		s)
 			get_status
@@ -137,7 +158,9 @@ while getopts ":sh" option; do
 			;;
 		h)
 			help_section
-			exit
+			;;
+		t)
+			toggle_login
 			;;
 		\?)
 			echo "Error: Invalid option"
@@ -146,8 +169,8 @@ while getopts ":sh" option; do
 	esac
 done
 
-# Call to main
-main
+# If the script is run with no options, just return the current status.
+get_status
 
 # All done
 exit
