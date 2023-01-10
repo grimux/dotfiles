@@ -1,16 +1,211 @@
 #!/bin/bash
+#
+# A script to sync music from my computer to my phone using rsync
+#
 
-#get username and password
-USER=""                    #Your username
-PASS=""				#Your password
-HOST="-p 12345 10.10.10.12"          #Keep just the address
-LCD="~/Music"     #Your local directory
-RCD="music"               #FTP server directory
+#################
+### Variables ###
+#################
 
-lftp -f "
-open $HOST
-user $USER $PASS
-lcd $LCD
-mirror --continue --reverse --delete --verbose $LCD $RCD
-bye
-" 
+# Mount point
+mount_point=/mnt/phone
+
+# PC music directory
+music_pc=~/Music
+
+# Phone music directory
+music_phone=$mount_point/Card/music
+
+# Excluded files list
+excluded_files="*.7z"
+
+# Device PID
+pid="6860"
+
+
+#################
+### Functions ###
+#################
+
+### Help Section ###
+help_section() {
+	echo "A script to sync music to an android phone"
+	echo
+	echo "Syntax: sync_music [-h|d]"
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "d     Run rsync in dry-run mode."
+	echo
+}
+
+### Get user input ###
+get_input() {
+	# List of devices in simple-mtpfs
+	device_list=$(jmtpfs -l)
+
+	# User input, selected with dmenu
+	input=$(echo $device_list | dmenu -i -l 5 -p "Choose a device:")
+
+	# ID of chosen device
+	device_id=$(echo $input | awk -F':' '{print $1}')
+
+	# If nothing was selected
+	if [ -z "$input" ]; then
+		echo "Nothing selected."
+		exit 1
+	fi
+
+	# If something invalid was chosen
+	# for example, not a number
+	if [[ ! "$device_id" =~ ^[0-9]+$ ]]; then
+		echo "Invalid choice."
+		exit 1
+	fi
+
+	# Return chosen device_id
+	echo $device_id
+}
+
+### Mount phone ###
+# When mounting the phone through the following command, the first attempt
+# will always fail because there is a pop-up on the phone.  After it is
+# allowed, the directory will first need to be unmounted, and then remounted
+# using the same command.
+mount_phone() {
+	# First attempt will trigger a pop-up on the phone
+	sudo jmtpfs -o allow_other $mount_point
+
+	# Allow access to your data
+	echo "Please tap \"Allow\" on the phone."
+	read -n1 -r -p "Press any key to continue..." key
+
+	# Unmount the first failed attempt
+	sudo fusermount -u $mount_point
+
+	# Remount, after "Allow" was tapped
+	sudo jmtpfs -o allow_other $mount_point
+}
+
+### Unmount_phone ###
+# Command to unmount an MTP mount point, with root privleges for /mnt directory
+unmount_phone() {
+	sudo fusermount -u $mount_point
+}
+
+### Check mount point ###
+# Simply checking if a directory exists.  This directory is obviously from
+# my phone.
+check_mount_point() {
+	if [ -d "/mnt/phone/Card" ]; then
+		echo 1
+	else
+		echo 0
+	fi
+}
+
+### Check if phone is plugged in ###
+# PID should be unique to my phone, can be set in variables section.
+check_phone_cable() {
+	jmtpfs -l | grep "PID=$pid" > /dev/null
+	result=$?
+	if [ $result -eq 1 ]; then
+		echo 0
+	else
+		echo 1
+	fi
+}
+
+### Call rsync ###
+# Function to wrap all the arguments for rsync.
+call_rsync() {
+	rsync \
+	--verbose \
+	--progress \
+	--human-readable \
+	--delete \
+	--size-only \
+	--exclude $excluded_files \
+	--omit-dir-times \
+	--no-perms \
+	--recursive \
+	--inplace \
+	"$music_pc/" "$music_phone"
+}
+
+### Call rsync - dry-run ###
+# Function to wrap all the arguments for rsync.  With dry-run enabled
+call_rsync_dry_run() {
+	rsync \
+	--verbose \
+	--progress \
+	--human-readable \
+	--delete \
+	--size-only \
+	--exclude $excluded_files \
+	--omit-dir-times \
+	--no-perms \
+	--recursive \
+	--inplace \
+	--dry-run \
+	"$music_pc/" "$music_phone"
+}
+
+###################
+### Entry point ###
+###################
+
+# Check if the phone is connected. 1 yes, 0 no
+is_phone_connected=$(check_phone_cable)
+
+# If the phone is not connected, tell me and quit
+if [ $is_phone_connected -eq 0 ]; then
+	echo "Phone is not connected."
+	exit 1
+fi
+
+# Is the phone already mounted? 1 yes, 0 no
+is_phone_mounted=$(check_mount_point)
+
+# If phone not mounted, do it
+# Not using 'get_input' at the moment, because of using jmtpfs now.
+# jmtpfs will need some grep/awk trickery to work with getting user
+# input and I don't feel like doing that now.
+# I don't plan on other devices being connected, so I am letting 
+# jmtpfs automatically choosing for me.
+if [ $is_phone_mounted -eq 0 ]; then
+	echo "Phone not mounted."
+	#choice=$(get_input)
+	mount_phone && echo Mounted || exit 1
+fi
+
+### Get arguments ###
+while getopts ":d" option; do
+	case $option in
+		d)
+			echo "Dry run started."
+			call_rsync_dry_run
+			exit
+			;;
+		/?)
+			echo "Error: Invalid option"
+			exit 1
+			;;
+	esac
+done
+
+### Main call to rsync ###
+# If rsync throws an error, tell the user
+call_rsync || echo "Error with rsync"
+
+### Prevent rsync and unmounting race war. ###
+# The mount point needs a second to become not busy.
+sleep 1
+
+### Unmount the phone ###
+# If umount_phone is successfull, tell the user.  Otherwise
+# exit with an error.
+unmount_phone && echo Unmounted || exit 1
+
+
+### done ###
+exit 0
