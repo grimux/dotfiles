@@ -2,6 +2,14 @@
 # 
 # A script to sync saves between my PC and Steam Deck
 #
+### Script Fail Events ###
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
 
 ### Config ###
 # ini file containing save location information.
@@ -69,6 +77,12 @@ pc_to_deck() {
 		echo "deck_directory: $deck_directory"
 	fi
 
+	mirror_options=(--only-newer --verbose --reverse)
+
+	if [ $dry_run_mode -eq 1 ]; then
+		mirror_options+=(--dry-run)
+	fi
+
 	case $dry_run_mode in
 		# Normal mode
 		0)
@@ -96,13 +110,15 @@ pc_to_deck() {
 			;;
 	esac
 
+	# Visual repesentation of transfer.
+	echo "PC -> Deck"
 
 	# Call to lftp
 	lftp -c "
 	open $HOST
 	user $USER $PASS
 	lcd $pc_directory
-	mirror $mirror_args
+	mirror $mirror_args $pc_directory $deck_directory
 	bye
 	" 
 	
@@ -151,6 +167,9 @@ deck_to_pc() {
 			;;
 	esac
 
+
+	# Visual repesentation of transfer.
+	echo "PC <- Deck"
 
 	# Call to lftp
 	lftp -c "
@@ -291,7 +310,7 @@ parse_conf() {
 		# Call to sync_saves
 		sync_saves "$title" "$pc_save" "$deck_save"
 
-	done < <(sed -E -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' -e 's/(title|pc|deck)=//g' "$conf_file")
+	done < <(sed -E -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' -e 's/[[:aplpha:]]*=//' "$conf_file")
 
 
 	
@@ -306,13 +325,15 @@ parse_conf_2() {
 	fi
 
 	# Copy contents of conf_file into an array called game_info
-	# Expression 1 is used to strip all lines with '#' and any blank lines.
-	# Expression 2 is used to remove the formatting of the conf_file (title=, pc=, etc.)
+	# Expression 1 is used to remove any lines beginning with a comment, or having a comment at the end of the line.
+	# Expression 2 will delete any blank lines in the file.
+	# Expression 3 is used to remove the formatting of the conf_file (title=, pc=, deck=).
 	mapfile -t game_info < <(\
 		sed \
 		--regexp-extended \
-		--expression='s/[[:space:]]*#.*// ; /^[[:space:]]*$/d' \
-		--expression='s/(title|pc|deck)=//g' \
+		--expression='s/[[:space:]]*#.*//' \
+		--expression='/^[[:space:]]*$/d' \
+		--expression='s/^[[:alpha:]]+=//' \
 		"$conf_file"\
 	)
 
@@ -329,9 +350,14 @@ read_game_array() {
 		echo "Entering: ${FUNCNAME[0]}"
 	fi
 
-	# Loop through the array game_info.  The step increment is set to 3 because the information
-	# is stored in the file in groups of 3.
-	for ((index=0; index < ${#game_info[@]}; index+=3)); do
+	# How many lines of data there are for each game.
+	# Line 1: Title
+	# Line 2: pc save
+	# Line 3: deck save
+	size_of_data_block=3
+
+	# Loop through the array game_info.  The step increment is set to size_of_data_block.
+	for ((index=0; index < ${#game_info[@]}; index+=$size_of_data_block)); do
 		# Name of game
 		local title=${game_info[$index]}
 
@@ -378,11 +404,11 @@ get_current_modes() {
 new_sync=0
 old_sync=0
 
-# Get arguments
+# Get arguments and set flags
 while getopts ":dhnso" option; do
 	case $option in
 		# What to do if there is an invalid argument.
-		/?)
+		\?)
 			echo "Error: Invalid option"
 			exit 1
 			;;
@@ -422,6 +448,10 @@ done
 #access_game_array
 #help_section
 
+if [ -z "$@" ]; then
+	help_section
+	exit
+fi
 
 if [ $old_sync -eq 1 ]; then
 	echo "Performing old sync"
