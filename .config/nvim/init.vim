@@ -47,6 +47,7 @@ let g:palenight_terminal_italics=1
 " Transparent background when using themes
 autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Setup
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -62,8 +63,21 @@ let mapleader = ","
 set wildmode=longest,list,full
 set clipboard=unnamedplus			" when yanking, send to system clipboard ("*) instead of normal buffer
 autocmd FileType markdown set linebreak
-" Treat _ as a word break
-set iskeyword-=_
+set iskeyword-=_				" Treat _ as a word break
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"--- Folding
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Controls
+" zo - opens fold
+" zc - closes fold
+" zm - increases auto fold depth
+" zr - reduces auto fold depth
+"set foldmethod=indent
+"set foldlevel=1
+"set foldclose=all
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Remaps
@@ -116,6 +130,7 @@ map <leader>br :BraceyReload<CR>
 " Run output script
 map <leader>p :!opout <c-r>%<CR><CR>
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -129,6 +144,7 @@ endfunction
 function SpellCheck()
 	setlocal spell! spell?
 endfunction
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- vimwiki settings
@@ -144,16 +160,7 @@ let vimwiki_jake.ext = '.md'
 let vimwiki_jake.custom_wiki2html = 'vimwiki_markdown'
 let vimwiki_jake.html_filename_parameterization = 1
 
-let vimwiki_serena = {}
-let vimwiki_serena.path = '$HOME/Documents/vimwiki-serena'
-let vimwiki_serena.path_html = '$HOME/Documents/vimwiki-serena/_site'
-let vimwiki_serena.template_path = '$HOME/Documents/vimwiki-serena/templates'
-let vimwiki_serena.template_default = 'default'
-let vimwiki_serena.syntax = 'markdown'
-let vimwiki_serena.ext = '.md'
-let vimwiki_serena.custom_wiki2html = 'vimwiki_markdown'
-
-let g:vimwiki_list = [vimwiki_jake, vimwiki_serena]
+let g:vimwiki_list = [vimwiki_jake]
 let g:vimwiki_global_ext = 0
 
 
