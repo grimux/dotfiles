@@ -1,0 +1,149 @@
+#!/usr/bin/bash
+# 
+# A script for checking which of my dotfiles and config files
+# are not tracked.
+# 
+# TODO
+# - Add an option to pipe into less
+
+# Directory for scripts
+script_directory="$HOME/.local/bin"
+
+# Directory for dotfiles
+dotfile_directory="$HOME/.config"
+
+# A wrapper for git.  Sets the working tree to my $HOME folder and
+# and sets the tracking directory to $HOME/dotfiles
+git_wrapper="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME"
+
+# Help Section
+help_section() {
+	echo "A script to show any untracked scripts and dotfiles."
+	echo
+	echo "Syntax: untracked [-h|s|c|l]"
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "s     Show untracked scripts."
+	echo "c     Show untracked dotfiles."
+	echo "l     Pipe output to less."
+	echo
+}
+
+# Get untracked scripts
+get_untracked_scripts() {
+	# Simple git command (using wrapper) to get the untracked files.
+	$git_wrapper status -u $script_directory
+}
+
+# Get untracked dotfiles
+get_untracked_dotfiles() {
+	# Simple git command (using wrapper) to get the untracked files.
+	$git_wrapper status -u $dotfile_directory
+}
+
+# Show the untracted scipts
+show_untracked_scripts() {
+	# Just a nice message
+	echo "###########"
+	echo "# Scripts #"
+	echo "###########"
+	echo
+	
+	# Get list of untracted scripts
+	get_untracked_scripts
+}
+
+# Show the untracted dotfiles
+show_untracked_dotfiles() {
+	# Just a nice message
+	echo "############"
+	echo "# Dotfiles #"
+	echo "############"
+	echo
+	
+	# Get list of untracted dotfiles
+	get_untracked_dotfiles
+}
+
+# Abnormal exit
+abnormal_exit() {
+	usage
+	exit 1
+}
+
+# Program usage
+usage() {
+	echo "Usage: $(basename $0) [-s] [-c] [-l]" 1>&2
+}
+
+### Debug ###
+debug() {
+	# Debug print
+	echo '$tracked_scripts:'
+	printf "%s\n" "${tracked_scripts[@]}"
+}
+
+pipe_to_less=0
+script_flag=0
+dotfile_flag=0
+debug_flag=0
+
+# Get arguments
+while getopts ":hslcd" options; do
+	case "${options}" in
+		l)
+			pipe_to_less=1
+			;;
+		h)
+			help_section
+			exit
+			;;
+		s)
+			# Set flag to output untracked scripts
+			script_flag=1
+			;;
+		c)
+			# Set flag to output untracked dotfiles
+			dotfile_flag=1
+			;;
+		d)
+			# Set debug flag
+			debug_flag=1
+			;;
+		*)
+			echo "Invalid option."
+			abnormal_exit
+			;;
+	esac
+done
+
+main() {
+	# Logic for script files
+	case $script_flag in
+		0)
+			;;
+		1)
+			if [ $pipe_to_less -eq 1 ]; then
+				show_untracked_scripts | less
+			else
+				show_untracked_scripts
+			fi
+			#echo 'scripts'
+			;;
+	esac
+
+	# Logic for dotfiles
+	case $dotfile_flag in
+		0)
+			;;
+		1)
+			if [ $pipe_to_less -eq 1 ];then
+				show_untracked_dotfiles | less
+			else
+				show_untracked_dotfiles
+			fi
+			;;
+	esac
+}
+
+main
