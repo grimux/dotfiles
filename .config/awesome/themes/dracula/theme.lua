@@ -93,8 +93,8 @@ theme.titlebar_maximized_button_focus_active    = theme.confdir .. "/icons/title
 
 local markup = lain.util.markup
 
--- Xow status
-local xow_status = awful.widget.watch('xowstatus', 5)
+-- TV mode status
+local tv_mode_status = awful.widget.watch('tv_mode_status', 5)
 
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
@@ -313,7 +313,7 @@ function theme.at_screen_connect(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
-	    xow_status,
+	    tv_mode_status,
             --mailicon,
             --theme.mail.widget,
             netdownicon,

@@ -332,6 +332,16 @@ globalkeys = mytable.join(
         {description = "focus previous by index", group = "client"}
     ),
 
+    -- all minimized clients are restored 
+        awful.key({ modkey, "Shift"   }, "n", 
+            function()
+                local tag = awful.tag.selected()
+                    for i=1, #tag:clients() do
+                        tag:clients()[i].minimized=false
+                        --tag:clients()[i]:redraw()
+                end
+            end),
+
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
@@ -435,7 +445,7 @@ globalkeys = mytable.join(
             naughty.notify(common)
         end,
         {description = "mpd on/off", group = "widgets"}),
-    awful.key({ altkey }, "m",
+    awful.key({ "Control" }, "m",
         function ()
 		awful.spawn("mpd-status")
 	end,
@@ -460,22 +470,22 @@ globalkeys = mytable.join(
               { description = "emoji menu", group = "programs"}),
     awful.key({ "Control",        }, "`",     function () awful.spawn("clipmenu -p clips:") end,
               { description = "qtpass", group = "programs"}),
-    awful.key({ modkey,           }, "g",     function () awful.spawn("lutris") end,
-              { description = "lutris", group = "programs"}),
-    awful.key({ modkey, "Shift"   }, "n",     function () awful.spawn("notepadqq") end,
-              { description = "notepadqq", group = "programs"}),
     awful.key({ modkey,           }, "c",     function () awful.spawn("qalculate-gtk") end,
               { description = "qalculate-gtk", group = "programs"}),
     awful.key({ modkey,           }, "t",     function () awful.spawn("transmission-remote-gtk") end,
               { description = "transmission remote gtk", group = "programs"}),
     awful.key({ modkey, "Shift"   }, "d",     function () awful.spawn("jdownloader") end,
               { description = "jDownloader2", group = "programs"}),
-    awful.key({ modkey }, "v",     function () awful.spawn("pavucontrol --tab=3") end,
+    awful.key({ modkey }, "v",     function () awful.spawn("pavucontrol --tab=1") end,
               { description = "pavucontrol", group = "programs"}),
 
     -- Script Launching
-    --awful.key({ modkey,        }, "F5",     function () awful.spawn("toggle-xow") end,
-    --          { description = "toggle xow", group = "scripts"}),
+    awful.key({ modkey,           }, "g",     function () awful.spawn("gametime") end,
+              { description = "gametime", group = "scripts"}),
+    awful.key({ modkey, "Shift"   }, "g",     function () awful.spawn("play -d") end,
+              { description = "gametime", group = "scripts"}),
+    awful.key({ modkey,        }, "F5",     function () awful.spawn("tv_mode") end,
+              { description = "TV mode toggle", group = "scripts"}),
     awful.key({ modkey,        }, "F6",     function () awful.spawn("toggle-conky") end,
               { description = "toggle conky", group = "scripts"}),
     awful.key({ modkey,        }, "F7",     function () awful.spawn("toggle-alpha") end,
