@@ -71,5 +71,5 @@ stty -ixon
 #alias npm='unalias node npm && load_nvm && npm'
 
 # Start graphical server on user's current tty if not already running.
-XINITRC=/home/jake/.xinitrc
+XINITRC="/home/jake/.xinitrc"
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
