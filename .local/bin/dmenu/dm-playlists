@@ -11,6 +11,7 @@ playlist_dir="$HOME/.config/mpd/playlists"
 
 # Array of playlists.
 # Takes all the files from the playlist directory and adds them to the array.
+# This array is dynamic and will change depending on the contents of the directory
 playlist_files=($playlist_dir/*)
 
 # Array of playlist names
