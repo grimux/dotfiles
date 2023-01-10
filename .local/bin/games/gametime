@@ -1,4 +1,62 @@
 #!/usr/bin/env sh
+#
+# Script for launching my game launchers
+#
 
-steam -nochatui -nofriendsui -silent &
-lutris &
+flag_steam=0
+flag_lutris=0
+
+# Launch the launchers
+launch_launchers() {
+	notify-send "gametime" "Starting Steam and Lutris..."
+	steam -nochatui -nofriendsui -silent &
+	lutris &
+}
+
+# Kill the launchers
+kill_all() {
+	notify-send "gametime" "Killing Steam and Lutris..."
+	killall steam
+	lutris_process=$(ps -ax | grep lutris | awk '{print $1}' | head -n 1)
+	kill -9 $lutris_process
+	
+}
+
+# Check for already running processes.  Set a flag
+check_processes() {
+	lutris_process=$(ps -ax | grep lutris | awk '{print $1}' | wc -l)
+	steam_process=$(pgrep steam)
+	
+	[[ $lutris_process -gt 1 ]] && flag_lutris=1
+	[[ -n "$steam_process" ]] && flag_steam=1
+}
+
+# Get arguments
+while getopts ":kh" option; do
+	case $option in
+		k)
+			kill_all
+			exit
+			;;
+		h)
+			help_section
+			exit
+			;;
+		\?)
+			echo "Error: Invalid option"
+			exit 1
+			;;
+	esac
+done
+
+# 
+if [ -z "$1" ]; then
+	check_processes
+	if [ $flag_steam -eq 1 ] || [ $flag_lutris -eq 1 ]; then
+		kill_all
+	else
+		launch_launchers
+	fi
+
+	exit
+fi
