@@ -14,6 +14,11 @@ awesome() {
 	# pasystray should start automatically.
 	#pasystray -g &
 	
+	picom &						# Picom for transparency
+	lxsession &					# Start policy kit
+	nitrogen --restore &				# Restore wallpaper
+	redshift-gtk &					# Redshift for bluelight filter
+	
 	exec awesome					# Start awesome
 }
 
@@ -46,18 +51,14 @@ shared_settings() {
 	local tv_id="HDMI-0"
 
 	# Commands
-	xrandr --output $tv_id --same-as $monitor_id	# Set TV (hdmi) to be the same as main monitor
-	picom &						# Picom for transparency
+	xrandr --output $tv_id --same-as $monitor_id &	# Set TV (hdmi) to be the same as main monitor
 	mpd &						# music player daemon
 	ums &						# Start Universal Media Server
 	#mpDris2 &					# control mpd with playerctl
-	setxkbmap -option caps:escape			# Set caps lock to escape
-	lxsession &					# Start policy kit
-	numlockx on					# Turn on the numlock
+	setxkbmap -option caps:escape &			# Set caps lock to escape
+	numlockx on &					# Turn on the numlock
 	clipmenud &					# Clipmenu
-	nitrogen --restore				# Restore wallpaper
-	xset s 900					# Blankout screen after 15 minutes
-	redshift-gtk &					# Redshift for bluelight filter
+	xset s 900 &					# Blankout screen after 15 minutes
 	playerctld daemon &				# Start playerctl daemon, tracks recent media players
 }
 
