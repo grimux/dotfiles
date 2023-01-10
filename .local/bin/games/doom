@@ -1,164 +1,347 @@
 #!/usr/bin/env bash
-# Script for launching doom and the vairous mods I play
+# 
+# doom
+#
+### Description ############################################################################################
+# Script for launching doom and the vairous mods I play.  GZDoom is very specific with how it handles mods
+# and saves.  A consistent mod profile is needed when playing on the same savegames, so I created this 
+# script to automate that based on mod profiles.
+############################################################################################################
 
-# Variables
+### TODO ####################################################################
+# - Finish implementing config parsing
+# - Implement a modifiers system, i.e. ColourfulDoom etc.
+#############################################################################
+
+# Normal fail status
+set -euo pipefail
+# Debug fail status
+#set -euox pipefail
+
+
+####################
+### Global Flags ###
+####################
+
+# Global debug mode
+debug_mode=0
+
+# Use dmenu to choose mod.
+use_dmenu=0
+
+
+
+
+##############
+### Config ###
+##############
+
+ini_file="$HOME/.config/game/doom.ini"
+cfg_file="$HOME/.config/game/doom.cfg"
 doomdir="$HOME/Games/doom"
 modsdir="$doomdir/mods"
+mapsdir="$modsdir/map_packs"
+addonsdir="$modsdir/addons"
 savedir="$doomdir/save"
 
-# Mods List
-mods_list=(
-	"brutal_minecraft"
-	"chill_doom"
-	"elementalism"
-	"golden_souls"
-	"guncaster"
-	"hedon"
-	"mower"
-	"project_brutality"
-	"reelism2"
-	"russian_overkill"
-	"siren"
-	"spooktober"
+
+
+
+####################
+### Mod Profiles ###
+####################
+
+# This file contains the mod profiles, inside a case statement.
+# This makes it convienent to keep the profiles and launcher script separate.
+mod_profiles="$HOME/.config/gzdoom/mod_profiles.sh"
+source $mod_profiles
+
+
+
+
+#######################
+### Data and Arrays ###
+#######################
+#
+### Listing of all the mod groupings. ###
+# This greps out the formated mod names in the ini file, then puts them into an array.
+# Formatting '[' and ']' are removed using sed.  This displays a nice clean name.
+mods_list=($(grep '\[.*\]' $ini_file | sed -e 's/\[//' -e 's/\]//'))
+
+# Map Packs
+map_pack_list=($mapsdir/*)
+
+# Modifiers list
+modifiers_list=(
+	""
 )
 
-# Functions
+# Simple array for storing mod names.  I will eventually come up with a better way to do this, such
+# as parsing a file.
+mod_list_array=(
+	chill_doom
+	brutal_minecraft
+	elementalism
+	golden_souls
+	guncaster
+	h_doom
+	hedon
+	mower
+	project_brutality
+	reelism2
+	russian_overkill
+	siren
+	spooktober
+)
+
+
+
+#################
+### Functions ###
+#################
+
 # Help Section
-help_section() {
+function help_section() {
 	echo "A script to launch Doom and its various mods."
 	echo
-	echo "Syntax: doom [-h|l] [mod name]"
+	echo "Syntax: doom [-h|d|l] [mod name]"
 	echo "options:"
 	echo "h     Print this help screen."
+	echo "d     Choose mod in dmenu."
 	echo "l     List installed mods."
 	echo
 }
 
-# List the mods
-list_mods() {
-	for i in "${mods_list[@]}"; do
-		echo "$i"
+# Get arguments
+function get_arguments() {
+	while getopts ":dhlm" option; do
+		case $option in
+			m)
+				use_dmenu=1
+				;;
+			d)
+				debug_mode=1
+				;;
+			h)
+				help_section
+				exit
+				;;
+			l)
+				list_mods
+				exit
+				;;
+			\?)
+				echo "Error: Invalid option"
+				exit
+				;;
+		esac
 	done
+
+	# Strip the arguments out.
+	shift $(( OPTIND - 1 ))
 }
 
-# Get arguments
-while getopts ":hl" option; do
-	case $option in
-		h)
-			help_section
-			exit
-			;;
-		l)
-			list_mods
-			exit
-			;;
-		\?)
-			echo "Error: Invalid option"
-			exit
-			;;
-	esac
-done
+# List the mods
+function list_mods() {
+	# Simply print the array $mods_list
+	printf "%s\n" "${mod_list_array[@]}"
+}
+
+# Dmenu
+function choose_in_dmenu() {
+	# Local variable to store the mod choice in.
+	local dmenu_choice
+	local prompt="Doom mod: "
+	local mod_array=$(list_mods) 
+
+	# Mod choice variable is equal to the selection from dmenu.
+	dmenu_choice=$(printf '%s\n' "${mod_array[@]}" | dmenu -i -l 20 -p "$prompt")
+
+	# Return the choice
+	echo "$dmenu_choice"
+}
+
+# Launch doom
+function launch_doom() {
+	# Local functions to store the arguments passed to the function.
+	# This helps with organization.
+	local iwad="$1"
+	local wads="$2"
+	local savedir="$3"
+	local map="$4"
+	local cheats="$5"
+	local skill="$6"
+
+	# Call gzdoom with our specified options.
+	# The variables must be used without " because gzdoom won't understand the command otherwise.
+	gzdoom \
+		-iwad $iwad \
+		-file $wads \
+		-savedir $savedir \
+		$map \
+		$cheats \
+		$skill
+	
+}
+
+# Check if the mod exists within the array.
+function check_mods() {
+	# First argument is the user's input, which mod to select.
+	local mod_to_check="$1"
+
+	# Local variables
+	local title
+	local does_it_exist
+
+	# Loop through the mod_list_array and check if the mod is there.
+	for title in ${mod_list_array[@]}; do
+		# If there is a match, set does_it_exist to 1 and stop.
+		if [ "$mod_to_check" == "$title" ]; then
+			does_it_exist=1
+			break
+		# Otherwise, set the flag to 0.
+		else
+			does_it_exist=0
+		fi
+	done
+
+	# Return 1 if the title exists, 0 if not
+	echo "$does_it_exist"
+}
 
 
-# Main Script
-case "$1" in
-	# If doom is called with no arguments, fall through to chill_doom
-	"")
-		# fallthrough
-		;&
 
-	chill_doom)
-		iwad=DOOM.WAD
-		wads="SmoothDoom.pk3 /DoomMetalVol5.wad"
-		maps="+map e1m1"
-		savedir="$savedir/chill_doom"
-		cheats="+buddha2 +give keys"
-		skill="+skill 3"
-		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
-		exit
-		;;
+###############
+### Parsing ###
+###############
+#
+# This section is for functions that I am experimenting with in parsing text files.  These are currently only
+# being used with the testing function down belown.  Be sure to disable main function when using these.
 
-	brutal_minecraft)
-		iwad=DOOM2.WAD
-		wads="brutal_minecraft/BM_MAIN_v1.0.pk3 brutal_minecraft/BM_RES_v1.0.pk3  brutal_minecraft/BM_RES2_v1.0.pk3 brutal_minecraft/BM_MAP_v1.0.wad brutal_minecraft/BM_ElectricPlayer_v1.0.pk3 brutal_minecraft/BM_Inventory_v1.0.pk3 brutal_minecraft/TiltPlusPlus_v1.65.pk3"
-		maps=""
-		savedir="$savedir/brutal_minecraft"
-		cheats=""
-		skill=""
-		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
-		exit
-		;;
+# Check ini for matching mod name
+function check_mods_parse() {
+	# Mod name, passed as argument.
+	local mod_name="$1"
 
-	elementalism)
-		iwad=DOOM2.WAD
-		wads="Elementalism_Phase1_RC1_1.01.pk3"
-		maps=""
-		savedir="$savedir/elementalism"
-		cheats=""
-		skill=""
-		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
-		exit
-		;;
+	# Exists flag
+	local exists
 
-	golden_souls)
-		iwad=DOOM.WAD
-		wads="GoldenSouls_Full_1.4.pk3"
-		maps=""
-		savedir="$savedir/golden_souls"
-		cheats=""
-		skill=""
-		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
-		exit
-		;;
+	# Grep the ini file to search for a match
+	# Grep will return 1 if no matches were found
+	# Also send grep's output to null
+	#grep "\[$mod_name\]" $ini_file > /dev/null
 
-	hedon)
-		iwad=DOOM2.WAD
-		wads="Hedon.ipk3 ThiccEdition.pk3"
-		maps=""
-		savedir="$savedir/hedon"
-		cheats=""
-		skill=""
-		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
-		exit
-		;;
+	# If the grep returns 0, then the mod name exists within the ini
+	[[ $(grep "\[$mod_name\]" $ini_file > /dev/null) -eq 0 ]] && exists=1
+	
+	# Return flag value
+	# 1 exists, 0 does not exist
+	echo $exists
+}
 
-	spooktober)
-		iwad=DOOM2.WAD
-		wads="SmoothDoom.pk3 spooktober.pk3 STEVE_FLASHLIGHT_PLUS.PK7"
-		maps=""
-		savedir="$savedir/spooktober"
-		cheats=""
-		skill=""
-		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
-		exit
-		;;
+function make_mod_array() {
+	# Name of doom mod, passed as an argument to the function
+	mod_name="$1"
 
-	reelism2)
-		iwad=DOOM2.WAD
-		wads="reelism2_v1.23.pk3"
-		maps=""
-		savedir="$savedir/reelism2"
-		cheats=""
-		skill=""
-		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
-		exit
-		;;
+	# Array for the chosen mod.  Will have all the config options
+	# such as wads, iwads, maps, skill, etc
+	mod_array=$(awk "/\[$mod_name\]/,/;;/" $ini_file)
 
-	mower)
-		iwad=DOOM2.WAD
-		wads="doom_mower_v2.wad"
-		maps=""
-		savedir="$savedir/doom_mower"
-		cheats=""
-		skill=""
-		gzdoom -iwad $iwad -file $wads $maps -savedir $savedir $cheats $skill
-		exit
-		;;
+	# Read the variable $mod_array into and array delimited by \n
+	#readarray -t mod_array <<< ${mod_array}
+}
 
-	*)
-		echo "Invalid mod"
-		exit
-		;;
-esac
-		
+function parse_ini_to_array() {
+	local ini_file key mod_array raw_mod_data
 
+	# First argument is the file to parse.
+	ini_file="$1"
+
+	# Second argument is the keyword to search for in the file.
+	key="$2"
+
+	# Array for the mod and its settings.
+	mapfile mod_array < <(awk "/\[$key\]/,/;;/" $ini_file)
+
+	raw_mod_data="${mod_array[@]/[[:alpha:]]*=/}"
+
+	printf "%s\n" "${#raw_mod_data[@]}"
+}
+
+###################
+### Entry Point ###
+###################
+#
+# Main is a working script.  Any testing should be done in the testing function.
+# Leave this as a complete and working script.
+#
+
+main() {
+	local chosen_mod
+	local does_mod_exist
+
+	# Get flag options passed to the script.
+	get_arguments "$@"
+
+	# Should we use dmenu or not.
+	if [ "$use_dmenu" -eq 1 ]; then
+		chosen_mod=$(choose_in_dmenu)
+	# $# is the number of arguments passed to the script, not including flags (-d). This checks
+	# if a mod name was entered or not.  If there were no arguments, exit with error.
+	elif [ $# -eq 0 ]; then
+		echo "No mod specified"
+		exit 1
+	# Otherwise strip the options from the argument list.
+	elif [ $# -gt 1 ]; then
+		shift $((OPTIND-1))
+	fi
+	
+	# set the chosen_mod to the first argument.
+	chosen_mod="$1"
+
+	# Check if the mod exists within the mod_list_array.
+	# Returns 1 if it exists, 0 if not.
+	does_mod_exist=$(check_mods "$chosen_mod")
+	
+	# If the mod does not exist, tell us and exit with error.
+	if [ "$does_mod_exist" -eq 0 ]; then
+		echo "That mod is not in the array."
+		exit 1
+	fi
+	
+	# Call mod_profiles, sourced from mod_profiles
+	mod_profiles "$chosen_mod"
+
+	# Call to launch doom with all the parameters
+	launch_doom "$iwad" "$wads" "$savedir" "$maps" "$cheats" "$skill"
+}
+
+###############
+### Testing ###
+###############
+#
+# This function is used to toggle functions that I am testing.  These will usually break things and 
+# can be unpredictible.  Be careful.
+#
+
+# Trying to parse config files using arrays.
+testing() {
+	#make_mod_array "$1"
+	#printf "%s\n" "${mod_array[@]}"
+	#set_gzdoom_options
+	
+	
+	chosen_mod_settings=($(parse_ini_to_array "$ini_file" "$1"))
+	parse_ini_to_array "$ini_file" "$1"
+	
+	printf "%s\n" "${chosen_mod_settings[@]}"
+}
+
+
+# Call to main, the working script.
+main "$@"
+
+# Call to the testing section.
+#testing "$@"
+
+exit
