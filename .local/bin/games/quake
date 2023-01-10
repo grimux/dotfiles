@@ -3,7 +3,7 @@
 
 # Variables
 quakedir="$HOME/Games/quake"
-flag=0
+choice="$1"
 
 # Mods List
 mods_list=(
@@ -32,9 +32,10 @@ mods_list=(
 help_section() {
 	echo "A script to launch Quake and its various mods."
 	echo
-	echo "Syntax: quake [-h|j|l] [mod name]"
+	echo "Syntax: quake [-h|d|i|l] [mod name]"
 	echo "options:"
 	echo "h     Print this help screen."
+	echo "d     Choose mod in dmenu."
 	echo "i     Run Quake-Injector."
 	echo "l     List installed mods."
 	echo
@@ -52,14 +53,43 @@ launch_quake() {
 	mangohud --dlsym gamemoderun quakespasm -game $1
 }
 
+# Check array for matching mod name
+check_mods() {
+	# Exists flag
+	exists=0
+
+	# Loop through array, searching for a match
+	for i in "${mods_list[@]}"; do
+		if [ "$i" == "$choice" ]; then
+			exists=1
+			break
+		else
+			exists=0
+		fi
+	done
+	
+	# Return flag value
+	# 1 exists, 0 does not exists
+	echo $exists
+}
+
 # Quake Injector
 quake_injector() {
 	$quakedir/quake-injector/bin/QuakeInjector
 }
 
+# Dmenu
+choose_in_dmenu() {
+	choice=$(printf '%s\n' "${mods_list[@]}" | dmenu -i -l 20 -p 'Quake mod:')
+	[[ -z "$choice" ]] && echo "Nothing selected" && exit 1
+}
+
 # Get arguments
-while getopts ":hil" option; do
+while getopts ":dhil" option; do
 	case $option in
+		d)
+			choose_in_dmenu
+			;;
 		h)
 			help_section
 			exit
@@ -86,19 +116,14 @@ if [ -z "$1" ]; then
 	exit
 fi
 
-# Loop through array, searching for a match
-for i in "${mods_list[@]}"; do
-	if [ "$i" == "$1" ]; then
-		flag=0
-		launch_quake "$i"
-		break
-	fi
-
-	# Set flag 1, meaning error
-	flag=1
-done
-
-# If the mod is not in the list
-if [ $flag -eq 1 ]; then
-	echo "Invalid mod."
+# Check if game exists in array.
+# 0 if doesn't exist, 1 if it does.
+# If the game exists, launch it.
+does_mod_exist=$(check_mods)
+if [[ does_mod_exist -eq 1 ]]; then
+	launch_quake $choice
+	exit
+else
+	echo "Invalid game."
+	exit 1
 fi
