@@ -16,9 +16,12 @@ exe="1964.exe"
 flag=0
 
 # List of N64 Games
-game_list=(
-	"ge"
-	"pd"
+# The array index corresponds to the rom's filename
+# Array contents is the full name of the game
+declare -A game_list=(
+	[ge]="GoldenEye 007"
+	[gf]="Goldfinger 007"
+	[pd]="Perfect Dark"
 )
 
 
@@ -39,8 +42,8 @@ help_section() {
 
 # List the games
 list_games() {
-	for i in "${game_list[@]}"; do
-		echo "$i"
+	for i in ${!game_list[@]}; do
+		echo "$i -- ${game_list[$i]}"
 	done
 }
 
@@ -93,7 +96,7 @@ if [ -z "$1" ]; then
 fi
 
 # Loop through array, searching for a match
-for i in "${game_list[@]}"; do
+for i in "${!game_list[@]}"; do
 	# if array[i] == arg
 	if [ "$i" == "$1" ]; then
 		# Unset error flag
