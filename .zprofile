@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 # ~/.profile
 # Author: Jake Meredith
 #
@@ -47,9 +47,9 @@ if [ -f $HOME/.config/shortcutrc ]; then
 fi
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/.local/bin" ] ; then
+if [ -d "$HOME/.local/bin" ]; then
     PATH="$HOME/.local/bin:$PATH"
-    PATH="$HOME/.local/bin/laptop:$PATH"
+    PATH="$HOME/.local/bin/tools:$PATH"
     PATH="$HOME/.local/bin/statusbar:$PATH"
     PATH="$HOME/.local/bin/dmenu:$PATH"
     PATH="$HOME/.local/bin/games:$PATH"
