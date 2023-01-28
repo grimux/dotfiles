@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+# 
+# A script to adjust the volume of pulseaudio sinks.
+#
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+# The amount to change the volume by.  My preference is 1.
+increment=1
+
+# Name of the pc sound card according to alsa.
+pc_pulse_sink="alsa_output.pci-0000_0c_00.3.analog-stereo"
+
+# Name of default sink; whatever sink is currently set as active (default).
+default_sink="@DEFAULT_SINK@"
+
+# Increase volume.
+increase_volume() {
+	pactl set-sink-volume "$pc_pulse_sink" +$increment%
+	play_sound
+}
+
+# Decrease volume.
+decrease_volume() {
+	pactl set-sink-volume "$pc_pulse_sink" -$increment%
+	play_sound
+
+}
+
+# Toggle muting.
+toggle_mute() {
+	# Toggle muting of all sinks using amixer.
+	#amixer --device pulse set Master 1+ toggle
+	
+	# Toggle mutting of currently active sink
+	#pactl set-sink-mute "$default_sink" toggle
+	
+	# Toggle mutting of all sinks.
+	toggle_mute_all
+
+}
+
+# Function to toggle mute all sinks
+toggle_mute_all() {
+	# Array of all sink indexes.
+	local all_sinks
+	all_sinks=$(pactl list sinks short | cut -f 1)
+
+	# Loop through array and run the pactl command.
+	for i in $all_sinks; do
+		pactl set-sink-mute "$i" toggle
+	done
+}
+
+# A small sound to play when changing the volume.
+play_sound() {
+	canberra-gtk-play --id=audio-volume-change --description="volume_adjust"
+}
+
+# Main function.
+main() {
+	# Argument passed to the main function.  Used to determine the case statement.
+	local option
+	option="$1"
+
+	# Volume control case.
+	case "$option" in
+		"up")
+			increase_volume "$increment"
+			;;
+		"down")
+			decrease_volume "$increment"
+			;;
+		"toggle")
+			toggle_mute
+			;;
+		*)
+			exit 1
+			;;
+	esac
+}
+
+main "$1"
