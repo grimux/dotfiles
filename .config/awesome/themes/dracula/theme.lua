@@ -93,8 +93,42 @@ theme.titlebar_maximized_button_focus_active    = theme.confdir .. "/icons/title
 
 local markup = lain.util.markup
 
--- TV mode status
-local tv_mode_status = awful.widget.watch('tv_mode_status', 5)
+-- TV mode widget
+-- Old watch method
+--local tv_mode_status = awful.widget.watch('tv_mode_status', 5)
+
+-- Get the status of TV Mode.
+function get_tv_mode_status ()
+	local status
+
+	awful.spawn.easy_async_with_shell("tv_mode_status", function(stdout)
+		status = stdout
+		return stdout
+	end)
+
+
+end
+
+
+
+local tv_mode_widget = wibox.widget ({
+	widget = wibox.widget.textbox,
+	--text = string.format("%s", get_tv_status)
+	--text = "tv mode: ",
+	opacity = 0.75,
+})
+
+-- Signal to send for TV Mode.
+awesome.connect_signal('update_tv_mode_status', function()
+	awful.spawn.easy_async_with_shell("tv_mode_status", function(stdout) 
+		tv_mode_widget.text = stdout
+	end)
+	
+	--tv_mode_widget.text = get_tv_mode_status()
+
+end)
+
+
 
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
@@ -312,8 +346,7 @@ function theme.at_screen_connect(s)
         nil,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-            wibox.widget.systray(),
-	    tv_mode_status,
+	    tv_mode_widget,
             --mailicon,
             --theme.mail.widget,
             netdownicon,
@@ -337,6 +370,7 @@ function theme.at_screen_connect(s)
             --bat.widget,
             clockicon,
             mytextclock,
+            wibox.widget.systray(),
         },
     }
 
