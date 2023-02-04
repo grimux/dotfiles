@@ -3,16 +3,13 @@
 alias ka="killall"
 #alias ls="ls --color=auto --group-directories-first"
 #alias la="ls -lA --color=auto --group-directories-first"
-alias ls="lsd -1 --dereference --group-directories-first"
-alias la="lsd -lA --dereference --group-directories-first"
-alias lls="/usr/bin/ls -1 --color=auto --group-directories-first"
+alias ls="lsd --group-directories-first"
+alias la="lsd --almost-all --long --total-size --group-directories-first"
+alias lss="/usr/bin/ls -1 --color=auto --group-directories-first"
 alias grep="grep --color=auto"
 alias f="ranger"
 alias sf="sudo ranger"
-alias e="explorer.exe ."
 alias x="exit"
-alias t="tmux -f ~/.config/tmux/tmux.conf"
-alias c="calcurse"
 alias vim="nvim"
 
 # yt-dlp
@@ -26,30 +23,15 @@ alias ytpod="yt-dlp --config-location ~/.config/youtube-dl/podcast"
 # Vimwiki
 alias wiki="nvim -c VimwikiIndex"
 
-# git
-alias g="git"
-alias ga="git add"
-alias gc="git commit"
-alias gac="git commit -a"
-alias gf="git fetch"
-alias gp="git pull"
-
-# yadm
-alias y="yadm"
-alias ys="yadm status"
-alias yc="yadm commit"
-alias ya="yadm add"
-alias yp="yadm push"
-
 alias sdn="shutdown now"
-alias n="notes"
-alias bat="cmd.exe /c"
 alias trem="transmission-remote"
 alias py="python"
-alias xrr="xmonad --recompile && xmonad --restart && arcolinux-restart-polybar && notify-send 'xmonad rebuild'"
 
 # dotfiles
-alias config="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME"
-alias clist="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME ls-tree --full-tree -r --name-only HEAD"
+alias config="/usr/bin/git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
+alias configls="/usr/bin/git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME ls-tree --full-tree -r --name-only HEAD"
 
 # Games
+
+# Directories
+alias gc="cd /mnt/x/game-stuff/game-collection"
