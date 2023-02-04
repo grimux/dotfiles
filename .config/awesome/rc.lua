@@ -130,7 +130,7 @@ local browser      = "firefox"
 --local music        = terminal .. " -e ncmpcpp"
 local music        = "cantata"
 local termfile     = terminal .. " -e ranger"
-local filemanager  = "pcmanfm"
+local filemanager  = "pcmanfm-qt"
 local pc_sink      = "alsa_output.pci-0000_0c_00.3.analog-stereo"
 
 awful.util.terminal = terminal
@@ -478,14 +478,22 @@ globalkeys = mytable.join(
               { description = "jDownloader2", group = "programs"}),
     awful.key({ modkey }, "v",     function () awful.spawn("pavucontrol --tab=1") end,
               { description = "pavucontrol", group = "programs"}),
+    awful.key({ modkey, "Shift" }, "z",     function () awful.spawn("filezilla") end,
+              { description = "pavucontrol", group = "programs"}),
 
     -- Script Launching
     awful.key({ modkey,           }, "g",     function () awful.spawn("gametime") end,
               { description = "gametime", group = "scripts"}),
     awful.key({ modkey, "Shift"   }, "g",     function () awful.spawn("play -d") end,
               { description = "gametime", group = "scripts"}),
-    awful.key({ modkey,        }, "F5",     function () awful.spawn("tv_mode") end,
+
+    awful.key({ modkey,        }, "F5",     function () 
+	    awful.spawn("tv_mode")
+	    --awesome.emit_signal('update_tv_mode_status')
+
+    end,
               { description = "TV mode toggle", group = "scripts"}),
+
     awful.key({ modkey,        }, "F6",     function () awful.spawn("toggle-conky") end,
               { description = "toggle conky", group = "scripts"}),
     awful.key({ modkey,        }, "F7",     function () awful.spawn("toggle-alpha") end,
@@ -522,11 +530,11 @@ globalkeys = mytable.join(
 
    -- Volume Keys
    awful.key({}, "XF86AudioMute", function()
-     awful.util.spawn("amixer -D pulse set Master 1+ toggle", false) end),
+     awful.util.spawn("volume_adjust toggle", false) end),
    awful.key({}, "XF86AudioLowerVolume", function()
-     awful.util.spawn("pactl set-sink-volume " .. pc_sink .. " -1%", false) end),
+     awful.util.spawn("volume_adjust down", false) end),
    awful.key({}, "XF86AudioRaiseVolume", function()
-     awful.util.spawn("pactl set-sink-volume " .. pc_sink .. " +1%", false) end),
+     awful.util.spawn("volume_adjust up", false) end),
 
    -- Screenshot
    awful.key({}, "Print", function () awful.spawn("screenshooter") end),
@@ -704,7 +712,6 @@ awful.rules.rules = {
           "DTA",  -- Firefox addon DownThemAll.
           "copyq",  -- Includes session name in class.
           "pinentry",
-          "lutris",
           "qalculate-gtk",
   	  "virt-manager",
 	  "1964.exe",
@@ -861,5 +868,6 @@ awful.mouse.snap.edge_enabled = false
 
 -- Startup
 -- Restart picom to avoid visual bugs
---awful.spawn.with_shell("killall picom && picom")
---awful.spawn.with_shell("nitrogen --restore")
+--awful.spawn.with_shell("picom")
+-- Restore nitrogen
+awful.spawn.with_shell("nitrogen --restore")
