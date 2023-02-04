@@ -76,25 +76,6 @@ modifiers_list=(
 	""
 )
 
-# Simple array for storing mod names.  I will eventually come up with a better way to do this, such
-# as parsing a file.
-mod_list_array=(
-	chill_doom
-	brutal_minecraft
-	elementalism
-	golden_souls
-	guncaster
-	h_doom
-	hedon
-	mower
-	project_brutality
-	reelism2
-	russian_overkill
-	siren
-	spooktober
-)
-
-
 
 #################
 ### Functions ###

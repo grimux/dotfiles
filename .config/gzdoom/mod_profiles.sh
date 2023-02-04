@@ -2,6 +2,27 @@
 ### Doom Script Mod Profiles ###
 ################################
 
+# Simple array for storing mod names.  I will eventually come up with a better way to do this, such
+# as parsing a file.
+mod_list_array=(
+	ashes
+	castlevania
+	chill_doom
+	brutal_minecraft
+	countrycide
+	elementalism
+	golden_souls
+	guncaster
+	h_doom
+	hedon
+	mower
+	project_brutality
+	reelism2
+	russian_overkill
+	siren
+	spooktober
+)
+
 # A function with a simple case statement.  The statement will set the variables for the arguments that will
 # eventually be passed to gzdoom.  The variables here are global and can be accessed from elsewhere in the 
 # script.  Just call this function and pass along the name of the mod.
@@ -14,6 +35,26 @@ function mod_profiles() {
 	
 		## Mod Settings ##
 
+		# Ashes 2063
+		ashes)
+			iwad=DOOM2.WAD
+			wads="Ashes2063Mod115.pk3 Ashes2063Maps115.wad"
+			maps=""
+			savedir="$savedir/ashes2063"
+			cheats=""
+			skill=""
+			;;
+
+		# Castllevania: Simon's Destiny
+		castlevania)
+			iwad=DOOM2.WAD
+			wads="Castlevania.ipk3"
+			maps=""
+			savedir="$savedir/castlevania"
+			cheats=""
+			skill=""
+			;;
+	
 		# Chill Doom
 		chill_doom)
 			iwad=DOOM.WAD
@@ -41,6 +82,15 @@ function mod_profiles() {
 			skill=""
 			;;
 	
+		countrycide)
+			iwad=DOOM2.WAD
+			wads="CountryCide.pk3"
+			maps=""
+			savedir="$savedir/countrycide"
+			cheats=""
+			skill=""
+			;;
+
 		elementalism)
 			iwad=DOOM2.WAD
 			wads="Elementalism_Phase1_RC1_1.01.pk3"
