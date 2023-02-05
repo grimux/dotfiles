@@ -1,1 +1,7 @@
---paths $HOME/Music/yt-dlp/ -o "%(title)s/%(title)s.%(ext)s" --split-chapters --embed-thumbnail --add-metadata -x --audio-format mp3 -i
+--paths $HOME/Music/yt-dlp
+--format "%(title)s/%(title)s.%(ext)s"
+--split-chapters
+--embed-thumbnail
+--add-metadata
+--extract-audio
+--audio-format mp3

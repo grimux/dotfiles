@@ -1,1 +1,9 @@
---paths $HOME/Downloads --output "%(title)s.%(ext)s" --embed-subs --embed-thumbnail --add-metadata --merge-output-format mkv
+--paths "$HOME/Videos/yt-dlp"
+--format "bestvideo[height<=1080][ext=webm]+bestaudio"
+--output "%(title)s-%(channel)s.%(ext)s"
+--sponsorblock-remove sponsor
+--restrict-filenames
+--embed-subs
+--embed-thumbnail
+--add-metadata
+--merge-output-format mkv

@@ -1,1 +1,9 @@
---format bestvideo[height<=1080][ext=webm]+bestaudio --sponsorblock-remove sponsor --paths $HOME/Videos/yt-dlp --output "%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s" --add-metadata --merge-output-format mkv
+--paths $HOME/Videos/yt-dlp
+--format bestvideo[height<=1080][ext=webm]+bestaudio
+--output "%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s"
+--sponsorblock-remove sponsor
+--restrict-filenames
+--embed-subs
+--embed-thumbnail
+--add-metadata
+--merge-output-format mkv
