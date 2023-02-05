@@ -1,18 +1,185 @@
-#!/usr/bin/env sh
-
-# Start blood video playlist
-# Stop mpd if it is playing
-mpc stop
-#mpc load pro_blood
-#mpc play
-mpv --playlist="$HOME/Videos/Games/Pro_Blood/blood.list"
-
-# Start music
-mpc clear
-mpc random on
-#mpc load gta_radio_favs
-mpc load game_chill
-mpc play
-
+#!/usr/bin/env bash
 #
-echo "Good morning!"
+# A script to run at bedtime.  It will play a video playlist and a music playlist.
+# By editing bedtime.m3u, we can change which videos are played.
+#
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+
+# Bedtime playlist file.
+# This file can be edited to play whatever videos I want at bedtime.
+# You can even add playlists to the playlist file and it will play them all.
+default_file="$HOME/Videos/playlists/bedtime.m3u"
+
+# Set the chosen playlist to the default one.
+chosen_playlist="$default_file"
+
+# All playlists.
+playlist_files=($HOME/Videos/playlists/*)
+
+# Alsa names for the TV and PC
+tv_alsa_id="alsa_output.pci-0000_0a_00.1.hdmi-stereo"
+pc_alsa_id="alsa_output.pci-0000_0c_00.3.analog-stereo"
+
+
+# Save the currently active window at the time of script execution.  This makes
+# it convenient to switch back later.
+previous_window=$(xdotool getactivewindow)
+
+# Get arguments
+get_arguments() {
+	while getopts ":lhp:" option; do
+		case $option in
+			l)
+				list_playlists
+				exit
+				;;
+			h)
+				help_section
+				exit
+				;;
+			p)
+				chosen_playlist="${OPTARG}"
+				;;
+			\?)
+				echo "Error: Invalid option"
+				exit
+				;;
+		esac
+	done
+}
+
+# List playlists
+list_playlists() {
+	#printf "%s\n" "${playlist_files[@]}"
+	
+	for i in "${playlist_files[@]}"; do
+		basename "$i" ".m3u"
+	done
+}
+
+# Dmenu
+function choose_in_dmenu() {
+	# Local variable to store the mod choice in.
+	local dmenu_choice
+	local prompt="Bedtime playlist: "
+	local choice_array=$(list_playlists) 
+
+	# Mod choice variable is equal to the selection from dmenu.
+	dmenu_choice=$(printf '%s\n' "${choice_array[@]}" | dmenu -i -l 20 -p "$prompt")
+
+	# Return the choice
+	echo "$dmenu_choice"
+}
+
+
+# Start mpv with the given playlist.
+launch_mpv() {
+	# The playlist file is passed to launch_mpv and stored in a variable.
+	local playlist="$1"
+
+	# Call to mpv with the playlist file
+	mpv --playlist="$playlist" &
+}
+
+# Switch to tag 8 in awesomewm.  This tag is for video players such as mpv.
+move_to_video_tag() {
+	xdotool search --name "mpv" windowactivate
+	#xdotool key --delay 100 Super_L+8
+}
+
+# Move back to the previous window.
+move_to_previous_window() {
+	xdotool windowactivate $previous_window
+}
+
+change_audio_sink() {
+	local device_name="$1"
+
+	local tv_index=$(get_device_index "$tv_alsa_id")
+
+	local pc_index=$(get_device_index "$pc_alsa_id")
+	
+	case "$device_name" in
+		"tv")
+			pacmd set-default-sink $tv_index
+			;;
+		"pc")
+			pacmd set-default-sink $pc_index
+			;;
+	esac
+
+}
+
+change_audio_sink_simple() {
+	echo "Hello"
+}
+
+# Function that returns the index in pacmd for the given alsa name.
+get_device_index() {
+	local alsa_name="$1"
+	pacmd \
+		list-sinks \
+		| grep \
+		--before-context=1 \
+		"$alsa_name" | \
+		grep "index" | \
+		sed 's/[^0-9]*//'
+}
+
+### Main ###
+#
+main() {
+	# Immediately stop mpd, so music won't play over video.
+	mpc stop
+	
+	# Switch the pulseaudio sink to the TV for video playback.
+	change_audio_sink "tv"
+	
+	# Launch mpv and play the playlist file.
+	launch_mpv "$default_file"
+
+	sleep 1
+
+	# Switch to the tag that will have mpv on it.
+	move_to_video_tag
+	
+	wait
+	
+	# Once the playlist is complete, switch back to the previous window.
+	move_to_previous_window
+	
+	# Switch the pulseaudio sink back to the PC.
+	change_audio_sink "pc"
+	
+	# Start music, won't happen until video playlist is completed.
+	mpc play
+	
+	# Good morning message
+	echo
+	echo "Good morning!"
+}
+
+testing() {
+
+	get_arguments "$@"
+
+	# Immediately stop mpd, so music won't play over video.
+	#mpc stop
+	
+	# Launch mpv and play the playlist file.
+	#launch_mpv "$chosen_playlist"
+
+}
+
+
+#testing "$@"
+main
+
+
