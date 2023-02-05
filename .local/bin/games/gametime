@@ -1,16 +1,46 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # Script for launching my game launchers
 #
 
-flag_steam=0
-flag_lutris=0
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+set -euox pipefail
+#set -euo pipefail
+
+is_steam_running=0
+is_lutris_running=0
 
 # Launch the launchers
-launch_launchers() {
+launch_launchers_minimized() {
 	notify-send "gametime" "Starting Steam and Lutris..."
 	steam -nochatui -nofriendsui -silent &
 	lutris &
+}
+
+# Start the game launchers, both windows up.
+launch_launchers_maximized() {
+	# Send a notification.
+	notify-send "gametime" "Starting Steam and Lutris..."
+
+	# Launch steam normally with no chat or friends list open.
+	#steam -nochatui -nofriendsui &
+	
+	# Launch steam with manghud and the same options.
+	mangohud steam-runtime -nochatui -nofriendsui &
+
+	# Launch lutris.
+	lutris &
+}
+
+get_process_id() {
+	local launcher_name="$1"
+	local process_id=$(pgrep --full "$launcher_name")
+
+	echo "$process_id"
 }
 
 # Kill the launchers
@@ -22,41 +52,81 @@ kill_all() {
 	
 }
 
+kill_launchers() {
+	notify-send "gametime" "Killing Steam and Lutris..."
+
+	pkill "steam"
+	pkill --full "lutris"
+}
+
 # Check for already running processes.  Set a flag
 check_processes() {
-	lutris_process=$(ps -ax | grep lutris | awk '{print $1}' | wc -l)
-	steam_process=$(pgrep steam)
+	#lutris_process=$(ps -ax | grep lutris | awk '{print $1}' | wc -l)
+	#steam_process=$(pgrep steam)
 	
-	[[ $lutris_process -gt 1 ]] && flag_lutris=1
-	[[ -n "$steam_process" ]] && flag_steam=1
+	local lutris_process=$(get_process_id "lutris")
+	local steam_process=$(get_process_id "steam")
+
+	if [ -z "$lutris_process" ]; then
+		is_lutris_running=0
+	else
+		is_lutris_running=1
+	fi
+
+	if [ -z "$steam_process" ]; then
+		is_steam_running=0
+	else
+		is_steam_running=1
+	fi
 }
 
 # Get arguments
-while getopts ":kh" option; do
-	case $option in
-		k)
-			kill_all
-			exit
-			;;
-		h)
-			help_section
-			exit
-			;;
-		\?)
-			echo "Error: Invalid option"
-			exit 1
-			;;
-	esac
-done
+get_arguments() {
+	while getopts ":kh" option; do
+		case $option in
+			k)
+				kill_all
+				exit
+				;;
+			h)
+				help_section
+				exit
+				;;
+			\?)
+				echo "Error: Invalid option"
+				exit 1
+				;;
+		esac
+	done
+}
 
-# 
-if [ -z "$1" ]; then
+# Main
+main() {
+	get_arguments "$@"
+	local arguments="$@"
+
 	check_processes
-	if [ $flag_steam -eq 1 ] || [ $flag_lutris -eq 1 ]; then
-		kill_all
+	if [ $is_steam_running -eq 1 ] || [ $is_lutris_running -eq 1 ]; then
+		kill_launchers
 	else
-		launch_launchers
+		#launch_launchers_minimized
+		launch_launchers_maximized
 	fi
 
-	exit
-fi
+	echo done
+}
+
+testing() {
+	local steam_process_id=$(get_process_id "steam")
+	local lutris_process_id=$(get_process_id "lutris")
+
+	if [ -z "$steam_process_id" ] || [ -z "$lutris_process_id" ]; then
+		kill_launchers
+	else
+		start_launchers
+		minimize_launchers
+	fi
+}
+
+#testing "$@"
+main "$@"
