@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 # 
 # xinit script
 #
@@ -8,40 +8,56 @@ session=${1:-awesome}
 
 # AwesomeWM config
 awesome() {
-	# Not using volumeicon at the moment, I prefer pasystray.
-	#volumeicon &
+	# Picom for transparency
+	picom &
+
+	# Start policy kit
+	lxsession &
 	
-	# pasystray should start automatically.
-	#pasystray -g &
+	# Restore wallpaper
+	nitrogen --restore &
+
+	# Redshift for bluelight filter
+	redshift-gtk &
 	
-	picom &						# Picom for transparency
-	lxsession &					# Start policy kit
-	nitrogen --restore &				# Restore wallpaper
-	redshift-gtk &					# Redshift for bluelight filter
-	
-	exec awesome					# Start awesome
+	# Start awesome
+	exec awesome
 }
 
 # Gnome config
 gnome() {
-	export XDG_SESSION_TYPE=x11		# Set session to xorg
-	export GDK_BACKEND=x11			# Set session to xorg
-	xscreensaver --no-splash &		# Turn on screensaver
-	exec gnome-session			# Start the session
+	# Set session to xorg
+	export XDG_SESSION_TYPE=x11		
+
+	# Set session to xorg
+	export GDK_BACKEND=x11
+
+	# Turn on screensaver
+	#xscreensaver --no-splash &
+	
+	# Start the session
+	exec gnome-session
 }
 
 # DWM config
-dwm() {
-	dwmblocks &					# Start dwmblocks
-	dunst &						# Dunst for notifications
-	conky -c ~/.config/conky/conkyrc.dwm &		# Start conky
-	exec dwm					# Start dwm
+dwm() {	
+	# Start dwmblocks
+	dwmblocks &
+	
+	# Dunst for notifications
+	dunst &
+
+	# Start conky
+	conky -c ~/.config/conky/conkyrc.dwm &
+	
+	# Start dwm
+	exec dwm
 }
 
 # KDE plasma config
 plasma() {
 	export DESKTOP_SESSION=plasma
-	exec startplasma-x11				# Start plasma
+	exec startplasma-x11
 }
 
 # General settings shared by all configs.
@@ -49,24 +65,40 @@ shared_settings() {
 	# ID names from xrandr for my TV and PC monitor.
 	local monitor_id="DVI-D-0"
 	local tv_id="HDMI-0"
+	
+	# Set TV (hdmi) to be the same as main monitor
+	xrandr --output $tv_id --same-as $monitor_id &
 
-	# Commands
-	xrandr --output $tv_id --same-as $monitor_id &	# Set TV (hdmi) to be the same as main monitor
-	mpd &						# music player daemon
-	ums &						# Start Universal Media Server
-	#mpDris2 &					# control mpd with playerctl
-	setxkbmap -option caps:escape &			# Set caps lock to escape
-	numlockx on &					# Turn on the numlock
-	clipmenud &					# Clipmenu
-	xset s 900 &					# Blankout screen after 15 minutes
-	playerctld daemon &				# Start playerctl daemon, tracks recent media players
+	# music player daemon
+	mpd &						
+
+	# Start Universal Media Server
+	ums &						
+
+	# control mpd with playerctl
+	#mpDris2 &					
+	
+	# Set caps lock to escape
+	setxkbmap -option caps:escape &
+
+	# Turn on the numlock
+	numlockx on &				
+
+	# Clipmen daemon
+	clipmenud &
+
+	# Blankout screen after 15 minutes
+	xset s 900 &
+
+	# Start playerctl daemon, tracks recent media players and can control them with media keys.
+	playerctld daemon &
 }
 
 # Run the shared settings first.
 shared_settings
 
 # Switch to determine which window manager we want to execute.
-case $session in
+case "$session" in
 	awesome|awm	) awesome;;
 	dwm		) dwm;;
 	gnome		) gnome;;
