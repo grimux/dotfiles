@@ -16,6 +16,9 @@ alias trem="transmission-remote"
 alias py="python"
 alias ka="killall"
 
+## Dotfile alias ##
+alias config="git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
+
 ## yt-dlp ##
 alias ytv="yt-dlp --config-location ~/.config/youtube-dl/video"
 alias yta="yt-dlp --config-location ~/.config/youtube-dl/audio"
