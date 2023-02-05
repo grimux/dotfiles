@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+#
+# A script to create m3u playlists for videos, mainly for using with UMS or mpv.
+#
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+playlist_directory="$HOME/Videos/playlists"
+playlist_array=($playlist_directory/*)
+playlist_header="#EXTM3U"
+playlist_name=""
+video_directory=""
+shuffle_mode=0
+
+cd "$playlist_directory"
+
+# How to use the script
+usage() {
+	echo "$(basename $0) (-s) [-n] <name> [-d] <directory>"
+}
+
+# Help Section
+help_section() {
+	echo "A script to enable TV Mode."
+	echo
+	echo "Syntax: $(basename $0) (options) [-n] <playlist name> [-d] <video directory>"
+	echo "optional:"
+	echo "h     Print this help screen."
+	echo "s     Enable shuffle mode."
+	echo "l     List playlists."
+	echo "r     Open playlist directory in ranger."
+	echo
+	echo "mandatory:"
+	echo "n     Name of the playlist to create (m3u)."
+	echo "d     Directory of video files (mkv)."
+	echo
+	echo "Playlists are saved in: $playlist_directory"
+}
+
+# Get arguments and set flags
+get_arguments() {
+	while getopts ":d:n:shlr" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Playlist mode
+			d) video_directory="${OPTARG}" ;;
+
+			# Name of playlist to create
+			n) playlist_name="${OPTARG}" ;;
+
+			# Shuffle playlist
+			s) shuffle_mode=1; echo "Shuffle mode: ON" ;;
+
+			# Help
+			h) help_section; exit ;;
+
+			# List playlists
+			l) list_playlists; exit ;;
+
+			# Open playlist directory in ranger
+			r) open_in_ranger; exit ;;
+
+			:) echo "Missing argument"; help_section; exit 1 ;;
+
+			*) usage; exit 1
+		esac
+	done
+}
+
+# Open the playlist directory in ranger.  Makes it easy to view playlists and delete them if necessary.
+open_in_ranger() {
+	ranger "$playlist_directory"
+}
+
+# List out all the playlists from the directory.
+list_playlists() {
+	# Local variable to store one name at a time.
+	local playlist_name
+
+	# Loop through array of files and echo out the basename.
+	for file in "${playlist_array[@]}"; do
+		playlist_name=$(basename $file)
+		echo $playlist_name
+	done
+}
+
+
+# Create m3u playlist file.
+create_m3u() {
+	local playlist_file="$playlist_directory/$playlist_name.m3u"
+	echo "Creating playlist for: $playlist_name"
+	echo "$playlist_header" > "$playlist_file"
+
+	if [ "$shuffle_mode" -eq 1 ]; then
+		readlink --canonicalize $video_directory/*.mkv | shuf >> "$playlist_file"
+	else
+		readlink --canonicalize $video_directory/*.mkv >> "$playlist_file"
+	fi
+
+	echo "Playlist created."
+	cat "$playlist_file"
+
+}
+
+get_arguments "$@"
+
+if [ "$OPTIND" -eq 1 ]; then
+	echo "Error: Must specify the playlist name and directory."
+	usage
+	exit 1
+fi
+
+create_m3u

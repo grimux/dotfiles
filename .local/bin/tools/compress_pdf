@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+call_ghostscript() {
+	local pdf_file="$1"
+
+	gs \
+		-sDEVICE=pdfwrite \
+		-dCompatibilityLevel=1.6 \
+		-dPDFSETTINGS=/ebook \
+		-dNOPAUSE \
+		-dQUIET \
+		-dBATCH \
+		-sOutputFile=compressed.pdf \
+		"$1"
+}
+
+call_ghostscript "$@"

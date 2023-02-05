@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+# 
+# A script to backup my firefox bookmarks.
+#
+
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+
+
+
+### Profiles ###
+jake_profile_name="ataneaoq.jake"
+tv_mode_profile_name="0wss9d6r.tv_mode"
+jake_profile_directory="$HOME/.mozilla/firefox/$jake_profile_name"
+tv_mode_profile_directory="$HOME/.mozilla/firefox/$tv_mode_profile_name"
+
+### Bookmarks ###
+local_database_file="$jake_profile_directory/places.sqlite"
+local_html_file="$jake_profile_directory/bookmarks.html"
+
+### Backup locations ###
+backup_directory="/mnt/x/archive-jake/my-settings/browsers"
+backup_database_file="$backup_directory/bookmarks_backup.sqlite"
+backup_html_file="$backup_directory/bookmarks.html"
+tv_mode_profile_archive="$backup_directory/tv_mode_profile"
+jake_profile_archive="$backup_directory/jake_profile"
+
+
+
+
+### Functions ###
+#
+# Bookmark database backup and html file copy.
+backup_bookmarks() {
+	# Backup the firefox database file
+	sqlite3 "$local_database_file" ".backup $backup_database_file"
+
+	# Backup the auto-generated bookmarks.html file
+	cp --verbose "$local_html_file" "$backup_html_file"
+}
+
+# Use 7zip to create/backup archives of my Firefox profiles.
+backup_profiles_7z() {
+	# Backup tv_mode profile with 7zip
+	7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$backup_directory/tv_mode_profile.7z" "$tv_mode_profile_directory"
+
+	# Backup jake profile with 7zip.
+	7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$backup_directory/jake_profile.7z" "$jake_profile_directory"
+}
+
+check_for_firefox() {
+	local firefox_process
+
+	firefox_process=$(pgrep "firefox")
+
+	if [ -n "$firefox_process" ]; then
+		echo 1
+	else
+		echo 0
+	fi
+}
+
+
+
+backup_profiles_tar() {
+	# Backup tv_mode profile with 7zip
+	tar --update --verbose --file "$tv_mode_profile_archive.tar"
+
+	# Backup jake profile with 7zip.
+	7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "jake_profile.7z" "$backup_directory"
+}
+
+get_date() {
+	local file
+	local file_time
+
+	file="$1"
+	file_time=$(date --reference="$file")
+
+	echo "$file_time"
+}
+
+main() {
+	local is_firefox_running
+
+	is_firefox_running=$(check_for_firefox)
+
+	if [ "$is_firefox_running" -eq 1 ]; then
+		echo "Closing Firefox..."
+		pkill "firefox"
+		sleep 0.75
+	fi
+
+
+
+	backup_bookmarks
+	backup_profiles_7z
+	
+	if [ "$is_firefox_running" -eq 1 ]; then
+		echo "Starting Firefox..."
+		nohup firefox > /dev/null &
+	fi
+}
+
+main

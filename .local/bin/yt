@@ -1,0 +1,381 @@
+#!/usr/bin/bash
+# 
+# A wrapper for yt-dlp
+#
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+set -euox pipefail
+#set -euo pipefail
+
+
+
+
+##############
+### Config ###
+##############
+# Directory location for downloading videos.
+video_download_location="$HOME/Videos/yt-dlp"
+
+# Directory location for downloading audio.
+audio_download_location="$HOME/Music/yt-dlp"
+
+# Output format for yt-dlp to use when downloading playlists.
+#playlist_output_format="%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s"
+playlist_output_format="%(playlist_index)s-%(title)s.%(ext)s"
+
+# Output format for yt-dlp to use when downloading a single file.
+single_output_format="%(title)s.%(ext)s"
+
+# Archive location and file.
+archive_directory="$HOME/.config/youtube-dl/archives"
+archive_file=""
+archive_extension=".archive"
+
+# m3u playlist file name and location.
+m3u_directory="$HOME/Videos/playlists"
+m3u_playlist_file=""
+
+# Global flags and variables.
+resolution="1080"
+check_size=0
+batch_mode=0
+playlist_mode=0
+extract_audio=0
+split_mode=0
+archive_mode=0
+filter_format="bestvideo[height<=$resolution][ext=webm]+bestaudio"
+
+# User variables
+batch_file=""
+url=""
+
+
+
+
+########################
+### yt-dlp arguments ###
+########################
+# List of arguments for video downloading.
+# --format: used to select the resolution we want, along with the extension
+# 	    and merge it with the best audio.
+#
+# -- output: controls the directory structure for where to play files.
+#
+# -- restrict-filenames: makes it so weird unicode characters stay our of our filename.
+#                        youtube really likes to use them and they mess with playlists.
+yt_arguments=(
+	--format "$filter_format" \
+	--paths "$HOME/Videos/yt-dlp" \
+	--output "$output_format" \
+	--embed-subs \
+	--embed-thumbnail \
+	--add-metadata \
+	--restrict-filenames \
+	--sponsorblock-remove sponsor \
+	--merge-output-format mkv \
+)
+
+
+#################
+### Functions ###
+#################
+# Help Section
+help_section() {
+	echo "A wrapper for yt-dlp and playlist management."
+	echo
+	echo "Syntax: $(basename $0) [-h|a|z] [-d] <output directory> [-c] <name of archive> [-p] <name of m3u> [-r] <resolution> -u <URL>"
+	echo "options:"
+	echo "u     URL to download."
+	echo "c     Create archive for playlist."
+	echo "r     Resolution of video to download. Defaults to 1080p."
+	echo "h     Print this help screen."
+	echo "l     List archive files."
+	echo "p     Enable playlist mode."
+	echo "b     Read URLs from file (batch)."
+	echo "a     Extract audio only."
+	echo "s     Split video by chapter."
+	echo "z     Get size of the provided URL."
+	echo
+}
+
+# Get the size of a playlist.
+get_playlist_size() {
+	local tempfile="$HOME/.cache/yt_size_check.txt"
+
+	yt-dlp -F "$url" | tee $tempfile
+
+	s_1080p=$(grep "webm[[:space:]].1920x1080" $tempfile | awk '{print $6}')
+	s_720p=$(grep "webm[[:space:]].1280x720" $tempfile | awk '{print $6}')
+	s_480p=$(grep "webm[[:space:]].854x480" $tempfile | awk '{print $6}')
+
+	echo "1080p: $s_1080p GB"
+	echo "720p: $s_720p GB"
+	echo "480p: $s_480p GB"
+
+	rm $tempfile
+}
+
+# Get the size of a playlist.  Relies upon an external python script to calculate.
+# First argument passed should be the prefered resolution.
+# Second argument is the URL of the playlist.
+# If no resolution is specified, 1080p will be used.
+get_playlist_size_easy() {
+	# Call to totalsize.  It is a python script that will calculate the total size
+	# of the URL provided.
+	totalsize \
+		--format-filter "$filter_format" \
+		"$url"
+}
+
+# List out the archives from the archive directory.
+list_archives() {
+	local archives
+	archives=($archive_directory/*)
+	
+	for file in ${archives[@]}; do
+		echo $(basename "$file")
+	done
+}
+
+# Download the video, either a single video or playlist.
+download_video() {
+	# Check to see if we should use playlist mode or not.  All this will change is
+	# the output path and the file name to reflect the playlist.
+	if [ $playlist_mode -eq 1 ]; then
+		local output_format="$playlist_output_format"
+		if [ -z "$archive_file" ]; then
+			echo "Please specify an archive to use for this playlist."
+			echo "Usage: -c <archivename>"
+			exit 1
+		else
+			yt_arguments+=(--download-archive "$archive_directory/$archive_file")
+		fi
+	else
+		local output_format="$single_output_format"
+	fi
+
+	# Final call to yt-dlp
+	if [ "$batch_mode" -eq 1 ]; then
+		yt_arguments+=(--batch-file $batch_file)
+		yt-dlp ${yt_arguments[@]}
+	else
+		yt-dlp ${yt_arguments[@]} ${url[@]}
+	fi
+
+
+}
+dowload_video_with_archive() {
+	echo
+}
+
+download_video_single() {
+	echo
+
+}
+
+download_video_playlist() {
+	echo
+}
+
+call_ytdlp_video() {
+	## List of arguments for video downloading. ##
+	# --format: used to select the resolution we want, along with the extension
+	# 	    and merge it with the best audio.
+	#
+	# -- output: controls the directory structure for where to play files.
+	#
+	# -- restrict-filenames: makes it so weird unicode characters stay our of our filename.
+	#                        youtube really likes to use them and they mess with playlists.
+	
+	local 
+	if [ "$batch_mode" -eq 1 ]; then
+		yt_arguments+="--batch-file=$batch_file"
+	fi
+
+	yt-dlp "${yt_arguments[@]}" "${url[@]}"
+
+}
+
+# Download audio only
+download_audio() {
+	# Check to see if we should use playlist mode or not.  All this will change is
+	# the output path and the file name to reflect the playlist.
+	if [ $playlist_mode -eq 1 ]; then
+		local output_format="$playlist_output_format"
+	else
+		local output_format="$single_output_format"
+	fi
+
+	local yt_args=("--paths" "$HOME/Music/yt-dlp"
+			"--output" "$output_format"
+			"--embed-thumbnail"
+			"--add-metadata"
+			"--sponsorblock-remove" "sponsor"
+			"--extract-audio"
+			"--audio-format" "mp3")
+
+	yt-dlp "${yt_args[@]}" "${url[@]}"
+
+}
+
+# Download audio of a single file and split it at the chapter marks.
+download_audio_split() {
+	yt-dlp \
+		--paths $HOME/Music/yt-dlp/ \
+		--output "%(title)s/%(title)s.%(ext)s" \
+		--split-chapters \
+		--embed-thumbnail \
+		--add-metadata \
+		--sponsorblock-remove sponsor \
+		--extract-audio \
+		--audio-format mp3 \
+		"${url[@]}"
+}
+
+# Download audio from a single video.
+download_audio_single() {
+	echo
+}
+
+# Download the audio from a playlist.
+download_audio_playlist() {
+	echo
+}
+
+# Function used to create m3u playlists for use with UMS and mpv.
+create_m3u_playlist() {
+	echo
+}
+
+# Check if the provided resolution (-r) is supported by the script.
+check_resolution() {
+	# Array of supported resolutions.
+	local supported_resolutions=(1080 720 480)
+
+	# If the supplied resolution is not found in the array, tell us, tell us the supported
+	# resolutions, and exit with error.
+	if [[ ! "${supported_resolutions[@]}" =~ "$resolution" ]]; then
+		echo "$resolution is not supported."
+		echo "Supported resolutions: ${supported_resolutions[@]}"
+		exit 1
+	fi
+}
+
+# Call to yt-dlp
+call_ytdlp() {
+	# Enter debug message
+	if [ $debug_mode -eq 1 ]; then
+		echo "Entering: ${FUNCNAME[0]}"
+	fi
+
+	# First argument is the url.
+	local url="$1"
+
+	# Second argument should be the resolution.
+	local resolution="$2"
+
+	# Call yt-dlp <args> <url>
+	yt-dlp "$arguments_video" "$url"
+	
+	# Exit debug message
+	if [ $debug_mode -eq 1 ]; then
+		echo "Leaving: ${FUNCNAME[0]}"
+	fi
+}
+
+
+# Get arguments and set flags
+get_arguments() {
+	while getopts ":d:c:lu::h:pr:aszb:" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Audio mode
+			a) extract_audio=1 ;;
+	
+			# Batch mode
+			b) batch_mode=1; batch_file="${OPTARG}" ;;
+	
+			# d flag is to override the default download location.
+			d) video_download_location="${OPTARG}" ;;
+
+			# C flag is for creating an archive file for yt-dlp.
+			c) archive_file="${OPTARG}.$archive_extension" ;;
+	
+			# u flag is for the URL to download.
+			u) url+="${OPTARG}" ;;
+	
+			# Open the help section
+			h) help_section; exit ;;
+				
+			# Set the resolution of video to download
+			r) resolution="${OPTARG}"; check_resolution "$resolution" ;;
+	
+			# Playlist mode
+			p) playlist_mode=1 ;;
+
+			# List out the current archives.
+			l) list_archives; exit 0;;
+	
+			# Split mode
+			s) split_mode=1 ;;
+
+			# Get size of provided URL
+			z) check_size=1 ;; 
+
+			:) echo "Missing argument."; help_section; exit 1 ;;
+		esac
+	done
+}
+	
+### Main logic ###
+main() {
+	# Get the arguments then shift them off
+	get_arguments "$@"
+
+	# If the url variable is empty, tell us with an error.
+	if [ -z "$url" ] && [ -z "$batch_file" ]; then
+		echo "No URL/batch provided."
+		exit 1
+	
+
+	# Else if check_size mode is enabled, get the size of the provided URL
+	# Resolution is optional, defaults to 1080p.
+	elif [ $check_size -eq 1 ]; then
+		get_playlist_size_easy "$url"
+		exit
+	
+	# Else if extract_audio mode is enabled, download the audio.
+	# This function will check to see if we should split or not.
+	# The function will also check whether it should use playlist format or not.
+	elif [ $extract_audio -eq 1 ]; then
+		download_audio "$url"
+		exit
+
+	elif [ "$batch_mode" -eq 1 ]; then
+		echo "Batch file: $batch_file"
+		echo "Videos will be downloaded to: $video_download_location"
+		echo "Archive file: $archive_file"
+		download_video "$batch_file"
+	
+	# Else if no other options are used, default to downloading the video.
+	# The function will check whether it should use playlist format or not.
+	else
+		echo "url to download: $url"
+		echo "Videos will be downloaded to: $video_download_location"
+		echo "Archive file: $archive_file"
+		download_video "${url[@]}"
+	fi
+}
+
+# Main testing function
+main_testing() {
+	get_arguments "$@"
+}
+
+main "$@"
+#main_testing "$@"
