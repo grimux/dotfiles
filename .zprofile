@@ -60,6 +60,7 @@ fi
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
     PATH="$HOME/.local/bin/laptop:$PATH"
+    PATH="$HOME/.local/bin/tools:$PATH"
     PATH="$HOME/.local/bin/statusbar:$PATH"
     PATH="$HOME/.local/bin/dmenu:$PATH"
     PATH="$HOME/.local/bin/games:$PATH"
