@@ -97,37 +97,6 @@ local markup = lain.util.markup
 -- Old watch method
 --local tv_mode_status = awful.widget.watch('tv_mode_status', 5)
 
--- Get the status of TV Mode.
-function get_tv_mode_status ()
-	local status
-
-	awful.spawn.easy_async_with_shell("tv_mode_status", function(stdout)
-		status = stdout
-		return stdout
-	end)
-
-
-end
-
-
-
-local tv_mode_widget = wibox.widget ({
-	widget = wibox.widget.textbox,
-	--text = string.format("%s", get_tv_status)
-	--text = "tv mode: ",
-	opacity = 0.75,
-})
-
--- Signal to send for TV Mode.
-awesome.connect_signal('update_tv_mode_status', function()
-	awful.spawn.easy_async_with_shell("tv_mode_status", function(stdout) 
-		tv_mode_widget.text = stdout
-	end)
-	
-	--tv_mode_widget.text = get_tv_mode_status()
-
-end)
-
 
 
 -- Textclock
@@ -152,7 +121,8 @@ local weathericon = wibox.widget.imagebox(theme.widget_weather)
 theme.weather = lain.widget.weather({
     APPID = "3e321f9414eaedbfab34983bda77a66e",
     units = "metric",
-    city_id = 4276816, -- placeholder (London)
+    lat = 38.61670684814453,
+    lon = -95.26720428466797,
     notification_preset = { font = "Mononoki 10", fg = theme.fg_normal },
     weather_na_markup = markup.fontfg(theme.font, "#eca4c4", "N/A "),
     settings = function()
@@ -346,7 +316,7 @@ function theme.at_screen_connect(s)
         nil,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-	    tv_mode_widget,
+	    --tv_mode_widget,
             --mailicon,
             --theme.mail.widget,
             netdownicon,
