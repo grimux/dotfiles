@@ -132,7 +132,7 @@ open_browser() {
 		--new-instance \
 		-P tv_mode \
 		--class "$custom_class_name" \
-		&
+		> /dev/null &
 
 
 	# Prevent race war with starting the browser and getting its ID.
@@ -303,6 +303,17 @@ restart_awesome() {
 	echo 'awesome.restart()' | awesome-client
 }
 
+# Reset the device name of the TV in pulseaudio
+# This is needed after running the script as the resolution change changes the name back to default.
+reset_tv_name() {
+	# The following command will rename the TV based on the name from pulseaudio
+	pacmd update-sink-proplist alsa_output.pci-0000_0a_00.1.hdmi-stereo device.description="TV"
+
+	# Reset the name of the combined sink.
+	pacmd unload-module module-combine-sink > /dev/null
+	pacmd load-module module-combine-sink > /dev/null
+}
+
 # Get arguments
 while getopts ":hd" option; do
 	case $option in
@@ -348,6 +359,9 @@ fi
 
 # Ensure that the wallpaper is okay.
 restore_wallpaper
+
+# Ensure the TV has the proper sink name in pulseaudio
+#reset_tv_name
 
 # Ensure that windows are positioned according to my awesomewm config by restarting awesome
 # This function currently has a bug and won't work properly.
