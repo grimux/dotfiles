@@ -14,7 +14,7 @@ dotfile_directory="$HOME/.config"
 
 # A wrapper for git.  Sets the working tree to my $HOME folder and
 # and sets the tracking directory to $HOME/dotfiles
-git_wrapper="/usr/bin/git --git-dir=$HOME/dotfiles --work-tree=$HOME"
+git_wrapper="/usr/bin/git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
 
 # Help Section
 help_section() {
