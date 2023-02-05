@@ -15,6 +15,7 @@ barrier
 base
 bash-completion
 bchunk
+beets
 bind
 bison
 bleachbit
@@ -29,6 +30,7 @@ btrfs-progs
 calcurse
 calibre
 cantata
+cava
 clipmenu
 conky
 cronie
@@ -126,6 +128,7 @@ lsd
 lsof
 lutris
 lxappearance
+lxqt-archiver
 lxsession
 m4
 m64py
@@ -171,7 +174,7 @@ pass
 pasystray
 patch
 pavucontrol
-pcmanfm
+pcmanfm-qt
 pcsx2
 picom
 piper
@@ -360,7 +363,6 @@ xorg-xwininfo
 xorg-xwud
 xscreensaver
 yad
-yadm
 yay
 yt-dlp
 zathura
