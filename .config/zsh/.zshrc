@@ -5,9 +5,6 @@ autoload -U colors && colors
 # My favorite
 #PS1="%B%{$fg[red]%}[%{$fg[yellow]%}%n%{$fg[green]%}@%{$fg[blue]%}%M %{$fg[magenta]%}%1~%{$fg[red]%}]%{$reset_color%}$%b "
 
-# Not my favorite
-#PS1="%B%{$fg[blue]%}[%{$fg[magenta]%}%n%{$fg[green]%}@%{$fg[orange]%}%M %{$fg[yellow]%}%~%{$fg[blue]%}]%{$reset_color%}$%b "
-
 # History in .config/zsh:
 HISTSIZE=10000
 SAVEHIST=10000
@@ -91,16 +88,16 @@ function extract {
 fi
 }
 
-# Use lf to switch directories and bind it to ctrl-o
-lfcd () {
-    tmp="$(mktemp)"
-    lf -last-dir-path="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        rm -f "$tmp"
-        [ -d "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"
+# Prevent nested ranger instances.  From archwiki.
+# url: https://wiki.archlinux.org/title/Ranger#Preventing_nested_ranger_instances
+ranger() {
+    if [ -z "$RANGER_LEVEL" ]; then
+        /usr/bin/ranger "$@"
+    else
+        exit
     fi
 }
+
 
 # Use ranger to switch directories
 rangercd () {
@@ -134,4 +131,7 @@ source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.
 eval "$(starship init zsh)"
 
 # colorscript on launch
-colorscript random
+#colorscript random
+
+# Neofetch
+neofetch
