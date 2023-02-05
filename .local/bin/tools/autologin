@@ -16,7 +16,7 @@ drop_in_file=/etc/systemd/system/getty@tty1.service.d/autologin.conf
 backup_file=$HOME/.config/autologin.conf
 
 # Autostartx variables
-shell_profile=$HOME/.zprofile
+shell_profile="$HOME/.zshrc"
 search_term_sed='\/dev\/tty1'
 search_term_grep="^#.*/dev/tty1"
 
