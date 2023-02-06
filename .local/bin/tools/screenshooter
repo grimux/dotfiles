@@ -1,2 +1,14 @@
 #!/usr/bin/env bash
-scrot -t 20 screenshot_%Y_%m_%d_%H_%M_%S.png -e 'mv $f $$(xdg-user-dir PICTURES); notify-send -i $m "Screenshot Taken\n$f"; rm -f $m'
+# 
+# A simple script to take screenshots.
+#
+
+# Use scrot to take the screenshot.  It also creates a thumbnail to use in the notification.
+scrot \
+	--thumb 20 \
+	screenshot_%Y_%m_%d_%H_%M_%S.png \
+	--exec \
+	'mv $f $$(xdg-user-dir PICTURES); notify-send -i $m "Screenshot Taken\n$f"; rm -f $m'
+
+# Play a camera shutter sound.
+canberra-gtk-play --id=camera-shutter
