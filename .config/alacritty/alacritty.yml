@@ -625,8 +625,8 @@ key_bindings:
   - { key: C,         mods: Control|Shift, action: Copy                        }
   - { key: Insert,    mods: Shift,         action: PasteSelection              }
   - { key: Key0,      mods: Control,       action: ResetFontSize               }
-  - { key: J,         mods: Control,       action: IncreaseFontSize            }
-  - { key: K,         mods: Control,       action: DecreaseFontSize            }
+    #  - { key: J,         mods: Alt,           action: IncreaseFontSize            }
+    #  - { key: K,         mods: Alt,           action: DecreaseFontSize            }
   - { key: F11,       mods: None,          action: ToggleFullscreen            }
   - { key: Paste,     mods: None,          action: Paste                       }
   - { key: Copy,      mods: None,          action: Copy                        }
