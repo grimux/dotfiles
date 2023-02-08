@@ -23,7 +23,7 @@ local lain          = require("lain")
 --local menubar       = require("menubar")
 local freedesktop   = require("freedesktop")
 local hotkeys_popup = require("awful.hotkeys_popup")
-                      require("awful.hotkeys_popup.keys")
+                      --require("awful.hotkeys_popup.keys")
 local mytable       = awful.util.table or gears.table -- 4.{0,1} compatibility
 local quake = lain.util.quake()
 
@@ -110,13 +110,15 @@ local altkey       = "Mod1"
 local terminal     = "alacritty"
 local vi_focus     = false -- vi-like client focus https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true  -- cycle with only the previously focused client or all https://github.com/lcpz/awesome-copycats/issues/274
+
+-- Default programs
 local editor       = os.getenv("EDITOR") or "nvim"
 local browser      = "firefox"
+local htmlwiki     = " ~/vimwiki/_site/index.html"
 --local music        = terminal .. " -e ncmpcpp"
 local music        = "cantata"
 local termfile     = terminal .. " -e ranger"
 local filemanager  = "pcmanfm-qt"
-local pc_sink      = "alsa_output.pci-0000_0c_00.3.analog-stereo"
 
 awful.util.terminal = terminal
 awful.util.tagnames = { "term", "www", "sys", "doc", "torr", "chat", "mus", "vid", "gfx" }
@@ -200,7 +202,7 @@ local myawesomemenu = {
 }
 
 local mysysmenu = {
-   	{ "quit", function() awesome.quit() end },
+	{ "quit", function() awesome.quit() end },
 	{ "reboot", "systemctl reboot" },
 	{ "shutdown", "shutdown now" },
 
@@ -318,8 +320,8 @@ globalkeys = mytable.join(
         {description = "focus previous by index", group = "client"}
     ),
 
-    -- all minimized clients are restored 
-        awful.key({ modkey, "Shift"   }, "n", 
+    -- all minimized clients are restored
+        awful.key({ modkey, "Shift"   }, "n",
             function()
                 local tag = awful.tag.selected()
                     for i=1, #tag:clients() do
@@ -339,7 +341,7 @@ globalkeys = mytable.join(
               {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
-	
+
 	-- Layout Sizing
 	awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
@@ -353,7 +355,7 @@ globalkeys = mytable.join(
               {description = "increase the number of columns", group = "layout"}),
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
-    
+
 	-- Layout cycling
 	awful.key({ modkey,           }, "Tab", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
@@ -440,6 +442,8 @@ globalkeys = mytable.join(
     -- User programs
     awful.key({ modkey,           }, "w",     function () awful.spawn(browser) end,
               { description = "browser", group = "programs"}),
+    awful.key({ modkey, "Shift"   }, "w",     function () awful.spawn(browser .. htmlwiki) end,
+              { description = "vimwiki", group = "programs"}),
     awful.key({ modkey,           }, "e",     function () awful.spawn(filemanager) end,
               { description = "file manager", group = "programs"}),
     awful.key({ modkey,           }, "m",     function () awful.spawn(music) end,
@@ -462,9 +466,9 @@ globalkeys = mytable.join(
               { description = "transmission remote gtk", group = "programs"}),
     awful.key({ modkey, "Shift"   }, "d",     function () awful.spawn("jdownloader") end,
               { description = "jDownloader2", group = "programs"}),
-    awful.key({ modkey }, "v",     function () awful.spawn("pavucontrol --tab=1") end,
+    awful.key({ modkey            }, "v",     function () awful.spawn("pavucontrol --tab=1") end,
               { description = "pavucontrol", group = "programs"}),
-    awful.key({ modkey, "Shift" }, "z",     function () awful.spawn("filezilla") end,
+    awful.key({ modkey, "Shift"   }, "z",     function () awful.spawn("filezilla") end,
               { description = "pavucontrol", group = "programs"}),
 
     -- Script Launching
@@ -473,7 +477,7 @@ globalkeys = mytable.join(
     awful.key({ modkey, "Shift"   }, "g",     function () awful.spawn("play -d") end,
               { description = "gametime", group = "scripts"}),
 
-    awful.key({ modkey,        }, "F5",     function () 
+    awful.key({ modkey,        }, "F5",     function ()
 	    awful.spawn("tv_mode")
 	    --awesome.emit_signal('update_tv_mode_status')
 
@@ -524,7 +528,7 @@ globalkeys = mytable.join(
 
    -- Screenshot
    awful.key({}, "Print", function () awful.spawn("screenshooter") end),
-	
+
 	-- Dmenu
 	awful.key({ modkey,         }, "space", function () awful.spawn("dmenu_run -i -p run:") end,
 		{ description = "dmenu", group = "programs"}),
@@ -710,6 +714,7 @@ awful.rules.rules = {
           "MessageWin",  -- kalarm.
           "Nm-connection-editor", -- network-manager-applet
 	  "PolyMC",
+	  "steam_app_%d", -- Let steam games default to floating.  %d is a wildcard for integers.
           "Sxiv",
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
           "Wpa_gui",
