@@ -1,5 +1,5 @@
 #!/bin/bash
-# 
+#
 # A script to sync saves between my PC and Steam Deck
 #
 ### Script Fail Events ###
@@ -11,7 +11,12 @@
 #set -euox pipefail
 set -euo pipefail
 
+
+
+
+##############
 ### Config ###
+##############
 # ini file containing save location information.
 ini_file="$HOME/.config/game/decksync.ini"
 
@@ -23,12 +28,19 @@ conf_file="$HOME/.config/game/decksync.cfg"
 # Dry-run mode global setting
 dry_run_mode=0
 
-# Debug mode global setting
-debug_mode=0
+# Sync method. 0 for new, 1 for old.
+old_sync=0
 
-# Global flag messages
-[[ $dry_run_mode -eq 1 ]] && echo "Global dry-run: ON"
-[[ $debug_mode -eq 1 ]] && echo "Global debug: ON"
+# Delete mode
+delete_mode=0
+
+# Arguments for the mirror option of lftp
+mirror_args=(
+	--only-newer
+	--verbose
+	--delete
+	--exclude-glob *.cfg
+)
 
 # Deck user name
 USER="deck"
@@ -39,76 +51,37 @@ PASS="Halflife2@"
 # IP address of deck.  Static from router setting.
 HOST="sftp://10.10.10.15"
 
+
+
+
+#################
 ### Functions ###
+#################
 # Help Section
 help_section() {
 	echo "A script to sync game saves between my PC and Steamdeck."
 	echo
-	echo "Syntax: decksync [-h|d|n|s|o]"
+	echo "Syntax: $(basename $0) [-h|d|n|s|o]"
 	echo "options:"
 	echo "h     Print this help screen."
-	echo "d     Enable debug mode."
 	echo "n     Enable dry-run mode."
+	echo "d     Delete extra files."
 	echo "s     Perform sync operation."
 	echo "o     Perform old_sync operation."
 	echo
 }
 
 usage() {
-	echo "decksync [-h|d|n|s|o]"
-	echo
+	echo "Usage: $(basename $0) [-h|d|n|s|o]"
 }
 
 # Sync saves from PC to deck
 pc_to_deck() {
-	# Enter debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Entering: ${FUNCNAME[0]}"
-	fi
-
 	# Set arguments to some variables.
 	# First argument is the pc directory to sync
 	# Second argmunet is the deck directory to sync
 	local pc_directory=$1
 	local deck_directory=$2
-
-	if [ $debug_mode -eq 1 ]; then
-		echo "pc_directory: $pc_directory"
-		echo "deck_directory: $deck_directory"
-	fi
-
-	mirror_options=(--only-newer --verbose --reverse)
-
-	if [ $dry_run_mode -eq 1 ]; then
-		mirror_options+=(--dry-run)
-	fi
-
-	case $dry_run_mode in
-		# Normal mode
-		0)
-			mirror_args="\
-				--only-newer \
-				--verbose \
-				--exclude-glob *.cfg \
-				--reverse \
-				--delete \
-				$pc_directory \
-				$deck_directory"
-			;;
-				
-		# Dry-run mode
-		1)
-			mirror_args="\
-				--only-newer \
-				--verbose \
-				--dry-run \
-				--exclude-glob *.cfg \
-				--reverse \
-				--delete \
-				$pc_directory \
-				$deck_directory"
-			;;
-	esac
 
 	# Visual repesentation of transfer.
 	echo "PC -> Deck"
@@ -118,55 +91,19 @@ pc_to_deck() {
 	open $HOST
 	user $USER $PASS
 	lcd $pc_directory
-	mirror $mirror_args $pc_directory $deck_directory
+	mirror $mirror_args --reverse $pc_directory $deck_directory
 	bye
-	" 
-	
-	# Exit debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Leaving: ${FUNCNAME[0]}"
-	fi
+	"
+
 }
 
 # Sync saves from deck to PC
 deck_to_pc() {
-	# Enter debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Entering: ${FUNCNAME[0]}"
-	fi
-
 	# Set arguments to some variables.
 	# First argument is the pc directory to sync
 	# Second argmunet is the deck directory to sync
 	local pc_directory="$1"
 	local deck_directory="$2"
-
-	# Check for dry-run mode
-	case $dry_run_mode in
-		# Normal mode
-		0)
-			mirror_args="\
-				--only-newer \
-				--verbose \
-				--exclude-glob *.cfg \
-				--delete \
-				$deck_directory \
-				$pc_directory"
-			;;
-				
-		# Dry-run mode
-		1)
-			mirror_args="\
-				--only-newer \
-				--verbose \
-				--dry-run \
-				--exclude-glob *.cfg \
-				--delete \
-				$deck_directory \
-				$pc_directory"
-			;;
-	esac
-
 
 	# Visual repesentation of transfer.
 	echo "PC <- Deck"
@@ -176,60 +113,13 @@ deck_to_pc() {
 	open $HOST
 	user $USER $PASS
 	lcd $pc_directory
-	mirror $mirror_args
+	mirror $mirror_args $deck_directory $pc_directory
 	bye
-	" 
-
-	# Exit debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Leaving: ${FUNCNAME[0]}"
-	fi
-}
-
-# Function to call when syncing saves.  Takes the game title, pc save location, and deck save location as arguments.
-sync_saves() {
-	# Enter debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Entering: ${FUNCNAME[0]}"
-	fi
-
-	# Local variables set from the arguments passed to the function.
-	local title="$1"
-	local pc_save="$2"
-	local deck_save="$3"
-
-	# Display message with game title
-	echo "Syncing $title"
-
-	# Debug output
-	if [ $debug_mode -eq 1 ]; then
-		echo "title: $title"
-		echo "pc_save: $pc_save"
-		echo "deck_save: $deck_save"
-	fi
-
-	# Call pc_to_deck
-	pc_to_deck "$pc_save" "$deck_save"
-
-	# Call deck_to_pc
-	deck_to_pc "$pc_save" "$deck_save"
-
-	# Exit debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Leaving: ${FUNCNAME[0]}"
-	fi
-
-	# Give a space to separate each game into three fields.
-	echo
+	"
 }
 
 # Old sync method
 old_sync() {
-	# Enter debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Entering: ${FUNCNAME[0]}"
-	fi
-
 	# Local Directories to sync
 	local oot_pc="$HOME/.local/share/soh/Save"
 	local blood_pc="$HOME/.config/nblood"
@@ -245,7 +135,7 @@ old_sync() {
 	pc_to_deck $oot_pc $oot_deck
 	deck_to_pc $oot_pc $oot_deck
 	echo
-	
+
 	# nBlood
 	echo "Syncing nBlood"
 	pc_to_deck $blood_pc $blood_deck
@@ -257,99 +147,11 @@ old_sync() {
 	pc_to_deck $gepd_pc $gepd_deck
 	deck_to_pc $gepd_pc $gepd_deck
 	echo
-	
-	# Exit debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Leaving: ${FUNCNAME[0]}"
-	fi
 }
 
-### File Parsing Section ###
-## ini ##
-# The following functions are for testing with ini parsing.
-create_game_array() {
-	#mapfile -t game_info_array < $ini_file
-	mapfile -t game_info_array < <(awk '/\[/{prefix=$0; next} $1{print prefix $0}' "$ini_file")
-}
-
-get_game_info() {
-	local title=$1
-	local game_info=($(grep -A 2 "\[$title\]" $ini_file))
-
-
-	printf "%s\n" ${game_info[@]}
-
-}
-
-access_game_array() {
-	for i in "${game_info_array[@]}"; do
-		title=$(echo "$i" | cut -s -d'[' -f 2)
-		echo $title
-	done
-}
-
-
-## conf ##
-# The following functions are for config parsing.
-parse_conf() {
-	#game_info=$(tr -s "\t" "\n" < "$conf_file")
-	#printf "%s\n" "${game_info[@]}"
-	
-	# Read conf file into array.  Delimited by tabs and newline
-	while IFS=$'\n;;' read -r -a game_info; do
-		local title="${game_info[0]}"
-		local pc_save="${game_info[1]}"
-		local deck_save="${game_info[2]}"
-
-		if [ $debug_mode -eq 1 ]; then
-			echo "title: $title"
-			echo "pc_save: $pc_save"
-			echo "deck_save: $deck_save"
-		fi
-
-		# Call to sync_saves
-		sync_saves "$title" "$pc_save" "$deck_save"
-
-	done < <(sed -E -e 's/[[:space:]]*#.*// ; /^[[:space:]]*$/d' -e 's/[[:aplpha:]]*=//' "$conf_file")
-
-
-	
-
-}
-
-# Function to parse and send information from conf_file
-parse_conf_2() {
-	# Enter debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Entering: ${FUNCNAME[0]}"
-	fi
-
-	# Copy contents of conf_file into an array called game_info
-	# Expression 1 is used to remove any lines beginning with a comment, or having a comment at the end of the line.
-	# Expression 2 will delete any blank lines in the file.
-	# Expression 3 is used to remove the formatting of the conf_file (title=, pc=, deck=).
-	mapfile -t game_info < <(\
-		sed \
-		--regexp-extended \
-		--expression='s/[[:space:]]*#.*//' \
-		--expression='/^[[:space:]]*$/d' \
-		--expression='s/^[[:alpha:]]+=//' \
-		"$conf_file"\
-	)
-
-	# Exit debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Leaving: ${FUNCNAME[0]}"
-	fi
-}
-
-# 
-read_game_array() {
-	# Enter debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Entering: ${FUNCNAME[0]}"
-	fi
-
+# Sync saves
+# This function loops through the array in groups of 3.  Title, pc location, deck location.
+sync_saves() {
 	# How many lines of data there are for each game.
 	# Line 1: Title
 	# Line 2: pc save
@@ -369,101 +171,100 @@ read_game_array() {
 		# Current index+2
 		local deck_save=${game_info[$index+2]}
 
-		# Debug output
-		if [ $debug_mode -eq 1 ]; then
-			echo "title: $title"
-			echo "pc_save: $pc_save"
-			echo "deck_save: $deck_save"
-		fi
-
 		# Call to sync_saves
-		sync_saves "$title" "$pc_save" "$deck_save"
+		# Display message with game title
+		echo "Syncing $title"
+
+		# Call pc_to_deck
+		pc_to_deck "$pc_save" "$deck_save"
+
+		# Call deck_to_pc
+		deck_to_pc "$pc_save" "$deck_save"
+
+		# Give a space to separate each game into three fields.
+		echo
+
+
 	done
-	
-	# Exit debug message
-	if [ $debug_mode -eq 1 ]; then
-		echo "Leaving: ${FUNCNAME[0]}"
-	fi
+
 }
 
 
-# Checks which modes are currently active and tells us.
-get_current_modes() {
-	# Is debug mode on?
-	if [ $debug_mode -eq 1 ]; then
-		echo "Debug mode: ON"
-	fi
 
-	# Is dry-run mode on?
-	if [ $dry_run_mode -eq 1 ]; then
-		echo "Dry-run mode: ON"
-	fi
+
+############################
+### File Parsing Section ###
+############################
+# Function to parse and send information from conf_file
+parse_conf() {
+	# Copy contents of conf_file into an array called game_info
+	# Expression 1 is used to remove any lines beginning with a comment, or having a comment at the end of the line.
+	# Expression 2 will delete any blank lines in the file.
+	# Expression 3 is used to remove the formatting of the conf_file (title=, pc=, deck=).
+	mapfile -t game_info < <(\
+		sed \
+		--regexp-extended \
+		--expression='s/[[:space:]]*#.*//' \
+		--expression='/^[[:space:]]*$/d' \
+		--expression='s/^[[:alpha:]]+=//' \
+		"$conf_file"\
+	)
+
 }
+
+
 
 ### Main ###
-new_sync=0
-old_sync=0
-
 # Get arguments and set flags
-while getopts ":dhnso" option; do
-	case $option in
-		# What to do if there is an invalid argument.
-		\?)
-			echo "Error: Invalid option"
-			exit 1
-			;;
-		# Open the help section
-		h)
-			# Help menu
-			help_section
-			exit
-			;;
-		# Enable debug mode
-		d)
-			# Debug mode
-			debug_mode=1
-			echo "Debug mode: ON"
-			;;
-		# Enable dry-run mode
-		n)
-			# Dry-run mode
-			dry_run_mode=1
-			echo "Dry-run mode: ON"
-			;;
-		# Perform sync operation
-		s)
-			new_sync=1
-			;;
-		# Perform old sync operation
-		o)
-			old_sync=1
-			;;
-	esac
-done
+get_arguments() {
+	while getopts ":hnsdo" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Option \"${OPTARG}\" not recognized."; usage; exit 1;;
+
+			# Delete any extra files.
+			d) delete_mode=1; mirror_args+=" --delete"; echo "Delete mode: ON";;
+
+			# Open the help section
+			h) help_section; exit;;
+
+			# Enable dry-run mode
+			n) dry_run_mode=1; mirror_args+=" --dry-run"; echo "Dry-run mode: ON";;
+
+			# Perform sync operation
+			s) old_sync=0;;
+
+			# Perform old sync operation
+			o) old_sync=1;;
+		esac
+	done
+}
 
 ### Entry Point ###
-#get_game_info nBlood
-#create_game_array
-#printf "%s\n" "${game_info_array[@]}"
-#access_game_array
-#help_section
+main() {
+	get_arguments "$@"
 
-if [ -z "$@" ]; then
-	help_section
-	exit
-fi
+	if [ "$old_sync" -eq 0 ] && [ "$delete_mode" -eq 0 ]; then
+		echo "Performing sync"
+		parse_conf
+		sync_saves
+	fi
 
-if [ $old_sync -eq 1 ]; then
-	echo "Performing old sync"
-	old_sync
-fi
+	if [ "$delete_mode" -eq 1 ]; then
+		echo "Removing extra files."
+		parse_conf
+		sync_saves
+	fi
+}
 
-if [ $new_sync -eq 1 ]; then
-	echo "Performing sync"
-	parse_conf_2
-	read_game_array
-fi
+main_testing() {
+	get_game_info nBlood
+	#create_game_array
+	#printf "%s\n" "${game_info_array[@]}"
+	#access_game_array
+	#help_section
+}
 
-
+main "$@"
 ### Done ###
 exit 0
