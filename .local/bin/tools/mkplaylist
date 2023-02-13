@@ -26,7 +26,7 @@ usage() {
 
 # Help Section
 help_section() {
-	echo "A script to enable TV Mode."
+	echo "A script to create video playlists."
 	echo
 	echo "Syntax: $(basename $0) (options) [-n] <playlist name> [-d] <video directory>"
 	echo "optional:"
