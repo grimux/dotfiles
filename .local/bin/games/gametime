@@ -8,17 +8,27 @@
 # o pipefail - script fails if command piped fails
 # x - output each line (debug)
 #
-set -euox pipefail
-#set -euo pipefail
+#set -euox pipefail
+set -uo pipefail
 
 is_steam_running=0
 is_lutris_running=0
 
 # Launch the launchers
 launch_launchers_minimized() {
+	# Send a notification.
 	notify-send "gametime" "Starting Steam and Lutris..."
-	steam -nochatui -nofriendsui -silent &
+
+	# Launch steam with or without manghud
+	mangohud steam-runtime -nochatui -nofriendsui &
+	#steam -nochatui -nofriendsui -silent &
+
+
+	# Launch lutris
 	lutris &
+
+	# Buggy and doesn't work
+	#xdotool search --onlyvisible --classname --sync lutris windowminimize --sync
 }
 
 # Start the game launchers, both windows up.
@@ -28,7 +38,7 @@ launch_launchers_maximized() {
 
 	# Launch steam normally with no chat or friends list open.
 	#steam -nochatui -nofriendsui &
-	
+
 	# Launch steam with manghud and the same options.
 	mangohud steam-runtime -nochatui -nofriendsui &
 
@@ -44,14 +54,6 @@ get_process_id() {
 }
 
 # Kill the launchers
-kill_all() {
-	notify-send "gametime" "Killing Steam and Lutris..."
-	killall steam
-	lutris_process=$(ps -ax | grep lutris | awk '{print $1}' | head -n 1)
-	kill -9 $lutris_process
-	
-}
-
 kill_launchers() {
 	notify-send "gametime" "Killing Steam and Lutris..."
 
@@ -63,7 +65,7 @@ kill_launchers() {
 check_processes() {
 	#lutris_process=$(ps -ax | grep lutris | awk '{print $1}' | wc -l)
 	#steam_process=$(pgrep steam)
-	
+
 	local lutris_process=$(get_process_id "lutris")
 	local steam_process=$(get_process_id "steam")
 
