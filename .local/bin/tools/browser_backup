@@ -25,7 +25,7 @@ local_database_file="$jake_profile_directory/places.sqlite"
 local_html_file="$jake_profile_directory/bookmarks.html"
 
 ### Backup locations ###
-backup_directory="/mnt/x/archive-jake/my-settings/browsers"
+backup_directory="/mnt/x/my-settings/browsers"
 backup_database_file="$backup_directory/bookmarks_backup.sqlite"
 backup_html_file="$backup_directory/bookmarks.html"
 tv_mode_profile_archive="$backup_directory/tv_mode_profile"
