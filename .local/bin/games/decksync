@@ -11,6 +11,14 @@
 #set -euox pipefail
 set -euo pipefail
 
+############
+### TODO ###
+############
+# - Add a checking system to see which directory has the most files.  This should incdicate the direction of
+#   syncing or the first time.
+#   - It seems there is a problem with the local pc directory and expanding the ~ to home.  Says the
+#     directory does not exist.  Chaning the cfg file to "/home/whatever/" fixes this problem, but I want
+#     to find how to fix it here.
 
 
 
@@ -34,14 +42,6 @@ old_sync=0
 # Delete mode
 delete_mode=0
 
-# Arguments for the mirror option of lftp
-mirror_args=(
-	--only-newer
-	--verbose
-	--delete
-	--exclude-glob *.cfg
-)
-
 # Deck user name
 USER="deck"
 
@@ -50,6 +50,13 @@ PASS="Halflife2@"
 
 # IP address of deck.  Static from router setting.
 HOST="sftp://10.10.10.15"
+
+# Arguments for the mirror option of lftp
+mirror_args=(
+	--only-newer
+	--verbose
+	--exclude-glob *.cfg
+)
 
 
 
@@ -86,15 +93,18 @@ pc_to_deck() {
 	# Visual repesentation of transfer.
 	echo "PC -> Deck"
 
+	# The mirror command for lftp.  It needs to be in a separate variable to expand all the
+	# variables correctly.
+	mirror_command="mirror ${mirror_args[@]} --reverse \"$pc_directory\" \"$deck_directory\""
+
 	# Call to lftp
 	lftp -c "
 	open $HOST
 	user $USER $PASS
-	lcd $pc_directory
-	mirror $mirror_args --reverse $pc_directory $deck_directory
+	lcd \"$pc_directory\"
+	$mirror_command
 	bye
 	"
-
 }
 
 # Sync saves from deck to PC
@@ -104,19 +114,121 @@ deck_to_pc() {
 	# Second argmunet is the deck directory to sync
 	local pc_directory="$1"
 	local deck_directory="$2"
+	local mirror_command
 
 	# Visual repesentation of transfer.
 	echo "PC <- Deck"
+
+	# The mirror command for lftp.  It needs to be in a separate variable to expand all the
+	# variables correctly.
+	mirror_command="mirror ${mirror_args[@]} \"$deck_directory\" \"$pc_directory\""
 
 	# Call to lftp
 	lftp -c "
 	open $HOST
 	user $USER $PASS
-	lcd $pc_directory
-	mirror $mirror_args $deck_directory $pc_directory
+	lcd \"$pc_directory\"
+	$mirror_command
 	bye
 	"
 }
+
+# Check the number of files in the Deck's directory.
+check_deck_saves() {
+	local deck_directory="$1"
+	local number_of_saves
+
+	number_of_saves=$(lftp -c "
+	open $HOST
+	user $USER $PASS
+	cd \"$deck_directory\"
+	ls
+	bye
+	" | wc -l)
+
+	number_of_saves=$((number_of_saves-2))
+	echo "$number_of_saves"
+}
+
+# Check the number of files in the PC's directory.
+# Currently has a bug where the ~ is not expanding properly to home.
+check_pc_saves() {
+	local pc_directory="$1"
+	local number_of_files
+
+	cd "$1"
+
+	number_of_files=$(ls | wc -l)
+
+	echo "$number_of_files"
+
+}
+
+# Sync saves
+# This function loops through the array in groups of 3.  Title, pc location, deck location.
+sync_saves() {
+	# Initialize empty variables
+	local title
+	local pc_save
+	local deck_save
+	local size_of_data_block
+
+	# How many lines of data there are for each game.
+	# Line 1: Title
+	# Line 2: pc save
+	# Line 3: deck save
+	size_of_data_block=3
+
+	# Loop through the array game_info.  The step increment is set to size_of_data_block.
+	for ((index=0; index < ${#game_info[@]}; index+="$size_of_data_block")); do
+		# Name of game
+		title="${game_info[$index]}"
+
+		# PC save location
+		# Current index+1
+		pc_save="${game_info[$index+1]}"
+
+		# Deck save location
+		# Current index+2
+		deck_save="${game_info[$index+2]}"
+
+		# Call to sync_saves
+		# Display message with game title
+		echo "Syncing $title"
+
+
+		# Currently testing this section
+		# Check save files for both locations.
+		#deck_files=$(check_deck_saves "$deck_save")
+		#pc_files=$(check_pc_saves "$pc_save")
+		deck_files=1
+		pc_files=1
+
+		# If the steam deck has more files then the pc directory, copy from deck first.
+		if [ "$deck_files" -gt "$pc_files" ]; then
+			# Call deck_to_pc
+			echo "Deck files are newer."
+			#deck_to_pc "$pc_save" "$deck_save"
+			#pc_to_deck "$pc_save" "$deck_save"
+		elif [ "$deck_files" -lt "$pc_files" ]; then
+			# Call pc_to_deck
+			echo "PC files are newer."
+			#pc_to_deck "$pc_save" "$deck_save"
+			#deck_to_pc "$pc_save" "$deck_save"
+		else
+			#echo "Directories have the same files."
+			pc_to_deck "$pc_save" "$deck_save"
+			deck_to_pc "$pc_save" "$deck_save"
+		fi
+
+		# Give a space to separate each game into three fields.
+		echo
+
+
+	done
+
+}
+
 
 # Old sync method
 old_sync() {
@@ -149,46 +261,6 @@ old_sync() {
 	echo
 }
 
-# Sync saves
-# This function loops through the array in groups of 3.  Title, pc location, deck location.
-sync_saves() {
-	# How many lines of data there are for each game.
-	# Line 1: Title
-	# Line 2: pc save
-	# Line 3: deck save
-	size_of_data_block=3
-
-	# Loop through the array game_info.  The step increment is set to size_of_data_block.
-	for ((index=0; index < ${#game_info[@]}; index+=$size_of_data_block)); do
-		# Name of game
-		local title=${game_info[$index]}
-
-		# PC save location
-		# Current index+1
-		local pc_save=${game_info[$index+1]}
-
-		# Deck save location
-		# Current index+2
-		local deck_save=${game_info[$index+2]}
-
-		# Call to sync_saves
-		# Display message with game title
-		echo "Syncing $title"
-
-		# Call pc_to_deck
-		pc_to_deck "$pc_save" "$deck_save"
-
-		# Call deck_to_pc
-		deck_to_pc "$pc_save" "$deck_save"
-
-		# Give a space to separate each game into three fields.
-		echo
-
-
-	done
-
-}
-
 
 
 
@@ -201,12 +273,14 @@ parse_conf() {
 	# Expression 1 is used to remove any lines beginning with a comment, or having a comment at the end of the line.
 	# Expression 2 will delete any blank lines in the file.
 	# Expression 3 is used to remove the formatting of the conf_file (title=, pc=, deck=).
+	# Expression 4 is used to remove quotation marks ".
 	mapfile -t game_info < <(\
 		sed \
 		--regexp-extended \
 		--expression='s/[[:space:]]*#.*//' \
 		--expression='/^[[:space:]]*$/d' \
 		--expression='s/^[[:alpha:]]+=//' \
+		--expression='s/"//g' \
 		"$conf_file"\
 	)
 
@@ -223,13 +297,13 @@ get_arguments() {
 			\?) echo "Error: Option \"${OPTARG}\" not recognized."; usage; exit 1;;
 
 			# Delete any extra files.
-			d) delete_mode=1; mirror_args+=" --delete"; echo "Delete mode: ON";;
+			d) delete_mode=1; mirror_args+=(--delete); echo "Delete mode: ON";;
 
 			# Open the help section
 			h) help_section; exit;;
 
 			# Enable dry-run mode
-			n) dry_run_mode=1; mirror_args+=" --dry-run"; echo "Dry-run mode: ON";;
+			n) dry_run_mode=1; mirror_args+=(--dry-run); echo "Dry-run mode: ON";;
 
 			# Perform sync operation
 			s) old_sync=0;;
@@ -240,25 +314,26 @@ get_arguments() {
 	done
 }
 
-### Entry Point ###
+
+
+############
+### Main ###
+############
 main() {
 	get_arguments "$@"
 
-	if [ "$old_sync" -eq 0 ] && [ "$delete_mode" -eq 0 ]; then
-		echo "Performing sync"
-		parse_conf
-		sync_saves
-	fi
-
-	if [ "$delete_mode" -eq 1 ]; then
-		echo "Removing extra files."
-		parse_conf
-		sync_saves
-	fi
+	echo "Performing sync"
+	echo
+	parse_conf
+	sync_saves
 }
 
+####################
+### Main Testing ###
+####################
 main_testing() {
-	get_game_info nBlood
+	get_arguments "$@"
+	#get_game_info nBlood
 	#create_game_array
 	#printf "%s\n" "${game_info_array[@]}"
 	#access_game_array
@@ -266,5 +341,6 @@ main_testing() {
 }
 
 main "$@"
+#main_testing "$@"
 ### Done ###
 exit 0
