@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 
+#
 # Shell profile for zsh
 #
 #
@@ -14,6 +14,7 @@ export BROWSER="firefox"
 export TERMINAL="alacritty"
 # Export GTK themes to Qt
 export QT_QPA_PLATFORMTHEME=gtk2
+export CM_DIR="$HOME/.cache/clipmenu"
 
 
 ############
@@ -21,12 +22,13 @@ export QT_QPA_PLATFORMTHEME=gtk2
 ############
 # Add .local/bin and a few subdirectories to PATH.
 if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
-    PATH="$HOME/.local/bin/laptop:$PATH"
-    PATH="$HOME/.local/bin/tools:$PATH"
-    PATH="$HOME/.local/bin/statusbar:$PATH"
-    PATH="$HOME/.local/bin/dmenu:$PATH"
-    PATH="$HOME/.local/bin/games:$PATH"
+	PATH="$HOME/.local/bin:$PATH"
+	#PATH="$HOME/.local/bin/laptop:$PATH"
+	PATH="$HOME/.local/bin/tools:$PATH"
+	PATH="$HOME/.local/bin/phone:$PATH"
+	PATH="$HOME/.local/bin/statusbar:$PATH"
+	PATH="$HOME/.local/bin/dmenu:$PATH"
+	PATH="$HOME/.local/bin/games:$PATH"
 fi
 
 
@@ -64,6 +66,11 @@ export LC_ALL=en_US.UTF-8
 # Disable the ctrl-s and ctrl-q shortcuts, which disable/enable keyboard input in the terminal.
 stty -ixon
 
+# Bind "Home", "End", and "Delete" to operate as expected.
+bindkey  "^[[H"   beginning-of-line
+bindkey  "^[[F"   end-of-line
+bindkey  "^[[3~"  delete-char
+
 
 ########################
 ### vi mode settings ###
@@ -85,20 +92,20 @@ bindkey '^e' edit-command-line
 
 ## Change cursor shape for different vi modes. ##
 function zle-keymap-select {
-  if [[ ${KEYMAP} == vicmd ]] ||
-     [[ $1 = 'block' ]]; then
-    echo -ne '\e[1 q'
-  elif [[ ${KEYMAP} == main ]] ||
-       [[ ${KEYMAP} == viins ]] ||
-       [[ ${KEYMAP} = '' ]] ||
-       [[ $1 = 'beam' ]]; then
-    echo -ne '\e[5 q'
-  fi
+	if [[ ${KEYMAP} == vicmd ]] ||
+		[[ $1 = 'block' ]]; then
+		echo -ne '\e[1 q'
+	elif [[ ${KEYMAP} == main ]] ||
+		[[ ${KEYMAP} == viins ]] ||
+		[[ ${KEYMAP} = '' ]] ||
+		[[ $1 = 'beam' ]]; then
+		echo -ne '\e[5 q'
+	fi
 }
 zle -N zle-keymap-select
 zle-line-init() {
-    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
-    echo -ne "\e[5 q"
+	zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+	echo -ne "\e[5 q"
 }
 zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
@@ -112,7 +119,8 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 #alias ls="ls --color=auto --group-directories-first"
 #alias la="ls -lA --color=auto --group-directories-first"
 alias ls="lsd --group-directories-first"
-alias la="lsd --almost-all --long --total-size --group-directories-first"
+alias la="lsd --almost-all --long --group-directories-first"
+alias lu="lsd --sizesort --almost-all --total-size --long --group-directories-first"
 alias lss="/usr/bin/ls -1 --color=auto --group-directories-first"
 alias grep="grep --color=auto"
 alias f="ranger"
@@ -123,8 +131,6 @@ alias sdn="shutdown now"
 alias trem="transmission-remote"
 alias py="python"
 alias ka="killall"
-
-alias testme="echo helloo"
 
 ## Dotfile alias ##
 alias config="git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
@@ -137,13 +143,11 @@ alias ytas="yt-dlp --config-location ~/.config/youtube-dl/audio_split"
 alias ytvp="yt-dlp --config-location ~/.config/youtube-dl/video_playlist"
 alias ytpod="yt-dlp --config-location ~/.config/youtube-dl/podcast"
 
-## Vimwiki ##
-alias wiki="nvim -c VimwikiIndex"
-
 ## Games ##
 
 ## Directories ##
 alias gc="cd /mnt/x/game-stuff/game-collection"
+alias steamdir="cd $HOME/.steam/steam"
 
 
 #################
@@ -153,15 +157,15 @@ alias gc="cd /mnt/x/game-stuff/game-collection"
 # Prevent nested ranger instances.  From archwiki.
 # url: https://wiki.archlinux.org/title/Ranger#Preventing_nested_ranger_instances
 ranger() {
-    if [ -z "$RANGER_LEVEL" ]; then
-        /usr/bin/ranger "$@"
-    else
-        exit
-    fi
+	if [ -z "$RANGER_LEVEL" ]; then
+		/usr/bin/ranger "$@"
+	else
+		exit
+	fi
 }
 
 
-# Use ranger to switch directories
+## Use ranger to switch directories ##
 rangercd () {
 	tmp="$(mktemp)"
 	ranger --choosedir="$tmp" "$@"
@@ -179,6 +183,21 @@ __git_files () {
 	_wanted files expl 'local files' _files
 }
 
+## Vimwiki Function ##
+# This will either open vimwiki, or you can use git.
+# usage: vimwiki git
+vimwiki () {
+	if [[ $# == 0 ]]
+	then
+		nvim +'VimwikiIndex'
+	elif [[ $1 == 'git' ]]
+	then
+		git -C ~/vimwiki/ ${@:2}
+	else
+		echo 'Usage: vimwiki [git] [args ...]'
+	fi
+}
+
 
 ##################
 ### Autostartx ###
@@ -192,7 +211,7 @@ XINITRC=$HOME/.xinitrc
 ################
 ### MangoHud ###
 ################
-#export MANGOHUD=1
+export MANGOHUD=1
 #export MANGOHUD_DLSYM=1
 
 
