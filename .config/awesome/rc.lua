@@ -121,18 +121,18 @@ local termfile     = terminal .. " -e ranger"
 local filemanager  = "pcmanfm-qt"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "term", "www", "sys", "doc", "torr", "chat", "mus", "vid", "gfx" }
+awful.util.tagnames = { "term", "www", "file", "email", "torr", "chat", "mus", "vid", "gfx" }
 awful.layout.layouts = {
 	awful.layout.suit.tile,
     awful.layout.suit.floating,
     --awful.layout.suit.tile.left,
     --awful.layout.suit.tile.bottom,
     --awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    --awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
+    --awful.layout.suit.fair,
+    awful.layout.suit.fair.horizontal,
+    --awful.layout.suit.spiral,
     --awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
+    --awful.layout.suit.max,
     --awful.layout.suit.max.fullscreen,
     --awful.layout.suit.magnifier,
     --awful.layout.suit.corner.nw,
@@ -749,23 +749,19 @@ awful.rules.rules = {
     --
     -- www
     { rule = { class = "firefox" },        properties = { screen = 1, tag = awful.util.tagnames[2] } },
-    -- sys
-    -- doc
-    { rule = { instance = "libreoffice" }, properties = { screen = 1, tag = awful.util.tagnames[4] } },
+    -- file
+    -- email
+    { rule = { class = "thunderbird" },    properties = { screen = 1, tag = awful.util.tagnames[4] } },
     -- torr
     { rule = { class = "qBittorrent" },    properties = { screen = 1, tag = awful.util.tagnames[5] } },
     { rule = { class = "Transmission-remote-gtk" },    properties = { screen = 1, tag = awful.util.tagnames[5] } },
-    { rule = { title = "JDownloader 2" },  properties = { screen = 1, tag = awful.util.tagnames[5] } },
     -- chat
-    { rule = { class = "thunderbird" },    properties = { screen = 1, tag = awful.util.tagnames[6] } },
     { rule = { class = "discord" },        properties = { screen = 1, tag = awful.util.tagnames[6] } },
     { rule = { class = "Signal" },         properties = { screen = 1, tag = awful.util.tagnames[6] } },
     -- mus
-    { rule = { class = "Sonata" },         properties = { screen = 1, tag = awful.util.tagnames[7] } },
     { rule = { class = "cantata" },        properties = { screen = 1, tag = awful.util.tagnames[7] } },
-    { rule = { class = "Spotify" },        properties = { screen = 1, tag = awful.util.tagnames[7] } },
     -- vid
-    { rule = { class = "mpv" },            properties = { screen = 1, tag = awful.util.tagnames[8] } },
+    --{ rule = { class = "mpv" },            properties = { screen = 1, tag = awful.util.tagnames[8] } },
     { rule = { class = "vlc" },            properties = { screen = 1, tag = awful.util.tagnames[8] } },
     -- gfx
     { rule = { class = "PolyMC" },         properties = { screen = 1, tag = awful.util.tagnames[9] } },
