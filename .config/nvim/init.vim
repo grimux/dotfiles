@@ -9,22 +9,21 @@
 "--- Plugins ---"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call plug#begin('~/.config/nvim/plugged')
-Plug 'preservim/nerdtree'
-Plug 'jreybert/vimagit'
-Plug 'junegunn/goyo.vim'
-Plug 'itchyny/lightline.vim'
-Plug 'francoiscabrol/ranger.vim'
-Plug 'vifm/vifm.vim'
-"Plug 'vim-airline/vim-airline'
-Plug 'joshdick/onedark.vim'
+"Plug 'itchyny/lightline.vim'
+Plug 'vim-airline/vim-airline'
 "Plug 'vim-airline/vim-airline-themes'
-Plug 'tpope/vim-fugitive'
+"Plug 'jreybert/vimagit'
+Plug 'francoiscabrol/ranger.vim'
+Plug 'dracula/vim'
+Plug 'joshdick/onedark.vim'
+"Plug 'tpope/vim-fugitive'
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'vimwiki/vimwiki'
-Plug 'turbio/bracey.vim'
-Plug 'frazrepo/vim-rainbow'
-Plug 'ryanoasis/vim-devicons'
+"Plug 'turbio/bracey.vim'
+Plug 'junegunn/goyo.vim'
 Plug 'chrisbra/Colorizer'
+" Addes new commands to read and write on root files
+Plug 'lambdalisue/suda.vim'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -34,18 +33,40 @@ set termguicolors
 set bg=dark
 "let g:rainbow_active = 1
 
-" onedark theme
-"colorscheme onedark
+"####################
+"## Airline Plugin ##
+"####################
+"let g:airline_theme='dracula'
 "let g:airline_theme='onedark'
+let g:airline_theme='palenight'
+let g:airline_powerline_fonts=1
+
+"######################
+"## Lightline Plugin ##
+"######################
+"let g:lightline = { 'colorscheme': 'palenight' }
+"let g:lightline = {
+"      \ 'active': {
+"      \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'absolutepath', 'modified' ] ],
+"      \ },
+"      \ 'colorscheme': 'palenight'
+"      \ }
+
+" Dracula theme
+"colorscheme dracula
+"let g:dracula_terminal_italics=1
+
+" Onedark theme
+"colorscheme onedark
 "let g:onedark_terminal_italics=1
 
-" palenight
+" Palenight theme
 colorscheme palenight
-let g:lightline = { 'colorscheme': 'palenight' }
 let g:palenight_terminal_italics=1
 
 " Transparent background when using themes
-autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
+"autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE
+hi Normal guibg=NONE ctermbg=NONE
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -61,9 +82,13 @@ set pastetoggle=<F8>
 set splitbelow splitright
 let mapleader = ","
 set wildmode=longest,list,full
-set clipboard=unnamedplus			" when yanking, send to system clipboard ("*) instead of normal buffer
 autocmd FileType markdown set linebreak
-set iskeyword-=_				" Treat _ as a word break
+
+" when yanking, send to system clipboard ("*) instead of normal buffer
+set clipboard=unnamedplus
+
+" Treat _ as a word break
+set iskeyword-=_
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -78,25 +103,44 @@ set iskeyword-=_				" Treat _ as a word break
 "set foldlevel=1
 "set foldclose=all
 
+"####################
+"### Plugin Setup ###
+"####################
+" Ranger Plugin
+let g:ranger_map_keys = 0
+map <leader>f :Ranger<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Remaps
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-map <leader>o :call SpellCheck()<CR>	" Spellcheck
-"map <leader>o :<CR>	" Spellcheck
-nnoremap <SPACE> @q					" Use spacebar for marco at 'q'
-map Q gq						" Q is unset
-map <F3> :call TrimWhiteSpace()<CR>			" Call trim white space function
+" Spellcheck
+map <leader>o :call SpellCheck()<CR>
+
+" Easily disable highlighting
+map <leader>nh :nohlsearch<CR>
+
+" Use spacebar for marco at 'q'
+nnoremap <SPACE> @q
+
+" Unset Q and :q.  These toggle a vim command history window.
+nnoremap Q :<nop>
+nnoremap q: <nop>
+
+" Call trim white space function
+map <F3> :call TrimWhiteSpace()<CR>
 
 " Magit
-map <F1> :Magit<CR>
+map <leader>mg :Magit<CR>
 
-" Nerdtree
-map <F2> :NERDTree<CR>
+" Reload vim config file
+nnoremap <leader>r :source $HOME/.config/nvim/init.vim<CR>
 
 " Goyo
 map <leader>g :Goyo <BAR> set linebreak<CR>
 
+" Show whitespaces
+
+map <leader>l :set list! list?<CR>
 " vimwiki
 map <leader>wm :VimwikiAll2HTML<CR>
 map <leader>wa :VimwikiGoto personal/mental-health/autism/autism-notes<CR>
@@ -127,9 +171,6 @@ map <leader>bb :Bracey<CR>
 map <leader>bs :BraceyStop<CR>
 map <leader>br :BraceyReload<CR>
 
-" Run output script
-map <leader>p :!opout <c-r>%<CR><CR>
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Functions
@@ -145,6 +186,10 @@ function SpellCheck()
 	setlocal spell! spell?
 endfunction
 
+"--- Autofunctions
+" Automatically reload nvim's config file when it is saved.
+autocmd! bufwritepost init.vim source $HOME/.config/nvim/init.vim
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- vimwiki settings
@@ -159,7 +204,6 @@ let vimwiki_jake.syntax = 'markdown'
 let vimwiki_jake.ext = '.md'
 let vimwiki_jake.custom_wiki2html = 'vimwiki_markdown'
 let vimwiki_jake.html_filename_parameterization = 1
-
 let g:vimwiki_list = [vimwiki_jake]
 let g:vimwiki_global_ext = 0
 
