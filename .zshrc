@@ -25,6 +25,7 @@ if [ -d "$HOME/.local/bin" ] ; then
 	PATH="$HOME/.local/bin:$PATH"
 	#PATH="$HOME/.local/bin/laptop:$PATH"
 	PATH="$HOME/.local/bin/tools:$PATH"
+	PATH="$HOME/.local/bin/toggles:$PATH"
 	PATH="$HOME/.local/bin/phone:$PATH"
 	PATH="$HOME/.local/bin/statusbar:$PATH"
 	PATH="$HOME/.local/bin/dmenu:$PATH"
@@ -131,6 +132,7 @@ alias sdn="shutdown now"
 alias trem="transmission-remote"
 alias py="python"
 alias ka="killall"
+alias pt="protontricks"
 
 ## Dotfile alias ##
 alias config="git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
@@ -211,7 +213,7 @@ XINITRC=$HOME/.xinitrc
 ################
 ### MangoHud ###
 ################
-export MANGOHUD=1
+#export MANGOHUD=1
 #export MANGOHUD_DLSYM=1
 
 
