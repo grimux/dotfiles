@@ -1,11 +1,29 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+#
+### Script Fail Events ###
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -uo pipefail
 
-if pgrep -x transmission-da >/dev/null ; then
+# Get the inverse of the running process.
+# 1 means it is running, 0 it is not.
+! pgrep --exact transmission-da > /dev/null
+is_transmission_running=$?
+
+# If transmission is running.
+if [ "$is_transmission_running" -eq 1 ]; then
 	pkill transmission-da
+	pkill transmission-re
 	echo "Turning transmission-daemon off"
 	notify-send "Turning transmission-daemon off"
+# If transmission is not running.
 else
-	transmission-daemon
+	transmission-daemon &
+	transmission-remote-gtk &
 	echo "Turning transmission-daemon on"
 	notify-send "Turning transmission-daemon on"
 fi
