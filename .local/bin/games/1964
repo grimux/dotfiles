@@ -1,13 +1,16 @@
 #!/usr/bin/env sh
 #
-# Wrapper script to run and manage the Nintendo 64 
+# Wrapper script to run and manage the Nintendo 64
 # emulator 1964 Goldeneye Perfect Dark build.
 #
 # Jake Meredith
 #
 
+##############
+### Config ###
+##############
 # Location of emulator
-emudir="/mnt/s/emulators/1964"
+emudir="$HOME/Games/1964"
 
 # Executable
 exe="1964.exe"
@@ -15,6 +18,10 @@ exe="1964.exe"
 # Error flag
 flag=0
 
+
+############
+### Data ###
+############
 # List of N64 Games
 # The array index corresponds to the rom's filename
 # Array contents is the full name of the game
@@ -25,7 +32,11 @@ declare -A game_list=(
 )
 
 
-# Functions
+
+
+#################
+### Functions ###
+#################
 #
 # Help Section
 help_section() {
@@ -40,6 +51,26 @@ help_section() {
 	echo
 }
 
+# Call to wine.
+call_wine() {
+	local title
+	local overclock
+
+	title="$1"
+	overclock="$2"
+
+	# Call to wine.
+	# -g: rom name
+	# -f: fullscreen
+	# -o: overclock amount; 6 for Goldeneye, 9 for Perfect Dark.
+	wine \
+		$emudir/$exe \
+		-g "$title.z64" \
+		-f \
+		-o "$overclock"
+
+}
+
 # List the games
 list_games() {
 	for i in ${!game_list[@]}; do
@@ -49,7 +80,12 @@ list_games() {
 
 # Launch game
 launch_game() {
-	wine $emudir/$exe -g $1.z64 -f
+	local game=$1
+
+	case "$game" in
+		ge) call_wine "$game" "6";;
+		pd) call_wine "$game" "9";;
+	esac
 }
 
 # Launch config
@@ -63,54 +99,60 @@ open_readme() {
 }
 
 # Get arguments
-while getopts ":hclr" option; do
-	case $option in
-		c)
-			launch_config
-			exit
-			;;
-		h)
-			help_section
-			exit
-			;;
-		l)
-			list_games
-			exit
-			;;
-		r)
-			open_readme
-			exit
-			;;
-		\?)
-			echo "Error: Invalid option"
-			exit
-			;;
-	esac
-done
+get_arguments() {
+	while getopts ":hclr" option; do
+		case $option in
+			# Launch the emulator to configure it.
+			c) launch_config; exit;;
 
-# Main script
-# If no argument, then list the games
-if [ -z "$1" ]; then
-	list_games
-	exit
-fi
+			# Help section and usage.
+			h) help_section; exit;;
 
-# Loop through array, searching for a match
-for i in "${!game_list[@]}"; do
-	# if array[i] == arg
-	if [ "$i" == "$1" ]; then
-		# Unset error flag
-		flag=0
-		launch_game "$i"
-		break
+			# List the games.
+			l) list_games; exit;;
+
+			# Open the readme for 1964.
+			r) open_readme; exit;;
+
+			# Invalid option.
+			\?) echo "Error: Invalid option"; exit;;
+
+		esac
+	done
+}
+
+
+############
+### Main ###
+############
+main() {
+	get_arguments "$@"
+
+	# If no argument, then list the games
+	if [ -z "$1" ]; then
+		list_games
+		exit
 	fi
 
-	# if arg is not found in array
-	# Set error flag
-	flag=1
-done
+	# Loop through array, searching for a match
+	for i in "${!game_list[@]}"; do
+		# if array[i] == arg
+		if [ "$i" == "$1" ]; then
+			# Unset error flag
+			flag=0
+			launch_game "$i"
+			break
+		fi
 
-# If the mod is not in the list
-if [ $flag -eq 1 ]; then
-	echo "Invalid game."
-fi
+		# if arg is not found in array
+		# Set error flag
+		flag=1
+	done
+
+	# If the mod is not in the list
+	if [ $flag -eq 1 ]; then
+		echo "Invalid game."
+	fi
+}
+
+main "$@"
