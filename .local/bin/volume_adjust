@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 
+#
 # A script to adjust the volume of pulseaudio sinks.
 #
 # e - script stops on error
@@ -10,6 +10,12 @@
 #set -euox pipefail
 set -euo pipefail
 
+# If no argument is specified, set argument to null.
+argument=${1:-null}
+
+##############
+### Config ###
+##############
 # The amount to change the volume by.  My preference is 1.
 increment=1
 
@@ -19,6 +25,10 @@ pc_pulse_sink="alsa_output.pci-0000_0c_00.3.analog-stereo"
 # Name of default sink; whatever sink is currently set as active (default).
 default_sink="@DEFAULT_SINK@"
 
+
+#################
+### Functions ###
+#################
 # Increase volume.
 increase_volume() {
 	pactl set-sink-volume "$pc_pulse_sink" +$increment%
@@ -36,10 +46,10 @@ decrease_volume() {
 toggle_mute() {
 	# Toggle muting of all sinks using amixer.
 	#amixer --device pulse set Master 1+ toggle
-	
+
 	# Toggle mutting of currently active sink
 	#pactl set-sink-mute "$default_sink" toggle
-	
+
 	# Toggle mutting of all sinks.
 	toggle_mute_all
 
@@ -62,7 +72,10 @@ play_sound() {
 	canberra-gtk-play --id=audio-volume-change --description="volume_adjust"
 }
 
-# Main function.
+
+############
+### Main ###
+############
 main() {
 	# Argument passed to the main function.  Used to determine the case statement.
 	local option
@@ -70,19 +83,19 @@ main() {
 
 	# Volume control case.
 	case "$option" in
-		"up")
-			increase_volume "$increment"
-			;;
-		"down")
-			decrease_volume "$increment"
-			;;
-		"toggle")
-			toggle_mute
-			;;
-		*)
-			exit 1
-			;;
+		# Increase volume.
+		"up") increase_volume "$increment";;
+
+		# Decrease volume.
+		"down") decrease_volume "$increment";;
+
+		# Toggle mute.
+		"mute") toggle_mute;;
+
+		# Error if anything else.
+		*) echo "Please provide an argument: up, down, mute."; exit 1;;
 	esac
 }
 
-main "$1"
+# Call to main
+main "$argument"
