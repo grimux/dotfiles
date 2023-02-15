@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 
+#
 # A script to backup my firefox bookmarks.
 #
 
@@ -11,31 +11,69 @@
 #set -euox pipefail
 set -euo pipefail
 
+mode=${1-:null}
 
-
-
-### Profiles ###
+##############
+### Config ###
+##############
+## Profiles ##
 jake_profile_name="ataneaoq.jake"
 tv_mode_profile_name="0wss9d6r.tv_mode"
-jake_profile_directory="$HOME/.mozilla/firefox/$jake_profile_name"
-tv_mode_profile_directory="$HOME/.mozilla/firefox/$tv_mode_profile_name"
+mozilla_profile_directory="$HOME/.mozilla/firefox"
+jake_profile_directory="$mozilla_profile_directory/$jake_profile_name"
+tv_mode_profile_directory="$mozilla_profile_directory/$tv_mode_profile_name"
 
-### Bookmarks ###
+## Bookmarks ##
 local_database_file="$jake_profile_directory/places.sqlite"
 local_html_file="$jake_profile_directory/bookmarks.html"
 
-### Backup locations ###
+## Backup locations ##
 backup_directory="/mnt/x/my-settings/browsers"
 backup_database_file="$backup_directory/bookmarks_backup.sqlite"
 backup_html_file="$backup_directory/bookmarks.html"
-tv_mode_profile_archive="$backup_directory/tv_mode_profile"
-jake_profile_archive="$backup_directory/jake_profile"
+tv_mode_profile_backup="$backup_directory/tv_mode_profile.7z"
+jake_profile_backup="$backup_directory/jake_profile.7z"
 
 
-
-
+#################
 ### Functions ###
-#
+#################
+# Help Section
+help_section() {
+	# Help Message.  4 space offset.
+	echo "A script to backup and restore Firefox profiles."
+	echo "usage:"
+	echo "    $(basename $0) [-h|-r]"
+	echo
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "r     Restore profiles."
+}
+
+# Get arguments and set flags
+get_arguments() {
+	while getopts ":hr" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1;;
+
+			# Help
+			h) help_section; exit;;
+
+			# Restore profiles
+			r) restore_browser_profiles; exit;;
+
+			*) usage; exit 1
+		esac
+	done
+}
+
+# Script usage.
+usage() {
+	echo "Usage: $(basename "$0") [-h|-r]"
+	echo
+}
+
 # Bookmark database backup and html file copy.
 backup_bookmarks() {
 	# Backup the firefox database file
@@ -46,14 +84,15 @@ backup_bookmarks() {
 }
 
 # Use 7zip to create/backup archives of my Firefox profiles.
-backup_profiles_7z() {
+compress_and_backup_profiles() {
 	# Backup tv_mode profile with 7zip
-	7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$backup_directory/tv_mode_profile.7z" "$tv_mode_profile_directory"
+	7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$tv_mode_profile_backup" "$tv_mode_profile_directory"
 
 	# Backup jake profile with 7zip.
-	7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$backup_directory/jake_profile.7z" "$jake_profile_directory"
+	7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$jake_profile_backup" "$jake_profile_directory"
 }
 
+# Check if firefox is running.
 check_for_firefox() {
 	local firefox_process
 
@@ -66,29 +105,39 @@ check_for_firefox() {
 	fi
 }
 
+# Restore bookmarks and profiles.
+restore_browser_profiles() {
+	# Give a small message and warn about deletion.
+	echo "Profile restoration."
+	echo "Profiles will be deleted before restoring."
+	read -rp "Continue? (y/n): " choice
 
+	# If the backup archives do not exist, tell us and abort the restoration.
+	if [ ! -f "$jake_profile_backup" ] || [ ! -f "$tv_mode_profile_backup" ]; then
+		echo "Backup profile(s) not found."
+		choice="n"
+	fi
 
-backup_profiles_tar() {
-	# Backup tv_mode profile with 7zip
-	tar --update --verbose --file "$tv_mode_profile_archive.tar"
+	# Case to determine if we should restore or not.
+	case "$choice" in
+		Y|y) rm -rf "$jake_profile_directory"; rm -rf "$tv_mode_profile_directory";;
+		N|n) echo "Aborting restore."; exit 1;;
+	esac
 
-	# Backup jake profile with 7zip.
-	7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "jake_profile.7z" "$backup_directory"
+	# Restore the profiles using 7zip extraction.
+	7z x -o"$mozilla_profile_directory" "$jake_profile_backup"
+	7z x -o"$mozilla_profile_directory" "$tv_mode_profile_backup"
+
 }
 
-get_date() {
-	local file
-	local file_time
 
-	file="$1"
-	file_time=$(date --reference="$file")
-
-	echo "$file_time"
-}
-
+############
+### Main ###
+############
 main() {
-	local is_firefox_running
+	get_arguments "$@"
 
+	local is_firefox_running
 	is_firefox_running=$(check_for_firefox)
 
 	if [ "$is_firefox_running" -eq 1 ]; then
@@ -98,14 +147,16 @@ main() {
 	fi
 
 
-
+	# Backup the bookmark files.
 	backup_bookmarks
-	backup_profiles_7z
-	
+
+	# Compress and backup the profiles using 7zip.
+	compress_and_backup_profiles
+
 	if [ "$is_firefox_running" -eq 1 ]; then
 		echo "Starting Firefox..."
 		nohup firefox > /dev/null &
 	fi
 }
 
-main
+main "$@"
