@@ -4,11 +4,20 @@
 #
 
 # Use scrot to take the screenshot.  It also creates a thumbnail to use in the notification.
+# monitor is to select only the primary display.
+
+# Get the name of the application that is currently focused on.
+application_name=$(xdotool getactivewindow getwindowname)
+
+# Call to scrot
+# Will create a thumbnail and only capture monitor 0.
+# It then executes a command on the image, display a notification, and remove the thumbnail.
 scrot \
+	"$application_name"_%Y_%m_%d_%H_%M_%S.png \
 	--thumb 20 \
-	screenshot_%Y_%m_%d_%H_%M_%S.png \
+	--monitor 0 \
 	--exec \
-	'mv $f $$(xdg-user-dir PICTURES); notify-send -i $m "Screenshot Taken\n$f"; rm -f $m'
+	'mv "$f" $$(xdg-user-dir PICTURES); notify-send --icon "$m" "Screenshot Taken\n$f"; rm --force "$m"'
 
 # Play a camera shutter sound.
 canberra-gtk-play --id=camera-shutter
