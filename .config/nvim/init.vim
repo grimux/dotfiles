@@ -30,7 +30,7 @@ call plug#end()
 "--- Color and theme options ---"
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set termguicolors
-set bg=dark
+set background=dark
 "let g:rainbow_active = 1
 
 "####################
@@ -138,9 +138,7 @@ nnoremap <leader>r :source $HOME/.config/nvim/init.vim<CR>
 " Goyo
 map <leader>g :Goyo <BAR> set linebreak<CR>
 
-" Show whitespaces
-
-map <leader>l :set list! list?<CR>
+map <leader>l :call ShowWhiteSpace()<CR>
 " vimwiki
 map <leader>wm :VimwikiAll2HTML<CR>
 map <leader>wa :VimwikiGoto personal/mental-health/autism/autism-notes<CR>
@@ -179,6 +177,12 @@ map <leader>br :BraceyReload<CR>
 function TrimWhiteSpace()
 	%s/\s*$//
 	''
+endfunction
+
+" Show all whitespace
+function ShowWhiteSpace()
+	set list! list?
+	set lcs+=space:.
 endfunction
 
 " Spell check
