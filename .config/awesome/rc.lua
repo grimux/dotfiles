@@ -520,7 +520,7 @@ globalkeys = mytable.join(
 
    -- Volume Keys
    awful.key({}, "XF86AudioMute", function()
-     awful.util.spawn("volume_adjust toggle", false) end),
+     awful.util.spawn("volume_adjust mute", false) end),
    awful.key({}, "XF86AudioLowerVolume", function()
      awful.util.spawn("volume_adjust down", false) end),
    awful.key({}, "XF86AudioRaiseVolume", function()
@@ -714,6 +714,7 @@ awful.rules.rules = {
           "MessageWin",  -- kalarm.
           "Nm-connection-editor", -- network-manager-applet
 	  "PolyMC",
+	  "Pavucontrol",
 	  "steam_app_%d", -- Let steam games default to floating.  %d is a wildcard for integers.
           "Sxiv",
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
