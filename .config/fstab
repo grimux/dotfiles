@@ -1,29 +1,29 @@
-# 
+#
 # fstab
 #
 # Format:
-# <device>					<dir>			<type>	<options>	<dump>	<fsck>
+# <device>					<dir>			<type>		<options>	<dump>	<fsck>
 
 # boot
 # /dev/nvme0n1p1
-UUID=C003-6F05      				/boot     		vfat   	rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro	0	2
+UUID=C003-6F05      				/boot     		vfat   		rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=ascii,shortname=mixed,utf8,errors=remount-ro	0	2
 
 # swap
 # /dev/nvme0n1p2
-UUID=bc44a42c-211e-4a24-b3ba-3325e28b37dd	none      		swap   	defaults  	0	0
+UUID=bc44a42c-211e-4a24-b3ba-3325e28b37dd	none      		swap   		defaults  	0	0
 
 # root
 # /dev/nvme0n1p3
-UUID=db7443f4-5907-496d-b121-1429913a455f	/         		ext4   	rw,relatime	0	1
+UUID=db7443f4-5907-496d-b121-1429913a455f	/         		ext4   		rw,relatime	0	1
 
 # Storage HDD
-UUID=ad6e8efc-dcfc-4cb6-b0a4-bf38ba78bdc1	/mnt/s			ext4   	rw,relatime	0	2
+UUID=ad6e8efc-dcfc-4cb6-b0a4-bf38ba78bdc1	/mnt/s			ext4   		rw,relatime	0	2
 
-# Big Storage HDD
-UUID=9024347024345B82				/mnt/x			ntfs-3g	users,permissions,auto	0	0
+# Archive
+UUID=9024347024345B82				/mnt/x			ntfs-3g		permissions	0	0
 
 # Video HDD
-UUID=30ae3cc1-6056-4d84-a29f-13b67f4f9be0	/mnt/v			ext4	rw,relatime	0	2
+UUID=30ae3cc1-6056-4d84-a29f-13b67f4f9be0	/mnt/v			ext4		rw,relatime	0	2
 
 # windows
-UUID=C86E3EFB6E3EE23C				/mnt/win		ntfs	umask=0022,gid=1000,uid=1000	0	0
+UUID=C86E3EFB6E3EE23C				/mnt/win		ntfs-3g		permissions	0	0
