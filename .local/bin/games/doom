@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# 
+#
 # doom
 #
 ### Description ############################################################################################
 # Script for launching doom and the vairous mods I play.  GZDoom is very specific with how it handles mods
-# and saves.  A consistent mod profile is needed when playing on the same savegames, so I created this 
+# and saves.  A consistent mod profile is needed when playing on the same savegames, so I created this
 # script to automate that based on mod profiles.
 ############################################################################################################
 
@@ -13,18 +13,18 @@
 # - Implement a modifiers system, i.e. ColourfulDoom etc.
 #############################################################################
 
-# Normal fail status
-set -euo pipefail
-# Debug fail status
+### Script Fail Events ###
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
 #set -euox pipefail
-
+set -euo pipefail
 
 ####################
 ### Global Flags ###
 ####################
-
-# Global debug mode
-debug_mode=0
 
 # Use dmenu to choose mod.
 use_dmenu=0
@@ -36,9 +36,9 @@ use_dmenu=0
 ### Config ###
 ##############
 
-ini_file="$HOME/.config/game/doom.ini"
-cfg_file="$HOME/.config/game/doom.cfg"
-doomdir="$HOME/Games/doom"
+ini_file="$HOME/.config/gzdoom/doom_script.ini"
+gzdoom_ini_file="$HOME/.config/gzdoom/gzdoom.ini"
+doomdir="$HOME/Games/gzdoom"
 modsdir="$doomdir/mods"
 mapsdir="$modsdir/map_packs"
 addonsdir="$modsdir/addons"
@@ -85,36 +85,26 @@ modifiers_list=(
 function help_section() {
 	echo "A script to launch Doom and its various mods."
 	echo
-	echo "Syntax: doom [-h|d|l] [mod name]"
+	echo "Syntax: $(basename "$0") [-h|m|l] [mod name]"
 	echo "options:"
 	echo "h     Print this help screen."
-	echo "d     Choose mod in dmenu."
+	echo "m     Choose mod in dmenu."
 	echo "l     List installed mods."
 	echo
 }
 
 # Get arguments
 function get_arguments() {
-	while getopts ":dhlm" option; do
+	while getopts ":hlm" option; do
 		case $option in
-			m)
-				use_dmenu=1
-				;;
-			d)
-				debug_mode=1
-				;;
-			h)
-				help_section
-				exit
-				;;
-			l)
-				list_mods
-				exit
-				;;
-			\?)
-				echo "Error: Invalid option"
-				exit
-				;;
+			m) use_dmenu=1;;
+
+			h) help_section; exit;;
+
+			l) list_mods; exit;;
+
+			\?) echo "Error: Invalid option"; exit;;
+
 		esac
 	done
 
@@ -133,7 +123,7 @@ function choose_in_dmenu() {
 	# Local variable to store the mod choice in.
 	local dmenu_choice
 	local prompt="Doom mod: "
-	local mod_array=$(list_mods) 
+	local mod_array=$(list_mods)
 
 	# Mod choice variable is equal to the selection from dmenu.
 	dmenu_choice=$(printf '%s\n' "${mod_array[@]}" | dmenu -i -l 20 -p "$prompt")
@@ -162,7 +152,7 @@ function launch_doom() {
 		$map \
 		$cheats \
 		$skill
-	
+
 }
 
 # Check if the mod exists within the array.
@@ -190,6 +180,13 @@ function check_mods() {
 	echo "$does_it_exist"
 }
 
+# Function to remove the first line of the gzdoom.ini file.  The first line is generated at startup and
+# contains the date and time.  This is annoying to deal with when tracking with git.  So this will remove
+# the line after creation.
+function fix_ini_for_git() {
+	# -n +2 : start at line 2 of the file.
+	echo "$(tail -n +2 "$gzdoom_ini_file")" > "$gzdoom_ini_file"
+}
 
 
 ###############
@@ -214,7 +211,7 @@ function check_mods_parse() {
 
 	# If the grep returns 0, then the mod name exists within the ini
 	[[ $(grep "\[$mod_name\]" $ini_file > /dev/null) -eq 0 ]] && exists=1
-	
+
 	# Return flag value
 	# 1 exists, 0 does not exist
 	echo $exists
@@ -272,36 +269,37 @@ main() {
 	elif [ $# -eq 0 ]; then
 		echo "No mod specified"
 		exit 1
-	# Otherwise strip the options from the argument list.
-	elif [ $# -gt 1 ]; then
-		shift $((OPTIND-1))
+	else
+		chosen_mod="$1"
 	fi
-	
+
 	# set the chosen_mod to the first argument.
-	chosen_mod="$1"
 
 	# Check if the mod exists within the mod_list_array.
 	# Returns 1 if it exists, 0 if not.
 	does_mod_exist=$(check_mods "$chosen_mod")
-	
+
 	# If the mod does not exist, tell us and exit with error.
 	if [ "$does_mod_exist" -eq 0 ]; then
 		echo "That mod is not in the array."
 		exit 1
 	fi
-	
+
 	# Call mod_profiles, sourced from mod_profiles
 	mod_profiles "$chosen_mod"
 
 	# Call to launch doom with all the parameters
 	launch_doom "$iwad" "$wads" "$savedir" "$maps" "$cheats" "$skill"
+
+	# Prepare the gzdoom ini file for git.
+	fix_ini_for_git
 }
 
 ###############
 ### Testing ###
 ###############
 #
-# This function is used to toggle functions that I am testing.  These will usually break things and 
+# This function is used to toggle functions that I am testing.  These will usually break things and
 # can be unpredictible.  Be careful.
 #
 
@@ -310,11 +308,11 @@ testing() {
 	#make_mod_array "$1"
 	#printf "%s\n" "${mod_array[@]}"
 	#set_gzdoom_options
-	
-	
+
+
 	chosen_mod_settings=($(parse_ini_to_array "$ini_file" "$1"))
 	parse_ini_to_array "$ini_file" "$1"
-	
+
 	printf "%s\n" "${chosen_mod_settings[@]}"
 }
 
