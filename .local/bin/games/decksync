@@ -25,13 +25,16 @@ set -euo pipefail
 ##############
 ### Config ###
 ##############
+#
+config_directory="$HOME/.config/steamdeck"
+
 # ini file containing save location information.
-ini_file="$HOME/.config/game/decksync.ini"
+ini_file="$config_directory/decksync.ini"
 
 # conf file.  Has different formatting from ini
 # Currently testing which method is best.
 # Using conf_file at the moment.
-conf_file="$HOME/.config/game/decksync.cfg"
+conf_file="$config_directory/decksync.cfg"
 
 # Dry-run mode global setting
 dry_run_mode=0
