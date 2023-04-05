@@ -26,4 +26,4 @@ UUID=9024347024345B82				/mnt/x			ntfs-3g		permissions	0	0
 UUID=30ae3cc1-6056-4d84-a29f-13b67f4f9be0	/mnt/v			ext4		rw,relatime	0	2
 
 # windows
-UUID=C86E3EFB6E3EE23C				/mnt/win		ntfs-3g		permissions	0	0
+UUID=7220B3F120B3BB05				/mnt/win		ntfs-3g		permissions	0	0
