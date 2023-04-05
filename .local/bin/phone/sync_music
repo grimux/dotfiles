@@ -2,6 +2,10 @@
 #
 # A script to sync music from my computer to my phone using rsync
 #
+# TODO:
+# - Finish implementing the make_playlist script
+# 	- Provide some nice ouput
+#
 # Script options:
 # e - script stops on error
 # u - error if undefined variable
@@ -192,6 +196,9 @@ main() {
 				;;
 		esac
 	done
+
+	### Make Playlists
+	make_playlists
 
 	### Main call to rsync ###
 	# If rsync throws an error, tell the user
