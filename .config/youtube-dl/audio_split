@@ -1,7 +1,9 @@
---paths $HOME/Music/yt-dlp
---format "%(title)s/%(title)s.%(ext)s"
---split-chapters
---embed-thumbnail
+--paths "$HOME/Music/yt-dlp"
+--output "%(title)s/%(title)s.%(ext)s"
+--sponsorblock-remove sponsor
+--restrict-filenames
 --add-metadata
+--embed-thumbnail
 --extract-audio
 --audio-format mp3
+--split-chapters
