@@ -36,7 +36,7 @@ use_dmenu=0
 ### Config ###
 ##############
 
-ini_file="$HOME/.config/gzdoom/doom_script.ini"
+ini_file="$HOME/.config/gzdoom/mod_profiles.ini"
 gzdoom_ini_file="$HOME/.config/gzdoom/gzdoom.ini"
 doomdir="$HOME/Games/gzdoom"
 modsdir="$doomdir/mods"
