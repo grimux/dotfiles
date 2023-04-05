@@ -388,12 +388,12 @@ globalkeys = mytable.join(
               {description = "quit awesome", group = "awesome"}),
 
     -- Widgets popups
-    awful.key({ altkey, }, "c", function () if beautiful.cal then beautiful.cal.show(7) end end,
-              {description = "show calendar", group = "widgets"}),
-    awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
-              {description = "show filesystem", group = "widgets"}),
-    awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
-              {description = "show weather", group = "widgets"}),
+    --awful.key({ altkey, }, "c", function () if beautiful.cal then beautiful.cal.show(7) end end,
+    --          {description = "show calendar", group = "widgets"}),
+    --awful.key({ altkey, }, "h", function () if beautiful.fs then beautiful.fs.show(7) end end,
+    --          {description = "show filesystem", group = "widgets"}),
+    --awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
+    --          {description = "show weather", group = "widgets"}),
 
     -- MPD control
     awful.key({ altkey, "Control" }, "Up",
@@ -478,9 +478,10 @@ globalkeys = mytable.join(
               { description = "gametime", group = "scripts"}),
 
     awful.key({ modkey,        }, "F5",     function ()
-	    awful.spawn("tv_mode")
-	    --awesome.emit_signal('update_tv_mode_status')
-
+	    awful.spawn.with_line_callback("tv_mode", {
+		    exit = function()
+			    awesome.emit_signal('update_tv_mode_status')
+		    end})
     end,
               { description = "TV mode toggle", group = "scripts"}),
 
@@ -704,7 +705,6 @@ awful.rules.rules = {
           "pinentry",
           "qalculate-gtk",
   	  "virt-manager",
-	  "1964.exe",
         },
         class = {
           "Arandr",
@@ -715,6 +715,7 @@ awful.rules.rules = {
           "Nm-connection-editor", -- network-manager-applet
 	  "PolyMC",
 	  "Pavucontrol",
+	  ".*exe",  -- Automatically float any window that containes "exe".  This works for most games or applications run through wine.
 	  "steam_app_%d", -- Let steam games default to floating.  %d is a wildcard for integers.
           "Sxiv",
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
@@ -766,10 +767,9 @@ awful.rules.rules = {
     { rule = { class = "vlc" },            properties = { screen = 1, tag = awful.util.tagnames[8] } },
     -- gfx
     { rule = { class = "PolyMC" },         properties = { screen = 1, tag = awful.util.tagnames[9] } },
-    { rule = { class = "Bottles" },        properties = { screen = 1, tag = awful.util.tagnames[9] } },
     { rule = { class = "Lutris" },         properties = { screen = 1, tag = awful.util.tagnames[9] } },
-    { rule = { class = "Virt-manager" },   properties = { screen = 1, tag = awful.util.tagnames[9] } },
     { rule = { class = "Steam" },          properties = { screen = 1, tag = awful.util.tagnames[9] } },
+    { rule = { class = "steam_app_%d" },   properties = { screen = 1, tag = awful.util.tagnames[9] } },
 }
 
 -- }}}
