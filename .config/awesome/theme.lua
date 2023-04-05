@@ -93,10 +93,37 @@ theme.titlebar_maximized_button_focus_active    = theme.confdir .. "/icons/title
 
 local markup = lain.util.markup
 
+
 -- TV mode widget
 -- Old watch method
 --local tv_mode_status = awful.widget.watch('tv_mode_status', 5)
+--
+-- Get the status of TV Mode.
+function get_tv_mode_status ()
+	local file = io.open(os.getenv("HOME") .. "/.cache/tv_mode_on","r")
+	if file ~= nil then io.close(file) return true else return false end
+end
 
+-- TV Mode widget and icon
+local tvmode_widget = wibox.widget ({
+	widget = wibox.widget.textbox,
+	--text = string.format("%s", get_tv_status)
+	--text = string.format("%s", tv_status),
+	opacity = 0.75,
+})
+
+-- Signal to send for TV Mode.
+awesome.connect_signal('update_tv_mode_status', function()
+	local tv_status = get_tv_mode_status()
+
+	if( tv_status ) then
+		tvmode_widget.text = "📺"
+	else
+		tvmode_widget.text = ""
+	end
+
+
+end)
 
 
 -- Textclock
@@ -316,7 +343,7 @@ function theme.at_screen_connect(s)
         nil,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-	    --tv_mode_widget,
+	    tvmode_widget,
             --mailicon,
             --theme.mail.widget,
             netdownicon,
