@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+#
+# A script to generate mpd m3u playlists for use with my phone.
+#
+# TODO:
+# - Finish implementing the main function
+# - Remove all unused functions.
+# - Migrate from testing to main.
+# - Create nice output to verify playlist creation.
+#
+### Script Fail Events ###
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+mpd_playlist_directory="$HOME/.config/mpd/playlists"
+phone_playlist_directory="$HOME/Music/playlists"
+
+mpd_playlists=($mpd_playlist_directory/*)
+phone_playlists=($phone_playlist_directory/*)
+
+function list_playlists() {
+	echo "### MPD ###"
+	printf "%s\n" "${mpd_playlists[@]}"
+	echo
+
+	echo "### Phone ###"
+	printf "%s\n" "${phone_playlists[@]}"
+
+}
+
+function copy_playlists_simple() {
+	rm -rfv "$phone_playlist_directory"
+	cp -ruv "$mpd_playlist_directory" "$phone_playlist_directory"
+
+}
+
+function copy_playlists_alt() {
+	rm -rf "$phone_playlist_directory"
+	mkdir "$phone_playlist_directory"
+
+	for file in "${mpd_playlists[@]}"; do
+		title=$(basename $file)
+		sed 's/./\.\.\/&/' "$file" > "$phone_playlist_directory/$title"
+		echo "$title created."
+	done
+}
+	
+
+function update_playlists() {
+	local mpd_file
+	local phone_file
+
+	for index in "${!mpd_playlists[@]}"; do
+		mpd_file="${mpd_playlists[$index]}"
+		phone_file="${phone_playlists[$index]}"
+
+		if [ "$mpd_file" -nt "$phone_file" ]; then
+			cp -v "$mpd_file" "$phone_file"
+			sed -i 's/./\.\.\/&/' "$phone_file"
+		fi
+	done
+}
+
+function initialize_playlists() {
+	cp \
+		--recursive \
+		--preserve \
+		--verbose \
+		"$mpd_playlist_directory" "$phone_playlist_directory"
+
+	adjust_playlist_for_phone
+}
+
+function adjust_playlist_for_phone() {
+	local file
+	sed -i 's/./\.\.\/&/' "$file"
+}
+
+function main() {
+	### Initialize Playlist Folder ###
+	if [ "${!phone_playlists[@]}" -eq 0 ]; then
+		initialize_playlists
+		exit
+	fi
+	copy_playlists
+	update_playlists
+	#adjust_playlist_for_phone
+}
+
+function main_testing() {
+	copy_playlists_alt
+}
+
+
+#main
+main_testing
