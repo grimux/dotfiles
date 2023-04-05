@@ -119,7 +119,7 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 ## General ##
 #alias ls="ls --color=auto --group-directories-first"
 #alias la="ls -lA --color=auto --group-directories-first"
-alias ls="lsd --group-directories-first"
+alias ls="lsd -1 --group-directories-first"
 alias la="lsd --almost-all --long --group-directories-first"
 alias lu="lsd --sizesort --almost-all --total-size --long --group-directories-first"
 alias lss="/usr/bin/ls -1 --color=auto --group-directories-first"
@@ -138,8 +138,8 @@ alias pt="protontricks"
 alias config="git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
 
 ## yt-dlp ##
-alias ytv="yt-dlp --config-location ~/.config/youtube-dl/video"
-alias yta="yt-dlp --config-location ~/.config/youtube-dl/audio"
+alias ytv="yt-dlp --config-location ~/.config/youtube-dl/video_single"
+alias yta="yt-dlp --config-location ~/.config/youtube-dl/audio_single"
 alias ytap="yt-dlp --config-location ~/.config/youtube-dl/audio_playlist"
 alias ytas="yt-dlp --config-location ~/.config/youtube-dl/audio_split"
 alias ytvp="yt-dlp --config-location ~/.config/youtube-dl/video_playlist"
@@ -155,7 +155,6 @@ alias steamdir="cd $HOME/.steam/steam"
 #################
 ### Functions ###
 #################
-
 # Prevent nested ranger instances.  From archwiki.
 # url: https://wiki.archlinux.org/title/Ranger#Preventing_nested_ranger_instances
 ranger() {
@@ -165,7 +164,6 @@ ranger() {
 		exit
 	fi
 }
-
 
 ## Use ranger to switch directories ##
 rangercd () {
