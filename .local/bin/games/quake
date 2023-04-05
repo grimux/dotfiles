@@ -4,6 +4,9 @@
 # Variables
 quakedir="$HOME/Games/quake"
 choice="$1"
+basedir="$HOME/Games/quake"
+source_port="quakespasm"
+#source_port="steam steam://run/2310//\"-game ad\"/"
 
 # Mods List
 mods_list=(
@@ -50,7 +53,7 @@ list_mods() {
 
 # Launch Quake
 launch_quake() {
-	mangohud --dlsym gamemoderun quakespasm -game $1
+	mangohud --dlsym gamemoderun quakespasm -basedir "$basedir" -game "$1"
 }
 
 # Check array for matching mod name
@@ -67,7 +70,7 @@ check_mods() {
 			exists=0
 		fi
 	done
-	
+
 	# Return flag value
 	# 1 exists, 0 does not exists
 	echo $exists
@@ -87,43 +90,36 @@ choose_in_dmenu() {
 # Get arguments
 while getopts ":dhil" option; do
 	case $option in
-		d)
-			choose_in_dmenu
-			;;
-		h)
-			help_section
-			exit
-			;;
-		l)
-			list_mods
-			exit
-			;;
-		i)
-			quake_injector
-			exit
-			;;
-		\?)
-			echo "Error: Invalid option"
-			exit
-			;;
+		d) choose_in_dmenu;;
+		h) help_section; exit;;
+		l) list_mods; exit;;
+		i) quake_injector; exit;;
+		\?) echo "Error: Invalid option"; exit;;
 	esac
 done
 
-# Main script
-# If no argument, then launch copper
-if [ -z "$1" ]; then
-	launch_quake "copper"
-	exit
-fi
+############
+### Main ###
+############
+main() {
+	# Main script
+	# If no argument, then launch copper
+	if [ -z "$1" ]; then
+		launch_quake "copper"
+		exit
+	fi
 
-# Check if game exists in array.
-# 0 if doesn't exist, 1 if it does.
-# If the game exists, launch it.
-does_mod_exist=$(check_mods)
-if [[ does_mod_exist -eq 1 ]]; then
-	launch_quake $choice
-	exit
-else
-	echo "Invalid game."
-	exit 1
-fi
+	# Check if game exists in array.
+	# 0 if doesn't exist, 1 if it does.
+	# If the game exists, launch it.
+	does_mod_exist=$(check_mods)
+	if [[ does_mod_exist -eq 1 ]]; then
+		launch_quake $choice
+		exit
+	else
+		echo "Invalid game."
+		exit 1
+	fi
+}
+
+main "$@"
