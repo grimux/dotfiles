@@ -38,7 +38,7 @@ function mod_profiles() {
 		# Ashes 2063
 		ashes)
 			iwad=DOOM2.WAD
-			wads="Ashes2063Mod115.pk3 Ashes2063Maps115.wad"
+			wads="Ashes2063Enriched2_23.pk3"
 			maps=""
 			savedir="$savedir/ashes2063"
 			cheats=""
