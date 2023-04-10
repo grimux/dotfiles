@@ -7,8 +7,8 @@
 # o pipefail - script fails if command piped fails
 # x - output each line (debug)
 #
-#set -euox pipefail
-set -euo pipefail
+set -euox pipefail
+#set -euo pipefail
 
 
 
@@ -171,7 +171,7 @@ get_arguments() {
 			o) video_download_location="${OPTARG}" ;;
 
 			# A flag is for creating an archive file for yt-dlp.
-			a) archive_file="${OPTARG}.$archive_extension" ;;
+			a) archive_file="${OPTARG}" ;;
 
 			# u flag is for the URL to download.
 			u) url+="${OPTARG}" ;;
@@ -217,14 +217,15 @@ main() {
 
 	# Set which type of formating we want for the file.
 	# Either playlist format or single.
-	if [ "$playlist_mode" -eq 1 ]; then
+	if [ "$playlist_mode" -eq 1 ] && [ -n "$archive_file" ]; then
 		# Playlist formatting
-		chosen_format=$playlist_output_format
+		chosen_format="$playlist_output_format"
 		# Add the archive file to the array of arguments.
-		yt_arguments+=" --download-archive $archive_directory/$archive_file"
-	else
-		# Single formatting
-		chosen_format=$single_output_format
+		#yt_arguments+=" --download-archive $archive_directory/$archive_file"
+		yt_arguments+=" --download-archive $archive_file"
+	elif [ "$playlist_mode" -eq 1 ] && [ -z "$archive_file" ]; then
+		echo "Playlist download requires and archive.  Please specify with \"-a [archive name]\"."
+		exit 1
 	fi
 
 	# Append this argument to the arguments array.
@@ -239,6 +240,8 @@ main() {
 	if [ "$batch_mode" -eq 1 ]; then
 		echo "Batch file: $(basename $batch_file)"
 		yt_arguments+=" --batch-file $batch_file"
+		download_video
+		exit
 	fi
 
 	if [ "$split_chapters_mode" -eq 1 ]; then
