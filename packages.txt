@@ -145,7 +145,6 @@ haveged
 hplip
 htim
 icoutils
-imwheel
 innoextract
 iptables-nft
 jdownloader2
@@ -266,7 +265,6 @@ rygel
 samba
 samrewritten-git
 scrot
-sddm
 sdl2_net
 sdl_ttf
 shards
@@ -315,7 +313,6 @@ tracker3-miners
 transmission-cli
 transmission-remote-gtk
 trash-cli
-trayer
 tremc
 ttf-bitstream-vera
 ttf-dejavu
@@ -335,7 +332,6 @@ vim
 virtualbox
 viu
 vlc
-volumeicon
 wget
 which
 wine-gecko
