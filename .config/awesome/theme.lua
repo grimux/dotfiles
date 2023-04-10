@@ -147,7 +147,7 @@ theme.cal = lain.widget.cal({
 local weathericon = wibox.widget.imagebox(theme.widget_weather)
 theme.weather = lain.widget.weather({
     APPID = "3e321f9414eaedbfab34983bda77a66e",
-    units = "metric",
+    units = "imperial",
     lat = 38.61670684814453,
     lon = -95.26720428466797,
     notification_preset = { font = "Mononoki 10", fg = theme.fg_normal },
