@@ -448,8 +448,10 @@ globalkeys = mytable.join(
               { description = "file manager", group = "programs"}),
     awful.key({ modkey,           }, "m",     function () awful.spawn(music) end,
               { description = "music", group = "programs"}),
-    awful.key({ modkey, "Shift"   }, "m",     function () awful.spawn("dm-playlists") end,
-              { description = "playlists", group = "programs"}),
+    awful.key({ modkey, "Shift"   }, "m",     function () awful.spawn("dm-playlists-music") end,
+              { description = "music playlists", group = "programs"}),
+    awful.key({ modkey, "Shift"   }, "v",     function () awful.spawn("dm-playlists-videos") end,
+              { description = "video playlists", group = "programs"}),
     awful.key({ modkey,           }, "r",     function () awful.spawn(termfile) end,
               { description = "ranger", group = "programs"}),
     awful.key({ modkey,           }, "p",     function () awful.spawn("passmenu -p pass:") end,
@@ -718,6 +720,7 @@ awful.rules.rules = {
 	  ".*exe",  -- Automatically float any window that containes "exe".  This works for most games or applications run through wine.
 	  "steam_app_%d", -- Let steam games default to floating.  %d is a wildcard for integers.
           "Sxiv",
+	  "feh",
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
           "Wpa_gui",
           "veromix",
