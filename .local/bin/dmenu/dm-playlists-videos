@@ -1,10 +1,20 @@
 #!/usr/bin/bash
-# 
+#
 # A script for using my video playlists in mpv.
 # Uses mpv to load, configure, and play everything.
 #
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
 
+
+#################
 ### Variables ###
+#################
 #
 # Video playlist directory
 playlist_dir="/mnt/v/playlists"
@@ -19,9 +29,47 @@ playlist_files=($playlist_dir/*)
 # sed is used to strip the file extension.
 playlist_names=$(printf '%s\n' "${playlist_files[@]}" | awk -F'/' '{print $NF}' | sed 's/.m3u//')
 
+# Option flags
+shuffle_mode=0
+use_tv_mode=0
 
+#################
 ### Functions ###
+#################
 #
+# Help Section
+help_section() {
+	# Help Message.  4 space offset.
+	echo "A script to open video playlists in mpv."
+	echo "usage:"
+	echo "    $(basename $0) [-h|-s|-t]"
+	echo
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "s     Enable shuffle mode."
+	echo "t     Use TV_Mode."
+}
+
+# Get arguments and set flags
+get_arguments() {
+	while getopts ":hst" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1;;
+
+			# Help
+			h) help_section; exit;;
+
+			# Shuffle mode
+			s) shuffle_mode=1; echo "Shuffle mode: ON";;
+
+			# Use TV_Mode
+			t) use_tv_mode=1; echo "TV mode: ON";;
+
+		esac
+	done
+}
+
 # Function to open playlist in dmenu
 open_in_dmenu() {
 	# Piping the array into dmenu.
@@ -30,21 +78,27 @@ open_in_dmenu() {
 
 # Check if the playlist exists
 check_playlist() {
+	# Exists flag.
 	exist=0
+
+	# Name of playlist to check.
 	name=$1
 
-	# Check for a match in the array
+	# Check for a match in the array.
 	for i in ${playlist_names[@]}; do
+		# If a match is found, set exists flag to 1 and break loop.
 		if [ "$name" == "$i" ]; then
 			exist=1
+			break
 		fi
 	done
 
-	# Return 1 if exists, 0 if not
+	# Return the result of the check.
+	# 1 if it exists, 0 if not.
 	echo $exist
 }
 
-# Message if the playlist is not found
+# Message if the playlist is not found.
 no_playlist() {
 	echo "Playlist not found."
 	notify-send "playlist error" "That playlist does not exist."
@@ -53,31 +107,52 @@ no_playlist() {
 
 # Prepare mpd for playback and start
 load_mpv() {
-	argument=$1
-	mpv "$argument"
+	# Argument passed is the location of the playlist file.
+	# $playlist_directory/$playlist_name.m3u
+	playlist_name=$1
+
+	# Options for mpv
+	mpv_args=(--loop-playlist)
+
+	if [ $shuffle_mode -eq 1 ]; then
+		mpv_args+=(--shuffle)
+	fi
+
+	# Start mpv and load the playlist.
+	mpv "${mpv_args[@]}" "$playlist_name"
+
 }
 
-### Entry point ###
+############
+### Main ###
+############
 #
-# Check if the argument passed to the script is empty
-# If so, capture the output of open_in_dmenu into $choice
-if [ -z "$1" ]; then
+main() {
+	# Get arguments
+	get_arguments "$@"
+
+	# Open dmenu and set the choice to $choice
 	choice=$(open_in_dmenu)
-# Otherwise use the argument as the playlist name
-else
-	choice="$1"
-fi
 
-# Check to see if the playlist has a match in the array
-does_playlist_exist=$(check_playlist $choice)
+	# Check to see if the playlist has a match in the array
+	does_playlist_exist=$(check_playlist $choice)
 
-# If the playlist exists, pass it to load_mpc function
-if [ $does_playlist_exist -eq 1 ]; then
-	load_mpv "$playlist_dir/$choice.m3u"
-# If it doesn't exist, call the no_playlist function
-else
-	no_playlist
-fi
+	# If the playlist exists, pass it to load_mpv function
+	if [ $does_playlist_exist -eq 1 ]; then
+		# Stop mpd if it is ying_playing.
+		mpc stop > /dev/null
+		load_mpv "$playlist_dir/$choice.m3u"
+	# If it doesn't exist, call the no_playlist function
+	else
+		no_playlist
+	fi
+}
+
+####################
+### Call to main ###
+####################
+#
+main "$@"
 
 ### End ###
 exit 0
