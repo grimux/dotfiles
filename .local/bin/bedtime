@@ -11,21 +11,24 @@
 #set -euox pipefail
 set -euo pipefail
 
+############
+### TODO ###
+############
+# - Decide if I want mpv to open on a specific tab.
+# - Add more comments to functions.
+#
+#
+#
 
 # Bedtime playlist file.
 # This file can be edited to play whatever videos I want at bedtime.
 # You can even add playlists to the playlist file and it will play them all.
-default_file="$HOME/Videos/playlists/bedtime.m3u"
-
-# Set the chosen playlist to the default one.
-chosen_playlist="$default_file"
-
-# All playlists.
-playlist_files=($HOME/Videos/playlists/*)
+bedtime_playlist="$HOME/Videos/playlists/bedtime.m3u"
 
 # Alsa names for the TV and PC
 tv_alsa_id="alsa_output.pci-0000_0a_00.1.hdmi-stereo"
 pc_alsa_id="alsa_output.pci-0000_0c_00.3.analog-stereo"
+combined_alsa_id="combined"
 
 
 # Save the currently active window at the time of script execution.  This makes
@@ -34,50 +37,40 @@ previous_window=$(xdotool getactivewindow)
 
 # Get arguments
 get_arguments() {
-	while getopts ":lhp:" option; do
+	while getopts ":lhe" option; do
 		case $option in
-			l)
-				list_playlists
-				exit
-				;;
-			h)
-				help_section
-				exit
-				;;
-			p)
-				chosen_playlist="${OPTARG}"
-				;;
-			\?)
-				echo "Error: Invalid option"
-				exit
-				;;
+			l) list_playlist_contents; exit;;
+			e) edit_bedtime_playlist; exit;;
+			h) help_section; exit;;
+			\?) echo "Error: Invalid option"; exit;;
 		esac
 	done
 }
 
+# Help Section
+help_section() {
+	# Help Message.  4 space offset.
+	echo "A script to play specific videos at bedtime."
+	echo "usage:"
+	echo "    $(basename $0) [-h|-l|-e]"
+	echo
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "l     Print out the bedtime playlist."
+	echo "e     Edit the bedtime playlist in vim."
+}
+
 # List playlists
-list_playlists() {
-	#printf "%s\n" "${playlist_files[@]}"
-	
-	for i in "${playlist_files[@]}"; do
-		basename "$i" ".m3u"
-	done
+list_playlist_contents() {
+	echo "### Bedtime Playlist ###"
+	echo
+	cat "$bedtime_playlist"
 }
 
-# Dmenu
-function choose_in_dmenu() {
-	# Local variable to store the mod choice in.
-	local dmenu_choice
-	local prompt="Bedtime playlist: "
-	local choice_array=$(list_playlists) 
-
-	# Mod choice variable is equal to the selection from dmenu.
-	dmenu_choice=$(printf '%s\n' "${choice_array[@]}" | dmenu -i -l 20 -p "$prompt")
-
-	# Return the choice
-	echo "$dmenu_choice"
+# Edit the playlist in vim.
+edit_bedtime_playlist() {
+	nvim "$bedtime_playlist"
 }
-
 
 # Start mpv with the given playlist.
 launch_mpv() {
@@ -99,26 +92,28 @@ move_to_previous_window() {
 	xdotool windowactivate $previous_window
 }
 
+# Switch to change the audio sink.
 change_audio_sink() {
+	# Name of sink to use, passed as an argument
+	# "tv", "pc", or "combined"
 	local device_name="$1"
 
+	# Index id of TV in alsa.
 	local tv_index=$(get_device_index "$tv_alsa_id")
 
+	# Index id of PC sound card in alsa.
 	local pc_index=$(get_device_index "$pc_alsa_id")
-	
+
+	# Index id of combined sink in alsa.
+	local combined_index=$(get_device_index "$combined_alsa_id")
+
+	# Case to set the default sink, based on its id.
 	case "$device_name" in
-		"tv")
-			pacmd set-default-sink $tv_index
-			;;
-		"pc")
-			pacmd set-default-sink $pc_index
-			;;
+		"tv") pacmd set-default-sink $tv_index;;
+		"pc") pacmd set-default-sink $pc_index;;
+		"combined") pacmd set-default-sink $combined_index;;
 	esac
 
-}
-
-change_audio_sink_simple() {
-	echo "Hello"
 }
 
 # Function that returns the index in pacmd for the given alsa name.
@@ -133,53 +128,88 @@ get_device_index() {
 		sed 's/[^0-9]*//'
 }
 
+############
 ### Main ###
+############
 #
 main() {
+	# Get arguments
+	get_arguments "$@"
+
 	# Immediately stop mpd, so music won't play over video.
-	mpc stop
-	
+	mpc stop > /dev/null
+
 	# Switch the pulseaudio sink to the TV for video playback.
-	change_audio_sink "tv"
-	
+	change_audio_sink "combined"
+
 	# Launch mpv and play the playlist file.
-	launch_mpv "$default_file"
+	launch_mpv "$bedtime_playlist"
 
 	sleep 1
 
 	# Switch to the tag that will have mpv on it.
 	move_to_video_tag
-	
+
 	wait
-	
+
 	# Once the playlist is complete, switch back to the previous window.
 	move_to_previous_window
-	
+
 	# Switch the pulseaudio sink back to the PC.
 	change_audio_sink "pc"
-	
+
 	# Start music, won't happen until video playlist is completed.
 	mpc play
-	
+
 	# Good morning message
 	echo
 	echo "Good morning!"
 }
 
+###############
+### Testing ###
+###############
+#
 testing() {
-
+	# Get arguments
 	get_arguments "$@"
 
 	# Immediately stop mpd, so music won't play over video.
-	#mpc stop
-	
+	#mpc stop > /dev/null
+
+	# Switch the pulseaudio sink to the TV for video playback.
+	change_audio_sink "combined"
+
 	# Launch mpv and play the playlist file.
-	#launch_mpv "$chosen_playlist"
+	#launch_mpv "$bedtime_playlist"
+
+	sleep 1
+
+	# Switch to the tag that will have mpv on it.
+	move_to_video_tag
+
+	wait
+
+	# Once the playlist is complete, switch back to the previous window.
+	move_to_previous_window
+
+	# Switch the pulseaudio sink back to the PC.
+	change_audio_sink "pc"
+
+	# Start music, won't happen until video playlist is completed.
+	#mpc play
+
+	# Good morning message
+	echo
+	echo "Good morning!"
 
 }
 
-
+####################
+### Call to main ###
+####################
+#
 #testing "$@"
-main
+main "$@"
 
 
