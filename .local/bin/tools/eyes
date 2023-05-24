@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+#
+# A script for controlling redshift to help with my light sensitivities and migraines.
+#
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+
+
+##############
+### Config ###
+##############
+temp="3000:2600"					# Temperature for day:night
+bright="0.75:0.60"					# Brightness for day:night
+hurt_conf_file="$HOME/.config/redshift/hurt.conf"	# Configuration file for low mode.
+
+
+
+#################
+### Functions ###
+#################
+function usage() {
+	echo "Do your eyes \"hurt\" or are they \"okay\"?";
+}
+
+function get_status() {
+	echo "Current status:"
+	redshift -p
+}
+
+# Set redshift to low mode by using arguments.
+function set_to_low() {
+	# Kill redshift if it is running.
+	kill_redshift
+
+	# Call redshift and apply the settings.
+	redshift \
+		-r \
+		-t "$temp" \
+		-b "$bright" \
+		&> /dev/null \
+		&
+
+}
+
+# Set redshift to low mode by using a configuration file.
+function set_to_low_conf() {
+	# Kill redshift if it is running.
+	kill_redshift
+
+	# Use configuration file for settings.
+	redshift -c $hurt_conf_file &> /dev/null &
+}
+
+function set_to_normal() {
+	# Kill redshift if it is running.
+	kill_redshift
+
+	# Start redshift using the default configuration file.  Send all output to null.
+	redshift &> /dev/null &
+}
+
+function kill_redshift() {
+	if pgrep redshift > /dev/null; then
+		killall redshift
+	fi
+}
+
+
+
+############
+### Main ###
+############
+function main() {
+	local condition="$@"
+
+	# Main logic.  Only two possible arguments.
+	case "$condition" in
+		# If no argument, show status.
+		"") usage; echo ; get_status;;
+
+		# If your eyes are hurting.
+		"hurt") echo "Sorry your eyes hurt...  Let me help."; set_to_low;;
+
+		# If your eyes are okay.
+		"okay") echo "You must be feeling better!"; set_to_normal;;
+
+		# Anything else entered is not recognized.
+		*) echo "Sorry, I don't recognize that command."; usage; exit 1;;
+	esac
+}
+
+
+
+####################
+### Call to main ###
+####################
+main "$@"
