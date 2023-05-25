@@ -190,6 +190,7 @@ patch
 pavucontrol
 pcmanfm-qt
 pcsx2
+perl-image-exiftool
 perl-rename
 pev
 phantomjs-bin
@@ -228,6 +229,7 @@ qtpass
 quakespasm
 ranger
 raze-git
+rclone
 redshift
 rsync
 rvm
