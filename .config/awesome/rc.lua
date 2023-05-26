@@ -861,4 +861,4 @@ awful.mouse.snap.edge_enabled = false
 -- Restart picom to avoid visual bugs
 --awful.spawn.with_shell("picom")
 -- Restore nitrogen
-awful.spawn.with_shell("nitrogen --restore")
+--awful.spawn.with_shell("nitrogen --restore")
