@@ -1,23 +1,86 @@
 #!/usr/bin/env bash
-# 
+#
 # A simple script to take screenshots.
 #
 
 # Use scrot to take the screenshot.  It also creates a thumbnail to use in the notification.
 # monitor is to select only the primary display.
 
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+set -euox pipefail
+#set -euo pipefail
+
+# Timeout for notify-send
+# It's good to have this low so successive screenshots are easier.
+timeout=100
+
 # Get the name of the application that is currently focused on.
 application_name=$(xdotool getactivewindow getwindowname)
 
-# Call to scrot
-# Will create a thumbnail and only capture monitor 0.
-# It then executes a command on the image, display a notification, and remove the thumbnail.
-scrot \
-	"$application_name"_%Y_%m_%d_%H_%M_%S.png \
-	--thumb 20 \
-	--monitor 0 \
-	--exec \
-	'mv "$f" $$(xdg-user-dir PICTURES); notify-send --icon "$m" "Screenshot Taken\n$f"; rm --force "$m"'
+# Arguments to pass to the `--exec` flag for `scrot`.
+#exec_args='notify-send --expire-time='$timeout' --icon "$m" "Screenshot Taken\n$f"; rm --force "$m"'
 
-# Play a camera shutter sound.
-canberra-gtk-play --id=camera-shutter
+function send_notification() {
+	local thumbnail="$1"
+	local filename="2"
+	notify-send --expire-time="$timeout" --icon "$thumbnail" "Screenshot Taken\n$filename"
+}
+
+function move_screenshot_to_pictures() {
+	local screenshot="$@"
+	mv "$screenshot" $(xdg-user-dir PICTURES)
+}
+
+function take_screenshot() {
+	local application_name=$(xdotool getactivewindow getwindowname)
+	# Call to scrot
+	# Will create a thumbnail and only capture monitor 0.
+	# It then executes a command on the image, display a notification, and remove the thumbnail.
+	# --expire-time is how long the notification will last in milliseconds.
+	scrot \
+		"$application_name"_%Y_%m_%d_%H_%M_%S.png \
+		--thumb 20 \
+		--monitor 0 \
+		--exec \
+		"$move_screenshot_to_pictures "$f"; $send_notification '$m $f'; $delete_thumbnail '$m'"
+}
+
+function play_sound() {
+	# Play a camera shutter sound.
+	canberra-gtk-play --id=camera-shutter
+}
+
+function testing(){
+	take_screenshot && play_sound
+}
+
+function main() {
+	# Call to scrot
+	# Will create a thumbnail and only capture monitor 0.
+	# It then executes a command on the image, display a notification, and remove the thumbnail.
+	scrot \
+		"$application_name"_%Y_%m_%d_%H_%M_%S.png \
+		--thumb 20 \
+		--monitor 0 \
+		--exec \
+		'mv "$f" $$(xdg-user-dir PICTURES); notify-send --expire-time='$timeout' --icon "$m" "Screenshot Taken\n$f"; rm --force "$m"'
+
+
+	# Check to see if `scrot` completed successfully.
+	# If so, play the sound.
+	# If not, send an error message.
+	if [ $? -eq 0 ]; then
+		play_sound
+	else
+		notify-send "Error!" "There was an error with the scrot command"
+	fi
+}
+
+main
