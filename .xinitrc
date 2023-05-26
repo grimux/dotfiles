@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# 
+#
 # xinit script
 #
 
@@ -13,13 +13,18 @@ awesome() {
 
 	# Start policy kit
 	lxsession &
-	
-	# Restore wallpaper
-	nitrogen --restore &
+
+	# Restore wallpaper using Nitrogen
+	#nitrogen --restore &
+
+	# Restore wallpaper using feh
+	~/.fehbg &
 
 	# Redshift for bluelight filter
+	# Use either the gtk tray icon or not.  Use `redshift -p` to check status.
 	redshift-gtk &
-	
+	#redshift &
+
 	# Start awesome
 	exec awesome
 }
@@ -27,29 +32,29 @@ awesome() {
 # Gnome config
 gnome() {
 	# Set session to xorg
-	export XDG_SESSION_TYPE=x11		
+	export XDG_SESSION_TYPE=x11
 
 	# Set session to xorg
 	export GDK_BACKEND=x11
 
 	# Turn on screensaver
 	#xscreensaver --no-splash &
-	
+
 	# Start the session
 	exec gnome-session
 }
 
 # DWM config
-dwm() {	
+dwm() {
 	# Start dwmblocks
 	dwmblocks &
-	
+
 	# Dunst for notifications
 	dunst &
 
 	# Start conky
 	conky -c ~/.config/conky/conkyrc.dwm &
-	
+
 	# Start dwm
 	exec dwm
 }
@@ -65,24 +70,24 @@ shared_settings() {
 	# ID names from xrandr for my TV and PC monitor.
 	local monitor_id="DVI-D-0"
 	local tv_id="HDMI-0"
-	
+
 	# Set TV (hdmi) to be the same as main monitor
 	xrandr --output $tv_id --same-as $monitor_id &
 
 	# music player daemon
-	mpd &						
+	mpd &
 
 	# Start Universal Media Server
-	ums &						
+	ums &
 
 	# control mpd with playerctl
-	#mpDris2 &					
-	
+	#mpDris2 &
+
 	# Set caps lock to escape
 	setxkbmap -option caps:escape &
 
 	# Turn on the numlock
-	numlockx on &				
+	numlockx on &
 
 	# Clipmen daemon
 	clipmenud &
