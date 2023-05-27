@@ -24,6 +24,7 @@ Plug 'junegunn/goyo.vim'
 Plug 'chrisbra/Colorizer'
 " Addes new commands to read and write on root files
 Plug 'lambdalisue/suda.vim'
+Plug 'chrisbra/unicode.vim'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -83,6 +84,7 @@ set splitbelow splitright
 let mapleader = ","
 set wildmode=longest,list,full
 autocmd FileType markdown set linebreak
+set autochdir
 
 " when yanking, send to system clipboard ("*) instead of normal buffer
 set clipboard=unnamedplus
@@ -125,6 +127,10 @@ nnoremap <SPACE> @q
 " Unset Q and :q.  These toggle a vim command history window.
 nnoremap Q :<nop>
 nnoremap q: <nop>
+
+" Delete selected text to black hole register and paste from the default
+" register
+vnoremap <leader>p "_dP
 
 " Call trim white space function
 map <F3> :call TrimWhiteSpace()<CR>
@@ -169,6 +175,8 @@ map <leader>bb :Bracey<CR>
 map <leader>bs :BraceyStop<CR>
 map <leader>br :BraceyReload<CR>
 
+" Make current file executable.
+map <leader>x :!chmod +x %<CR><CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Functions
