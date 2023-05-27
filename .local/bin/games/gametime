@@ -20,8 +20,8 @@ launch_launchers_minimized() {
 	notify-send "gametime" "Starting Steam and Lutris..."
 
 	# Launch steam with or without manghud
-	mangohud steam-runtime -nochatui -nofriendsui &
-	#steam -nochatui -nofriendsui -silent &
+	#mangohud steam-runtime -nochatui -nofriendsui &
+	steam -nochatui -nofriendsui -silent &
 
 
 	# Launch lutris
@@ -37,10 +37,10 @@ launch_launchers_maximized() {
 	notify-send "gametime" "Starting Steam and Lutris..."
 
 	# Launch steam normally with no chat or friends list open.
-	#steam -nochatui -nofriendsui &
+	steam -nochatui -nofriendsui &
 
 	# Launch steam with manghud and the same options.
-	mangohud steam-runtime -nochatui -nofriendsui &
+	#mangohud steam-runtime -nochatui -nofriendsui &
 
 	# Launch lutris.
 	lutris &
