@@ -16,6 +16,7 @@ mod_list_array=(
 	h_doom
 	hedon
 	mower
+	myhouse
 	project_brutality
 	reelism2
 	russian_overkill
@@ -24,7 +25,7 @@ mod_list_array=(
 )
 
 # A function with a simple case statement.  The statement will set the variables for the arguments that will
-# eventually be passed to gzdoom.  The variables here are global and can be accessed from elsewhere in the 
+# eventually be passed to gzdoom.  The variables here are global and can be accessed from elsewhere in the
 # script.  Just call this function and pass along the name of the mod.
 function mod_profiles() {
 	# First argument passed is called mod_name.
@@ -32,7 +33,7 @@ function mod_profiles() {
 
 	# Switch case to choose the settings.
 	case "$mod_name" in
-	
+
 		## Mod Settings ##
 
 		# Ashes 2063
@@ -54,7 +55,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		# Chill Doom
 		chill_doom)
 			iwad=DOOM.WAD
@@ -64,7 +65,7 @@ function mod_profiles() {
 			cheats="+buddha2 +give keys"
 			skill="+skill 3"
 			;;
-	
+
 		# Brutal Minecraft
 		brutal_minecraft)
 			iwad=DOOM2.WAD
@@ -81,7 +82,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		countrycide)
 			iwad=DOOM2.WAD
 			wads="CountryCide.pk3"
@@ -99,7 +100,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		golden_souls)
 			iwad=DOOM.WAD
 			wads="GoldenSouls_Full_1.4.pk3"
@@ -108,7 +109,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		guncaster)
 			iwad=DOOM2.WAD
 			wads="Guncaster.pk3"
@@ -117,7 +118,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		h_doom)
 			iwad=DOOM2.WAD
 			wads="m12-hdoom_techdemo9.pk3"
@@ -126,7 +127,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		hedon)
 			iwad=DOOM2.WAD
 			wads="Hedon.ipk3 ThiccEdition.pk3"
@@ -135,7 +136,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		mower)
 			iwad=DOOM2.WAD
 			wads="doom_mower_v2.wad"
@@ -144,7 +145,16 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
+		myhouse)
+			iwad=DOOM2.WAD
+			wads="myhouse.pk3"
+			maps=""
+			savedir="$savedir/myhouse"
+			cheats=""
+			skill=""
+			;;
+
 		project_brutality)
 			iwad=DOOM2.WAD
 			wads="\
@@ -156,7 +166,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		reelism2)
 			iwad=DOOM2.WAD
 			wads="reelism2_v1.23.pk3"
@@ -165,7 +175,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		russian_overkill)
 			iwad=DOOM2.WAD
 			wads="RO.pk3"
@@ -174,7 +184,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		siren)
 			iwad=DOOM2.WAD
 			wads="Siren-0.6a.pk3"
@@ -183,7 +193,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		spooktober)
 			iwad=DOOM2.WAD
 			wads="SmoothDoom.pk3 spooktober.pk3 STEVE_FLASHLIGHT_PLUS.PK7"
@@ -192,7 +202,7 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
-	
+
 		*)
 			echo "Invalid mod"
 			exit 1
