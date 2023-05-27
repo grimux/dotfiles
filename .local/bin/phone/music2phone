@@ -38,7 +38,7 @@ pid="6860"
 # These are just the general options for all runs.
 rsync_arguments=(
 	--verbose
-	--progress
+	--info=progress2
 	--human-readable
 	--delete
 	--size-only
@@ -58,11 +58,22 @@ rsync_arguments=(
 help_section() {
 	echo "A script to sync music to an android phone"
 	echo
-	echo "Syntax: sync_music [-h|d]"
+	echo "Syntax: $(basename $0) [-h|n]"
 	echo "options:"
 	echo "h     Print this help screen."
-	echo "d     Run rsync in dry-run mode."
+	echo "n     Run rsync in dry-run mode."
 	echo
+}
+
+# Get arguments
+get_arguments() {
+	while getopts ":hn" option; do
+		case $option in
+			\?) echo "Error: Invalid option"; exit 1 ;;
+			h) help_section; exit ;;
+			n) rsync_arguments+="--dry-run"; echo "Dry-run mode: ON" ;;
+		esac
+	done
 }
 
 ### Get user input ###
@@ -159,6 +170,9 @@ call_rsync() {
 ###################
 
 main() {
+	# Get Arguments first
+	get_arguments "$@"
+
 	# Check if the phone is connected. 1 yes, 0 no
 	is_phone_connected=$(check_phone_cable)
 
