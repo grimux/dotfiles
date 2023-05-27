@@ -18,6 +18,7 @@ format.notifydate=%a %F
 format.notifytime=%T
 format.outputdate=%D
 format.dayheading=%a, %B %e, %Y
+format.appointmenttime=%I:%M%P
 general.autogc=no
 general.autosave=yes
 general.confirmdelete=yes
