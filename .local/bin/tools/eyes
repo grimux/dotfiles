@@ -19,7 +19,7 @@ set -euo pipefail
 ### Config ###
 ##############
 temp="2100:2100"					# Temperature for day:night
-bright="0.60:0.60"					# Brightness for day:night
+bright="0.60:0.45"					# Brightness for day:night
 hurt_conf_file="$HOME/.config/redshift/hurt.conf"	# Configuration file for low mode.
 call_redshift="redshift-gtk"
 
