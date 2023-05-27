@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-# 
+#
 # A script for using my music playlists in mpd.
 # Uses mpc to load, configure, and play everything.
 #
@@ -30,21 +30,26 @@ open_in_dmenu() {
 
 # Check if the playlist exists
 check_playlist() {
+	# Exists flag.
 	exist=0
+
+	# Name of playlist to check.
 	name=$1
 
-	# Check for a match in the array
+	# Check for a match in the array.
 	for i in ${playlist_names[@]}; do
+		# If a match is found, set exists flag to 1.
 		if [ "$name" == "$i" ]; then
 			exist=1
 		fi
 	done
 
-	# Return 1 if exists, 0 if not
+	# Return the result of the check.
+	# 1 if it exists, 0 if not.
 	echo $exist
 }
 
-# Message if the playlist is not found
+# Message if the playlist is not found.
 no_playlist() {
 	echo "Playlist not found."
 	notify-send "playlist error" "That playlist does not exist."
@@ -53,35 +58,50 @@ no_playlist() {
 
 # Prepare mpd for playback and start
 load_mpc() {
+	# Argument passed is the location of the playlist file.
+	# $playlist_directory/$playlist_name.m3u
 	argument=$1
+
+	# Clear mpd playlist
 	mpc clear > /dev/null
+
+	# Turn on random and repeat
 	mpc random on > /dev/null
 	mpc repeat on > /dev/null
+
+	# Load the playlist
 	mpc load "$argument"
+
+	# Play
 	mpc play
 }
 
-### Entry point ###
+### Main ###
 #
-# Check if the argument passed to the script is empty
-# If so, capture the output of open_in_dmenu into $choice
-if [ -z "$1" ]; then
-	choice=$(open_in_dmenu)
-# Otherwise use the argument as the playlist name
-else
-	choice="$1"
-fi
+main() {
+	# Check if the argument passed to the script is empty
+	# If so, capture the output of open_in_dmenu into $choice
+	if [ -z "$1" ]; then
+		choice=$(open_in_dmenu)
+	# Otherwise use the argument as the playlist name
+	else
+		choice="$1"
+	fi
 
-# Check to see if the playlist has a match in the array
-does_playlist_exist=$(check_playlist $choice)
+	# Check to see if the playlist has a match in the array
+	does_playlist_exist=$(check_playlist $choice)
 
-# If the playlist exists, pass it to load_mpc function
-if [ $does_playlist_exist -eq 1 ]; then
-	load_mpc $choice
-# If it doesn't exist, call the no_playlist function
-else
-	no_playlist
-fi
+	# If the playlist exists, pass it to load_mpc function
+	if [ $does_playlist_exist -eq 1 ]; then
+		load_mpc $choice
+	# If it doesn't exist, call the no_playlist function
+	else
+		no_playlist
+	fi
+}
+
+# Call main
+main "$@"
 
 ### End ###
 exit 0
