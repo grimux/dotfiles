@@ -27,9 +27,14 @@ playlist_files=($playlist_dir/*)
 # Array of playlist names
 # awk is used to strip the file path and leave just the file name. -F'/' sets the delimiter to /
 # sed is used to strip the file extension.
-playlist_names=$(printf '%s\n' "${playlist_files[@]}" | awk -F'/' '{print $NF}' | sed 's/.m3u//')
+#playlist_names=$(printf '%s\n' "${playlist_files[@]}" | awk -F'/' '{print $NF}' | sed 's/.m3u//')
+playlist_names=$(basename --multiple --suffix=.m3u "${playlist_files[@]}")
+
+# Options for mpv
+mpv_args=(--loop-playlist)
 
 # Option flags
+watch_later=0
 shuffle_mode=0
 use_tv_mode=0
 
@@ -39,7 +44,7 @@ use_tv_mode=0
 #
 # Help Section
 help_section() {
-	# Help Message.  4 space offset.
+	# Help Message.  5 space offset.
 	echo "A script to open video playlists in mpv."
 	echo "usage:"
 	echo "    $(basename $0) [-h|-s|-t]"
@@ -47,12 +52,13 @@ help_section() {
 	echo "options:"
 	echo "h     Print this help screen."
 	echo "s     Enable shuffle mode."
+	echo "w     Enable watch later mode (default)."
 	echo "t     Use TV_Mode."
 }
 
 # Get arguments and set flags
 get_arguments() {
-	while getopts ":hst" option; do
+	while getopts ":hswt" option; do
 		case $option in
 			# What to do if there is an invalid argument.
 			\?) echo "Error: Invalid option"; exit 1;;
@@ -61,7 +67,10 @@ get_arguments() {
 			h) help_section; exit;;
 
 			# Shuffle mode
-			s) shuffle_mode=1; echo "Shuffle mode: ON";;
+			s) shuffle_mode=1; mpv_args+=(--shuffle); echo "Shuffle mode: ON";;
+
+			# Save playlist position on exit.
+			w) watch_later=1; mpv_args+=(--save-position-on-quit); echo "Watch later mode: ON";;
 
 			# Use TV_Mode
 			t) use_tv_mode=1; echo "TV mode: ON";;
@@ -102,25 +111,38 @@ check_playlist() {
 no_playlist() {
 	echo "Playlist not found."
 	notify-send "playlist error" "That playlist does not exist."
-	exit 1
 }
 
 # Prepare mpd for playback and start
-load_mpv() {
+call_mpv() {
 	# Argument passed is the location of the playlist file.
 	# $playlist_directory/$playlist_name.m3u
 	playlist_name=$1
 
-	# Options for mpv
-	mpv_args=(--loop-playlist)
-
-	if [ $shuffle_mode -eq 1 ]; then
-		mpv_args+=(--shuffle)
+	# Display a message if watch_later is enabled.
+	if [ $watch_later -eq 1 ]; then
+		echo "Playlist resumed: $(basename $playlist_name .m3u)"
+		notify-send "Playlist resumed:" "$(basename $playlist_name .m3u)"
 	fi
+
 
 	# Start mpv and load the playlist.
 	mpv "${mpv_args[@]}" "$playlist_name"
 
+	# Display a message if watch_later is enabled.
+	if [ $watch_later -eq 1 ]; then
+		echo "Playlist position saved: $(basename $playlist_name .m3u)"
+		notify-send "Playlist position saved:" "$(basename $playlist_name .m3u)"
+	fi
+
+}
+
+check_mpd_status() {
+	if mpc status | grep 'playing' > /dev/null 2>&1; then
+		echo 1
+	else
+		echo 0
+	fi
 }
 
 ############
@@ -137,22 +159,34 @@ main() {
 	# Check to see if the playlist has a match in the array
 	does_playlist_exist=$(check_playlist $choice)
 
-	# If the playlist exists, pass it to load_mpv function
-	if [ $does_playlist_exist -eq 1 ]; then
-		# Stop mpd if it is ying_playing.
-		mpc stop > /dev/null
-		load_mpv "$playlist_dir/$choice.m3u"
 	# If it doesn't exist, call the no_playlist function
-	else
+	if [ $does_playlist_exist -eq 0 ]; then
 		no_playlist
+		exit 1
+	fi
+
+	# Check to see if mpd is playing.
+	is_mpd_playing=$(check_mpd_status)
+
+	# Stop mpd if it is playing.
+	if [ $is_mpd_playing -eq 1 ]; then
+		mpc pause > /dev/null
+	fi
+
+	# Call to mpv with the playlist as an argument.
+	call_mpv "$playlist_dir/$choice.m3u"
+
+	# If mpd was playing before starting a video, resume playing.
+	if [ $is_mpd_playing -eq 1 ]; then
+		mpc play > /dev/null
 	fi
 }
 
 ####################
 ### Call to main ###
 ####################
-#
-main "$@"
+# Call main.  pass the `-w` flag by default.
+main "-w" "$@"
 
 ### End ###
 exit 0
