@@ -2,6 +2,10 @@
 #
 # A script to create m3u playlists for videos, mainly for using with UMS or mpv.
 #
+###################
+### Fail Events ###
+###################
+#
 # e - script stops on error
 # u - error if undefined variable
 # o pipefail - script fails if command piped fails
@@ -10,18 +14,43 @@
 #set -euox pipefail
 set -euo pipefail
 
+############
+### TODO ###
+############
+#
+# - Remove all references to 'm3u' and change to variable.
+# - Remove all references to 'mkv' and change to variable.
+# - Finish 'create_m3u' function.
+# - Decide about append mode, keep or not.
+# - Implement more than mkv searching.
+# - Finish continue prompt.
+#
+
+#################
+### Variables ###
+#################
+#
 playlist_directory="$HOME/Videos/playlists"
 playlist_array=($playlist_directory/*)
 playlist_header="#EXTM3U"
 playlist_name=""
 video_directory=""
+
+video_extentions="-name *.mkv -o -name *.avi -o -name *.mp4"
+
 shuffle_mode=0
+append_mode=0
 
-cd "$playlist_directory"
 
+#cd "$playlist_directory"
+
+#################
+### Functions ###
+#################
+#
 # How to use the script
 usage() {
-	echo "$(basename $0) (-s) [-n] <name> [-d] <directory>"
+	echo "$(basename $0) (options) [-n] <name> [-d] <directory>"
 }
 
 # Help Section
@@ -29,25 +58,30 @@ help_section() {
 	echo "A script to create video playlists."
 	echo
 	echo "Syntax: $(basename $0) (options) [-n] <playlist name> [-d] <video directory>"
-	echo "optional:"
-	echo "h     Print this help screen."
-	echo "s     Enable shuffle mode."
-	echo "l     List playlists."
-	echo "r     Open playlist directory in ranger."
+	echo "options:"
+	echo "h                   : Print this help screen."
+	echo "s                   : Enable shuffle mode."
+	echo "l                   : List playlists."
+	echo "e                   : Open playlist directory in ranger."
+	echo "r <playlist name>   : Remove playlist."
+	echo "a                   : Append to playlist."
 	echo
-	echo "mandatory:"
-	echo "n     Name of the playlist to create (m3u)."
-	echo "d     Directory of video files (mkv)."
+	echo "arguments:"
+	echo "n   : Name of the playlist to create (m3u)."
+	echo "d   : Directory of video files (mkv)."
 	echo
 	echo "Playlists are saved in: $playlist_directory"
 }
 
 # Get arguments and set flags
 get_arguments() {
-	while getopts ":d:n:shlr" option; do
+	while getopts ":d:n:shlear:" option; do
 		case $option in
 			# What to do if there is an invalid argument.
 			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Append to playlist
+			a) append_mode=1; echo "Append mode: ON" ;;
 
 			# Playlist mode
 			d) video_directory="${OPTARG}" ;;
@@ -65,13 +99,21 @@ get_arguments() {
 			l) list_playlists; exit ;;
 
 			# Open playlist directory in ranger
-			r) open_in_ranger; exit ;;
+			e) open_in_ranger; exit ;;
+
+			# Remove playlist
+			r) remove_playlist "${OPTARG}"; exit ;;
 
 			:) echo "Missing argument"; help_section; exit 1 ;;
 
 			*) usage; exit 1
 		esac
 	done
+}
+
+would_you_like_to_continue() {
+	echo "Would you like to continue? (y/n)"
+	exit 1
 }
 
 # Open the playlist directory in ranger.  Makes it easy to view playlists and delete them if necessary.
@@ -91,17 +133,50 @@ list_playlists() {
 	done
 }
 
+# Check if the playlist exists
+check_playlists() {
+	# Exists flag.
+	local exist=0
+
+	# Name of playlist to check.
+	local playlist_to_check=$1
+
+	# Check for a match in the array.
+	for i in ${playlist_array[@]}; do
+		# If a match is found, set exists flag to 1 and break loop.
+		if [ "$playlist_to_check" == "$i" ]; then
+			exist=1
+			break
+		fi
+	done
+
+	# Return the result of the check.
+	# 1 if it exists, 0 if not.
+	echo $exist
+}
+
+# Remove playlist
+remove_playlist() {
+	local playlist=$1
+
+	rm --force --verbose "$playlist_directory/$playlist.m3u"
+}
 
 # Create m3u playlist file.
 create_m3u() {
 	local playlist_file="$playlist_directory/$playlist_name.m3u"
 	echo "Creating playlist for: $playlist_name"
-	echo "$playlist_header" > "$playlist_file"
+
+	if [ $append_mode -eq 0 ]; then
+		echo "$playlist_header" > "$playlist_file"
+	fi
 
 	if [ "$shuffle_mode" -eq 1 ]; then
-		readlink --canonicalize $video_directory/*.mkv | shuf >> "$playlist_file"
+		#readlink --canonicalize "$video_directory/**"/*.mkv | shuf >> "$playlist_file"
+		find "$video_directory" -type f $video_extentions -print | shuf >> "$playlist_file"
 	else
-		readlink --canonicalize $video_directory/*.mkv >> "$playlist_file"
+		#readlink --canonicalize "$video_directory"/**/*.mkv >> "$playlist_file"
+		find "$video_directory" -type f $video_extentions | sort >> "$playlist_file"
 	fi
 
 	echo "Playlist created."
@@ -109,12 +184,32 @@ create_m3u() {
 
 }
 
-get_arguments "$@"
+############
+### Main ###
+############
+#
+main() {
+	get_arguments "$@"
 
-if [ "$OPTIND" -eq 1 ]; then
-	echo "Error: Must specify the playlist name and directory."
-	usage
-	exit 1
-fi
+	if [ "$OPTIND" -eq 1 ]; then
+		echo "Error: Must specify the playlist name and directory."
+		usage
+		exit 1
+	fi
 
-create_m3u
+	does_playlist_exist=$(check_playlists "$playlist_directory/$playlist_name.m3u")
+
+	if [ $does_playlist_exist -eq 1 ]; then
+		echo "Playlist already exists."
+		#to_continue=$(would_you_like_to_continue)
+		#[[ $to_continue -eq 0 ]] && exit 1
+	fi
+
+	create_m3u
+}
+
+####################
+### Call to main ###
+####################
+#
+main "$@"
