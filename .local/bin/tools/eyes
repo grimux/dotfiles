@@ -1,7 +1,18 @@
 #!/usr/bin/env bash
 #
+############
+### Info ###
+############
+#
+### Description ###
 # A script for controlling redshift to help with my light sensitivities and migraines.
 #
+### How it works ###
+# It utilizes two configuration files, a normal mode and a hurt mode.  The script will
+# link the proper config file to redshift's default config file, "redshift.conf".
+# This ensures that settings are saved between X sessions and reboots.  Settings will
+# only change when this script is run with the proper arguments.
+
 
 ###################
 ### Fail Events ###
@@ -18,9 +29,20 @@ set -euo pipefail
 ##############
 ### Config ###
 ##############
+#
+### Temp/Brightness ###
 temp="2100:2100"					# Temperature for day:night
 bright="0.60:0.45"					# Brightness for day:night
-hurt_conf_file="$HOME/.config/redshift/hurt.conf"	# Configuration file for low mode.
+
+### Files ###
+conf_dir="$HOME/.config/redshift"
+hurt_conf_file="$conf_dir/hurt.conf"	# Configuration file for low mode.
+normal_conf_file="$conf_dir/normal.conf"
+current_conf_file="$conf_dir/redshift.conf"
+
+### Call to redshift ###
+# Can be either "redshift-gtk" to get the tray icon, or just "redshift".
+# call_redshift="redshift"
 call_redshift="redshift-gtk"
 
 
@@ -28,20 +50,37 @@ call_redshift="redshift-gtk"
 #################
 ### Functions ###
 #################
+#
 function usage() {
 	echo "Do your eyes \"hurt\" or are they \"okay\"?";
 }
 
+# Get the current status.
+# It just prints out the config file and doesn't actually get live values.
 function get_status() {
 	echo "Current status:"
 	redshift -p
 }
 
-# Set redshift to low mode by using arguments.
+# Set redshift to hurt mode.
+# Creates a link to the hurt config file and names is "redshift.conf".
 function set_to_low() {
 	# Kill redshift if it is running.
 	kill_redshift
 
+	# Create a link to the hurt file.  The link is called "redshift.conf".
+	ln \
+		--force \
+		"$hurt_conf_file" \
+		"$current_conf_file"
+
+
+	# Start redshift using the normal configuration file.  Send all output to null.
+	$call_redshift &> /dev/null &
+}
+
+# Set redshift to low mode by using arguments.
+function set_to_low_args() {
 	# Call redshift and apply the settings.
 	$call_redshift \
 		-r \
@@ -49,26 +88,27 @@ function set_to_low() {
 		-b "$bright" \
 		&> /dev/null \
 		&
-
 }
 
-# Set redshift to low mode by using a configuration file.
-function set_to_low_conf() {
-	# Kill redshift if it is running.
-	kill_redshift
-
-	# Use configuration file for settings.
-	$call_redshift -c $hurt_conf_file &> /dev/null &
-}
-
+# Set redshift to normal mode.
+# Creates a link to the normal config file and names is "redshift.conf".
 function set_to_normal() {
 	# Kill redshift if it is running.
 	kill_redshift
+
+	# Create a link to the normal file.  The link is called "redshift.conf".
+	ln \
+		--force \
+		"$normal_conf_file" \
+		"$current_conf_file"
 
 	# Start redshift using the default configuration file.  Send all output to null.
 	$call_redshift &> /dev/null &
 }
 
+# If redshift is found running, kill it.
+# Multiple instances of redshift running causes settings to stack and monitor flickering.
+# So it's important to ensure only one is ever running.
 function kill_redshift() {
 	if pgrep redshift > /dev/null; then
 		killall redshift
@@ -81,9 +121,10 @@ function kill_redshift() {
 ### Main ###
 ############
 function main() {
+	# My current condition, passed as an argument.
 	local condition="$@"
 
-	# Main logic.  Only two possible arguments.
+	# Main logic.  Only two possible arguments; "okay" and "hurt".
 	case "$condition" in
 		# If no argument, show status.
 		"") usage; echo ; get_status;;
