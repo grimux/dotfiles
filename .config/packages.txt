@@ -108,6 +108,7 @@ hplip
 htim
 icoutils
 id3v2
+img2pdf
 innoextract
 iptables-nft
 jdownloader2
@@ -256,6 +257,7 @@ speedtest-cli
 starship
 steam
 steamtinkerlaunch
+subdl
 subliminal
 sudo
 sxiv
