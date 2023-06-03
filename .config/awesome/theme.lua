@@ -155,7 +155,7 @@ theme.weather = lain.widget.weather({
     settings = function()
         descr = weather_now["weather"][1]["description"]:lower()
         units = math.floor(weather_now["main"]["temp"])
-        widget:set_markup(markup.fontfg(theme.font, "#eca4c4", descr .. " @ " .. units .. "°C"))
+        widget:set_markup(markup.fontfg(theme.font, "#eca4c4", descr .. " @ " .. units .. "°F"))
     end
 })
 
@@ -356,13 +356,13 @@ function theme.at_screen_connect(s)
             memory.widget,
             cpuicon,
             cpu.widget,
+            tempicon,
+	    --cputemp,
+            temp.widget,
             fsicon,
             theme.fs.widget,
             weathericon,
             theme.weather.widget,
-            tempicon,
-	    --cputemp,
-            temp.widget,
             --baticon,
             --bat.widget,
             clockicon,
