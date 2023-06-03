@@ -2,6 +2,8 @@
 # A script/config file that contains my favorite/most often used code.
 #
 
+### Shebang ###
+#!/usr/bin/env bash
 
 ####################################################################################################
 # Fail Events:
