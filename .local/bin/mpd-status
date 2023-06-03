@@ -19,4 +19,4 @@ message=$(printf "%s\n%s\n%s" "$track" "$artist" "$album")
 echo $info
 
 # Print the message using notify-send
-notify-send -i "$artwork" "MPD"  "$message"
+notify-send -i "$artwork" "Currently Playing:"  "$message"
