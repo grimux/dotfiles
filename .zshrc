@@ -13,6 +13,7 @@ export FILE="ranger"
 export BROWSER="firefox"
 #export PAGER="most"
 export TERMINAL="alacritty"
+export TERMCMD="$TERMINAL"
 # Export GTK themes to Qt
 export QT_QPA_PLATFORMTHEME=gtk2
 export CM_DIR="$HOME/.cache/clipmenu"
@@ -38,6 +39,7 @@ if [ -d "$HOME/.local/bin" ] ; then
 	PATH="$HOME/.local/bin/statusbar:$PATH"
 	PATH="$HOME/.local/bin/dmenu:$PATH"
 	PATH="$HOME/.local/bin/games:$PATH"
+	PATH="$HOME/.local/bin/steamdeck:$PATH"
 	PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
 fi
 
@@ -142,6 +144,7 @@ alias la="lsd --almost-all --long --group-directories-first"
 alias lu="lsd --sizesort --almost-all --total-size --long --group-directories-first"
 alias lss="/usr/bin/ls -1 --color=auto --group-directories-first"
 alias grep="grep --color=auto"
+alias searchtext="grep -R --color=auto"
 
 ## Config files ##
 alias cfa="$EDITOR ~/.zshrc -c /Aliases"
@@ -149,6 +152,7 @@ alias cfv="$EDITOR ~/.config/nvim/init.vim"
 alias cfx="$EDITOR ~/.xinitrc"
 alias cfz="$EDITOR ~/.zshrc"
 alias cfb="$EDITOR ~/Videos/playlists/bedtime.m3u"
+alias cfs="$EDITOR ~/.config/script_boilerplate.sh"
 
 ## Program shortcuts ##
 alias define="sdcv"			# Dictionary
@@ -160,11 +164,16 @@ alias py="python"
 alias sdn="shutdown now"
 alias sf="sudo ranger"			# Run ranger as root
 alias spell="look"
+alias tar-backup="tar cvfpz"
+alias tar-restore="tar xvfpz"
 alias trem="transmission-remote"
-alias vim="nvim"
 alias vimhelp="nvim -c help -c only"	# Open the help section of nvim
+alias vim="nvim"
 alias weather="curl wttr.in"		# Get the current weather
 alias x="exit"
+alias rsync-fat="rsync -hvrltD --modify-window=1 --stats --info=progress2"
+alias mountsd="sudo mount /dev/sdf1"
+alias getsub="subdl --username grimux --password ahb0oaSuG3iPohk@ --download=most-downloaded --existing=query"
 
 ## Dotfile alias ##
 # An alias to manage my dotfiles.
@@ -178,9 +187,12 @@ alias ytpod="$yt_app $yt_config_location/podcast"
 alias ytv="$yt_app $yt_config_location/video_single"
 alias ytvp="$yt_app $yt_config_location/video_playlist"
 
+# Copy game files using rsync
+alias send_game="rsync -hvrlt --info=progress2 --stats"
+
 ## Games ##
-alias help_me="steam steam://rungameid/1010750"
-alias bloodgdx="/usr/lib/jvm/java-8-jre/jre/bin/java -jar /usr/share/buildgdx/BuildGDX.jar -silent -path /mnt/s/SteamLibrary/steamapps/common/Blood"
+#alias im_stuck="steam -applaunch 1010750 map e1m1"
+alias im_stuck="nblood"
 
 ## Music ##
 alias dangan="mpc clear; mpc searchadd Title \"Into Free\"; mpc play; lyrics"
@@ -192,9 +204,10 @@ mpv_playlist_settings="--loop-playlist --save-position-on-quit"
 alias factorio="mpv $mpv_playlist_settings $video_playlist_dir/factorio_1.0_tuplex.m3u"
 alias futurama="mpv $mpv_playlist_settings --shuffle $video_playlist_dir/futurama.m3u"
 alias subnautica="mpv $mpv_playlist_settings $video_playlist_dir/subnautica.m3u"
+alias spongebob="mpv $mpv_playlist_settings --shuffle $video_playlist_dir/spongebob.m3u"
 alias blood="mpv $mpv_playlist_settings $video_playlist_dir/blood_fresh_supply.m3u"
-alias xavier="mpv $video_playlist_dir/xavier.m3u"
-alias xfiles="mpv $mpv_playlist_settings --save-position-on-quit $video_playlist_dir/xfiles.m3u"
+alias xavier="mpv $mpv_playlist_settings $video_playlist_dir/xavier.m3u"
+alias xfiles="mpv $mpv_playlist_settings $video_playlist_dir/xfiles.m3u"
 alias twinpeaks="mpv $mpv_playlist_settings $video_playlist_dir/twin_peaks.m3u"
 
 alias calm="mpv --loop --fullscreen /mnt/v/relaxing/Autism_Calming_Sensory_Meltdown_Remedy_Soothing_Visuals-Super_Duper_Fun_Music.mkv"
