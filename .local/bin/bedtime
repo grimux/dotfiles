@@ -77,8 +77,9 @@ launch_mpv() {
 	# The playlist file is passed to launch_mpv and stored in a variable.
 	local playlist="$1"
 
-	# Call to mpv with the playlist file
-	mpv --playlist="$playlist" &
+	# Call to mpv with the playlist file.
+	# If there is a watch later file, ignore it.
+	mpv --no-resume-playback --playlist="$playlist"
 }
 
 # Switch to tag 8 in awesomewm.  This tag is for video players such as mpv.
@@ -148,7 +149,7 @@ main() {
 	sleep 1
 
 	# Switch to the tag that will have mpv on it.
-	move_to_video_tag
+	#move_to_video_tag
 
 	wait
 
