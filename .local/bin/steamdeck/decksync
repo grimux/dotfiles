@@ -25,7 +25,7 @@ set -euo pipefail
 ##############
 ### Config ###
 ##############
-#
+# Script configuration directory.
 config_directory="$HOME/.config/steamdeck"
 
 # ini file containing save location information.
