@@ -47,6 +47,8 @@ rsync_arguments=(
 	--no-perms
 	--recursive
 	--inplace
+	--times
+	--perms
 )
 
 
