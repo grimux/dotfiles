@@ -115,8 +115,8 @@ local cycle_prev   = true  -- cycle with only the previously focused client or a
 local editor       = os.getenv("EDITOR") or "nvim"
 local browser      = "firefox"
 local htmlwiki     = " ~/vimwiki/_site/index.html"
---local music        = terminal .. " -e ncmpcpp"
-local music        = "cantata"
+local music        = terminal .. " -e ncmpcpp"
+--local music        = "cantata"
 local termfile     = terminal .. " -e ranger"
 local filemanager  = "pcmanfm-qt"
 
@@ -306,7 +306,7 @@ globalkeys = mytable.join(
     awful.key({ altkey }, "Right", function () lain.util.tag_view_nonempty(1) end,
               {description = "view  previous nonempty", group = "tag"}),
 
-	   -- Cycle through windows
+   -- Cycle through windows
     awful.key({ modkey,           }, "j",
         function ()
             awful.client.focus.byidx( 1)
@@ -726,6 +726,7 @@ awful.rules.rules = {
           "veromix",
           "xtightvncviewer",
 	  "Yad",
+	  "Zathura",  -- PDF viewer
          },
 
         -- Note that the name property shown in xprop might be set slightly after creation of the client
