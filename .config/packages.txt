@@ -311,6 +311,7 @@ wine-mono
 wine-staging
 winetricks
 wkhtmltox
+wmctrl
 words
 xash3d-fwgs-git
 xclip
