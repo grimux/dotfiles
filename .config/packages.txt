@@ -175,6 +175,7 @@ ntfs-3g
 numlockx
 nvidia-dkms
 nvidia-settings
+obs-studio
 openbsd-netcat
 openssh
 openssl-1.1
@@ -232,6 +233,8 @@ ranger
 raze-git
 rclone
 redshift
+rhvoice
+rhvoice-language-english
 rsync
 rvm
 s-nail
@@ -253,6 +256,7 @@ soh-otr-exporter
 soh-otr-gc_mq_d
 soh-otr-gc_nmq_d
 solaar
+speech-dispatcher
 speedtest-cli
 starship
 steam
