@@ -174,6 +174,7 @@ alias x="exit"
 alias rsync-fat="rsync -hvrltD --modify-window=1 --stats --info=progress2"
 alias mountsd="sudo mount /dev/sdf1"
 alias getsub="subdl --username grimux --password ahb0oaSuG3iPohk@ --download=most-downloaded --existing=query"
+alias movies="ranger ~/Videos/movies"
 
 ## Dotfile alias ##
 # An alias to manage my dotfiles.
