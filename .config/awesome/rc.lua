@@ -474,9 +474,9 @@ globalkeys = mytable.join(
               { description = "pavucontrol", group = "programs"}),
 
     -- Script Launching
-    awful.key({ modkey,           }, "g",     function () awful.spawn("gametime") end,
+    awful.key({ modkey,           }, "F1",     function () awful.spawn("gametime") end,
               { description = "gametime", group = "scripts"}),
-    awful.key({ modkey, "Shift"   }, "g",     function () awful.spawn("play -d") end,
+    awful.key({ modkey, "Shift"   }, "F1",     function () awful.spawn("play -d") end,
               { description = "gametime", group = "scripts"}),
 
     awful.key({ modkey,        }, "F5",     function ()
