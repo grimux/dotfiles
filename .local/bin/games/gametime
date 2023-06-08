@@ -9,72 +9,97 @@
 # x - output each line (debug)
 #
 #set -euox pipefail
-set -uo pipefail
+set -euo pipefail
+
+
+
+########################
+### Global Variables ###
+########################
 
 is_steam_running=0
 is_lutris_running=0
 
-# Launch the launchers
-launch_launchers_minimized() {
-	# Send a notification.
-	notify-send "gametime" "Starting Steam and Lutris..."
-
-	# Launch steam with or without manghud
-	#mangohud steam-runtime -nochatui -nofriendsui &
-	steam -nochatui -nofriendsui -silent &
 
 
-	# Launch lutris
-	lutris &
+#################
+### Functions ###
+#################
 
-	# Buggy and doesn't work
-	#xdotool search --onlyvisible --classname --sync lutris windowminimize --sync
-}
-
-# Start the game launchers, both windows up.
-launch_launchers_maximized() {
-	# Send a notification.
-	notify-send "gametime" "Starting Steam and Lutris..."
-
-	# Launch steam normally with no chat or friends list open.
-	steam -nochatui -nofriendsui &
+# Function to launch Steam.
+# You can decide if you want it minimized or not, or to use MangoHud or not.
+function launch_steam() {
+	# Launch steam with no chat or friends list open.
+	# Silent will make it minimized to sys-tray.
+	#steam -nochatui -nofriendsui -silent &> /dev/null &
+	steam -nochatui -nofriendsui &> /dev/null &
 
 	# Launch steam with manghud and the same options.
-	#mangohud steam-runtime -nochatui -nofriendsui &
-
-	# Launch lutris.
-	lutris &
+	#mangohud steam-runtime -nochatui -nofriendsui -silent &> /dev/null &
 }
 
-get_process_id() {
+# Function to launch Lutris.
+# By default it will be minimized by using `wmctrl`.
+function launch_lutris() {
+	# Launch lutris
+	lutris &> /dev/null &
+
+	# Uses wmctrl to minimize lutris.
+	# This loop will try running the command until it succeeds.
+	until wmctrl -r lutris -b add,hidden; do
+		echo "Waiting for lutris..."
+		sleep 3
+	done
+}
+
+# Function to launch the launchers.
+# Will send a notification.
+function launch_launchers() {
+	# Send a notification.
+	notify-send "gametime" "Starting Steam and Lutris..."
+
+	launch_steam
+	launch_lutris
+
+
+}
+
+# Function to get the process id of Steam and Lutris.
+# It will return the process id.
+function get_process_id() {
 	local launcher_name="$1"
 	local process_id=$(pgrep --full "$launcher_name")
 
 	echo "$process_id"
 }
 
-# Kill the launchers
-kill_launchers() {
+# Kill the launchers.
+# Will check first to see if the process is running or not.
+# If we try to `pkill` a process that doesn't exist, the script exits prematurely
+function kill_launchers() {
 	notify-send "gametime" "Killing Steam and Lutris..."
 
-	pkill "steam"
-	pkill --full "lutris"
+	[[ "$is_steam_running" -eq 1 ]] && pkill "steam"
+	[[ "$is_lutris_running" -eq 1 ]] && pkill --full "lutris"
 }
 
 # Check for already running processes.  Set a flag
-check_processes() {
-	#lutris_process=$(ps -ax | grep lutris | awk '{print $1}' | wc -l)
-	#steam_process=$(pgrep steam)
-
+function check_processes() {
+	# Local variables to hold the process ID of Steam and Lutris.
+	# These variables will be empty (-z) if the process is not running.
 	local lutris_process=$(get_process_id "lutris")
 	local steam_process=$(get_process_id "steam")
 
+	# Check the lutris process.
+	# If running, set to 1.
 	if [ -z "$lutris_process" ]; then
 		is_lutris_running=0
 	else
 		is_lutris_running=1
 	fi
 
+	# Check the Steam process.
+	# If running, set to 1.
 	if [ -z "$steam_process" ]; then
 		is_steam_running=0
 	else
@@ -82,53 +107,23 @@ check_processes() {
 	fi
 }
 
-# Get arguments
-get_arguments() {
-	while getopts ":kh" option; do
-		case $option in
-			k)
-				kill_all
-				exit
-				;;
-			h)
-				help_section
-				exit
-				;;
-			\?)
-				echo "Error: Invalid option"
-				exit 1
-				;;
-		esac
-	done
-}
 
-# Main
-main() {
-	get_arguments "$@"
-	local arguments="$@"
 
+############
+### Main ###
+############
+function main() {
+	# Check for running processes for Steam and Lutris
 	check_processes
+
+	# If either of them is running, kill it.
 	if [ $is_steam_running -eq 1 ] || [ $is_lutris_running -eq 1 ]; then
 		kill_launchers
+	# Otherwise, launch them.
 	else
-		#launch_launchers_minimized
-		launch_launchers_maximized
-	fi
-
-	echo done
-}
-
-testing() {
-	local steam_process_id=$(get_process_id "steam")
-	local lutris_process_id=$(get_process_id "lutris")
-
-	if [ -z "$steam_process_id" ] || [ -z "$lutris_process_id" ]; then
-		kill_launchers
-	else
-		start_launchers
-		minimize_launchers
+		launch_launchers
 	fi
 }
 
-#testing "$@"
+### Call to main ###
 main "$@"
