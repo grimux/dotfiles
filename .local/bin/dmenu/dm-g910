@@ -1,0 +1,158 @@
+#!/usr/bin/bash
+#
+# A script for controlling light profiles on my Logitech G910 keyboard.
+# Uses `g910-led` from the package `g810-led`.  Github: https://github.com/MatMoul/g810-led
+#
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+
+### Variables ###
+#
+# Profile directory
+profile_dir="$HOME/.config/keyboard"
+
+# Array of profiles.
+# Takes all the files from the profile directory and adds them to the array.
+# This array is dynamic and will change depending on the contents of the directory
+profile_files=($profile_dir/*)
+
+# Array of profile names
+# awk is used to strip the file path and leave just the file name. -F'/' sets the delimiter to /
+# sed is used to strip the file extension.
+#profile_names=$(printf '%s\n' "${profile_files[@]}" | awk -F'/' '{print $NF}' | sed 's/.m3u//')
+profile_names=$(basename --multiple "${profile_files[@]}")
+
+# Startup profile.
+# This is the default profile and will be applied on boot.
+startup_profile="/etc/g810-led/profile"
+
+# The profile currently in use.  This script will copy the selected profile to this file name.
+# Then, a link is used in `/etc/g810-led/profile` to start the profile on boot.
+current_profile="$HOME/.local/share/g910_profile"
+
+### Functions ###
+#
+# Function to open profile in dmenu
+function open_in_dmenu() {
+	# Piping the array into dmenu.
+	printf '%s\n' "${profile_names[@]}" | dmenu -i -l 20 -p 'Playlist:'
+}
+
+# Check if the startup profile is linked to an existing profile.
+function check_startup() {
+	# Initialize the exists flag to zero.
+	local exists=0
+
+	# Check if the file is a symbolic link (-L) and if the file exists (-e).
+	# If both conditions are true, set the exists flag to 1.
+	if [[ -L "$startup_profile" ]] && [[ -e "$startup_profile" ]]; then
+		exists=1
+	fi
+
+	# Return the result.  1 is a link, 0 is not.
+	echo "$exists"
+}
+
+# Check if the profile exists
+function check_profile() {
+	# Exists flag.
+	exist=0
+
+	# Name of profile to check.
+	name=$1
+
+	# Check for a match in the array.
+	for i in ${profile_names[@]}; do
+		# If a match is found, set exists flag to 1.
+		if [ "$name" == "$i" ]; then
+			exist=1
+		fi
+	done
+
+	# Return the result of the check.
+	# 1 if it exists, 0 if not.
+	echo $exist
+}
+
+# Load lighting profile using `g910-led`.
+function load_profile() {
+	# Name of the profile to load, passed as argument.
+	local profile="$@"
+
+	# Call g910-led and set the profile.
+	g910-led -p "$profile_dir/$profile"
+
+	# Copy the selected profile to the
+	cp "$profile_dir/$profile" "$current_profile"
+
+	# Give a message, telling us the profile name.
+	echo "Profile set to: $profile"
+	notify-send "g910-led:" "Profile set to: $profile"
+}
+
+### Main ###
+#
+function main() {
+	# Choice can be passed as an argument or left blank to use dmenu.
+	local choice="$@"
+
+
+	### Handling arguments ###
+	# Check if the argument passed to the script is empty
+	# If so, capture the output of open_in_dmenu into $choice
+	if [ -z "$choice" ]; then
+		choice=$(open_in_dmenu)
+	# Otherwise use the argument as the profile name
+	else
+		choice="$1"
+	fi
+
+
+	### Does profile exist ###
+	# Check to see if the profile has a match in the array
+	does_profile_exist=$(check_profile $choice)
+
+	# If the profile exists, pass it to load_mpc function
+	if [ $does_profile_exist -eq 1 ]; then
+		echo "Profile found!"
+		echo "loading..."
+		load_profile $choice
+	# If it doesn't exist, tell us and exit with an error.
+	else
+		echo "Profile not found."
+		notify-send "dm-g910 Error:" "That profile does not exist."
+		exit 1
+	fi
+
+
+	### Does link exist ###
+	# Check to see if the startup profile in /etc/g810-led is linked to the config in the home
+	# directory.
+	does_link_exist=$(check_startup)
+
+	# If the file is not a link, tell us and change it.
+	if [ $does_link_exist -eq 0 ]; then
+		echo "Startup profile is not linked."
+		echo "Creating link..."
+		sudo ln --symbolic --force "$current_profile" "$startup_profile"
+		echo "Done"
+	else
+		echo "Startup link is good."
+	fi
+}
+
+# Call main
+main "$@"
+
+### End ###
+exit 0
