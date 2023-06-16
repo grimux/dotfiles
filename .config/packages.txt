@@ -322,6 +322,7 @@ words
 xash3d-fwgs-git
 xclip
 xdelta3
+xdg-desktop-portal-lxqt
 xdg-user-dirs
 xf86-video-vesa
 xone-dkms
