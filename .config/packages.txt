@@ -262,6 +262,7 @@ speech-dispatcher
 speedtest-cli
 starship
 steam
+steam-metadata-editor-git
 steamtinkerlaunch
 subdl
 subliminal
