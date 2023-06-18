@@ -34,6 +34,7 @@ cantata
 cava
 cemu
 clipmenu
+cmake
 conky
 cronie
 crystal
@@ -110,6 +111,7 @@ hplip
 htim
 icoutils
 id3v2
+imagemagick
 img2pdf
 innoextract
 iptables-nft
@@ -208,6 +210,7 @@ polymc-bin
 powerline-fonts
 ppsspp
 progress
+protobuf
 protonhax
 protontricks
 protonup-git
@@ -221,6 +224,7 @@ pv
 python-charset-normalizer
 python-cogapp
 python-httplib2
+python-internetarchive
 python-mutagen
 python-oauth2client
 python-pathvalidate
