@@ -146,6 +146,7 @@ lld
 lsd
 lsof
 lutris
+luxtorpeda-git
 lxappearance
 lxqt-archiver
 lxsession
@@ -237,6 +238,7 @@ qtpass
 quakespasm
 ranger
 raze-git
+rbdoom-3-bfg
 rclone
 redshift
 rhvoice
