@@ -81,6 +81,7 @@ gamemode
 gamescope
 gcc
 gdrive
+genact
 gendesk
 ghostscript
 gimp
