@@ -216,6 +216,7 @@ protobuf
 protonhax
 protontricks
 protonup-git
+protonup-qt-bin
 puddletag
 pulseaudio
 pulseaudio-alsa
