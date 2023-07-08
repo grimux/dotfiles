@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-# 
+#
 ### Description #####################################################################################
 # A script to toggle TV mode on my computer.  It switches my connected TV to be it's own monitor
 # and play videos on it.  This script uses a custom profile within Firefox, so its current tabs,
@@ -59,7 +59,7 @@ xrandr_mirror_mode() {
 enable_tv_mode() {
 	### TODO ###
 	#
-	
+
 	# Enter debug message
 	if [ $debug_mode -eq 1 ]; then
 		echo "Entering: ${FUNCNAME[0]}"
@@ -87,12 +87,12 @@ enable_tv_mode() {
 disable_tv_mode() {
 	### TODO ###
 	# - Fix bugs with close_browser
-	
+
 	# Enter debug message
 	if [ $debug_mode -eq 1 ]; then
 		echo "Entering: ${FUNCNAME[0]}"
 	fi
-	
+
 	# Get the id of the browser with YouTube in it
 	local browser_window_id=$(get_browser_id)
 
@@ -107,7 +107,7 @@ disable_tv_mode() {
 
 	# Show disable message
 	disable_message
-	
+
 	# Exit debug message
 	if [ $debug_mode -eq 1 ]; then
 		echo "Leaving: ${FUNCNAME[0]}"
@@ -124,7 +124,7 @@ open_browser() {
 
 	# Store the currently active window so we can switch back to it after opening firefox.
 	local previously_active_window=$(get_current_window)
-	
+
 	# Call to startup firefox.  Will use its own profile.
 	# Also inialized with its own custom class name so it can be easily found.
 	nohup \
@@ -137,10 +137,10 @@ open_browser() {
 
 	# Prevent race war with starting the browser and getting its ID.
 	sleep 0.75
-	
+
 	# Get the ID of the newly created browser window.
 	local browser_id=$(get_browser_id)
-	
+
 	# NOTE: Since I am using a separate profile for firefox, it seems to remember the last
 	# monitor that was used, so the following command is not needed, and will actually move
 	# the firefox window back to my main screen, if it was previously on the TV
@@ -294,7 +294,8 @@ help_section() {
 # Fix wallpaper.
 # Sometimes the wallpaper may not apply when switching monitors around.
 restore_wallpaper() {
-	nitrogen --restore
+	#nitrogen --restore
+	~/.fehbg
 }
 
 # Restart awesomewm.  This is to rearanged windows when leaving TV mode.
