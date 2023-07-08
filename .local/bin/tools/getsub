@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+#
+##################################################################################
+# Name:
+# 	getsub
+#
+# Description:
+# 	Simple wrapper for `subdl`.  Uses my account, which is retrieved by pass.
+##################################################################################
+
+# Call subdl with the corresponding arguments.
+subdl \
+	--username grimux \
+	--password $(pass show services/open-subtitles | head -n1) \
+	--download=most-downloaded \
+	--existing=overwrite
