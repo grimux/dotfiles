@@ -25,6 +25,11 @@ awesome() {
 	redshift-gtk &
 	#redshift &
 
+	# Fix for steam
+	#/usr/lib/xdg-desktop-portal-gtk &
+	/usr/lib/xdg-desktop-portal-lxqt &
+	/usr/lib/xdg-desktop-portal &
+
 	# Start awesome
 	exec awesome
 }
@@ -75,7 +80,9 @@ shared_settings() {
 	xrandr --output $tv_id --same-as $monitor_id &
 
 	# music player daemon
-	mpd &
+	# Check if the pid file exists, if not, start mpd.
+	# If file exists and size greater than zero (-s), skip.
+	[ ! -s ~/.local/share/mpd/pid ] && mpd
 
 	# Start Universal Media Server
 	ums &
