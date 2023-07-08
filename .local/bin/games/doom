@@ -25,18 +25,14 @@ set -euo pipefail
 ####################
 ### Global Flags ###
 ####################
-
 # Use dmenu to choose mod.
 use_dmenu=0
-
-
+use_steam=0
 
 
 ##############
 ### Config ###
 ##############
-
-ini_file="$HOME/.config/gzdoom/mod_profiles.ini"
 gzdoom_ini_file="$HOME/.config/gzdoom/gzdoom.ini"
 doomdir="$HOME/Games/gzdoom"
 modsdir="$doomdir/mods"
@@ -45,28 +41,22 @@ addonsdir="$modsdir/addons"
 savedir="$doomdir/save"
 
 
-
-
 ####################
 ### Mod Profiles ###
 ####################
-
 # This file contains the mod profiles, inside a case statement.
 # This makes it convienent to keep the profiles and launcher script separate.
 mod_profiles="$HOME/.config/gzdoom/mod_profiles.sh"
 source $mod_profiles
 
 
-
-
 #######################
 ### Data and Arrays ###
 #######################
-#
 ### Listing of all the mod groupings. ###
 # This greps out the formated mod names in the ini file, then puts them into an array.
 # Formatting '[' and ']' are removed using sed.  This displays a nice clean name.
-mods_list=($(grep '\[.*\]' $ini_file | sed -e 's/\[//' -e 's/\]//'))
+#mods_list=($(grep '\[.*\]' $ini_file | sed -e 's/\[//' -e 's/\]//'))
 
 # Map Packs
 map_pack_list=($mapsdir/*)
@@ -80,28 +70,30 @@ modifiers_list=(
 #################
 ### Functions ###
 #################
-
 # Help Section
 function help_section() {
 	echo "A script to launch Doom and its various mods."
 	echo
-	echo "Syntax: $(basename "$0") [-h|m|l] [mod name]"
+	echo "Syntax: $(basename "$0") [-h|d|l|s] [mod name]"
 	echo "options:"
 	echo "h     Print this help screen."
-	echo "m     Choose mod in dmenu."
+	echo "d     Choose mod in dmenu."
 	echo "l     List installed mods."
+	echo "s     Use Steam."
 	echo
 }
 
 # Get arguments
 function get_arguments() {
-	while getopts ":hlm" option; do
+	while getopts ":hlds" option; do
 		case $option in
-			m) use_dmenu=1;;
+			d) echo "Using dmenu."; use_dmenu=1;;
 
 			h) help_section; exit;;
 
 			l) list_mods; exit;;
+
+			s) echo "Using Steam."; use_steam=1;;
 
 			\?) echo "Error: Invalid option"; exit;;
 
@@ -142,17 +134,34 @@ function launch_doom() {
 	local map="$4"
 	local cheats="$5"
 	local skill="$6"
+	local program_to_use="gzdoom"
+	local steam_id
 
-	# Call gzdoom with our specified options.
-	# The variables must be used without " because gzdoom won't understand the command otherwise.
-	gzdoom \
+	# Set the steam id for the corresponding game, Doom 1 or Doom 2.
+	# doom1: 2280
+	# doom2: 2300
+	case $iwad in
+		"DOOM.WAD") steam_id=2280;;
+		"DOOM2.WAD") steam_id=2300;;
+		"") echo "iwad is empty string"; exit 1;;
+		*) echo "Unrecognized iwad name"; exit 1;;
+	esac
+
+	# Check to see if Steam should be used.
+	if [ $use_steam -eq 1 ]; then
+		program_to_use="steam -applaunch $steam_id"
+	# If not, launch gzdoom directly.
+	else
+		program_to_use="gzdoom"
+	fi
+
+	$program_to_use \
 		-iwad $iwad \
 		-file $wads \
 		-savedir $savedir \
 		$map \
 		$cheats \
 		$skill
-
 }
 
 # Check if the mod exists within the array.
@@ -210,7 +219,7 @@ function check_mods_parse() {
 	#grep "\[$mod_name\]" $ini_file > /dev/null
 
 	# If the grep returns 0, then the mod name exists within the ini
-	[[ $(grep "\[$mod_name\]" $ini_file > /dev/null) -eq 0 ]] && exists=1
+	#[[ $(grep "\[$mod_name\]" $ini_file > /dev/null) -eq 0 ]] && exists=1
 
 	# Return flag value
 	# 1 exists, 0 does not exist
@@ -246,35 +255,54 @@ function parse_ini_to_array() {
 	printf "%s\n" "${#raw_mod_data[@]}"
 }
 
-###################
-### Entry Point ###
-###################
+############
+### Main ###
+############
 #
 # Main is a working script.  Any testing should be done in the testing function.
 # Leave this as a complete and working script.
 #
-
 main() {
-	local chosen_mod
+	# Local variables.
 	local does_mod_exist
+	local chosen_mod
 
+
+	## Get arguments ##
+	##---------------##
 	# Get flag options passed to the script.
 	get_arguments "$@"
 
-	# Should we use dmenu or not.
+
+	## Main Logic ##
+	##------------##
+	# Check to see if we are using dmenu or not.
 	if [ "$use_dmenu" -eq 1 ]; then
+		# If so, set chosen mod to the output of choose_in_dmenu function.
 		chosen_mod=$(choose_in_dmenu)
-	# $# is the number of arguments passed to the script, not including flags (-d). This checks
-	# if a mod name was entered or not.  If there were no arguments, exit with error.
-	elif [ $# -eq 0 ]; then
-		echo "No mod specified"
-		exit 1
+
+	# Check to see if we are using Steam.
+	elif [ "$use_steam" -eq 1 ]; then
+		# First, remove the leading arguments, "-s".
+		shift $(( OPTIND - 1 ))
+		# Set chosen_mod to the remainder of the arguments.
+		chosen_mod="$@"
+
+	# Else if there are no arguments.
+	elif [ -z "$@" ]; then
+		echo "Please choose a mod profile:"
+		echo
+		list_mods
+		exit
+
+	# Base case when an argument is supplied.  Expects mod name.
 	else
-		chosen_mod="$1"
+		chosen_mod="$@"
 	fi
 
-	# set the chosen_mod to the first argument.
 
+	## Does mod exist? ##
+	##-----------------##
 	# Check if the mod exists within the mod_list_array.
 	# Returns 1 if it exists, 0 if not.
 	does_mod_exist=$(check_mods "$chosen_mod")
@@ -285,13 +313,24 @@ main() {
 		exit 1
 	fi
 
+
+	## Source .config/gzdoom/mod_profiles.sh ##
+	##---------------------------------------##
 	# Call mod_profiles, sourced from mod_profiles
 	mod_profiles "$chosen_mod"
 
+
+	## Launch gzdoom, with or without Steam. ##
+	##---------------------------------------##
 	# Call to launch doom with all the parameters
 	launch_doom "$iwad" "$wads" "$savedir" "$maps" "$cheats" "$skill"
 
+
+	## Fix gzdoom.ini ##
+	##----------------##
 	# Prepare the gzdoom ini file for git.
+	# Basically, this removes the date header of the file.  This gets generated every time
+	# gzdoom is launched.  Very annoying to track with git, this will remove that date.
 	fix_ini_for_git
 }
 
@@ -302,9 +341,8 @@ main() {
 # This function is used to toggle functions that I am testing.  These will usually break things and
 # can be unpredictible.  Be careful.
 #
-
 # Trying to parse config files using arrays.
-testing() {
+testing_parse() {
 	#make_mod_array "$1"
 	#printf "%s\n" "${mod_array[@]}"
 	#set_gzdoom_options
@@ -317,10 +355,17 @@ testing() {
 }
 
 
+###################
+### Entry Point ###
+###################
+# Only choose one main function to run, "main" or "testing".
 # Call to main, the working script.
 main "$@"
 
 # Call to the testing section.
 #testing "$@"
 
+############
+### Exit ###
+############
 exit
