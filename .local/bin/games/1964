@@ -6,6 +6,18 @@
 # Jake Meredith
 #
 
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+
 ##############
 ### Config ###
 ##############
@@ -14,9 +26,6 @@ emudir="$HOME/Games/1964"
 
 # Executable
 exe="1964.exe"
-
-# Error flag
-flag=0
 
 
 ############
@@ -42,7 +51,7 @@ declare -A game_list=(
 help_section() {
 	echo "A script to launch 1964 GEPD Edition"
 	echo
-	echo "Syntax: 1964 [-c|h|l] [game name]"
+	echo "Syntax: $(basename $0) [-c|h|l] [game name]"
 	echo "options:"
 	echo "c     Configure 1964."
 	echo "h     Print this help screen."
@@ -52,12 +61,10 @@ help_section() {
 }
 
 # Call to wine.
-call_wine() {
-	local title
-	local overclock
-
-	title="$1"
-	overclock="$2"
+launch_game() {
+	# Local variables to store the title and overclock amount.
+	local title="$1"
+	local overclock="$2"
 
 	# Call to wine.
 	# -g: rom name
@@ -73,19 +80,33 @@ call_wine() {
 
 # List the games
 list_games() {
+	echo "$(basename $0) - Currently installed games:"
 	for i in ${!game_list[@]}; do
 		echo "$i -- ${game_list[$i]}"
 	done
 }
 
 # Launch game
-launch_game() {
+check_game() {
 	local game=$1
+	local exists=0
 
-	case "$game" in
-		ge) call_wine "$game" "6";;
-		pd) call_wine "$game" "9";;
-	esac
+	# Loop through array, searching for a match
+	for i in "${!game_list[@]}"; do
+		# if array[i] == arg
+		if [ "$i" == "$1" ]; then
+			# Unset error flag
+			exists=1
+			break
+		else
+			exists=0
+		fi
+
+	done
+
+	# Return result.  1 exists, 0 does not exist.
+	echo "$exists"
+
 }
 
 # Launch config
@@ -126,33 +147,43 @@ get_arguments() {
 ### Main ###
 ############
 main() {
+	# Get option arguments, if there are any.
 	get_arguments "$@"
+
+	# Local variable of the game's name.  This assumes that no options were passed to the script.
+	local game="$@"
 
 	# If no argument, then list the games
 	if [ -z "$1" ]; then
+		help_section
 		list_games
 		exit
 	fi
 
-	# Loop through array, searching for a match
-	for i in "${!game_list[@]}"; do
-		# if array[i] == arg
-		if [ "$i" == "$1" ]; then
-			# Unset error flag
-			flag=0
-			launch_game "$i"
-			break
-		fi
+	# Check to see if the game exists within the array.
+	# Result assigned to a variable.  1 exists, 0 does not.
+	does_game_exist=$(check_game "$game")
 
-		# if arg is not found in array
-		# Set error flag
-		flag=1
-	done
-
-	# If the mod is not in the list
-	if [ $flag -eq 1 ]; then
-		echo "Invalid game."
+	# Logic if the game does not exist.
+	# Tell us then exit with error.
+	if [ $does_game_exist -eq 0 ]; then
+		echo "That game does not exist."
+		exit 1
 	fi
+
+	# Once the check passes, the game will launch based on a case statement.
+	# ge is GoldenEye, with overclock of 6.
+	# pd is Perfect Dark, with overclock of 9.
+	# gf is Goldfinger rom hack, with overclock of 6.
+	case "$game" in
+		pd) launch_game "$game" "9";;
+		ge) launch_game "$game" "6";;
+		gf) launch_game "$game" "6";;
+	esac
 }
 
+
+####################
+### Call to main ###
+####################
 main "$@"
