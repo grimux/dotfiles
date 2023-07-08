@@ -29,6 +29,9 @@ is_lutris_running=0
 # Function to launch Steam.
 # You can decide if you want it minimized or not, or to use MangoHud or not.
 function launch_steam() {
+	# Silently patch steam with modifications done with steam-metadata-editor
+	steammetadataeditor --silent
+
 	# Launch steam with no chat or friends list open.
 	# Silent will make it minimized to sys-tray.
 	#steam -nochatui -nofriendsui -silent &> /dev/null &
@@ -48,7 +51,7 @@ function launch_lutris() {
 	# This loop will try running the command until it succeeds.
 	until wmctrl -r lutris -b add,hidden; do
 		echo "Waiting for lutris..."
-		sleep 3
+		sleep 1
 	done
 }
 
