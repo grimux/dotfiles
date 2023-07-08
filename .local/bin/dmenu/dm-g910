@@ -19,7 +19,7 @@ set -euo pipefail
 ### Variables ###
 #
 # Profile directory
-profile_dir="$HOME/.config/keyboard"
+profile_dir="$HOME/.config/g910"
 
 # Array of profiles.
 # Takes all the files from the profile directory and adds them to the array.

@@ -1,0 +1,29 @@
+# Dracula profile.
+# Keys are split into groups.
+
+g logo 8be9fd       # Blue
+g indicators f8f8f2 # White
+g multimedia 50fa7b # Green
+g fkeys ffb86c      # Orange
+g modifiers ffb86c  # Orange
+g arrows ff5555     # Red
+g numeric 50fa7b    # Green
+g functions f8f8f2  # White
+g keys bd93f9       # Purple
+g gkeys f8f8f2      # White
+k tilde ff5555      # Red
+k W 8be9fd          # Blue {
+k A 8be9fd
+k S 8be9fd
+k D 8be9fd          # }         
+k 1 50fa7b          # Green {
+k 2 50fa7b
+k 3 50fa7b
+k 4 50fa7b
+k 5 50fa7b
+k 6 50fa7b
+k 7 50fa7b
+k 8 50fa7b
+k 9 50fa7b
+k 0 50fa7b          # }
+c                   # Commit changes

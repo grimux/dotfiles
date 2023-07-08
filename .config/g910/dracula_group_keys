@@ -1,0 +1,19 @@
+# Dracula theme for Logitech G910
+# for use with `g910-led`
+
+g logo bd93f9
+g indicators ffffff
+g multimedia 009600
+g fkeys 50fa7b
+g modifiers ff7936
+g arrows f1fa8c
+g numeric 8be8fd
+g functions ff5555
+g keys ff79c6
+g gkeys bfbfbf
+k W 0000ff          # Blue {
+k A 0000ff
+k S 0000ff
+k D 0000ff          # }
+
+c # Commit changes
