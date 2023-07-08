@@ -60,17 +60,31 @@ no_playlist() {
 load_mpc() {
 	# Argument passed is the location of the playlist file.
 	# $playlist_directory/$playlist_name.m3u
-	argument=$1
+	playlist_name=$1
 
 	# Clear mpd playlist
 	mpc clear > /dev/null
 
-	# Turn on random and repeat
-	mpc random on > /dev/null
+	# Logic to control if mpd should enable randomize mode or not.
+	# If a playlist name matches, disable random.
+	case $playlist_name in
+		# Playlists that I do not want randomized.
+		blood|calm|darkside_flac|meltdown|silent_chill|silent_chill_redux)
+			# Disable random mode.
+			mpc random off > /dev/null
+			;;
+		# Everything else will be randomized.
+		*)
+			# Enable random mode.
+			mpc random on > /dev/null
+			;;
+	esac
+
+	# Enable repeat mode.
 	mpc repeat on > /dev/null
 
 	# Load the playlist
-	mpc load "$argument"
+	mpc load "$playlist_name"
 
 	# Play
 	mpc play
