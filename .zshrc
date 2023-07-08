@@ -91,6 +91,7 @@ bindkey  "^[[H"   beginning-of-line
 bindkey  "^[[F"   end-of-line
 bindkey  "^[[3~"  delete-char
 
+DISABLE_AUTO_TITLE="false"
 
 ########################
 ### vi mode settings ###
@@ -153,6 +154,7 @@ alias cfx="$EDITOR ~/.xinitrc"
 alias cfz="$EDITOR ~/.zshrc"
 alias cfb="$EDITOR ~/Videos/playlists/bedtime.m3u"
 alias cfs="$EDITOR ~/.config/script_boilerplate.sh"
+alias cfawe="$EDITOR ~/.config/awesome/rc.lua"
 
 ## Program shortcuts ##
 alias define="sdcv"			# Dictionary
@@ -173,8 +175,9 @@ alias weather="curl wttr.in"		# Get the current weather
 alias x="exit"
 alias rsync-fat="rsync -hvrltD --modify-window=1 --stats --info=progress2"
 alias mountsd="sudo mount /dev/sdf1"
-alias getsub="subdl --username grimux --password ahb0oaSuG3iPohk@ --download=most-downloaded --existing=query"
 alias movies="ranger ~/Videos/movies"
+alias videos="ranger ~/Videos/playlists"
+alias fluffy="cd /mnt/s/modding/Fluffy_Mod_Manager; wine /mnt/s/modding/Fluffy_Mod_Manager/Modmanager.exe"
 
 ## Dotfile alias ##
 # An alias to manage my dotfiles.
@@ -192,8 +195,9 @@ alias ytvp="$yt_app $yt_config_location/video_playlist"
 alias send_game="rsync -hvrlt --info=progress2 --stats"
 
 ## Games ##
-#alias im_stuck="steam -applaunch 1010750 map e1m1"
-alias im_stuck="nblood"
+alias im_stuck="steam -applaunch 1010750 map e1m1"
+alias help_me="nblood"
+alias jkdf2="openjkdf2"
 
 ## Music ##
 alias dangan="mpc clear; mpc searchadd Title \"Into Free\"; mpc play; lyrics"
@@ -216,6 +220,7 @@ alias calm="mpv --loop --fullscreen /mnt/v/relaxing/Autism_Calming_Sensory_Meltd
 ## Directories ##
 alias gc="cd /mnt/x/game-stuff/game-collection"
 alias steamdir="cd $HOME/.steam/steam"
+alias bin="cd $HOME/.local/bin"
 
 
 #################
