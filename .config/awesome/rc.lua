@@ -63,19 +63,19 @@ end
 -- Toggle showing the desktop
 local show_desktop = false
 function show_my_desktop()
-	if show_desktop then
-		for _, c in ipairs(client.get()) do
-			c:emit_signal(
-				"request::activate", "key.unminimize", {raise = true}
-			)
-		end
-		show_desktop = false
-	else
-		for _, c in ipairs(client.get()) do
-			c.minimized = true
-		end
-		show_desktop = true
-	end
+  if show_desktop then
+    for _, c in ipairs(client.get()) do
+      c:emit_signal(
+        "request::activate", "key.unminimize", {raise = true}
+      )
+    end
+    show_desktop = false
+  else
+    for _, c in ipairs(client.get()) do
+      c.minimized = true
+    end
+    show_desktop = true
+  end
 end
 
 -- }}}
@@ -115,15 +115,15 @@ local cycle_prev   = true  -- cycle with only the previously focused client or a
 local editor       = os.getenv("EDITOR") or "nvim"
 local browser      = "firefox"
 local htmlwiki     = " ~/vimwiki/_site/index.html"
-local music        = terminal .. " -e ncmpcpp"
+local music        = terminal .. " --class ncmpcpp -e ncmpcpp"
 --local music        = "cantata"
-local termfile     = terminal .. " -e ranger"
+local termfile     = terminal .. " --class ranger -e ranger"
 local filemanager  = "pcmanfm-qt"
 
 awful.util.terminal = terminal
 awful.util.tagnames = { "term", "www", "file", "email", "torr", "chat", "mus", "vid", "gfx" }
 awful.layout.layouts = {
-	awful.layout.suit.tile,
+  awful.layout.suit.tile,
     awful.layout.suit.floating,
     --awful.layout.suit.tile.left,
     --awful.layout.suit.tile.bottom,
@@ -202,9 +202,9 @@ local myawesomemenu = {
 }
 
 local mysysmenu = {
-	{ "quit", function() awesome.quit() end },
-	{ "reboot", "systemctl reboot" },
-	{ "shutdown", "shutdown now" },
+  { "quit", function() awesome.quit() end },
+  { "reboot", "systemctl reboot" },
+  { "shutdown", "shutdown now" },
 
 }
 
@@ -214,7 +214,7 @@ awful.util.mymainmenu = freedesktop.menu.build {
         -- other triads can be put here
     },
     after = {
-		{ "Power", mysysmenu },
+    { "Power", mysysmenu },
         { "Open terminal", terminal },
         -- other triads can be put here
     }
@@ -281,7 +281,19 @@ root.buttons(mytable.join(
     --awful.button({ }, 3, function () awful.util.mymainmenu:toggle() end)
     --awful.button({ }, 4, awful.tag.viewnext),
     --awful.button({ }, 5, awful.tag.viewprev)
+
+
 ))
+
+
+--[[
+clientbuttons = mytable.join(
+    awful.button({ }, 6, function() awful.spawn("/dev/null") end), -- Scroll wheel left
+    awful.button({ }, 7, function() awful.spawn("/dev/null") end), -- Scroll wheel right
+    awful.button({ }, 8, function() awful.spawn("screenshooter") end), -- Thumb button back
+    awful.button({ }, 9, function() awful.spawn("/dev/null") end) -- Thumb button forward
+)
+--]]
 
 -- }}}
 
@@ -342,8 +354,8 @@ globalkeys = mytable.join(
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
 
-	-- Layout Sizing
-	awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
+  -- Layout Sizing
+  awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)          end,
               {description = "decrease master width factor", group = "layout"}),
@@ -356,8 +368,8 @@ globalkeys = mytable.join(
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
 
-	-- Layout cycling
-	awful.key({ modkey,           }, "Tab", function () awful.layout.inc( 1)                end,
+  -- Layout cycling
+  awful.key({ modkey,           }, "Tab", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "Tab", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
@@ -435,9 +447,9 @@ globalkeys = mytable.join(
         {description = "mpd on/off", group = "widgets"}),
     awful.key({ "Control" }, "m",
         function ()
-		awful.spawn("mpd-status")
-	end,
-	{description = "mpd status", group = "mpd"}),
+    awful.spawn("mpd-status")
+  end,
+  {description = "mpd status", group = "mpd"}),
 
     -- User programs
     awful.key({ modkey,           }, "w",     function () awful.spawn(browser) end,
@@ -448,10 +460,6 @@ globalkeys = mytable.join(
               { description = "file manager", group = "programs"}),
     awful.key({ modkey,           }, "m",     function () awful.spawn(music) end,
               { description = "music", group = "programs"}),
-    awful.key({ modkey, "Shift"   }, "m",     function () awful.spawn("dm-playlists-music") end,
-              { description = "music playlists", group = "programs"}),
-    awful.key({ modkey, "Shift"   }, "v",     function () awful.spawn("dm-playlists-videos") end,
-              { description = "video playlists", group = "programs"}),
     awful.key({ modkey,           }, "r",     function () awful.spawn(termfile) end,
               { description = "ranger", group = "programs"}),
     awful.key({ modkey,           }, "p",     function () awful.spawn("passmenu -p pass:") end,
@@ -480,10 +488,10 @@ globalkeys = mytable.join(
               { description = "gametime", group = "scripts"}),
 
     awful.key({ modkey,        }, "F5",     function ()
-	    awful.spawn.with_line_callback("tv_mode", {
-		    exit = function()
-			    awesome.emit_signal('update_tv_mode_status')
-		    end})
+          awful.spawn.with_line_callback("tv_mode", {
+              exit = function()
+                  awesome.emit_signal('update_tv_mode_status')
+              end})
     end,
               { description = "TV mode toggle", group = "scripts"}),
 
@@ -505,11 +513,18 @@ globalkeys = mytable.join(
               { description = "soundscapes", group = "dmenu"}),
     awful.key({ modkey }, "s",     function () awful.spawn("dm-websearch") end,
               { description = "web search", group = "dmenu"}),
+    awful.key({ modkey, "Shift"   }, "m",     function () awful.spawn("dm-playlists-music") end,
+              { description = "music playlists", group = "dmenu"}),
+    awful.key({ modkey, "Shift"   }, "v",     function () awful.spawn("dm-playlists-videos") end,
+              { description = "video playlists", group = "dmenu"}),
+    awful.key({ modkey, "Shift"   }, "x",     function () awful.spawn("dm-g910") end,
+              { description = "keyboard profile", group = "dmenu"}),
+
 
    -- Functions
    -- Show desktop. My function for this is above.
-	awful.key({ altkey, "Control" }, "d", function(c) show_my_desktop() end,
-		{description = "toggle showing the desktop", group = "client"}),
+  awful.key({ altkey, "Control" }, "d", function(c) show_my_desktop() end,
+    {description = "toggle showing the desktop", group = "client"}),
 
    -- Media Keys
    awful.key({}, "XF86AudioPlay", function()
@@ -532,11 +547,11 @@ globalkeys = mytable.join(
    -- Screenshot
    awful.key({}, "Print", function () awful.spawn("screenshooter") end),
 
-	-- Dmenu
-	awful.key({ modkey,         }, "space", function () awful.spawn("dmenu_run -i -p run:") end,
-		{ description = "dmenu", group = "programs"}),
-	awful.key({ modkey, "Shift" }, "space", function () awful.spawn("sudo dmenu_run -i -p sudo:") end,
-		{ description = "sudo dmenu", group = "programs"}),
+  -- Dmenu
+  awful.key({ modkey,         }, "space", function () awful.spawn("dmenu_run -i -p run:") end,
+    { description = "dmenu", group = "programs"}),
+  awful.key({ modkey, "Shift" }, "space", function () awful.spawn("sudo dmenu_run -i -p sudo:") end,
+    { description = "sudo dmenu", group = "programs"}),
 
 
 
@@ -693,7 +708,7 @@ awful.rules.rules = {
                      keys = clientkeys,
                      buttons = clientbuttons,
                      screen = awful.screen.preferred,
-		     placement = awful.placement.centered+awful.placement.no_offscreen,
+                     placement = awful.placement.centered+awful.placement.no_offscreen,
                      --placement = awful.placement.no_overlap+awful.placement.no_offscreen,
                      size_hints_honor = false
      }
@@ -706,27 +721,31 @@ awful.rules.rules = {
           "copyq",  -- Includes session name in class.
           "pinentry",
           "qalculate-gtk",
-  	  "virt-manager",
+          "virt-manager",
         },
         class = {
           "Arandr",
           "Blueman-manager",
           "Gpick",
+          "Gzdoom",
           "Kruler",
+          "Luxtorpeda",  -- Steam compatibility tool for native linux engines.
           "MessageWin",  -- kalarm.
           "Nm-connection-editor", -- network-manager-applet
-	  "PolyMC",
-	  "Pavucontrol",
-	  ".*exe",  -- Automatically float any window that containes "exe".  This works for most games or applications run through wine.
-	  "steam_app_%d", -- Let steam games default to floating.  %d is a wildcard for integers.
+          "PolyMC", --
+          "Pavucontrol",
+          ".*exe",  -- Automatically float any window that containes "exe".  This works for most games or applications run through wine.
+          "SGDBoop",
+          "smapi",  --  Stardew Valley modding framework.  Runs in alacritty window with class name "smapi".
+          "steam_app_%d", -- Let steam games default to floating.  %d is a wildcard for integers.
           "Sxiv",
-	  "feh",
+          "feh",
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
           "Wpa_gui",
           "veromix",
           "xtightvncviewer",
-	  "Yad",
-	  "Zathura",  -- PDF viewer
+          "Yad",
+          "Zathura",  -- PDF viewer
          },
 
         -- Note that the name property shown in xprop might be set slightly after creation of the client
@@ -766,13 +785,14 @@ awful.rules.rules = {
     { rule = { class = "Signal" },         properties = { screen = 1, tag = awful.util.tagnames[6] } },
     -- mus
     { rule = { class = "cantata" },        properties = { screen = 1, tag = awful.util.tagnames[7] } },
+    { rule = { class = "ncmpcpp" },        properties = { screen = 1, tag = awful.util.tagnames[7] } },  -- The class "ncmpcpp" is defined above by the "music" variable.  Class is set by calling the terminal.
     -- vid
     --{ rule = { class = "mpv" },            properties = { screen = 1, tag = awful.util.tagnames[8] } },
     { rule = { class = "vlc" },            properties = { screen = 1, tag = awful.util.tagnames[8] } },
     -- gfx
     { rule = { class = "PolyMC" },         properties = { screen = 1, tag = awful.util.tagnames[9] } },
     { rule = { class = "Lutris" },         properties = { screen = 1, tag = awful.util.tagnames[9] } },
-    { rule = { class = "Steam" },          properties = { screen = 1, tag = awful.util.tagnames[9] } },
+    { rule = { class = "steam" },          properties = { screen = 1, tag = awful.util.tagnames[9] } },
     { rule = { class = "steam_app_%d" },   properties = { screen = 1, tag = awful.util.tagnames[9] } },
 }
 
@@ -863,3 +883,5 @@ awful.mouse.snap.edge_enabled = false
 --awful.spawn.with_shell("picom")
 -- Restore nitrogen
 --awful.spawn.with_shell("nitrogen --restore")
+-- Restore feh
+awful.spawn.with_shell("~/.fehbg")
