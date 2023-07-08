@@ -5,7 +5,8 @@
 # Simple array for storing mod names.  I will eventually come up with a better way to do this, such
 # as parsing a file.
 mod_list_array=(
-	ashes
+	ashes_ep1
+	ashes_ep2
 	castlevania
 	chill_doom
 	brutal_minecraft
@@ -36,12 +37,22 @@ function mod_profiles() {
 
 		## Mod Settings ##
 
-		# Ashes 2063
-		ashes)
+		# Ashes 2063 Ep1
+		ashes_ep1)
 			iwad=DOOM2.WAD
 			wads="Ashes2063Enriched2_23.pk3"
 			maps=""
 			savedir="$savedir/ashes2063"
+			cheats=""
+			skill=""
+			;;
+
+		# Ashes 2063 Ep2
+		ashes_ep2)
+			iwad=DOOM2.WAD
+			wads="AshesAfterglow1_10.pk3"
+			maps=""
+			savedir="$savedir/ashes_afterglow"
 			cheats=""
 			skill=""
 			;;
@@ -59,7 +70,7 @@ function mod_profiles() {
 		# Chill Doom
 		chill_doom)
 			iwad=DOOM.WAD
-			wads="SmoothDoom.pk3 DoomMetalVol5.wad"
+			wads="SmoothDoom.pk3 DoomMetalVol5.wad ketchup.pk3 steve_flashlight.pk7"
 			maps="+map e1m1"
 			savedir="$savedir/chill_doom"
 			cheats="+buddha2 +give keys"
@@ -196,7 +207,7 @@ function mod_profiles() {
 
 		spooktober)
 			iwad=DOOM2.WAD
-			wads="SmoothDoom.pk3 spooktober.pk3 STEVE_FLASHLIGHT_PLUS.PK7"
+			wads="SmoothDoom.pk3 spooktober.pk3 steve_flashlight.pk7"
 			maps=""
 			savedir="$savedir/spooktober"
 			cheats=""
