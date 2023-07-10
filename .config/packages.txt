@@ -183,6 +183,7 @@ nvidia-dkms
 nvidia-settings
 obs-studio
 openbsd-netcat
+openrgb-bin
 openssh
 openssl-1.1
 os-prober
