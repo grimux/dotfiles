@@ -18,7 +18,6 @@ export TERMCMD="$TERMINAL"
 export QT_QPA_PLATFORMTHEME=gtk2
 export CM_DIR="$HOME/.cache/clipmenu"
 
-
 ########################
 ### Global variables ###
 ########################
@@ -43,7 +42,6 @@ if [ -d "$HOME/.local/bin" ] ; then
 	PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
 fi
 
-
 #######################
 ### less/man colors ###
 #######################
@@ -55,7 +53,6 @@ export LESS_TERMCAP_so="$(printf '%b' '[01;44;33m')"; a="${a%_}"
 export LESS_TERMCAP_se="$(printf '%b' '[0m')"; a="${a%_}"
 export LESS_TERMCAP_us="$(printf '%b' '[1;32m')"; a="${a%_}"
 export LESS_TERMCAP_ue="$(printf '%b' '[0m')"; a="${a%_}"
-
 
 ########################
 ### General Settings ###
@@ -131,7 +128,6 @@ zle-line-init() {
 zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
-
 
 ###############
 ### Aliases ###
@@ -222,7 +218,6 @@ alias gc="cd /mnt/x/game-stuff/game-collection"
 alias steamdir="cd $HOME/.steam/steam"
 alias bin="cd $HOME/.local/bin"
 
-
 #################
 ### Functions ###
 #################
@@ -298,13 +293,11 @@ XINITRC=$HOME/.xinitrc
 # If on tty1, and Xorg is not running, automatically startx with $XINITRC.
 [ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
 
-
 ################
 ### MangoHud ###
 ################
 #export MANGOHUD=1
 #export MANGOHUD_DLSYM=1
-
 
 #######################
 ### Prompt Settings ###
