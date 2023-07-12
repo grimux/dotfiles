@@ -20,7 +20,7 @@ argument=${1:-null}
 increment=1
 
 # Name of the pc sound card according to alsa.
-pc_pulse_sink="alsa_output.pci-0000_0c_00.3.analog-stereo"
+pc_pulse_sink="alsa_output.pci-0000_0b_00.3.analog-stereo"
 
 # Name of default sink; whatever sink is currently set as active (default).
 default_sink="@DEFAULT_SINK@"
