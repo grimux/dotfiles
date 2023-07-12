@@ -13,4 +13,5 @@ subdl \
 	--username grimux \
 	--password $(pass show services/open-subtitles | head -n1) \
 	--download=most-downloaded \
-	--existing=overwrite
+	--existing=overwrite \
+	"$@"
