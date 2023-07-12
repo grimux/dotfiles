@@ -27,6 +27,7 @@ set -euo pipefail
 ####################
 # Use dmenu to choose mod.
 use_dmenu=0
+use_zenity=0
 use_steam=0
 
 
@@ -74,10 +75,11 @@ modifiers_list=(
 function help_section() {
 	echo "A script to launch Doom and its various mods."
 	echo
-	echo "Syntax: $(basename "$0") [-h|d|l|s] [mod name]"
+	echo "Syntax: $(basename "$0") [-h|d|z|l|s] [mod name]"
 	echo "options:"
 	echo "h     Print this help screen."
 	echo "d     Choose mod in dmenu."
+	echo "z     Choose mod in zenity."
 	echo "l     List installed mods."
 	echo "s     Use Steam."
 	echo
@@ -85,7 +87,7 @@ function help_section() {
 
 # Get arguments
 function get_arguments() {
-	while getopts ":hlds" option; do
+	while getopts ":hldsz" option; do
 		case $option in
 			d) echo "Using dmenu."; use_dmenu=1;;
 
@@ -95,13 +97,12 @@ function get_arguments() {
 
 			s) echo "Using Steam."; use_steam=1;;
 
+			z) echo "Using zenity."; use_zenity=1;;
+
 			\?) echo "Error: Invalid option"; exit;;
 
 		esac
 	done
-
-	# Strip the arguments out.
-	shift $(( OPTIND - 1 ))
 }
 
 # List the mods
@@ -122,6 +123,20 @@ function choose_in_dmenu() {
 
 	# Return the choice
 	echo "$dmenu_choice"
+}
+
+# Choose the mod using zenity.
+function choose_in_zenity() {
+	# Local variable to store the mod choice in.
+	local zenity_choice
+	local prompt="Doom mod:"
+	local mod_array=$(list_mods)
+
+	# Mod choice variable is equal to the selection from zenity.
+	zenity_choice=$(printf '%s\n' "${mod_array[@]}" | zenity --title=DoomMod --width 400 --height 600 --list --column "$prompt")
+
+	# Return the choice
+	echo "$zenity_choice"
 }
 
 # Launch doom
@@ -195,6 +210,11 @@ function check_mods() {
 function fix_ini_for_git() {
 	# -n +2 : start at line 2 of the file.
 	echo "$(tail -n +2 "$gzdoom_ini_file")" > "$gzdoom_ini_file"
+}
+
+# Function to fix the caps lock returning to normal after using gzdoom.
+function fix_caps_lock() {
+	setxkbmap -option caps:escape
 }
 
 
@@ -273,6 +293,11 @@ main() {
 	# Get flag options passed to the script.
 	get_arguments "$@"
 
+	# If there were any options passed to the script, remove them.
+	if [ $# -gt 1 ]; then
+		# First, remove the leading arguments, "-s".
+		shift $(( OPTIND - 1 ))
+	fi
 
 	## Main Logic ##
 	##------------##
@@ -281,12 +306,9 @@ main() {
 		# If so, set chosen mod to the output of choose_in_dmenu function.
 		chosen_mod=$(choose_in_dmenu)
 
-	# Check to see if we are using Steam.
-	elif [ "$use_steam" -eq 1 ]; then
-		# First, remove the leading arguments, "-s".
-		shift $(( OPTIND - 1 ))
-		# Set chosen_mod to the remainder of the arguments.
-		chosen_mod="$@"
+	# Use zenity to set the chosen mod.
+	elif [ "$use_zenity" -eq 1 ]; then
+		chosen_mod=$(choose_in_zenity)
 
 	# Else if there are no arguments.
 	elif [ -z "$@" ]; then
@@ -332,6 +354,8 @@ main() {
 	# Basically, this removes the date header of the file.  This gets generated every time
 	# gzdoom is launched.  Very annoying to track with git, this will remove that date.
 	fix_ini_for_git
+
+	fix_caps_lock
 }
 
 ###############
