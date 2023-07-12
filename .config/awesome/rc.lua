@@ -480,6 +480,9 @@ globalkeys = mytable.join(
               { description = "pavucontrol", group = "programs"}),
     awful.key({ modkey, "Shift"   }, "z",     function () awful.spawn("filezilla") end,
               { description = "pavucontrol", group = "programs"}),
+    awful.key({ modkey, "Shift"   }, "r",     function () awful.spawn("openrgb") end,
+              { description = "openrgb", group = "programs"}),
+
 
     -- Script Launching
     awful.key({ modkey,           }, "F1",     function () awful.spawn("gametime") end,
@@ -726,6 +729,7 @@ awful.rules.rules = {
         class = {
           "Arandr",
           "Blueman-manager",
+	  "fury.bin",
           "Gpick",
           "Gzdoom",
           "Kruler",
