@@ -47,7 +47,7 @@ tv_mode_file="$HOME/.cache/tv_mode_on"
 
 # Call to xrandr to setup TV as a secondary display.
 xrandr_tv_mode() {
-	xrandr --output $tv_name --right-of $monitor_name
+	xrandr --output $tv_name --left-of $monitor_name
 }
 
 # Call to xrandr to setup TV as a mirror of my main display.
