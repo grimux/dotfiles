@@ -129,6 +129,7 @@ lib32-giflib
 lib32-gst-plugins-base
 lib32-gst-plugins-good
 lib32-gstreamer
+lib32-libnm
 lib32-libxslt
 lib32-mpg123
 lib32-openal
@@ -239,7 +240,7 @@ qt5-styleplugins
 qtpass
 quakespasm
 ranger
-raze-git
+raze
 rbdoom-3-bfg
 rclone
 redshift
