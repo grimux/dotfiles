@@ -7,8 +7,8 @@
 # o pipefail - script fails if command piped fails
 # x - output each line (debug)
 #
-set -euox pipefail
-#set -euo pipefail
+#set -euox pipefail
+set -euo pipefail
 
 
 
