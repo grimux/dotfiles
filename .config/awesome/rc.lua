@@ -582,6 +582,8 @@ clientkeys = mytable.join(
         {description = "toggle fullscreen", group = "client"}),
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
+    awful.key({ modkey,           }, "q",      function (c) c:kill()                         end,
+              {description = "close", group = "client"}),
     awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
@@ -722,6 +724,7 @@ awful.rules.rules = {
         instance = {
           "DTA",  -- Firefox addon DownThemAll.
           "copyq",  -- Includes session name in class.
+	  "Godot_Engine",
           "pinentry",
           "qalculate-gtk",
           "virt-manager",
@@ -733,12 +736,12 @@ awful.rules.rules = {
           "Gpick",
           "Gzdoom",
           "Kruler",
-          "Luxtorpeda",  -- Steam compatibility tool for native linux engines.
           "MessageWin",  -- kalarm.
           "Nm-connection-editor", -- network-manager-applet
           "PolyMC", --
           "Pavucontrol",
           ".*exe",  -- Automatically float any window that containes "exe".  This works for most games or applications run through wine.
+	  "Raze",
           "SGDBoop",
           "smapi",  --  Stardew Valley modding framework.  Runs in alacritty window with class name "smapi".
           "steam_app_%d", -- Let steam games default to floating.  %d is a wildcard for integers.
