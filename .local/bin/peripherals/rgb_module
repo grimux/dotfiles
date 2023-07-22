@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+#
+# A script to toggle the controllable rgb.
+#
+
+rgb_dropin_file="i2c-dev.conf"
+dropin_backup_location="$HOME/.config"
+dropin_enable_location="/etc/modules-load.d"
+
+function get_arguments() {
+	case "$@" in
+		toggle) toggle_rgb_module;;
+		status) get_status;;
+		on) enable_rgb_module;;
+		off) disable_rgb_module;;
+		help) help_section;;
+		*) echo "Invalid command"; usage; exit 1;;
+	esac
+}
+
+# Help Section
+function help_section() {
+	echo "A script to enable/disable i2c_dev module for RGB."
+	echo
+	echo "Syntax: $(basename $0) <command>"
+	echo "commands:"
+	# Space offset: 5
+	echo "status     : Show the current status of the i2c_dev module."
+	echo "toggle     : Toggle the current status."
+	echo "on         : Turn the module on."
+	echo "off        : Turn the module off."
+}
+
+# How to use the script.
+function usage() {
+	echo "Usage:"
+	echo "$(basename $0) <command>"
+}
+
+function enable_rgb_module() {
+	# Local variables to store the long file names.
+	local module="$dropin_enable_location/$rgb_dropin_file"
+
+	sudo cp $dropin_backup_location/$rgb_dropin_file $dropin_enable_location
+}
+
+function disable_rgb_module() {
+	# Local variables to store the long file names.
+	local module="$dropin_enable_location/$rgb_dropin_file"
+
+	sudo rm $dropin_enable_location/$rgb_dropin_file
+}
+
+function get_status() {
+	# Local variables to store the long file names.
+	local module="$dropin_enable_location/$rgb_dropin_file"
+
+	if [ -s $module ]; then
+		echo "i2c_dev: enabled"
+	else
+		echo "i2c_dev: disabled"
+	fi
+}
+
+function toggle_rgb_module() {
+	# Local variables to store the long file names.
+	local module="$dropin_enable_location/$rgb_dropin_file"
+	local module_bakcup="$dropin_backup_location/$rgb_dropin_file"
+
+	if [ -s $module ]; then
+		sudo rm $module
+		echo "Module removed."
+	else
+		sudo cp $module_backup $module
+		echo "Module installed."
+	fi
+}
+
+function main() {
+	get_arguments $@
+	exit
+}
+
+main "$@"

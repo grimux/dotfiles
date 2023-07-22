@@ -1,0 +1,133 @@
+#!/bin/bash
+
+
+#################
+### Variables ###
+#################
+# Get the ID of the headset using awk.  -- Not currently used.
+# Dynamic
+#bluetooth_id=$(pactl list cards short | awk '/bluez/{print $2}')
+
+# Headset pactl ID.  Should be unique.
+# hard-coded.
+headset_id="bluez_card.60_AB_D2_42_83_3F"
+
+# Phrases in `pactl` for setting the headset modes.
+audio_mode="a2dp_sink"
+call_mode="handsfree_head_unit"
+
+
+#################
+### Functions ###
+#################
+# Help Section
+function help_section() {
+	echo "A script to manage my bluetooth headset."
+	echo
+	echo "Syntax: $(basename $0) <command>"
+	echo "commands:"
+	# Space offset: 19
+	echo "     audio     : Switch to audio mode."
+	echo "     call      : Switch to call mode."
+	echo "     toggle    : Toggle current mode."
+	echo "     status    : Show current mode."
+}
+
+# A function that attempts to sync audio back up with video.  It does this by switching the headset
+# on and off.
+function headset_sync() {
+	local current_status=$(get_headset_mode)
+
+	echo "Syncing headset..."
+	pactl set-card-profile "$headset_id" $current_status
+	pactl set-card-profile "$headset_id" off
+	pactl set-card-profile "$headset_id" $current_status
+}
+
+function headset_reset() {
+	echo "Turning it off and on again..."
+	pactl set-card-profile "$headset_id" $audio_mode
+	pactl set-card-profile "$headset_id" off
+	pactl set-card-profile "$headset_id" $audio_mode
+}
+
+# A function to print out a nice report for the headset's status.
+function headset_status() {
+	local current_status=$(get_headset_mode)
+	local report=""
+
+	case "$current_status" in
+		"$audio_mode") report="Audio";;
+		"$call_mode") report="Call";;
+		*) report="Error with getting status."
+	esac
+
+	echo "Current mode:"
+	echo "$report"
+}
+
+# Command to get the status of the headset.
+function get_headset_mode() {
+	pactl list cards | grep -i --after-context=20 "$headset_id" | awk '/Active Profile/{print $3}'
+}
+
+# Command to set the headset to call mode.
+function set_call_mode() {
+	# Command to pactl.  Uses the unique id and phrase from the Variables section.
+	pactl set-card-profile "$headset_id" $call_mode
+
+	# Tell the user of the change.
+	echo "Call mode activated"
+}
+
+# Command to the the headset to audio mode.
+function set_audio_mode() {
+	# Command to pactl.  Uses the unique id and phrase from the Variables section.
+	pactl set-card-profile "$headset_id" $audio_mode
+
+	# Tell the user of the change.
+	echo "Audio mode activated"
+}
+
+# A function to toggle the current headset mode.
+function toggle_headset() {
+	local headset_status=$(get_headset_mode)
+
+	# Tell the user of the switch
+	echo "Toggling headset...";
+
+	# Logic to control the toggle.
+	if [ "$headset_status" == "$audio_mode" ]; then
+		set_call_mode
+	else
+		set_audio_mode
+	fi
+
+}
+
+
+############
+### Main ###
+############
+function main() {
+	# Local variable to store the command in.
+	local user_command="$@"
+
+	# Logic to control which command does what.
+	case "$user_command" in
+		"") headset_status; echo; help_section; exit;;
+		"audio") set_audio_mode;;
+		"call") set_call_mode;;
+		"status") headset_status;;
+		"toggle") toggle_headset;;
+		"sync") headset_sync;;
+		"reset") headset_reset;;
+		"help") help_section;;
+		*) echo "Invalid command."; help_section; exit 1;;
+	esac
+}
+
+#############
+### Begin ###
+#############
+main "$@"

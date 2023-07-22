@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+#
+#
+#
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+
+function check_webcam() {
+	mpv --demuxer-lavf-format=video4linux2 --demuxer-lavf-o-set=input_format=mjpeg av://v4l2:/dev/video0
+}
+
+function toggle_webcam() {
+	authorized_file="/sys/devices/pci0000:00/0000:00:07.1/0000:0b:00.3/usb5/5-4/5-4:1.0/authorized"
+
+	if [ $(cat $authorized_file) -eq 1 ]; then
+		echo 0 > $authorized_file || echo "Be sure to run with sudo"
+		echo "Webcam Disabled."
+	else
+		echo 1 > $authorized_file || echo "Be sure to run with sudo"
+		echo "Webcam Enabled."
+	fi
+}
+
+function main() {
+	arg="$@"
+	case "$arg" in
+		"") echo "Status:";;
+		"check"|"test") check_webcam; exit 0;;
+		"toggle") toggle_webcam; exit 0;;
+		*) echo "Command not recoginized."; exit 1;;
+	esac
+}
+
+main "$@"
