@@ -18,6 +18,7 @@ bash-completion
 bchunk
 bind
 bison
+blackchocobo
 bleachbit
 bless
 blueberry
@@ -134,6 +135,7 @@ lib32-libxslt
 lib32-mpg123
 lib32-openal
 lib32-v4l-utils
+libff7tk-git
 libnewt
 libreoffice-fresh
 libretro-pcsx2
