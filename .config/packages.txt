@@ -238,7 +238,6 @@ python-pathvalidate
 python-pip
 qalculate-gtk
 qbittorrent
-qemu-desktop
 qt5-styleplugins
 qtpass
 quakespasm
@@ -320,7 +319,6 @@ update-grub
 usbutils
 vde2
 vim
-virtualbox
 viu
 vlc
 wget
