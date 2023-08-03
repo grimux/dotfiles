@@ -181,6 +181,7 @@ nitrogen
 notepadqq
 noto-fonts
 noto-fonts-cjk
+nrg2iso
 ntfs-3g
 numlockx
 nvidia-dkms
