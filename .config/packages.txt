@@ -33,7 +33,6 @@ calcurse
 calibre
 cantata
 cava
-cemu
 clipmenu
 cmake
 conky
@@ -193,6 +192,7 @@ openssh
 openssl-1.1
 os-prober
 pacman-contrib
+pacman-log-orphans-hook
 palenight-gtk-theme
 pamixer
 pandoc-cli
