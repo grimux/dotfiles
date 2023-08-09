@@ -4,13 +4,14 @@
 
 # Simple array for storing mod names.  I will eventually come up with a better way to do this, such
 # as parsing a file.
-mod_list_array=(
+mod_profile_array=(
 	ashes_ep1
 	ashes_ep2
 	castlevania
 	chill_doom
 	brutal_minecraft
 	countrycide
+	doom_complete
 	elementalism
 	golden_souls
 	guncaster
@@ -25,6 +26,7 @@ mod_list_array=(
 	spooktober
 )
 
+
 # A function with a simple case statement.  The statement will set the variables for the arguments that will
 # eventually be passed to gzdoom.  The variables here are global and can be accessed from elsewhere in the
 # script.  Just call this function and pass along the name of the mod.
@@ -34,6 +36,16 @@ function mod_profiles() {
 
 	# Switch case to choose the settings.
 	case "$mod_name" in
+
+		## Vanilla Wad ##
+		doom_complete)
+			iwad=doom_complete.pk3
+			wads=""
+			maps=""
+			savedir="$savedir/doom_complete"
+			cheats=""
+			skill=""
+			;;
 
 		## Mod Settings ##
 
@@ -70,7 +82,7 @@ function mod_profiles() {
 		# Chill Doom
 		chill_doom)
 			iwad=DOOM.WAD
-			wads="SmoothDoom.pk3 DoomMetalVol5.wad ketchup.pk3 steve_flashlight.pk7"
+			wads="SmoothDoom.pk3 DoomMetalVol5.wad steve_flashlight.pk7"
 			maps="+map e1m1"
 			savedir="$savedir/chill_doom"
 			cheats="+buddha2 +give keys"
@@ -169,9 +181,11 @@ function mod_profiles() {
 		project_brutality)
 			iwad=DOOM2.WAD
 			wads="\
+				DoomMetalVol5.wad \
 				Project_Brutality.pk3 \
 				pb_hud_base_a.pk3 \
-				pb_hud_base_b.pk3"
+				pb_hud_base_b.pk3 \
+				mapsofchaos-ok.wad"
 			maps=""
 			savedir="$savedir/project_brutality"
 			cheats=""
