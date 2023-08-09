@@ -154,5 +154,9 @@ function main() {
 # Call main
 main "$@"
 
+# Set caps lock to escape
+setxkbmap -option caps:escape &
+
+
 ### End ###
 exit 0
