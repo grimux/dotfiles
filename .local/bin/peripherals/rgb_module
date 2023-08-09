@@ -42,6 +42,8 @@ function enable_rgb_module() {
 	local module="$dropin_enable_location/$rgb_dropin_file"
 
 	sudo cp $dropin_backup_location/$rgb_dropin_file $dropin_enable_location
+
+	echo "rgb module enabled."
 }
 
 function disable_rgb_module() {
@@ -49,6 +51,8 @@ function disable_rgb_module() {
 	local module="$dropin_enable_location/$rgb_dropin_file"
 
 	sudo rm $dropin_enable_location/$rgb_dropin_file
+
+	echo "rgb module disabled."
 }
 
 function get_status() {
@@ -67,12 +71,10 @@ function toggle_rgb_module() {
 	local module="$dropin_enable_location/$rgb_dropin_file"
 	local module_bakcup="$dropin_backup_location/$rgb_dropin_file"
 
-	if [ -s $module ]; then
-		sudo rm $module
-		echo "Module removed."
+	if [ -s "$module" ]; then
+		disable_rgb_module
 	else
-		sudo cp $module_backup $module
-		echo "Module installed."
+		enable_rgb_module
 	fi
 }
 
