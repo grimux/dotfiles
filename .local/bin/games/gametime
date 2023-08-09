@@ -31,6 +31,8 @@ is_lutris_running=0
 function launch_steam() {
 	# Silently patch steam with modifications done with steam-metadata-editor
 	steammetadataeditor --silent
+	sleep 1
+	steammetadataeditor --silent
 
 	# Launch steam with no chat or friends list open.
 	# Silent will make it minimized to sys-tray.
