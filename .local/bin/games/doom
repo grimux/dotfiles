@@ -22,6 +22,9 @@
 #set -euox pipefail
 set -euo pipefail
 
+
+
+
 ####################
 ### Global Flags ###
 ####################
@@ -29,6 +32,9 @@ set -euo pipefail
 use_dmenu=0
 use_zenity=0
 use_steam=0
+choose_map=0
+
+
 
 
 ##############
@@ -42,6 +48,8 @@ addonsdir="$modsdir/addons"
 savedir="$doomdir/save"
 
 
+
+
 ####################
 ### Mod Profiles ###
 ####################
@@ -49,6 +57,8 @@ savedir="$doomdir/save"
 # This makes it convienent to keep the profiles and launcher script separate.
 mod_profiles="$HOME/.config/gzdoom/mod_profiles.sh"
 source $mod_profiles
+
+
 
 
 #######################
@@ -60,12 +70,14 @@ source $mod_profiles
 #mods_list=($(grep '\[.*\]' $ini_file | sed -e 's/\[//' -e 's/\]//'))
 
 # Map Packs
-map_pack_list=($mapsdir/*)
+map_packs_array=$(find $mapsdir -type f -iname '*.wad' -printf '%f\n' -o -iname '*.pk3' -printf '%f\n' | sort)
 
 # Modifiers list
 modifiers_list=(
 	""
 )
+
+
 
 
 #################
@@ -80,75 +92,149 @@ function help_section() {
 	echo "h     Print this help screen."
 	echo "d     Choose mod in dmenu."
 	echo "z     Choose mod in zenity."
+	echo "m     Choose map pack."
 	echo "l     List installed mods."
 	echo "s     Use Steam."
 	echo
 }
 
-# Get arguments
+
+## Arguments ##
+#-------------#
+# Get arguments passed to the script
 function get_arguments() {
-	while getopts ":hldsz" option; do
+	while getopts ":hldmsz" option; do
 		case $option in
+			# Use dmenu
 			d) echo "Using dmenu."; use_dmenu=1;;
 
+			# Show help section and exit.
 			h) help_section; exit;;
 
-			l) list_mods; exit;;
+			# List out the mod profiles and map packs avalible.
+			l)
+				echo "Mod Profiles:"
+				echo "-------------"
+				list_mod_profiles
+				echo
+				echo "Map Pack:"
+				echo "---------"
+				list_map_packs
+				exit
+				;;
 
+			# Set flag to choose map pack.
+			m) echo "Map pack will be chosen."; choose_map=1;;
+
+			# Set flag to use Steam.
 			s) echo "Using Steam."; use_steam=1;;
 
+			# Set flag to use Zentiy to choose everything.
 			z) echo "Using zenity."; use_zenity=1;;
 
-			\?) echo "Error: Invalid option"; exit;;
+			# Base case, if there is an invalid option
+			\?) echo "Error: Invalid option"; exit 1;;
 
 		esac
 	done
 }
 
+
+##-------------------##
+## Listing functions ##
+##-------------------##
 # List the mods
-function list_mods() {
+function list_mod_profiles() {
 	# Simply print the array $mods_list
-	printf "%s\n" "${mod_list_array[@]}"
+	printf "%s\n" "${mod_profile_array[@]}"
 }
 
-# Dmenu
-function choose_in_dmenu() {
-	# Local variable to store the mod choice in.
+function list_map_packs() {
+	# Simply print the array of map packs
+	printf "%s\n" "${map_packs_array[@]}"
+}
+
+
+##-----------------------##
+## Choosing mod profiles ##
+##-----------------------##
+# Choose the mod profile using dmenu.
+function choose_profile_in_dmenu() {
+	# Local variable to store the mod choice and the prompt.
+	local prompt="Doom Profiles:"
 	local dmenu_choice
-	local prompt="Doom mod: "
-	local mod_array=$(list_mods)
 
 	# Mod choice variable is equal to the selection from dmenu.
-	dmenu_choice=$(printf '%s\n' "${mod_array[@]}" | dmenu -i -l 20 -p "$prompt")
+	dmenu_choice=$(printf '%s\n' "${mod_profile_array[@]}" | dmenu -i -l 20 -p "$prompt")
 
-	# Return the choice
+	# Return profile the choice.
 	echo "$dmenu_choice"
 }
 
-# Choose the mod using zenity.
-function choose_in_zenity() {
+# Choose the mod profile using zenity.
+function choose_profile_in_zenity() {
 	# Local variable to store the mod choice in.
+	local prompt="Doom Profiles"
 	local zenity_choice
-	local prompt="Doom mod:"
-	local mod_array=$(list_mods)
 
-	# Mod choice variable is equal to the selection from zenity.
-	zenity_choice=$(printf '%s\n' "${mod_array[@]}" | zenity --title=DoomMod --width 400 --height 600 --list --column "$prompt")
+	# Mod profile choice is equal to the selection from zenity.
+	zenity_choice=$(printf '%s\n' "${mod_profile_array[@]}" | zenity --title="$prompt" --width 400 --height 600 --list --column "$prompt")
 
 	# Return the choice
 	echo "$zenity_choice"
 }
 
+
+##---------------##
+## Choosing Maps ##
+##---------------##
+# Choose the map pack using dmenu.
+function choose_map_in_dmenu() {
+	# Local variables to store the map choice and the prompt.
+	local prompt="Map packs:"
+	local dmenu_choice
+
+	# Map choice variable is equal to the selection from dmenu.
+	dmenu_choice=$(printf '%s\n' "${map_packs_array[@]}" | dmenu -i -l 20 -p "$prompt")
+
+	# Return the map choice.
+	echo "$dmenu_choice"
+}
+
+# Choose the mod profile using zenity.
+function choose_map_in_zenity() {
+	# Local variable to store the mod choice in.
+	local prompt="Map packs:"
+	local zenity_choice
+
+	# Map choice is equal to the selection from zenity.
+	zenity_choice=$(printf '%s\n' "${map_packs_array[@]}" | zenity --title="$prompt" --width 400 --height 600 --list --column "$prompt")
+
+	# Check to see if anything was chosen, if not then exit.
+	if [ -z "$zenity_choice" ]; then
+		echo "No map pack selected."
+		exit 1
+	fi
+
+	# Return the choice
+	echo "$zenity_choice"
+}
+
+
+##----------------##
+## Launching Doom ##
+##----------------##
 # Launch doom
 function launch_doom() {
 	# Local functions to store the arguments passed to the function.
 	# This helps with organization.
 	local iwad="$1"
 	local wads="$2"
-	local savedir="$3"
-	local map="$4"
-	local cheats="$5"
-	local skill="$6"
+	local map_pack="$3"
+	local savedir="$4"
+	local map="$5"
+	local cheats="$6"
+	local skill="$7"
 	local program_to_use="gzdoom"
 	local steam_id
 
@@ -158,6 +244,7 @@ function launch_doom() {
 	case $iwad in
 		"DOOM.WAD") steam_id=2280;;
 		"DOOM2.WAD") steam_id=2300;;
+		"doom_complete.pk3") steam_id=2300;;
 		"") echo "iwad is empty string"; exit 1;;
 		*) echo "Unrecognized iwad name"; exit 1;;
 	esac
@@ -172,7 +259,7 @@ function launch_doom() {
 
 	$program_to_use \
 		-iwad $iwad \
-		-file $wads \
+		-file $wads $map_pack \
 		-savedir $savedir \
 		$map \
 		$cheats \
@@ -188,8 +275,8 @@ function check_mods() {
 	local title
 	local does_it_exist
 
-	# Loop through the mod_list_array and check if the mod is there.
-	for title in ${mod_list_array[@]}; do
+	# Loop through the mod_profile_array and check if the mod is there.
+	for title in ${mod_profile_array[@]}; do
 		# If there is a match, set does_it_exist to 1 and stop.
 		if [ "$mod_to_check" == "$title" ]; then
 			does_it_exist=1
@@ -204,9 +291,15 @@ function check_mods() {
 	echo "$does_it_exist"
 }
 
-# Function to remove the first line of the gzdoom.ini file.  The first line is generated at startup and
-# contains the date and time.  This is annoying to deal with when tracking with git.  So this will remove
-# the line after creation.
+
+##-------------------##
+## Cleanup Functions ##
+##-------------------##
+#
+## Fix gzdoom.ini ##
+# Prepare the gzdoom ini file for git.
+# Basically, this removes the date header of the file.  This gets generated every time
+# gzdoom is launched.  Very annoying to track with git, this will remove that date.
 function fix_ini_for_git() {
 	# -n +2 : start at line 2 of the file.
 	echo "$(tail -n +2 "$gzdoom_ini_file")" > "$gzdoom_ini_file"
@@ -217,75 +310,28 @@ function fix_caps_lock() {
 	setxkbmap -option caps:escape
 }
 
-
-###############
-### Parsing ###
-###############
-#
-# This section is for functions that I am experimenting with in parsing text files.  These are currently only
-# being used with the testing function down belown.  Be sure to disable main function when using these.
-
-# Check ini for matching mod name
-function check_mods_parse() {
-	# Mod name, passed as argument.
-	local mod_name="$1"
-
-	# Exists flag
-	local exists
-
-	# Grep the ini file to search for a match
-	# Grep will return 1 if no matches were found
-	# Also send grep's output to null
-	#grep "\[$mod_name\]" $ini_file > /dev/null
-
-	# If the grep returns 0, then the mod name exists within the ini
-	#[[ $(grep "\[$mod_name\]" $ini_file > /dev/null) -eq 0 ]] && exists=1
-
-	# Return flag value
-	# 1 exists, 0 does not exist
-	echo $exists
+# A function to clean up after using the script.
+function clean_up() {
+	fix_ini_for_git
+	fix_caps_lock
 }
 
-function make_mod_array() {
-	# Name of doom mod, passed as an argument to the function
-	mod_name="$1"
 
-	# Array for the chosen mod.  Will have all the config options
-	# such as wads, iwads, maps, skill, etc
-	mod_array=$(awk "/\[$mod_name\]/,/;;/" $ini_file)
-
-	# Read the variable $mod_array into and array delimited by \n
-	#readarray -t mod_array <<< ${mod_array}
-}
-
-function parse_ini_to_array() {
-	local ini_file key mod_array raw_mod_data
-
-	# First argument is the file to parse.
-	ini_file="$1"
-
-	# Second argument is the keyword to search for in the file.
-	key="$2"
-
-	# Array for the mod and its settings.
-	mapfile mod_array < <(awk "/\[$key\]/,/;;/" $ini_file)
-
-	raw_mod_data="${mod_array[@]/[[:alpha:]]*=/}"
-
-	printf "%s\n" "${#raw_mod_data[@]}"
-}
-
-############
-### Main ###
-############
+######################
+### Main Functions ###
+######################
 #
 # Main is a working script.  Any testing should be done in the testing function.
 # Leave this as a complete and working script.
 #
-main() {
+##------##
+## Main ##
+##------##
+function main() {
 	# Local variables.
 	local does_mod_exist
 	local chosen_mod
+	local map_pack
 
 
 	## Get arguments ##
@@ -304,17 +350,15 @@ main() {
 	# Check to see if we are using dmenu or not.
 	if [ "$use_dmenu" -eq 1 ]; then
 		# If so, set chosen mod to the output of choose_in_dmenu function.
-		chosen_mod=$(choose_in_dmenu)
+		chosen_mod=$(choose_profile_in_dmenu)
 
 	# Use zenity to set the chosen mod.
 	elif [ "$use_zenity" -eq 1 ]; then
-		chosen_mod=$(choose_in_zenity)
+		chosen_mod=$(choose_profile_in_zenity)
 
 	# Else if there are no arguments.
 	elif [ -z "$@" ]; then
-		echo "Please choose a mod profile:"
-		echo
-		list_mods
+		list_mod_profiles
 		exit
 
 	# Base case when an argument is supplied.  Expects mod name.
@@ -322,10 +366,9 @@ main() {
 		chosen_mod="$@"
 	fi
 
-
 	## Does mod exist? ##
 	##-----------------##
-	# Check if the mod exists within the mod_list_array.
+	# Check if the mod exists within the mod_profile_array.
 	# Returns 1 if it exists, 0 if not.
 	does_mod_exist=$(check_mods "$chosen_mod")
 
@@ -341,41 +384,38 @@ main() {
 	# Call mod_profiles, sourced from mod_profiles
 	mod_profiles "$chosen_mod"
 
+	## Choose a map pack ##
+	##-------------------##
+	# Here is where to check whether to choose a map pack or not.
+	if [ "$choose_map" -eq 1 ]; then
+		if [ "$use_dmenu" -eq 1 ]; then
+			map_pack=$(choose_map_in_dmenu)
+		elif [ "$use_zenity" -eq 1 ]; then
+			map_pack=$(choose_map_in_zenity)
+		else
+			echo "Please use Zenity or Dmenu."
+			exit 1
+		fi
+	else
+		map_pack=""
+	fi
 
 	## Launch gzdoom, with or without Steam. ##
 	##---------------------------------------##
 	# Call to launch doom with all the parameters
-	launch_doom "$iwad" "$wads" "$savedir" "$maps" "$cheats" "$skill"
-
-
-	## Fix gzdoom.ini ##
-	##----------------##
-	# Prepare the gzdoom ini file for git.
-	# Basically, this removes the date header of the file.  This gets generated every time
-	# gzdoom is launched.  Very annoying to track with git, this will remove that date.
-	fix_ini_for_git
-
-	fix_caps_lock
+	launch_doom "$iwad" "$wads" "$map_pack" "$savedir" "$maps" "$cheats" "$skill"
 }
 
-###############
-### Testing ###
-###############
+##---------##
+## Testing ##
+##---------##
 #
 # This function is used to toggle functions that I am testing.  These will usually break things and
 # can be unpredictible.  Be careful.
 #
-# Trying to parse config files using arrays.
-testing_parse() {
-	#make_mod_array "$1"
-	#printf "%s\n" "${mod_array[@]}"
-	#set_gzdoom_options
+function testing() {
+	echo "Using testing function."
 
-
-	chosen_mod_settings=($(parse_ini_to_array "$ini_file" "$1"))
-	parse_ini_to_array "$ini_file" "$1"
-
-	printf "%s\n" "${chosen_mod_settings[@]}"
 }
 
 
@@ -388,6 +428,11 @@ main "$@"
 
 # Call to the testing section.
 #testing "$@"
+
+#############
+## Cleanup ##
+#############
+clean_up
 
 ############
 ### Exit ###
