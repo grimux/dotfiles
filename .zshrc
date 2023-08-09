@@ -35,6 +35,7 @@ if [ -d "$HOME/.local/bin" ] ; then
 	PATH="$HOME/.local/bin/tools:$PATH"
 	PATH="$HOME/.local/bin/toggles:$PATH"
 	PATH="$HOME/.local/bin/phone:$PATH"
+	PATH="$HOME/.local/bin/peripherals:$PATH"
 	PATH="$HOME/.local/bin/statusbar:$PATH"
 	PATH="$HOME/.local/bin/dmenu:$PATH"
 	PATH="$HOME/.local/bin/games:$PATH"
@@ -175,6 +176,8 @@ alias movies="ranger ~/Videos/movies"
 alias videos="ranger ~/Videos/playlists"
 alias fluffy="cd /mnt/s/modding/Fluffy_Mod_Manager; wine /mnt/s/modding/Fluffy_Mod_Manager/Modmanager.exe"
 
+alias 7z_update="7z u -up1q0r2x1y2z1w2 -mx9 -mmt16"
+
 ## Dotfile alias ##
 # An alias to manage my dotfiles.
 alias config="git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
@@ -217,6 +220,7 @@ alias calm="mpv --loop --fullscreen /mnt/v/relaxing/Autism_Calming_Sensory_Meltd
 alias gc="cd /mnt/x/game-stuff/game-collection"
 alias steamdir="cd $HOME/.steam/steam"
 alias bin="cd $HOME/.local/bin"
+alias wallpaper="ranger $HOME/Pictures/game-screenshots"
 
 #################
 ### Functions ###
@@ -315,4 +319,4 @@ eval "$(starship init zsh)"
 #colorscript random
 
 # Neofetch
-neofetch
+#neofetch
