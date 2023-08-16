@@ -63,6 +63,7 @@ efibootmgr
 exa
 exfat-utils
 feh
+ficsit-cli-bin
 file-roller
 filezilla
 firefox
