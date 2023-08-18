@@ -24,7 +24,6 @@ bless
 blueberry
 bluez
 bluez-libs
-brave-bin
 bridge-utils
 browserpass
 btrfs-progs
@@ -54,7 +53,6 @@ doom64ex-git
 dosfstools
 dracula-cursors-git
 dracula-gtk-theme
-duckstation-git
 dunst
 dwarfs
 dxvk-bin
