@@ -132,6 +132,7 @@ lib32-libnm
 lib32-libxslt
 lib32-mpg123
 lib32-openal
+lib32-sdl2_mixer
 lib32-v4l-utils
 libff7tk-git
 libnewt
@@ -247,6 +248,7 @@ rclone
 redshift
 rhvoice
 rhvoice-language-english
+rottexpr-git
 rsync
 rvm
 s-nail
@@ -268,6 +270,7 @@ soh-otr-exporter
 soh-otr-gc_mq_d
 soh-otr-gc_nmq_d
 solaar
+soundfont-fluid
 speech-dispatcher
 speedtest-cli
 starship
