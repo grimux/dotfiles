@@ -190,6 +190,7 @@ openbsd-netcat
 openrgb-bin
 openssh
 openssl-1.1
+openxray
 os-prober
 pacman-contrib
 pacman-log-orphans-hook
