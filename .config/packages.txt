@@ -242,6 +242,7 @@ qbittorrent
 qt5-styleplugins
 qtpass
 quakespasm
+qzdl-git
 ranger
 raze
 rbdoom-3-bfg
