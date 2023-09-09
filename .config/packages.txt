@@ -58,8 +58,8 @@ dwarfs
 dxvk-bin
 eduke32
 efibootmgr
-exa
 exfat-utils
+eza
 feh
 ficsit-cli-bin
 file-roller
