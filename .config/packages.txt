@@ -278,6 +278,7 @@ speedtest-cli
 starship
 steam
 steam-metadata-editor-git
+steamcmd
 steamtinkerlaunch
 subdl
 subliminal
