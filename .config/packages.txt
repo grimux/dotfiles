@@ -162,6 +162,7 @@ mame-tools
 mangohud
 materia-gtk-theme
 mediainfo
+mergerfs
 mpc
 mpd
 mpdris2
