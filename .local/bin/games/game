@@ -2,300 +2,660 @@
 
 # Game backup script
 
-# Variables
-save_locations=$HOME/.config/game/game_save_locations.txt
-archive_locations=$HOME/.config/game/game_archive_locations.txt
-temp_file=$HOME/.cache/game_save_temp.txt
+##########################
+### Script Fail Events ###
+##########################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
 
-# Functions
+###########################################################
+### TODO ##################################################
+#
+# - Add more comments.
+# - Add ability to delete and restore archives.
+# - Move config section to separate file.
+#
+###########################################################
+
+
+##############
+### Config ###
+##############
+# Configuration file locations.
+# These are read into arrays for the script to access.
+save_locations_conf="$HOME/.config/game/game_save_locations.cfg"
+archive_locations_conf="$HOME/.config/game/game_archive_locations.cfg"
+
+# Remote backup location on Google Drive that rclone will access.
+rclone_backup_location="gdrive:Game Stuff/save-backups"
+
+# Dry-run mode flag.
+dry_run_mode=0
+
+# Set this flag to performe actions on archives instead of save files.
+archive_mode=0
+
+# Size of data in the config file.  3 lines of data.
+# The file has the following format:
+# Line 1: Title
+# Line 2: pc save
+# Line 3: backup save
+size_of_data_block=3
+
+# Rsync arguments
+rsync_arguments=(
+	--recursive
+	--verbose
+	--times
+	--human-readable
+	--delete
+	--modify-window=1
+)
+
+
+#################
+### Functions ###
+#################
+# Help
 help_section() {
 	echo "A script to manage game saves."
 	echo
-	echo "Syntax: game [-h|l] [command] (game name)"
+	echo "Syntax: $(basename $0) [-h|l|n] [command] <game name>"
 	echo "options:"
 	echo "h     Print this help screen."
-	echo "l     List games."
+	echo "l     List games and exit."
+	echo "n     Dry-run mode."
 	echo
 	echo "commands:"
 	echo "backup                    Backup game saves"
 	echo "archive                   Compress game archives"
-	echo "restore (game title)      Restore game saves"
-	echo "delete (game title)       Delete game saves"
+	echo "restore (game title)      Restore the specified game's save."
+	echo "delete (game title)       Delete the specified game's save."
+	echo "revert (game title)       Delete then restore the spcified game's save."
 	echo "list                      List games"
+	echo "upload                    Upload game saves to Google Drive."
 	echo
 }
 
-# Just a spacer, for pretty output.
-spacer() {
-	echo ------------------------------------------------------
+### header
+#
+# A nice header for information.  Pass in some text to display it.
+#
+function header() {
+	local text="$1"
+
+	echo "================================================"
+	echo "$text"
+	echo "------------------------------------------------"
 }
 
-# List the tracked games and archives
-list_games() {
-	echo "=== Games ==="
-	create_temp_file "$save_locations"
-	while read line; do
-		game_title=$(echo $line | awk -F',' '{print $1}')
-		echo $game_title
-	done < $temp_file
-	remove_temp_file
-	echo
-
-	echo "=== Archives ==="
-	create_temp_file "$archive_locations"
-	while read line; do
-		game_title=$(echo $line | awk -F',' '{print $1}')
-		echo $game_title
-	done < $temp_file
-	remove_temp_file
+### footer
+#
+# A footer to use after certain code execution to provide a nice "block" of info.
+# Use below a header obviously.
+#
+function footer() {
+	echo "================================================"
 }
 
-# Create a temporary file.  Will strip comments and format for awk
-create_temp_file() {
-	# sed command will ignore any line beginning with #
-	# tr will replace multiple tab characters with a single ,
-	# redirect this into my temp_file
-	sed 's/\s*#.*$//;/^\s*$/d' $1 | tr -s "\t" "," > $temp_file
-	#sed 's/\s*#.*$//;/^\s*$/d' $save_locations | tr -s "\t" "\n" > $temp_file
-}
+### list_games
+#
+# A new and improved version of the list_games function.  Uses loops to go through the data arrays.
+# Prints out the names of all games and archives in the config file.
+#
+function list_games() {
+	# Initialize empty variables
+	local title
 
-# Remove the temp file
-remove_temp_file() {
-	rm -f $temp_file
-}
+	# Display a header with the text "Games".
+	header "Games"
 
-# Testing a way to read file into an array
-read_file() {
-	create_temp_file "$save_locations"
-	mapfile -t -d'[\n]' game_array < $temp_file
-	for i in "${game_array[@]}"; do
-		echo $i
+	# Loop through the array save_locations.  The step increment is set to size_of_data_block.
+	# In this case the config file has a data block size of 3.
+	for ((index=0; index < ${#save_locations[@]}; index+="$size_of_data_block")); do
+		# Name of game
+		title="${save_locations[$index]}"
+
+		# Display message with game title
+		echo $title
 	done
-	#remove_temp_file
-}
 
-# Small check if a directory exists
-check_dir() {
-	if [ -d "$1" ]; then
-		return 0
-	else
-		return 1
-	fi
-}
+	# Add a footer after the "Games" category.
+	footer
 
-# Get the game title
-get_game_title() {
-	game_title=$(echo $1 | awk -F',' '{print $1}')
-	echo "$game_title"
-}
-
-get_game_save() {
-	game_save=$(echo $1 | awk -F',' '{print $2}')
-	echo "$game_save"
-}
-
-get_game_backup() {
-	game_backup=$(echo $1 | awk -F',' '{print $3}')
-	echo "$game_backup"
-}
-
-# Backup saves function
-backup_saves() {
-	create_temp_file "$save_locations"
-	while read line; do
-		game_title=$(get_game_title "$line")
-		game_save=$(get_game_save "$line")
-		game_backup=$(get_game_backup "$line")
-		echo "Backing up $game_title..."
-		spacer
-		if ! check_dir "$game_save"; then
-			echo "'$game_save' not found.  Try restoring."
-			echo
-			continue
-		fi
-		#cp -rpv --update "$game_save/." "$game_backup"
-		rsync -rvth --delete --modify-window=1 "$game_save/" "$game_backup"
-		echo
-	done < $temp_file
-	remove_temp_file
-}
-
-archive_saves() {
-	echo "Archiving games..."
+	# Some spacing between categories
 	echo
-	create_temp_file "$archive_locations"
-	while read line; do
-		game_title=$(get_game_title "$line")
-		game_directory=$(get_game_save "$line")
-		game_archive=$(get_game_backup "$line")
-		echo "Backing up $game_title..."
-		7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$game_archive" "$game_directory"
+	echo
+
+	# Display a head with the text "Archives".
+	header "Archives"
+
+	# Loop through the array archive_locations.  The step increment is set to size_of_data_block.
+	# In this case the config file has a data block size of 3.
+	for ((index=0; index < ${#archive_locations[@]}; index+="$size_of_data_block")); do
+		# Name of game
+		title="${archive_locations[$index]}"
+
+		# Display message with game title
+		echo $title
+	done
+
+	# Add a footer after the "Archives" category.
+	footer
+}
+
+# A function to check wether a directory exists or not, and if it is empty.
+# Returns 0 if it does not exist, 1 if it exists, 2 if it exists and is empty.
+function check_directory() {
+	# Variable for the directory to check, passed to the function.
+	local directory="$1"
+
+	# Initialize the status to zero.
+	local status=0
+
+
+	# Check if the pc save directory exists.
+	if [ -d "$directory" ]; then
+		# Check if directory if empty using the find command.
+		# It will return the directory path if it is empty.
+		local is_empty=$(find "$directory" -maxdepth 0 -type d -empty)
+
+		# If the variable is a non-zero string, meaning the directory is empty.
+		if [ -n "$is_empty" ]; then
+			# Set status to 2, exists but empty.
+			status=2
+		else
+			# Set status to 1, exists and ready to sync.
+			status=1
+		fi
+	fi
+
+	# Return the status of the directory.
+	# 0: Does not exist
+	# 1: Exists
+	# 2: Exists but empty
+	echo "$status"
+}
+
+### backup_saves
+#
+# Function to backup game saves to a local drive.  It uses rsync to do this.
+#
+function backup_saves() {
+	# Initialize empty variables
+	local title
+	local pc_save
+	local backup_save
+
+	# If dry-run mode is set, add it to the arguments for rsync.
+	if [ $dry_run_mode -eq 1 ]; then
+		rsync_arguments+=("--dry-run")
+	fi
+
+
+	# Loop through the array save_locations.  The step increment is set to size_of_data_block.
+	# In this case the config file has a data block size of 3.
+	for ((index=0; index < ${#save_locations[@]}; index+="$size_of_data_block")); do
+		# Name of game
+		title="${save_locations[$index]}"
+
+		# PC save location
+		# Current index+1
+		pc_save="${save_locations[$index+1]}"
+
+		# Backup save location
+		# Current index+2
+		backup_save="${save_locations[$index+2]}"
+
+		# Add a header that will display the game's title.
+		header "Syncing $title"
+
+		# Check the status of the directory.
+		# 0: Does not exist.
+		# 1: Exists and ready to sync.
+		# 2: Exists but empty.
+		directory_status=$(check_directory "$pc_save")
+
+
+		case "$directory_status" in
+			0)
+				echo "PC save directory does not exist. Try restoring it."
+				echo "Skipping..."
+				;;
+			1)
+				# Call to rsync
+				rsync ${rsync_arguments[@]} "$pc_save/" "$backup_save"
+				;;
+			2)
+				echo "PC save directory is empty.  Try restoring it."
+				echo "Skipping..."
+				;;
+		esac
+
+
+		# Add a footer.
+		footer
+
+		# Give some space to separate each game.
 		echo
-	done < $temp_file
-	remove_temp_file
+		echo
+
+
+	done
 }
 
-# Restore a save game
-restore_save() {
-	# Remove last argument
-	shift
-	create_temp_file "$save_locations"
+### archive_saves
+#
+# A function to compress a directory into a 7z archive.  Useful for games that heavily rely on
+# folder structure and to preserve modding, along with saves.  Uses 7zip.
+#
+function archive_saves() {
+	# Initialize empty variables
+	local title
+	local pc_directory
+	local backup_archive
 
-	# Set game_title to arguments
-	game_title="$@"
+	# Loop through the array save_locations.  The step increment is set to size_of_data_block.
+	# In this case the config file has a data block size of 3.
+	for ((index=0; index < ${#archive_locations[@]}; index+="$size_of_data_block")); do
+		# Name of game
+		title="${archive_locations[$index]}"
+
+		# PC directory location
+		# Current index+1
+		pc_directory="${archive_locations[$index+1]}"
+
+		# Archive file location
+		# Current index+2
+		backup_archive="${archive_locations[$index+2]}"
+
+		# Add a header that will display the name of the archive.
+		header "Compressing $title"
+
+		# Remove temp archive if it exists.
+		if [ -f "$backup_archive.tmp" ]; then
+			echo "Temporary archive file found.  Removing..."
+			rm --verbose $backup_archive.tmp
+		fi
+
+		# Get the status of the directory to be compressed.
+		directory_status=$(check_directory "$pc_directory")
+		# Logic to check the local save directories.
+		case "$directory_status" in
+			# The local directory does not exist.
+			0) 
+				echo "Local save directory not found.  Skipping..."
+				;;
+			# The local directory exists, compress it.
+			1)
+				# Call to 7zip
+				# TODO: Add an explanation for this silly argument.
+				7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$backup_archive" "$pc_directory"
+				;;
+
+			# The local directory exists, but is empty.
+			2)
+				echo "Local save directory found and it's empty.  Skipping..."
+				;;
+		esac
+
+
+		# Add a footer
+		footer
+
+		# Give some space to separate each game.
+		echo
+		echo
+
+
+	done
+}
+
+function restore_save() {
+	local game_title
+	local does_game_exist=0
+	shift
+
+	# Set game_title to arguments if they exist.
+	if [ -z "$@" ]; then
+		game_title="null"
+	else
+		game_title="$@"
+	fi
+
 
 	# Check if arguments were supplied.
 	# If not, prompt for input
-	if [ -z "$game_title" ]; then
+	if [ $game_title == "null" ]; then
 		read -p "Please enter game title: " game_title
 	fi
 
-	# Check file if game exists in the text file
-	check_title=$(grep "$game_title" "$temp_file")
-	if [ -z "$check_title" ]; then
-		echo "That game is not in the list."
+	# Initialize empty variables
+	local title
+	local pc_save
+	local backup_save
+
+	# Loop through the array save_locations.  The step increment is set to size_of_data_block.
+	# In this case the config file has a data block size of 3.
+	for ((index=0; index < ${#save_locations[@]}; index+="$size_of_data_block")); do
+		# Name of game
+		title="${save_locations[$index]}"
+
+		# PC directory location
+		# Current index+1
+		pc_save="${save_locations[$index+1]}"
+
+		# Archive file location
+		# Current index+2
+		backup_save="${save_locations[$index+2]}"
+
+		# If the game is found in the config array.
+		if [ "$title" == "$game_title" ]; then
+			does_game_exist=1
+			break
+		fi
+	done
+
+	# If dry-run mode is set, add it to the arguments for rsync.
+	if [ $dry_run_mode -eq 1 ]; then
+		rsync_arguments+=("--dry-run")
+	fi
+
+	# Base case if the game is not found in the config file.
+	if [ $does_game_exist -eq 0 ]; then
+		echo "Game not found in config!"
 		exit 1
 	fi
 
-	# Setup variables
-	game_save=$(grep "$game_title" $temp_file | awk -F',' '{print $2}')
-	game_backup=$(grep "$game_title" $temp_file | awk -F',' '{print $3}')
+	# Check the status of the directory.
+	# 0: Does not exist.
+	# 1: Exists and ready to sync.
+	# 2: Exists but empty.
+	backup_directory_status=$(check_directory "$backup_save")
+	local_directory_status=$(check_directory "$pc_save")
 
-	# Debug output
-	#echo $game_directory
-	#echo $game_backup
+	# Logic to check the backup save directories.
+	case "$backup_directory_status" in
+		0) echo "Backup directory for $title does not exist."; exit 1;;
+		1) echo "Backup directory found.";;
+		2) echo "Backup directory for $title is empty."; exit 1;;
+	esac
 
-	# Check if backup directory exists
-	# If not, exit
-	if ! check_dir "$game_backup"; then
-		echo "Backup location not found.  Aborting."
-		exit 1
-	fi
+	# Logic to check the local save directories.
+	case "$local_directory_status" in
+		0) echo "Local save directory not found.  Creating..."; mkdir "$pc_save";;
+		1) echo "Local save files already exist.  Try deleting first."; exit 1;;
+		2) echo "Local save directory found and it's empty.";;
+	esac
 
-	# Check if local save directory exists
-	# If already present, exit
-	if check_dir "$game_save"; then
-		echo "The save directory is already present."
-		exit 1
-	fi
+	# Call to rsync
+	rsync ${rsync_arguments[@]} "$backup_save/" "$pc_save"
 
-	# Small message
-	echo "Restoring $game_title..."
-
-	# cp command
-	cp -rpv --update "$game_backup/." "$game_save"
-
-	# Remove the temporary file
-	remove_temp_file
 }
 
-restore_archive() {
-	shift
-	shift
-	echo "$@"
-	echo here
-	create_temp_file "$archive_locations"
 
-	remove_temp_file
+function restore_archive() {
+	echo "Restoring archive."
 }
 
-# Delete local save
-delete_save() {
-	# Remove last argument
+function delete_save() {
+	local game_title
+	local does_game_exist=0
+	local to_continue=0
 	shift
-	create_temp_file "$save_locations"
 
-	# Set game_title to arguments
-	game_title="$@"
+	# Set game_title to arguments if they exist.
+	if [ -z "$@" ]; then
+		game_title="null"
+	else
+		game_title="$@"
+	fi
+
 
 	# Check if arguments were supplied.
 	# If not, prompt for input
-	if [ -z "$game_title" ]; then
+	if [ $game_title == "null" ]; then
 		read -p "Please enter game title: " game_title
 	fi
 
-	# Check file if game exists in the text file
-	check_title=$(grep "$game_title" "$temp_file")
-	if [ -z "$check_title" ]; then
-		echo "That game is not in the list."
+	# Initialize empty variables
+	local title
+	local pc_save
+	local backup_save
+
+	# Loop through the array save_locations.  The step increment is set to size_of_data_block.
+	# In this case the config file has a data block size of 3.
+	for ((index=0; index < ${#save_locations[@]}; index+="$size_of_data_block")); do
+		# Name of game
+		title="${save_locations[$index]}"
+
+		# PC directory location
+		# Current index+1
+		pc_save="${save_locations[$index+1]}"
+
+		# Archive file location
+		# Current index+2
+		backup_save="${save_locations[$index+2]}"
+
+		# If the game is found in the config array.
+		if [ "$title" == "$game_title" ]; then
+			does_game_exist=1
+			break
+		fi
+	done
+
+	# Base case if the game is not found in the config file.
+	if [ $does_game_exist -eq 0 ]; then
+		echo "Game not found in config!"
 		exit 1
 	fi
 
-	# Setup variables
-	game_save=$(grep "$game_title" $temp_file | awk -F',' '{print $2}')
+	# Check the status of the directory.
+	# 0: Does not exist.
+	# 1: Exists and ready to sync.
+	# 2: Exists but empty.
+	backup_directory_status=$(check_directory "$backup_save")
+	local_directory_status=$(check_directory "$pc_save")
 
-	# Small message
-	echo "Deleting $game_title..."
 
-	# Debug output
-	echo "$game_save"
+	# Logic to check the backup save directories.
+	case "$backup_directory_status" in
+		0) echo "Backup directory for $title does not exist. The local save will not be deleted."; exit 1;;
+		1) echo "Backup directory found.";;
+		2) echo "Backup directory for $title is empty.  The local save will not be deleted."; exit 1;;
+	esac
 
-	# Delete the game saves and folder
-	rm -rfv "$game_save"
+	# Logic to check the local save directories.
+	case "$local_directory_status" in
+		0) echo "Local save directory does not exist."; exit 1;;
+		1) echo "Local save files found.";;
+		2) echo "Local save directory found and it's empty.";;
+	esac
 
-	# Delete the temp file
-	remove_temp_file
+	# Display a prompt to ask to continue or not.
+	read -p "Do you want to delete local saves for $title?(y/n): " to_continue
+	case "$to_continue" in
+		"Y"|"y") rm --recursive --verbose "$pc_save";;
+		"N"|"n") echo "Aborting.  Nothing will be deleted.";;
+		*) echo "Enter only y/n."; exit 1;;
+	esac
+
+
 }
 
-get_args() {
-	while getopts ":hl" option; do
+### upload_saves
+# Function to upload saves to Google Drive.  Uses rclone to accomplish this.
+#
+# rclone will sync all files with the cloud.  It will create all necessary directories,
+# preserve timestamps, and delete files no longer in the source.
+#
+# It should be noted that this will only upload the save files and not the archives,
+# they are much too large to store in the cloud.
+#
+function upload_saves() {
+	# Opening message
+	echo "Uploading to GDrive."
+
+	# Initialize empty variables
+	local title
+	local pc_save
+	local backup_save
+
+	# Arguments for the sync operation of rclone.  Also a placeholder for dry-run mode.
+	rclone_arguments="--progress"
+
+	# If dry-run mode is set, add it to the arguments for rclone.
+	if [ $dry_run_mode -eq 1 ]; then
+		rclone_arguments+=("--dry-run")
+	fi
+
+
+	# Loop through the array save_locations.  The step increment is set to size_of_data_block.
+	# In this case the config file has a data block size of 3.
+	for ((index=0; index < ${#save_locations[@]}; index+="$size_of_data_block")); do
+		# Name of game
+		title="${save_locations[$index]}"
+
+		# PC save location
+		# Current index+1
+		pc_save="${save_locations[$index+1]}"
+
+		# Backup save location
+		# Current index+2
+		backup_save="${save_locations[$index+2]}"
+
+		# Call to sync_saves
+		# Display message with game title
+		header "Uploading $title"
+
+		# If the save directory does not exist, skip it.
+		if [ ! -d "$backup_save" ]; then
+			echo "Backup save directory does not exist."
+			echo "Skipping..."
+		else
+			# Use rclone to sync files to Google Drive.
+			# rclone will automatically make the directory if it does not exist.
+			rclone sync $rclone_arguments "$backup_save" "$rclone_backup_location/$title"
+
+		fi
+
+		# Add a footer to the end.
+		footer
+
+		# Give a space to separate each game.
+		echo
+		echo
+
+
+	done
+
+}
+
+### parse_conf
+# Function to parse the configuration files for the script.  The config file information will be
+# stored in two arrays with global access.
+#
+# This should be run first to avoid any bugs and ensure the data is available to the script.
+#
+function parse_conf() {
+	# Copy contents of conf_file into an array called game_info
+	# Expression 1 is used to remove any lines beginning with a comment, or having a comment at the end of the line.
+	# Expression 2 will delete any blank lines in the file.
+	# Expression 3 is used to remove the formatting of the conf_file (title=, pc=, backup=).
+	# Expression 4 is used to remove quotation marks ".
+	mapfile -t save_locations < <(\
+		sed \
+		--regexp-extended \
+		--expression='s/[[:space:]]*#.*//' \
+		--expression='/^[[:space:]]*$/d' \
+		--expression='s/^[[:alpha:]]+=//' \
+		--expression='s/"//g' \
+		"$save_locations_conf"\
+	)
+
+	mapfile -t archive_locations < <(\
+		sed \
+		--regexp-extended \
+		--expression='s/[[:space:]]*#.*//' \
+		--expression='/^[[:space:]]*$/d' \
+		--expression='s/^[[:alpha:]]+=//' \
+		--expression='s/"//g' \
+		"$archive_locations_conf"\
+	)
+}
+
+
+#####################
+### Get Arguments ###
+#####################
+function get_args() {
+	while getopts ":ahln" option; do
 		case $option in
-			h)
-				help_section
-				exit
-				;;
-			l)
-				list_games
-				exit
-				;;
-			\?)
-				echo Error: invalid option
-				exit 1
-				;;
+			a) archive_mode=1; echo "Archive mode: ON";;
+			h) help_section; exit;;
+			l) list_games; exit;;
+			n) dry_run_mode=1; echo "Dry-run mode: ON";;
+			\?) echo Error: invalid option; exit 1;;
 		esac
 	done
 }
 
-main() {
+
+############
+### Main ###
+############
+function main() {
+	local arguments="$@"
+	local game_title=""
+
+	# Strip out any flag arguments if they exist.
+	if [ $# -gt 1 ]; then
+		shift $((OPTIND-1))
+	fi
+
+	# If no commands were passed, show the help section and exit.
+	if [ -z "$arguments" ]; then
+		help_section
+		exit
+	fi
+
+	# Main case logic.
 	case "$1" in
-		"")
-			help_section
-			exit
-			;;
-		backup)
-			backup_saves
-			exit
-			;;
-	
-		archive)
-			archive_saves
-			exit
-			;;
-		list)
-			list_games
-			exit
-			;;
+		"") help_section; exit;;
+
+		backup) backup_saves; exit;;
+
+		archive) archive_saves; exit;;
+
+		upload) upload_saves; exit;;
+
+		list) list_games; exit;;
+
 		restore)
-			[[ "$2" == "-a" ]] && restore_archive "$@" && exit
+			##[[ "$2" == "-a" ]] && restore_archive "$@" && exit
 			restore_save "$@"
-			exit
-			;;
+			exit;;
 		delete)
 			delete_save "$@"
-			exit
-			;;
+			exit;;
+		revert)
+			delete_save "$@"
+			restore_save "$@"
+			exit;;
 
-		test)
-			read_file
-			exit
-			;;
-		*)
-			echo "Invalid command"
-			exit 1
-			;;
+		*) echo "Invalid command"; exit 1;;
 	esac
 }
 
-# Start main script
+
+#############
+### Start ###
+#############
+parse_conf
 get_args "$@"
 main "$@"
