@@ -152,6 +152,7 @@ alias cfz="$EDITOR ~/.zshrc"
 alias cfb="$EDITOR ~/Videos/playlists/bedtime.m3u"
 alias cfs="$EDITOR ~/.config/script_boilerplate.sh"
 alias cfawe="$EDITOR ~/.config/awesome/rc.lua"
+alias cfd="$EDITOR ~/.config/gzdoom/mod_profiles.sh"
 
 ## Program shortcuts ##
 alias define="sdcv"			# Dictionary
