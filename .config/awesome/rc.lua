@@ -132,7 +132,7 @@ awful.layout.layouts = {
     awful.layout.suit.fair.horizontal,
     --awful.layout.suit.spiral,
     --awful.layout.suit.spiral.dwindle,
-    --awful.layout.suit.max,
+    awful.layout.suit.max,
     --awful.layout.suit.max.fullscreen,
     --awful.layout.suit.magnifier,
     --awful.layout.suit.corner.nw,
@@ -549,6 +549,10 @@ globalkeys = mytable.join(
 
    -- Screenshot
    awful.key({}, "Print", function () awful.spawn("screenshooter") end),
+
+   -- Set Caps to escape
+   awful.key({ modkey, "Control" }, "k", function() awful.spawn("set_caps_to_esc") end,
+    { description = "Set Caps to ESC", group = "misc"}),
 
   -- Dmenu
   awful.key({ modkey,         }, "space", function () awful.spawn("dmenu_run -i -p run:") end,
