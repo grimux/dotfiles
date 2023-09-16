@@ -245,16 +245,13 @@ function launch_doom() {
 		"DOOM.WAD") steam_id=2280;;
 		"DOOM2.WAD") steam_id=2300;;
 		"doom_complete.pk3") steam_id=2300;;
+		"DOOM64.CE.ipk3") steam_id=1148590;;
 		"") echo "iwad is empty string"; exit 1;;
-		*) echo "Unrecognized iwad name"; exit 1;;
 	esac
 
 	# Check to see if Steam should be used.
 	if [ $use_steam -eq 1 ]; then
 		program_to_use="steam -applaunch $steam_id"
-	# If not, launch gzdoom directly.
-	else
-		program_to_use="gzdoom"
 	fi
 
 	$program_to_use \
@@ -358,8 +355,7 @@ function main() {
 
 	# Else if there are no arguments.
 	elif [ -z "$@" ]; then
-		list_mod_profiles
-		exit
+		chosen_mod="chill_doom"
 
 	# Base case when an argument is supplied.  Expects mod name.
 	else
@@ -390,11 +386,8 @@ function main() {
 	if [ "$choose_map" -eq 1 ]; then
 		if [ "$use_dmenu" -eq 1 ]; then
 			map_pack=$(choose_map_in_dmenu)
-		elif [ "$use_zenity" -eq 1 ]; then
-			map_pack=$(choose_map_in_zenity)
 		else
-			echo "Please use Zenity or Dmenu."
-			exit 1
+			map_pack=$(choose_map_in_zenity)
 		fi
 	else
 		map_pack=""
