@@ -14,15 +14,15 @@
 # o pipefail - script fails if command piped fails
 # x - output each line (debug)
 #
-set -euox pipefail
-#set -euo pipefail
+#set -euox pipefail
+set -euo pipefail
 
 # Timeout for notify-send
 # It's good to have this low so successive screenshots are easier.
 timeout=100
 
 # Get the name of the application that is currently focused on.
-application_name=$(xdotool getactivewindow getwindowname)
+application_name=$(xdotool getactivewindow getwindowclassname)
 
 # Arguments to pass to the `--exec` flag for `scrot`.
 #exec_args='notify-send --expire-time='$timeout' --icon "$m" "Screenshot Taken\n$f"; rm --force "$m"'
@@ -39,7 +39,7 @@ function move_screenshot_to_pictures() {
 }
 
 function take_screenshot() {
-	local application_name=$(xdotool getactivewindow getwindowname)
+	local application_name=$(xdotool getactivewindow getwindowclassname)
 	# Call to scrot
 	# Will create a thumbnail and only capture monitor 0.
 	# It then executes a command on the image, display a notification, and remove the thumbnail.
@@ -57,20 +57,29 @@ function play_sound() {
 	canberra-gtk-play --id=camera-shutter
 }
 
-function testing(){
+function testing() {
 	take_screenshot && play_sound
+}
+
+function copy_to_clipboard() {
+	local application_name=$(xdotool getactivewindow getwindowname)
+
+	# Copy screenshot to the clipboard
+	xclip -i < "$application_name"
+
 }
 
 function main() {
 	# Call to scrot
 	# Will create a thumbnail and only capture monitor 0.
-	# It then executes a command on the image, display a notification, and remove the thumbnail.
+	# It then executes a command on the image; it copies the image to the clipboard, moves it
+	# to the Pictures directory, displays a notification, and deletes the thumbnail.
 	scrot \
 		"$application_name"_%Y_%m_%d_%H_%M_%S.png \
 		--thumb 20 \
 		--monitor 0 \
 		--exec \
-		'mv "$f" $$(xdg-user-dir PICTURES); notify-send --expire-time='$timeout' --icon "$m" "Screenshot Taken\n$f"; rm --force "$m"'
+		'xclip -selection clipboard -t image/png -i "$f"; mv "$f" $$(xdg-user-dir PICTURES); notify-send --expire-time='$timeout' --icon "$m" "Screenshot Taken\n$f"; rm --force "$m"'
 
 
 	# Check to see if `scrot` completed successfully.
@@ -81,6 +90,7 @@ function main() {
 	else
 		notify-send "Error!" "There was an error with the scrot command"
 	fi
+
 }
 
 main
