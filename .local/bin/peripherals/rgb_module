@@ -3,16 +3,18 @@
 # A script to toggle the controllable rgb.
 #
 
+# File name for the systemd drop-in file for rgb control.
 rgb_dropin_file="i2c-dev.conf"
-dropin_backup_location="$HOME/.config"
+
+# Location to put the file.
 dropin_enable_location="/etc/modules-load.d"
 
 function get_arguments() {
 	case "$@" in
 		toggle) toggle_rgb_module;;
 		status) get_status;;
-		on) enable_rgb_module;;
-		off) disable_rgb_module;;
+		on|enable) enable_rgb_module;;
+		off|disable) disable_rgb_module;;
 		help) help_section;;
 		*) echo "Invalid command"; usage; exit 1;;
 	esac
@@ -37,15 +39,23 @@ function usage() {
 	echo "$(basename $0) <command>"
 }
 
+# Enable the rgb module.
 function enable_rgb_module() {
 	# Local variables to store the long file names.
 	local module="$dropin_enable_location/$rgb_dropin_file"
+	local temp="$HOME/.cache/$rgb_dropin_file"
 
-	sudo cp $dropin_backup_location/$rgb_dropin_file $dropin_enable_location
+	# Create a temp file with the proper contents for systemd.
+	echo "i2c-dev" > $temp
 
+	# Move the temp file to the proper location.
+	sudo mv $temp $module
+
+	# Give output.
 	echo "rgb module enabled."
 }
 
+# Disable the rgb module.
 function disable_rgb_module() {
 	# Local variables to store the long file names.
 	local module="$dropin_enable_location/$rgb_dropin_file"
@@ -55,6 +65,7 @@ function disable_rgb_module() {
 	echo "rgb module disabled."
 }
 
+# Show the current status.
 function get_status() {
 	# Local variables to store the long file names.
 	local module="$dropin_enable_location/$rgb_dropin_file"
@@ -69,7 +80,6 @@ function get_status() {
 function toggle_rgb_module() {
 	# Local variables to store the long file names.
 	local module="$dropin_enable_location/$rgb_dropin_file"
-	local module_bakcup="$dropin_backup_location/$rgb_dropin_file"
 
 	if [ -s "$module" ]; then
 		disable_rgb_module
