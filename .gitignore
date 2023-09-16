@@ -15,8 +15,10 @@
 .config/nvim/plugged/*
 .config/OpenGOAL/*
 .config/OpenGOAL-Launcher/*
+.config/OpenRGB/*
 .config/PCSX2/*
 .config/puddletag/*
+.config/satisfactory-mod-manager-gui/*
 .config/Signal/*
 .config/spotify/*
 .config/StardewValley/*
