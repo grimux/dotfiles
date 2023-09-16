@@ -5,10 +5,14 @@
 # Simple array for storing mod names.  I will eventually come up with a better way to do this, such
 # as parsing a file.
 mod_profile_array=(
+	"64"
+	abysm
 	ashes_ep1
 	ashes_ep2
+	arcade
 	castlevania
 	chill_doom
+	bloom
 	brutal_minecraft
 	countrycide
 	doom_complete
@@ -24,6 +28,7 @@ mod_profile_array=(
 	russian_overkill
 	siren
 	spooktober
+	total_chaos
 )
 
 
@@ -37,22 +42,50 @@ function mod_profiles() {
 	# Switch case to choose the settings.
 	case "$mod_name" in
 
+		# Doom 64
+		"64")
+			iwad=DOOM64.CE.ipk3
+			wads=""
+			maps=""
+			savedir="$savedir/doom64"
+			cheats=""
+			skill=""
+			;;
 		## Vanilla Wad ##
 		doom_complete)
 			iwad=doom_complete.pk3
-			wads=""
+			wads="damnums.pk3 simplehudaddons.pk3 steve_flashlight.pk7"
 			maps=""
 			savedir="$savedir/doom_complete"
+			cheats=""
+			skill="" ;;
+
+		## Mod Settings ##
+
+		# Abysm 2
+		abysm)
+			iwad=DOOM2.WAD
+			wads="abysm2.pk3 damnums.pk3 simplehudaddons.pk3 steve_flashlight.pk7"
+			maps=""
+			savedir="$savedir/abysm2"
 			cheats=""
 			skill=""
 			;;
 
-		## Mod Settings ##
+		# Arcade mode
+		arcade)
+			iwad=DOOM2.WAD
+			wads="SmoothDoom.pk3 ketchup.pk3 damnums.pk3 simplehudaddons.pk3 steve_flashlight.pk7 colourfulhell.pk3"
+			maps=""
+			savedir="$savedir/arcade"
+			cheats=""
+			skill=""
+			;;
 
 		# Ashes 2063 Ep1
 		ashes_ep1)
 			iwad=DOOM2.WAD
-			wads="Ashes2063Enriched2_23.pk3"
+			wads="Ashes2063Enriched2_23.pk3 damnums.pk3 simplehudaddons.pk3"
 			maps=""
 			savedir="$savedir/ashes2063"
 			cheats=""
@@ -62,9 +95,19 @@ function mod_profiles() {
 		# Ashes 2063 Ep2
 		ashes_ep2)
 			iwad=DOOM2.WAD
-			wads="AshesAfterglow1_10.pk3"
+			wads="AshesAfterglow1_10.pk3 damnums.pk3 simplehudaddons.pk3"
 			maps=""
 			savedir="$savedir/ashes_afterglow"
+			cheats=""
+			skill=""
+			;;
+
+		# Bloom - Blood mixed with Doom
+		bloom)
+			iwad=DOOM2.WAD
+			wads="Bloom.pk3"
+			maps=""
+			savedir="$savedir/bloom"
 			cheats=""
 			skill=""
 			;;
@@ -82,7 +125,7 @@ function mod_profiles() {
 		# Chill Doom
 		chill_doom)
 			iwad=DOOM.WAD
-			wads="SmoothDoom.pk3 DoomMetalVol5.wad steve_flashlight.pk7"
+			wads="SmoothDoom.pk3 DoomMetalVol5.wad steve_flashlight.pk7 ketchup.pk3"
 			maps="+map e1m1"
 			savedir="$savedir/chill_doom"
 			cheats="+buddha2 +give keys"
@@ -117,7 +160,7 @@ function mod_profiles() {
 
 		elementalism)
 			iwad=DOOM2.WAD
-			wads="Elementalism_Phase1_RC1_1.01.pk3"
+			wads="Elementalism_Phase1_RC1_1.01.pk3 simplehudaddons.pk3 steve_flashlight.pk7"
 			maps=""
 			savedir="$savedir/elementalism"
 			cheats=""
@@ -135,7 +178,7 @@ function mod_profiles() {
 
 		guncaster)
 			iwad=DOOM2.WAD
-			wads="Guncaster.pk3"
+			wads="Guncaster.pk3 GC_Addon.pk3 GC_WeaponShop.pk3 damnums.pk3"
 			maps=""
 			savedir="$savedir/guncaster"
 			cheats=""
@@ -180,12 +223,7 @@ function mod_profiles() {
 
 		project_brutality)
 			iwad=DOOM2.WAD
-			wads="\
-				DoomMetalVol5.wad \
-				Project_Brutality.pk3 \
-				pb_hud_base_a.pk3 \
-				pb_hud_base_b.pk3 \
-				mapsofchaos-ok.wad"
+			wads="DoomMetalVol5.wad	Project_Brutality.pk3 simplehudaddons.pk3 steve_flashlight.pk7"
 			maps=""
 			savedir="$savedir/project_brutality"
 			cheats=""
@@ -194,7 +232,7 @@ function mod_profiles() {
 
 		reelism2)
 			iwad=DOOM2.WAD
-			wads="reelism2_v1.23.pk3"
+			wads="reelism2.pk3 simplehudaddons.pk3"
 			maps=""
 			savedir="$savedir/reelism2"
 			cheats=""
@@ -203,7 +241,7 @@ function mod_profiles() {
 
 		russian_overkill)
 			iwad=DOOM2.WAD
-			wads="RO.pk3"
+			wads="RO.pk3 colourfulhell.pk3 damnums.pk3 steve_flashlight.pk7 simplehudaddons.pk3"
 			maps=""
 			savedir="$savedir/russian_overkill"
 			cheats=""
@@ -212,7 +250,7 @@ function mod_profiles() {
 
 		siren)
 			iwad=DOOM2.WAD
-			wads="Siren-0.6a.pk3"
+			wads="Siren.pk3"
 			maps=""
 			savedir="$savedir/siren"
 			cheats=""
@@ -221,9 +259,18 @@ function mod_profiles() {
 
 		spooktober)
 			iwad=DOOM2.WAD
-			wads="SmoothDoom.pk3 spooktober.pk3 steve_flashlight.pk7"
+			wads="SmoothDoom.pk3 spooktober.pk3 damnums.pk3 simplehudaddons.pk3 steve_flashlight.pk7"
 			maps=""
 			savedir="$savedir/spooktober"
+			cheats=""
+			skill=""
+			;;
+
+		total_chaos)
+			iwad=total_chaos.wad
+			wads="totalchaos.pk3 steve_flashlight.pk7"
+			maps=""
+			savedir="$savedir/total_chaos"
 			cheats=""
 			skill=""
 			;;
