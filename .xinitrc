@@ -30,6 +30,8 @@ awesome() {
 	/usr/lib/xdg-desktop-portal-lxqt &
 	/usr/lib/xdg-desktop-portal &
 
+	export XDG_SESSION_TYPE='x11'
+
 	# Start awesome
 	exec awesome
 }
