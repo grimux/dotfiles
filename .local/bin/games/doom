@@ -69,7 +69,7 @@ source $mod_profiles
 #mods_list=($(grep '\[.*\]' $ini_file | sed -e 's/\[//' -e 's/\]//'))
 
 # Map Packs
-map_packs_array=$(find $mapsdir -type f -iname '*.wad' -printf '%f\n' -o -iname '*.pk3' -printf '%f\n' | sort)
+map_pack_array=$(find $mapsdir -type f -iname '*.wad' -printf '%f\n' -o -iname '*.pk3' -printf '%f\n' | sort)
 
 # Modifiers list
 addons_list=$(find $addonsdir -type f -iname '*.wad' -printf '%f\n' -o -iname '*.pk3' -printf '%f\n' | sort)
@@ -152,96 +152,62 @@ function list_map_packs() {
 	# Simply print the array of map packs
 	echo "Map Packs:"
 	echo "----------"
-	printf "%s\n" "${map_packs_array[@]}"
+	printf "%s\n" "${map_pack_array[@]}"
 }
 
 
-##-----------------------##
-## Choosing mod profiles ##
-##-----------------------##
-# Choose the mod profile using dmenu.
-function choose_profile_in_dmenu() {
-	# Local variable to store the mod choice and the prompt.
-	local prompt="Doom Profiles:"
+##------------------##
+## Choosing options ##
+##------------------##
+# Choose options using dmenu.
+function choose_in_dmenu() {
+	# Prompt is set from the first passed argument.
+	local prompt="$1"
+	# Array is created from the second argument, which is an array itself.
+	local array=$2[@]
+	# Variable for the choice.
 	local dmenu_choice
+	# An array of options.  Made from the passed array.
+	local choices=("${!array}")
 
 	# Mod choice variable is equal to the selection from dmenu.
-	dmenu_choice=$(printf '%s\n' "${mod_profile_array[@]}" | dmenu -i -l 20 -p "$prompt")
+	dmenu_choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -l 20 -p "$prompt")
 
 	# Return profile the choice.
 	echo "$dmenu_choice"
 }
 
-# Choose mod profile using fzf.
-function choose_profile_in_fzf() {
-	# Local variable to store the mod choice and the prompt.
-	local prompt="Doom Profiles:"
+# Choose options using fzf.
+function choose_in_fzf() {
+	# Prompt is set from the first passed argument.
+	local prompt="$1"
+	# Array is created from the second argument, which is an array itself.
+	local array=$2[@]
+	# Variable for the choice.
 	local fzf_choice
+	# An array of options.  Made from the passed array.
+	local choices=("${!array}")
 
 	# Mod choice variable is equal to the selection from dmenu.
-	fzf_choice=$(printf '%s\n' "${mod_profile_array[@]}" | fzf --reverse --border rounded --border-label="$prompt")
+	fzf_choice=$(printf '%s\n' "${choices[@]}" | fzf --reverse --border rounded --border-label="$prompt")
 
 	# Return profile the choice.
 	echo "$fzf_choice"
 }
 
-# Choose the mod profile using zenity.
-function choose_profile_in_zenity() {
-	# Local variable to store the mod choice in.
-	local prompt="Doom Profiles"
+# Choose options using zenity.
+function choose_in_zenity() {
+	# Prompt is set from the first passed argument.
+	local prompt="$1"
+	# Array is created from the second argument, which is an array itself.
+	local array=$2[@]
+	# Variable for the choice.
 	local zenity_choice
+	# An array of options.  Made from the passed array.
+	local choices=("${!array}")
 
 	# Mod profile choice is equal to the selection from zenity.
-	zenity_choice=$(printf '%s\n' "${mod_profile_array[@]}" | zenity --title="$prompt" --width 400 --height 600 --list --column "$prompt")
-
-	# Return the choice
-	echo "$zenity_choice"
-}
-
-##---------------##
-## Choosing Maps ##
-##---------------##
-# Choose the map pack using dmenu.
-function choose_map_in_dmenu() {
-	# Local variables to store the map choice and the prompt.
-	local prompt="Map packs:"
-	local dmenu_choice
-	local array="$@"
-
-	# Map choice variable is equal to the selection from dmenu.
-	dmenu_choice=$(printf '%s\n' "${map_packs_array[@]}" | dmenu -i -l 20 -p "$prompt")
-
-	# Return the map choice.
-	echo "$dmenu_choice"
-}
-
-# Choose the map pack using fzf.
-function choose_map_in_fzf() {
-	# Local variables to store the map choice and the prompt.
-	local prompt="Map packs:"
-	local fzf_choice
-
-	# Map choice variable is equal to the selection from dmenu.
-	fzf_choice=$(printf '%s\n' "${map_packs_array[@]}" | fzf --reverse --border rounded --border-label="$prompt")
-
-	# Return the map choice.
-	echo "$fzf_choice"
-}
-
-# Choose the mod profile using zenity.
-function choose_map_in_zenity() {
-	# Local variable to store the mod choice in.
-	local prompt="Map packs:"
-	local zenity_choice
-
-	# Map choice is equal to the selection from zenity.
-	zenity_choice=$(printf '%s\n' "${map_packs_array[@]}" | zenity --title="$prompt" --width 400 --height 600 --list --column "$prompt")
-
-	# Check to see if anything was chosen, if not then exit.
-	if [ -z "$zenity_choice" ]; then
-		echo "No map pack selected."
-		exit 1
-	fi
+	zenity_choice=$(printf '%s\n' "${choices[@]}" | zenity --title="$prompt" --width 400 --height 600 --list --column "$prompt")
 
 	# Return the choice
 	echo "$zenity_choice"
@@ -294,23 +260,23 @@ function launch_doom() {
 
 # Check if the mod exists within the array.
 function check_mods() {
-	# First argument is the user's input, which mod to select.
+	# First argument is the user's input, which mod to check for.
 	local mod_to_check="$1"
 
 	# Local variables
 	local title
-	local does_it_exist=0
+	local does_mod_exist=0
 
 	# Loop through the mod_profile_array and check if the mod is there.
 	for title in ${mod_profile_array[@]}; do
-		# If there is a match, set does_it_exist to 1 and stop.
+		# If there is a match, set does_mod_exist to 1 and stop.
 		if [ "$mod_to_check" == "$title" ]; then
-			does_it_exist=1
+			does_mod_exist=1
 			break
 		fi
 	done
 
-	# Return 1 if the title exists, 0 if not
+	# Return 1 if the mod exists, 0 if not.
 	echo "$does_it_exist"
 }
 
@@ -365,15 +331,17 @@ function main() {
 	## Main Logic ##
 	##------------##
 	# Check to see which mod picker we are using.
+	local mod_prompt="Mod Profiles:"
 	case "$mod_picker" in
 		# Use dmenu.
-		"dmenu") chosen_mod=$(choose_profile_in_dmenu);;
+		#"dmenu") chosen_mod=$(choose_profile_in_dmenu);;
+		"dmenu") chosen_mod=$(choose_in_dmenu "$mod_prompt" mod_profile_array);;
 
 		# Use fzf.
-		"fzf") chosen_mod=$(choose_profile_in_fzf);;
+		"fzf") chosen_mod=$(choose_in_fzf "$mod_prompt" mod_profile_array);;
 
 		# Use zenity.
-		"zenity") chosen_mod=$(choose_profile_in_zenity);;
+		"zenity") chosen_mod=$(choose_in_zenity "$mod_prompt" mod_profile_array);;
 
 		# Base case.  Expects an argument.
 		"none") chosen_mod="$@"
@@ -383,6 +351,12 @@ function main() {
 	# If no arguments are given, start chill_doom by default.
 	if [ -z $@ ]; then
 		chosen_mod="chill_doom"
+	fi
+
+	# If no mod profile is selected.
+	if [ -z "$chosen_mod" ]; then
+		echo "Nothing chosen."
+		exit 1
 	fi
 
 	## Does mod exist? ##
@@ -406,15 +380,21 @@ function main() {
 	## Choose a map pack ##
 	##-------------------##
 	# Here is where to check whether to choose a map pack or not.
+	local map_prompt="Map Packs:"
 	if [ "$choose_map" -eq 1 ]; then
 		case "$mod_picker" in
-			"dmenu") map_pack=$(choose_map_in_dmenu);;
-			"fzf") map_pack=$(choose_map_in_fzf);;
-			"zenity") map_pack=$(choose_map_in_zenity);;
-			"none") map_pack=$(choose_map_in_fzf);;
+			"dmenu") map_pack=$(choose_in_dmenu "$map_prompt" map_pack_array);;
+			"fzf"|"none") map_pack=$(choose_in_fzf "$map_prompt" map_pack_array);;
+			"zenity") map_pack=$(choose_in_zenity "$map_prompt" map_pack_array);;
 		esac
 	else
 		map_pack=""
+	fi
+
+	# If a map pack is to be chosen but nothing was selected.
+	if [ "$choose_map" -eq 1 ] && [ "$map_pack" == "" ]; then
+		echo "No map chosen."
+		exit 1
 	fi
 
 	## Launch gzdoom, with or without Steam. ##
@@ -449,7 +429,7 @@ main "$@"
 #############
 ## Cleanup ##
 #############
-#clean_up
+clean_up
 
 ############
 ### Exit ###
