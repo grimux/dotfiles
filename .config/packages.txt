@@ -195,6 +195,7 @@ openxray
 os-prober
 pacman-contrib
 pacman-log-orphans-hook
+pacutils
 palenight-gtk-theme
 pamixer
 pandoc-cli
