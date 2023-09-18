@@ -29,8 +29,7 @@ set -euo pipefail
 ### Global Flags ###
 ####################
 # Use dmenu to choose mod.
-use_dmenu=0
-use_zenity=0
+mod_picker="none"
 use_steam=0
 choose_map=0
 
@@ -73,9 +72,7 @@ source $mod_profiles
 map_packs_array=$(find $mapsdir -type f -iname '*.wad' -printf '%f\n' -o -iname '*.pk3' -printf '%f\n' | sort)
 
 # Modifiers list
-modifiers_list=(
-	""
-)
+addons_list=$(find $addonsdir -type f -iname '*.wad' -printf '%f\n' -o -iname '*.pk3' -printf '%f\n' | sort)
 
 
 
@@ -91,6 +88,7 @@ function help_section() {
 	echo "options:"
 	echo "h     Print this help screen."
 	echo "d     Choose mod in dmenu."
+	echo "f     Choose mod in fzf."
 	echo "z     Choose mod in zenity."
 	echo "m     Choose map pack."
 	echo "l     List installed mods."
@@ -103,22 +101,21 @@ function help_section() {
 #-------------#
 # Get arguments passed to the script
 function get_arguments() {
-	while getopts ":hldmsz" option; do
+	while getopts ":hfldmsz" option; do
 		case $option in
 			# Use dmenu
-			d) echo "Using dmenu."; use_dmenu=1;;
+			d) echo "Using dmenu."; mod_picker="dmenu";;
 
 			# Show help section and exit.
 			h) help_section; exit;;
 
+			# Use fzf
+			f) echo "Using fzf."; mod_picker="fzf";;
+
 			# List out the mod profiles and map packs avalible.
 			l)
-				echo "Mod Profiles:"
-				echo "-------------"
 				list_mod_profiles
 				echo
-				echo "Map Pack:"
-				echo "---------"
 				list_map_packs
 				exit
 				;;
@@ -130,7 +127,7 @@ function get_arguments() {
 			s) echo "Using Steam."; use_steam=1;;
 
 			# Set flag to use Zentiy to choose everything.
-			z) echo "Using zenity."; use_zenity=1;;
+			z) echo "Using zenity."; mod_picker="zenity";;
 
 			# Base case, if there is an invalid option
 			\?) echo "Error: Invalid option"; exit 1;;
@@ -146,11 +143,15 @@ function get_arguments() {
 # List the mods
 function list_mod_profiles() {
 	# Simply print the array $mods_list
+	echo "Mod Profiles:"
+	echo "-------------"
 	printf "%s\n" "${mod_profile_array[@]}"
 }
 
 function list_map_packs() {
 	# Simply print the array of map packs
+	echo "Map Packs:"
+	echo "----------"
 	printf "%s\n" "${map_packs_array[@]}"
 }
 
@@ -171,6 +172,19 @@ function choose_profile_in_dmenu() {
 	echo "$dmenu_choice"
 }
 
+# Choose mod profile using fzf.
+function choose_profile_in_fzf() {
+	# Local variable to store the mod choice and the prompt.
+	local prompt="Doom Profiles:"
+	local fzf_choice
+
+	# Mod choice variable is equal to the selection from dmenu.
+	fzf_choice=$(printf '%s\n' "${mod_profile_array[@]}" | fzf --reverse --border rounded --border-label="$prompt")
+
+	# Return profile the choice.
+	echo "$fzf_choice"
+}
+
 # Choose the mod profile using zenity.
 function choose_profile_in_zenity() {
 	# Local variable to store the mod choice in.
@@ -184,7 +198,6 @@ function choose_profile_in_zenity() {
 	echo "$zenity_choice"
 }
 
-
 ##---------------##
 ## Choosing Maps ##
 ##---------------##
@@ -193,12 +206,26 @@ function choose_map_in_dmenu() {
 	# Local variables to store the map choice and the prompt.
 	local prompt="Map packs:"
 	local dmenu_choice
+	local array="$@"
 
 	# Map choice variable is equal to the selection from dmenu.
 	dmenu_choice=$(printf '%s\n' "${map_packs_array[@]}" | dmenu -i -l 20 -p "$prompt")
 
 	# Return the map choice.
 	echo "$dmenu_choice"
+}
+
+# Choose the map pack using fzf.
+function choose_map_in_fzf() {
+	# Local variables to store the map choice and the prompt.
+	local prompt="Map packs:"
+	local fzf_choice
+
+	# Map choice variable is equal to the selection from dmenu.
+	fzf_choice=$(printf '%s\n' "${map_packs_array[@]}" | fzf --reverse --border rounded --border-label="$prompt")
+
+	# Return the map choice.
+	echo "$fzf_choice"
 }
 
 # Choose the mod profile using zenity.
@@ -235,26 +262,28 @@ function launch_doom() {
 	local map="$5"
 	local cheats="$6"
 	local skill="$7"
-	local program_to_use="gzdoom"
-	local steam_id
-
-	# Set the steam id for the corresponding game, Doom 1 or Doom 2.
-	# doom1: 2280
-	# doom2: 2300
-	case $iwad in
-		"DOOM.WAD") steam_id=2280;;
-		"DOOM2.WAD") steam_id=2300;;
-		"doom_complete.pk3") steam_id=2300;;
-		"DOOM64.CE.ipk3") steam_id=1148590;;
-		"") echo "iwad is empty string"; exit 1;;
-	esac
+	local launcher="gzdoom"
+	local steam_id=0
 
 	# Check to see if Steam should be used.
 	if [ $use_steam -eq 1 ]; then
-		program_to_use="steam -applaunch $steam_id"
+		# Set the steam id for the corresponding game, Doom 1, Doom 2, or Doom 64.
+		# doom1:  2280
+		# doom2:  2300
+		# doom64: 1148590
+		case $iwad in
+			"DOOM.WAD") steam_id=2280;;
+			"DOOM2.WAD") steam_id=2300;;
+			"doom_complete.pk3") steam_id=2300;;
+			"DOOM64.CE.ipk3") steam_id=1148590;;
+			"") echo "iwad is empty string"; exit 1;;
+		esac
+
+		# Set launcher to steam.
+		launcher="steam -applaunch $steam_id"
 	fi
 
-	$program_to_use \
+	$launcher \
 		-iwad $iwad \
 		-file $wads $map_pack \
 		-savedir $savedir \
@@ -270,7 +299,7 @@ function check_mods() {
 
 	# Local variables
 	local title
-	local does_it_exist
+	local does_it_exist=0
 
 	# Loop through the mod_profile_array and check if the mod is there.
 	for title in ${mod_profile_array[@]}; do
@@ -278,9 +307,6 @@ function check_mods() {
 		if [ "$mod_to_check" == "$title" ]; then
 			does_it_exist=1
 			break
-		# Otherwise, set the flag to 0.
-		else
-			does_it_exist=0
 		fi
 	done
 
@@ -302,15 +328,9 @@ function fix_ini_for_git() {
 	echo "$(tail -n +2 "$gzdoom_ini_file")" > "$gzdoom_ini_file"
 }
 
-# Function to fix the caps lock returning to normal after using gzdoom.
-function fix_caps_lock() {
-	setxkbmap -option caps:escape
-}
-
 # A function to clean up after using the script.
 function clean_up() {
 	fix_ini_for_git
-	fix_caps_lock
 }
 
 
@@ -344,22 +364,25 @@ function main() {
 
 	## Main Logic ##
 	##------------##
-	# Check to see if we are using dmenu or not.
-	if [ "$use_dmenu" -eq 1 ]; then
-		# If so, set chosen mod to the output of choose_in_dmenu function.
-		chosen_mod=$(choose_profile_in_dmenu)
+	# Check to see which mod picker we are using.
+	case "$mod_picker" in
+		# Use dmenu.
+		"dmenu") chosen_mod=$(choose_profile_in_dmenu);;
 
-	# Use zenity to set the chosen mod.
-	elif [ "$use_zenity" -eq 1 ]; then
-		chosen_mod=$(choose_profile_in_zenity)
+		# Use fzf.
+		"fzf") chosen_mod=$(choose_profile_in_fzf);;
 
-	# Else if there are no arguments.
-	elif [ -z "$@" ]; then
+		# Use zenity.
+		"zenity") chosen_mod=$(choose_profile_in_zenity);;
+
+		# Base case.  Expects an argument.
+		"none") chosen_mod="$@"
+
+	esac
+
+	# If no arguments are given, start chill_doom by default.
+	if [ -z $@ ]; then
 		chosen_mod="chill_doom"
-
-	# Base case when an argument is supplied.  Expects mod name.
-	else
-		chosen_mod="$@"
 	fi
 
 	## Does mod exist? ##
@@ -384,11 +407,12 @@ function main() {
 	##-------------------##
 	# Here is where to check whether to choose a map pack or not.
 	if [ "$choose_map" -eq 1 ]; then
-		if [ "$use_dmenu" -eq 1 ]; then
-			map_pack=$(choose_map_in_dmenu)
-		else
-			map_pack=$(choose_map_in_zenity)
-		fi
+		case "$mod_picker" in
+			"dmenu") map_pack=$(choose_map_in_dmenu);;
+			"fzf") map_pack=$(choose_map_in_fzf);;
+			"zenity") map_pack=$(choose_map_in_zenity);;
+			"none") map_pack=$(choose_map_in_fzf);;
+		esac
 	else
 		map_pack=""
 	fi
@@ -425,7 +449,7 @@ main "$@"
 #############
 ## Cleanup ##
 #############
-clean_up
+#clean_up
 
 ############
 ### Exit ###
