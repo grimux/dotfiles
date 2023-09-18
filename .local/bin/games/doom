@@ -163,12 +163,10 @@ function list_map_packs() {
 function choose_in_dmenu() {
 	# Prompt is set from the first passed argument.
 	local prompt="$1"
-	# Array is created from the second argument, which is an array itself.
-	local array=$2[@]
+	# Local variable is created which points to the passed array.
+	local -n choices="$2"
 	# Variable for the choice.
 	local dmenu_choice
-	# An array of options.  Made from the passed array.
-	local choices=("${!array}")
 
 	# Mod choice variable is equal to the selection from dmenu.
 	dmenu_choice=$(printf '%s\n' "${choices[@]}" | dmenu -i -l 20 -p "$prompt")
@@ -181,12 +179,10 @@ function choose_in_dmenu() {
 function choose_in_fzf() {
 	# Prompt is set from the first passed argument.
 	local prompt="$1"
-	# Array is created from the second argument, which is an array itself.
-	local array=$2[@]
+	# Local variable is created which points to the passed array.
+	local -n choices="$2"
 	# Variable for the choice.
 	local fzf_choice
-	# An array of options.  Made from the passed array.
-	local choices=("${!array}")
 
 	# Mod choice variable is equal to the selection from dmenu.
 	fzf_choice=$(printf '%s\n' "${choices[@]}" | fzf --reverse --border rounded --border-label="$prompt")
@@ -199,12 +195,11 @@ function choose_in_fzf() {
 function choose_in_zenity() {
 	# Prompt is set from the first passed argument.
 	local prompt="$1"
-	# Array is created from the second argument, which is an array itself.
-	local array=$2[@]
+	# Local variable is created which points to the passed array.
+	local -n choices="$2"
 	# Variable for the choice.
 	local zenity_choice
 	# An array of options.  Made from the passed array.
-	local choices=("${!array}")
 
 	# Mod profile choice is equal to the selection from zenity.
 	zenity_choice=$(printf '%s\n' "${choices[@]}" | zenity --title="$prompt" --width 400 --height 600 --list --column "$prompt")
@@ -277,7 +272,7 @@ function check_mods() {
 	done
 
 	# Return 1 if the mod exists, 0 if not.
-	echo "$does_it_exist"
+	echo "$does_mod_exist"
 }
 
 
