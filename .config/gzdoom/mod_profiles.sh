@@ -5,7 +5,7 @@
 # Simple array for storing mod names.  I will eventually come up with a better way to do this, such
 # as parsing a file.
 mod_profile_array=(
-	"64"
+	64
 	abysm
 	ashes_ep1
 	ashes_ep2
@@ -43,7 +43,7 @@ function mod_profiles() {
 	case "$mod_name" in
 
 		# Doom 64
-		"64")
+		64)
 			iwad=DOOM64.CE.ipk3
 			wads=""
 			maps=""
@@ -168,8 +168,8 @@ function mod_profiles() {
 			;;
 
 		golden_souls)
-			iwad=DOOM.WAD
-			wads="GoldenSouls_Full_1.4.pk3"
+			iwad=DOOM2.WAD
+			wads="GoldenSouls.pk3"
 			maps=""
 			savedir="$savedir/golden_souls"
 			cheats=""
@@ -267,7 +267,7 @@ function mod_profiles() {
 			;;
 
 		total_chaos)
-			iwad=total_chaos.wad
+			iwad=DOOM2.WAD
 			wads="totalchaos.pk3 steve_flashlight.pk7"
 			maps=""
 			savedir="$savedir/total_chaos"
