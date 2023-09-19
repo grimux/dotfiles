@@ -74,6 +74,7 @@ fuse-overlayfs
 fuse2
 fuse3
 fuseiso
+fzf
 g810-led
 gameconqueror
 gamemode
