@@ -46,7 +46,6 @@ dialog
 discord
 dkms
 dmidecode
-dmscripts-git
 dnsmasq
 dolphin-emu
 doom64ex-git
@@ -118,6 +117,7 @@ innoextract
 iptables-nft
 jdownloader2
 jmtpfs
+jq
 jre
 jre-openjdk
 jre8
