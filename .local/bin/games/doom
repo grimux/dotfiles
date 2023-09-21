@@ -199,7 +199,6 @@ function choose_in_zenity() {
 	local -n choices="$2"
 	# Variable for the choice.
 	local zenity_choice
-	# An array of options.  Made from the passed array.
 
 	# Mod profile choice is equal to the selection from zenity.
 	zenity_choice=$(printf '%s\n' "${choices[@]}" | zenity --title="$prompt" --width 400 --height 600 --list --column "$prompt")
