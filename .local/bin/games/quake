@@ -1,14 +1,39 @@
 #!/usr/bin/env bash
+#
 # Script for launching quake and the vairous mods I play
+#
 
-# Variables
+### Script Fail Events ###
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+
+##############
+### Config ###
+##############
 quakedir="$HOME/Games/quake"
-choice="$1"
 basedir="$HOME/Games/quake"
-source_port="quakespasm"
-#source_port="steam steam://run/2310//\"-game ad\"/"
 
-# Mods List
+# Quake's Steam ID
+steam_id=2310
+
+# Flag for Steam
+use_steam=0
+# Name of picker program to use.  None by default.
+mod_picker="none"
+
+# Prompt text for picker programs.
+prompt="Quake mods:"
+
+
+#################
+### Mods List ###
+#################
 mods_list=(
 	"ad"
 	"bbelief"
@@ -30,44 +55,63 @@ mods_list=(
 	"xmasjam2020"
 )
 
-# Functions
+
+#################
+### Functions ###
+#################
 # Help Section
-help_section() {
+function help_section() {
 	echo "A script to launch Quake and its various mods."
 	echo
 	echo "Syntax: quake [-h|d|i|l] [mod name]"
 	echo "options:"
 	echo "h     Print this help screen."
 	echo "d     Choose mod in dmenu."
+	echo "z     Choose mod in zenity."
+	echo "s     Use Steam."
 	echo "i     Run Quake-Injector."
 	echo "l     List installed mods."
 	echo
 }
 
 # List the mods
-list_mods() {
+function list_mods() {
+	echo "Mods:"
+	echo "-----"
 	for i in "${mods_list[@]}"; do
 		echo "$i"
 	done
 }
 
 # Launch Quake
-launch_quake() {
-	mangohud --dlsym gamemoderun quakespasm -basedir "$basedir" -game "$1"
+function launch_quake() {
+	local launcher="$1"
+	local mod_name="$2"
+
+	case "$launcher" in
+		# Launch using quakespasm.
+		"quakespasm") mangohud --dlsym gamemoderun quakespasm -basedir "$basedir" -game "$mod_name";;
+
+		# Lanuch using quakespasm-spiked
+		"spiked") exit 1;;
+
+		# Launch using Steam.
+		"steam") steam -applaunch $steam_id -game "$mod_name";;
+	esac
+
 }
 
 # Check array for matching mod name
-check_mods() {
+function check_mods() {
+	local mod_name="$1"
 	# Exists flag
-	exists=0
+	local exists=0
 
 	# Loop through array, searching for a match
 	for i in "${mods_list[@]}"; do
-		if [ "$i" == "$choice" ]; then
+		if [ "$i" == "$mod_name" ]; then
 			exists=1
 			break
-		else
-			exists=0
 		fi
 	done
 
@@ -77,49 +121,118 @@ check_mods() {
 }
 
 # Quake Injector
-quake_injector() {
+function quake_injector() {
 	$quakedir/quake-injector/bin/QuakeInjector
 }
 
-# Dmenu
-choose_in_dmenu() {
-	choice=$(printf '%s\n' "${mods_list[@]}" | dmenu -i -l 20 -p 'Quake mod:')
-	[[ -z "$choice" ]] && echo "Nothing selected" && exit 1
+# Choose the mod in dmenu.
+function choose_in_dmenu() {
+	local choice
+
+	# Mod choice variable is equal to the selection from dmenu.
+	choice=$(printf '%s\n' "${mods_list[@]}" | dmenu -i -l 20 -p "$prompt")
+
+	# Return the choice made.
+	echo "$choice"
 }
 
-# Get arguments
-while getopts ":dhil" option; do
-	case $option in
-		d) choose_in_dmenu;;
-		h) help_section; exit;;
-		l) list_mods; exit;;
-		i) quake_injector; exit;;
-		\?) echo "Error: Invalid option"; exit;;
-	esac
-done
+# Choose the mod in fzf.
+function choose_in_fzf() {
+	local choice
+
+	# Mod choice variable is equal to the selection from fzf.
+	choice=$(printf '%s\n' "${mods_list[@]}" | fzf --reverse --border rounded --border-label="$prompt")
+	# Return the choice made.
+	echo "$choice"
+}
+
+# Choose options using zenity.
+function choose_in_zenity() {
+	# Prompt is set from the first passed argument.
+	local choice
+
+	# Mod profile choice is equal to the selection from zenity.
+	choice=$(printf '%s\n' "${mods_list[@]}" | zenity --title="$prompt" --width 400 --height 600 --list --column "$prompt")
+
+	# Return the choice
+	echo "$choice"
+}
 
 ############
 ### Main ###
 ############
-main() {
-	# Main script
+# Main script
+function main() {
+	# Set local variable to argument.
+	local choice="$@"
+
 	# If no argument, then launch copper
-	if [ -z "$1" ]; then
-		launch_quake "copper"
-		exit
+	if [ -z "$choice" ]; then
+		choice="copper"
+	fi
+
+
+	# If the use_dmenu flag is set, choice is equal to the selection made in the dmenu function.
+	case "$mod_picker" in
+		"dmenu") choice=$(choose_in_dmenu);;
+		"fzf") choice=$(choose_in_fzf);;
+		"zenity") choice=$(choose_in_zenity);;
+	esac
+
+
+	# If nothing is selected using one of the mod pickers.
+	if [ -z "$choice" ]; then
+		echo "Nothing selected"
+		exit 1
 	fi
 
 	# Check if game exists in array.
 	# 0 if doesn't exist, 1 if it does.
-	# If the game exists, launch it.
-	does_mod_exist=$(check_mods)
-	if [[ does_mod_exist -eq 1 ]]; then
-		launch_quake $choice
-		exit
-	else
-		echo "Invalid game."
+	does_mod_exist=$(check_mods "$choice")
+
+	# If the game does not exist, tell us and exit with error.
+	if [ $does_mod_exist -eq 0 ]; then
+		echo "That mod does not exist."
 		exit 1
 	fi
+
+	# Output mod name.
+	echo "Launching Quake: $choice"
+
+	# Check to see if we should launch with Steam or not.
+	case $use_steam in
+		0) launch_quake "quakespasm" "$choice";;
+		1) launch_quake "steam" "$choice";;
+	esac
 }
 
+# Testing function.
+testing() {
+	echo "Testing branch."
+
+	local port_to_use
+
+}
+
+#############
+### Start ###
+#############
+# Get arguments
+while getopts ":dfhilsz" option; do
+	case $option in
+		d) echo "Using dmenu."; mod_picker="dmenu";;
+		f) echo "Using fzf."; mod_picker="fzf";;
+		h) help_section; exit;;
+		l) list_mods; exit;;
+		i) quake_injector; exit;;
+		s) echo "Using Steam."; use_steam=1;;
+		z) echo "Using zenity."; mod_picker="zenity";;
+		\?) echo "Error: Invalid option"; exit 1;;
+	esac
+done
+
+# Stip out any flag arguments.
+shift $((OPTIND - 1))
+
 main "$@"
+#testing "$@"
