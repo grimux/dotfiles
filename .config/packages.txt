@@ -267,7 +267,6 @@ sdl_ttf
 shards
 shell-color-scripts
 shellcheck
-signal-desktop
 simple-mtpfs
 sl
 sm64ex-redrawn-60fps-git
