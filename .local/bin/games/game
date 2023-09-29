@@ -288,7 +288,7 @@ function archive_saves() {
 		# Logic to check the local save directories.
 		case "$directory_status" in
 			# The local directory does not exist.
-			0) 
+			0)
 				echo "Local save directory not found.  Skipping..."
 				;;
 			# The local directory exists, compress it.
@@ -507,7 +507,7 @@ function upload_saves() {
 	local backup_save
 
 	# Arguments for the sync operation of rclone.  Also a placeholder for dry-run mode.
-	rclone_arguments="--progress"
+	rclone_arguments="--progress --metadata --human-readable --check-first --checksum"
 
 	# If dry-run mode is set, add it to the arguments for rclone.
 	if [ $dry_run_mode -eq 1 ]; then
@@ -531,7 +531,7 @@ function upload_saves() {
 
 		# Call to sync_saves
 		# Display message with game title
-		header "Uploading $title"
+		header "Uploading: $title"
 
 		# If the save directory does not exist, skip it.
 		if [ ! -d "$backup_save" ]; then
