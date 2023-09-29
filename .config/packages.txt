@@ -123,6 +123,7 @@ jre-openjdk
 jre8
 jstest-gtk-git
 kdiskmark
+kompare
 kvantum
 lftp
 lib32-giflib
@@ -278,6 +279,7 @@ solaar
 soundfont-fluid
 speech-dispatcher
 speedtest-cli
+sqlitebrowser
 starship
 steam
 steam-metadata-editor-git
