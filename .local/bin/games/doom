@@ -11,6 +11,7 @@
 ### TODO ####################################################################
 # - Finish implementing config parsing
 # - Implement a modifiers system, i.e. ColourfulDoom etc.
+# - Implement separate config files for the mod configs.
 #############################################################################
 
 ### Script Fail Events ###
@@ -54,6 +55,10 @@ savedir="$doomdir/save"
 ####################
 # This file contains the mod profiles, inside a case statement.
 # This makes it convienent to keep the profiles and launcher script separate.
+#
+# Contains the following:
+# mod_profile_array
+# mod_profiles function
 mod_profiles="$HOME/.config/gzdoom/mod_profiles.sh"
 source $mod_profiles
 
@@ -101,7 +106,7 @@ function help_section() {
 #-------------#
 # Get arguments passed to the script
 function get_arguments() {
-	while getopts ":hfldmsz" option; do
+	while getopts ":hfldmrsz" option; do
 		case $option in
 			# Use dmenu
 			d) echo "Using dmenu."; mod_picker="dmenu";;
@@ -125,6 +130,9 @@ function get_arguments() {
 
 			# Set flag to use Steam.
 			s) echo "Using Steam."; use_steam=1;;
+
+			# Choose a random mod to play.
+			r) echo "Random mod will be chosen."; mod_picker="random";;
 
 			# Set flag to use Zentiy to choose everything.
 			z) echo "Using zenity."; mod_picker="zenity";;
@@ -189,6 +197,27 @@ function choose_in_fzf() {
 
 	# Return profile the choice.
 	echo "$fzf_choice"
+}
+
+function generate_random_mod() {
+	local random_mod=$(shuf --echo --head-count=1 ${mod_profile_array[@]})
+	echo $random_mod
+}
+
+# A function to pick a mod randomly from the mod list.
+function choose_randomly() {
+	local random_mod
+	local answer
+
+	while true; do
+		random_mod=$(shuf --echo --head-count=1 ${mod_profile_array[@]})
+		read -p "The chosen mod is \"$random_mod\". Would you like to play? (y/n/r): " answer
+		case $answer in
+			[rR]*) ;;
+			[yY]*) echo "$random_mod"; return 0;;
+			[nN]*) echo ""; return 1;;
+		esac
+	done
 }
 
 # Choose options using zenity.
@@ -333,6 +362,9 @@ function main() {
 
 		# Use fzf.
 		"fzf") chosen_mod=$(choose_in_fzf "$mod_prompt" mod_profile_array);;
+
+		# Randomly choose a mod.
+		"random") chosen_mod=$(choose_randomly);;
 
 		# Use zenity.
 		"zenity") chosen_mod=$(choose_in_zenity "$mod_prompt" mod_profile_array);;
