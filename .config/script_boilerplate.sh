@@ -137,6 +137,11 @@ function usage() {
 #
 #---------------------------------------------------------------------------------------------------
 
+#=========
+# Option 1
+#=========
+
+#--------
 # Part A
 #--------
 
@@ -154,6 +159,7 @@ proceed_prompt() {
 	done
 }
 
+#--------
 # Part B
 #--------
 
@@ -168,5 +174,41 @@ if [ "$to_continue" -eq 0 ]; then
 fi
 
 
+#==========
+# Yes or No
+#==========
+
+#-------
+# Part A
+#-------
+# A simple function to return results based on a yes or no statement.
+# Notice the logic is reversed when returning integers as opposed to
+# echoing them.  Return 0 is success, return 1 is failure.
+function yes_or_no() {
+	local choice
+	local prompt="$1"
+
+	while true; do
+		read -p "$prompt (y/n): " choice
+		case $choice in
+			[Yy]*) return 0;;
+			[Nn]*) return 1;;
+		esac
+	done
+}
+
+
+#-------
+# Part B
+#-------
+# Call to Part A, using comparison operator.
+yes_or_no "Would you like to continue?" || exit
+
+# Or using an `if` block
+if yes_or_no "Would you like to continue?"; then
+	echo "Continuing."
+else
+	echo "Stopping."
+fi
 
 
