@@ -19,6 +19,7 @@ set -euo pipefail
 # - Add more comments.
 # - Add ability to delete and restore archives.
 # - Move config section to separate file.
+# - Add ability to restore special save circumstance.
 #
 ###########################################################
 
@@ -173,12 +174,24 @@ function check_directory() {
 			# Set status to 1, exists and ready to sync.
 			status=1
 		fi
+	# Or if the string for the save location contains a pattern, i.e. a *.
+	# This way we can copy saves from a location that contains other files.
+	elif [[ "$directory" =~ '*' ]] || [ -f "$directory" ]; then
+		local do_files_exist=$(find $directory -type f)
+
+		# If the variable is a non-zero string, meaning that save files exist.
+		if [ -n "${do_files_exist[@]}" ]; then
+			status=3
+		else
+			status=0
+		fi
 	fi
 
 	# Return the status of the directory.
 	# 0: Does not exist
 	# 1: Exists
 	# 2: Exists but empty
+	# 3: Perform a special sync
 	echo "$status"
 }
 
@@ -222,9 +235,10 @@ function backup_saves() {
 		directory_status=$(check_directory "$pc_save")
 
 
+		# Case logic on what to do depending on the directory status.
 		case "$directory_status" in
 			0)
-				echo "PC save directory does not exist. Try restoring it."
+				echo "PC save directory/files do not exist. Try restoring it."
 				echo "Skipping..."
 				;;
 			1)
@@ -234,6 +248,10 @@ function backup_saves() {
 			2)
 				echo "PC save directory is empty.  Try restoring it."
 				echo "Skipping..."
+				;;
+			3)
+				# Call to special save backup function.
+				backup_special_saves "$pc_save" "$backup_save"
 				;;
 		esac
 
@@ -247,6 +265,38 @@ function backup_saves() {
 
 
 	done
+}
+
+# A function to backup saves that share the same directory as other files.
+# To use it, just specify a pattern for the save files in the config file.
+function backup_special_saves() {
+	# Initialize empty variables
+	local pc_saves="$1"
+	local backup_directory="$2"
+	local pattern
+	local special_rsync_arguments
+	local save_directory
+
+	# The actual pattern.
+	pattern=$(basename "$pc_saves")
+
+	# Directory of the save files.
+	save_directory=$(dirname $pc_saves)
+
+	# Special arguments for rsync to handle filters.
+	rsync_arguments+=(
+		--include="**/$pattern"
+		--exclude="*"
+	)
+
+	# Dry-run mode flag check.
+	if [ $dry_run_mode -eq 1 ]; then
+		rsync_arguments+=("--dry-run")
+	fi
+
+	# Call to rsync to sync only the specified files.
+	rsync ${rsync_arguments[@]} "$save_directory/" "$backup_directory/"
+
 }
 
 ### archive_saves
@@ -391,6 +441,7 @@ function restore_save() {
 		0) echo "Local save directory not found.  Creating..."; mkdir "$pc_save";;
 		1) echo "Local save files already exist.  Try deleting first."; exit 1;;
 		2) echo "Local save directory found and it's empty.";;
+		3) echo "Special save circumstance.  Not implemented yet."; exit 1;;
 	esac
 
 	# Call to rsync
@@ -618,14 +669,17 @@ function main() {
 		shift $((OPTIND-1))
 	fi
 
+	# The command passed to the script.
+	local command="$1"
+
 	# If no commands were passed, show the help section and exit.
-	if [ -z "$arguments" ]; then
+	if [ -z "$command" ]; then
 		help_section
 		exit
 	fi
 
 	# Main case logic.
-	case "$1" in
+	case "$command" in
 		"") help_section; exit;;
 
 		backup) backup_saves; exit;;
