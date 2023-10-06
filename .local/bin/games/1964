@@ -22,11 +22,21 @@ set -euo pipefail
 ### Config ###
 ##############
 # Location of emulator
-emudir="$HOME/Games/1964"
+emudir="/mnt/s/games/1964"
 
 # Executable
 exe="1964.exe"
 
+# Proton directory.
+proton_directory="/home/jake/.local/share/Steam/steamapps/common"
+proton_executable="files/bin/wine"
+
+# Version of wine or proton to use.
+#wine_version="wine"
+wine_version="$proton_directory/Proton - Experimental/$proton_executable"
+
+# Wine prefix to use.
+WINEPREFIX="$emudir/bottle"
 
 ############
 ### Data ###
@@ -70,8 +80,8 @@ launch_game() {
 	# -g: rom name
 	# -f: fullscreen
 	# -o: overclock amount; 6 for Goldeneye, 9 for Perfect Dark.
-	wine \
-		$emudir/$exe \
+	"$wine_version" \
+		"$emudir/$exe" \
 		-g "$title.z64" \
 		-f \
 		-o "$overclock"
