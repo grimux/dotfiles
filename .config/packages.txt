@@ -123,7 +123,6 @@ jre-openjdk
 jre8
 jstest-gtk-git
 kdiskmark
-kompare
 kvantum
 lftp
 lib32-giflib
@@ -263,6 +262,7 @@ samba
 samrewritten-git
 scrot
 sdcv
+sdl2_image
 sdl2_net
 sdl_ttf
 shards
