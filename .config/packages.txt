@@ -346,7 +346,6 @@ xdelta3
 xdg-desktop-portal-lxqt
 xdg-user-dirs
 xf86-video-vesa
-xone-dkms
 xonotic
 xorg-appres
 xorg-bdftopcf
