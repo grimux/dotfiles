@@ -193,6 +193,7 @@ alias ytvp="$yt_app $yt_config_location/video_playlist"
 
 # Copy game files using rsync
 alias send_game="rsync -hvrlt --info=progress2 --stats"
+alias copy_files="rsync -rvhtU --info=progress2 --stats"
 
 ## Games ##
 alias im_stuck="steam -applaunch 1010750 map e1m1"
