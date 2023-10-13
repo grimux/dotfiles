@@ -742,6 +742,7 @@ awful.rules.rules = {
           "Kruler",
           "MessageWin",  -- kalarm.
           "Nm-connection-editor", -- network-manager-applet
+	  "org-gdstash-ui-GDStashFrame", -- GDStash for Grim Dawn
           "PolyMC", --
           "Pavucontrol",
           ".*exe",  -- Automatically float any window that containes "exe".  This works for most games or applications run through wine.
