@@ -24,6 +24,7 @@ bless
 blueberry
 bluez
 bluez-libs
+brave-bin
 bridge-utils
 browserpass
 btrfs-progs
