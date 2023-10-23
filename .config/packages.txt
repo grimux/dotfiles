@@ -227,6 +227,7 @@ protonhax
 protontricks
 protonup-git
 protonup-qt-bin
+proxychains-ng
 puddletag
 pulseaudio
 pulseaudio-alsa
@@ -310,6 +311,8 @@ texlive-publishers
 theforceengine
 thunderbird
 tk
+tor
+torbrowser-launcher
 traceroute
 transmission-cli
 transmission-remote-gtk
