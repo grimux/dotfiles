@@ -274,28 +274,17 @@ function backup_special_saves() {
 	local pc_saves="$1"
 	local backup_directory="$2"
 	local pattern
-	local special_rsync_arguments
 	local save_directory
 
 	# The actual pattern.
 	pattern=$(basename "$pc_saves")
 
 	# Directory of the save files.
-	save_directory=$(dirname $pc_saves)
-
-	# Special arguments for rsync to handle filters.
-	rsync_arguments+=(
-		--include="**/$pattern"
-		--exclude="*"
-	)
-
-	# Dry-run mode flag check.
-	if [ $dry_run_mode -eq 1 ]; then
-		rsync_arguments+=("--dry-run")
-	fi
+	save_directory=$(dirname "$pc_saves")
 
 	# Call to rsync to sync only the specified files.
-	rsync ${rsync_arguments[@]} "$save_directory/" "$backup_directory/"
+	# Uses special filters to only copy the specified files.
+	rsync ${rsync_arguments[@]} --include="**/$pattern" --exclude="*" "$save_directory/" "$backup_directory/"
 
 }
 
@@ -470,7 +459,7 @@ function delete_save() {
 
 	# Check if arguments were supplied.
 	# If not, prompt for input
-	if [ $game_title == "null" ]; then
+	if [ "$game_title" == "null" ]; then
 		read -p "Please enter game title: " game_title
 	fi
 
@@ -591,7 +580,7 @@ function upload_saves() {
 		else
 			# Use rclone to sync files to Google Drive.
 			# rclone will automatically make the directory if it does not exist.
-			rclone sync $rclone_arguments "$backup_save" "$rclone_backup_location/$title"
+			rclone sync ${rclone_arguments[@]} "$backup_save" "$rclone_backup_location/$title"
 
 		fi
 
