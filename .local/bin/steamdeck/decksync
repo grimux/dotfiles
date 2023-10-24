@@ -19,6 +19,7 @@ set -euo pipefail
 #   - It seems there is a problem with the local pc directory and expanding the ~ to home.  Says the
 #     directory does not exist.  Chaning the cfg file to "/home/whatever/" fixes this problem, but I want
 #     to find how to fix it here.
+# - Add some more comments.
 
 
 
@@ -59,8 +60,8 @@ mirror_args=(
 	--only-newer
 	--verbose
 	--exclude-glob *.cfg
+	--dereference
 )
-
 
 
 
@@ -93,12 +94,21 @@ pc_to_deck() {
 	local pc_directory=$1
 	local deck_directory=$2
 
+	local mirror_command
+
 	# Visual repesentation of transfer.
 	echo "PC -> Deck"
 
 	# The mirror command for lftp.  It needs to be in a separate variable to expand all the
 	# variables correctly.
-	mirror_command="mirror ${mirror_args[@]} --reverse \"$pc_directory\" \"$deck_directory\""
+	if [[ "$pc_directory" =~ '*' ]] || [ -f "$pc_directory" ]; then
+		pattern=$(basename "$pc_directory")
+		pc_directory=$(dirname "$pc_directory")
+		deck_directory=$(dirname "$deck_directory")
+		mirror_command="mirror ${mirror_args[@]} --reverse --file=$pc_directory/$pattern --target-dir=$deck_directory"
+	else
+		mirror_command="mirror ${mirror_args[@]} --reverse \"$pc_directory\" \"$deck_directory\""
+	fi
 
 	# Call to lftp
 	lftp -c "
@@ -122,9 +132,26 @@ deck_to_pc() {
 	# Visual repesentation of transfer.
 	echo "PC <- Deck"
 
-	# The mirror command for lftp.  It needs to be in a separate variable to expand all the
-	# variables correctly.
-	mirror_command="mirror ${mirror_args[@]} \"$deck_directory\" \"$pc_directory\""
+	# Check to see if the pc_directory has a glob character, "*" in this case.  Or if
+	# the pc_directory is actually a single file.
+	# When this is triggered, special glob matching for files will be used in lftp.
+	if [[ "$pc_directory" =~ '*' ]] || [ -f "$pc_directory" ]; then
+		# Glob matching pattern from the config file.
+		pattern=$(basename "$pc_directory")
+
+		# Directory for the PC saves.
+		pc_directory=$(dirname "$pc_directory")
+
+		# Directory for the Steam Deck saves.
+		deck_directory=$(dirname "$deck_directory")
+
+		# The mirror command for lftp.  It needs to be in a separate variable to expand all the
+		# variables correctly.
+		mirror_command="mirror ${mirror_args[@]} --file=$deck_directory/$pattern --target-dir=$pc_directory"
+	# When pc_directory is an actual directory.
+	else
+		mirror_command="mirror ${mirror_args[@]} \"$deck_directory\" \"$pc_directory\""
+	fi
 
 	# Call to lftp
 	lftp -c "
