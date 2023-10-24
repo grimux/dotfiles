@@ -115,8 +115,8 @@ local cycle_prev   = true  -- cycle with only the previously focused client or a
 local editor       = os.getenv("EDITOR") or "nvim"
 local browser      = "firefox"
 local htmlwiki     = " ~/vimwiki/_site/index.html"
-local music        = terminal .. " --class ncmpcpp -e ncmpcpp"
---local music        = "cantata"
+--local music        = terminal .. " --class ncmpcpp -e ncmpcpp"
+local music        = "cantata"
 local termfile     = terminal .. " --class ranger -e ranger"
 local filemanager  = "pcmanfm-qt"
 
@@ -506,6 +506,8 @@ globalkeys = mytable.join(
               { description = "change audio output", group = "scripts"}),
     awful.key({ modkey,        }, "F9",     function () awful.spawn("toggle-transmission") end,
               { description = "toggle transmission", group = "scripts"}),
+    awful.key({ modkey,        }, "F10",     function () awful.spawn("toggle-tor") end,
+              { description = "toggle Tor Network", group = "scripts"}),
 
     awful.key({ modkey, }, "z", function () quake:toggle() end),
 
