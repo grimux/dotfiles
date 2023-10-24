@@ -220,6 +220,7 @@ playerctl
 plocate
 polymc-bin
 powerline-fonts
+powershell-bin
 ppsspp
 progress
 protobuf
