@@ -165,6 +165,8 @@ mangohud
 materia-gtk-theme
 mediainfo
 mergerfs
+moar
+most
 mpc
 mpd
 mpdris2
