@@ -58,6 +58,8 @@ dwarfs
 dxvk-bin
 eduke32
 efibootmgr
+espeak-ng
+espeakup
 exfat-utils
 eza
 feh
@@ -256,8 +258,6 @@ raze
 rbdoom-3-bfg
 rclone
 redshift
-rhvoice
-rhvoice-language-english
 rmg
 rottexpr-git
 rsync
