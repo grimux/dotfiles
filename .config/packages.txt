@@ -335,6 +335,7 @@ update-grub
 usbutils
 vde2
 vim
+virtualbox
 viu
 vlc
 wget
