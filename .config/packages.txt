@@ -53,6 +53,7 @@ doom64ex-git
 dosfstools
 dracula-cursors-git
 dracula-gtk-theme
+duckstation-git
 dunst
 dwarfs
 dxvk-bin
@@ -336,6 +337,7 @@ usbutils
 vde2
 vim
 virtualbox
+virtualbox-guest-utils
 viu
 vlc
 wget
