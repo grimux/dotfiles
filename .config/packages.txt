@@ -233,6 +233,7 @@ protontricks
 protonup-git
 protonup-qt-bin
 proxychains-ng
+ps3iso-utils-git
 puddletag
 pulseaudio
 pulseaudio-alsa
@@ -260,6 +261,7 @@ rclone
 redshift
 rmg
 rottexpr-git
+rpcs3-git
 rsync
 rvm
 s-nail
