@@ -212,6 +212,7 @@ pasystray
 patch
 pavucontrol
 pcmanfm-qt
+pcsx2-git
 perl-image-exiftool
 perl-rename
 pev
