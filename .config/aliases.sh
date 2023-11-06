@@ -2,6 +2,14 @@
 ### Aliases ###
 ###############
 
+########################
+### Global variables ###
+########################
+export yt_app="yt-dlp --config-location"
+export yt_config_location="~/.config/youtube-dl"
+export video_playlist_dir="/mnt/v/playlists"
+export mpv_playlist_settings="--loop-playlist --save-position-on-quit"
+
 ## ls/lsd, grep ##
 #alias ls="ls --color=auto --group-directories-first"
 #alias la="ls -lA --color=auto --group-directories-first"
@@ -74,7 +82,6 @@ alias meditation="mpv /mnt/s/music/meditation/jon_kabat_meditation.mp3"
 alias playback="mpc clear; mpc searchadd Artist \"Forth Right MC\"; mpc play"
 
 ## Video Playlists ##
-mpv_playlist_settings="--loop-playlist --save-position-on-quit"
 alias factorio="mpv $mpv_playlist_settings $video_playlist_dir/factorio_1.0_tuplex.m3u"
 alias futurama="mpv $mpv_playlist_settings --shuffle $video_playlist_dir/futurama.m3u"
 alias subnautica="mpv $mpv_playlist_settings $video_playlist_dir/subnautica.m3u"
