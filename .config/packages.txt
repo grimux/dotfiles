@@ -51,6 +51,7 @@ dnsmasq
 dolphin-emu
 doom64ex-git
 dosfstools
+downgrade
 dracula-cursors-git
 dracula-gtk-theme
 duckstation-git
