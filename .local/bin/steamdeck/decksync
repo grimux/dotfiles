@@ -69,7 +69,7 @@ mirror_args=(
 ### Functions ###
 #################
 # Help Section
-help_section() {
+function help_section() {
 	echo "A script to sync game saves between my PC and Steamdeck."
 	echo
 	echo "Syntax: $(basename $0) [-h|d|n|s|o]"
@@ -82,8 +82,53 @@ help_section() {
 	echo
 }
 
-usage() {
+function usage() {
 	echo "Usage: $(basename $0) [-h|d|n|s|o]"
+}
+
+### header
+#
+# A nice header for information.  Pass in some text to display it.
+#
+function header() {
+	local text="$1"
+
+	echo "================================================"
+	echo "$text"
+	echo "------------------------------------------------"
+}
+
+### footer
+#
+# A footer to use after certain code execution to provide a nice "block" of info.
+# Use below a header obviously.
+#
+function footer() {
+	echo "================================================"
+}
+
+### divider
+#
+# A divider to be used in-between two items.
+#
+function divider() {
+	echo "------------------------------------------------"
+}
+
+# A simple function to return results based on a yes or no statement.
+# Notice the logic is reversed when returning integers as opposed to
+# echoing them.  Return 0 is success, return 1 is failure.
+function yes_or_no() {
+	local choice
+	local prompt="$1"
+
+	while true; do
+		read -p "$prompt (y/n): " choice
+		case $choice in
+			[Yy]*) return 0;;
+			[Nn]*) return 1;;
+		esac
+	done
 }
 
 # Sync saves from PC to deck
@@ -222,10 +267,8 @@ sync_saves() {
 		# Current index+2
 		deck_save="${game_info[$index+2]}"
 
-		# Call to sync_saves
-		# Display message with game title
-		echo "Syncing $title"
-
+		# Add a header that will display the game's title.
+		header "Syncing $title"
 
 		# Currently testing this section
 		# Check save files for both locations.
@@ -248,8 +291,13 @@ sync_saves() {
 		else
 			#echo "Directories have the same files."
 			pc_to_deck "$pc_save" "$deck_save"
+			echo
 			deck_to_pc "$pc_save" "$deck_save"
+			
 		fi
+
+		# Add a footer.
+		footer
 
 		# Give a space to separate each game into three fields.
 		echo
@@ -356,6 +404,15 @@ main() {
 	echo
 	parse_conf
 	sync_saves
+
+	# Once a dry-run is complete, prompt the user if they wish to run the script again, but for real.
+	if [ $dry_run_mode -eq 1 ]; then
+		echo "Dry-Run complete."
+		yes_or_no "Would you like to run the script for real?" || exit
+		echo
+		decksync
+	fi
+		
 }
 
 ####################
