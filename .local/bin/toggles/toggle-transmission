@@ -16,14 +16,30 @@ is_transmission_running=$?
 
 # If transmission is running.
 if [ "$is_transmission_running" -eq 1 ]; then
-	pkill transmission-da
-	pkill transmission-re
+	# Send some messages.
 	echo "Turning transmission-daemon off"
 	notify-send "Turning transmission-daemon off"
+
+	# Kill the transmission daemon.
+	pkill transmission-da
+
+	# Wait a bit.
+	sleep 2
+
+	# Kill the transmission gui.
+	pkill transmission-re
 # If transmission is not running.
 else
-	transmission-daemon &
-	transmission-remote-gtk &
+	# Send some messages.
 	echo "Turning transmission-daemon on"
 	notify-send "Turning transmission-daemon on"
+
+	# Start up the transmission daemon
+	transmission-daemon &
+
+	# Wait a bit.
+	sleep 2
+
+	# Start the transmission gui.
+	transmission-remote-gtk &
 fi
