@@ -84,7 +84,7 @@ function get_process_id() {
 function kill_launchers() {
 	notify-send "gametime" "Killing Steam and Lutris..."
 
-	[[ "$is_steam_running" -eq 1 ]] && pkill "steam"
+	[[ "$is_steam_running" -eq 1 ]] && pkill --full "steam"
 	[[ "$is_lutris_running" -eq 1 ]] && pkill --full "lutris"
 }
 
