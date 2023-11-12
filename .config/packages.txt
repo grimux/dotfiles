@@ -342,6 +342,7 @@ usbutils
 vde2
 vim
 virtualbox
+virtualbox-guest-iso
 virtualbox-guest-utils
 viu
 vlc
