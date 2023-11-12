@@ -19,13 +19,6 @@ export TERMCMD="$TERMINAL"
 export QT_QPA_PLATFORMTHEME=gtk2
 export CM_DIR="$HOME/.cache/clipmenu"
 
-########################
-### Global variables ###
-########################
-export yt_app="yt-dlp --config-location"
-export yt_config_location="~/.config/youtube-dl"
-export video_playlist_dir="/mnt/v/playlists"
-
 ############
 ### Path ###
 ############
