@@ -152,6 +152,7 @@ linux-firmware
 linux-headers
 linuxconsole
 lld
+lmms
 lsd
 lsof
 lutris
