@@ -170,7 +170,6 @@ mangohud
 materia-gtk-theme
 mediainfo
 mergerfs
-moar
 most
 mpc
 mpd
@@ -228,7 +227,6 @@ playerctl
 plocate
 polymc-bin
 powerline-fonts
-powershell-bin
 ppsspp
 progress
 protobuf
