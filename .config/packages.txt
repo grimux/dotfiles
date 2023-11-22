@@ -211,6 +211,7 @@ pandoc-cli
 papirus-icon-theme
 paprefs
 pass
+passff-host
 pasystray
 patch
 pavucontrol
@@ -251,6 +252,7 @@ python-mutagen
 python-oauth2client
 python-pathvalidate
 python-pip
+python-pipx
 qalculate-gtk
 qbittorrent
 qt5-styleplugins
