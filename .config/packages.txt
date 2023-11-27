@@ -267,7 +267,6 @@ rbdoom-3-bfg
 rclone
 redshift
 rmg
-rottexpr-git
 rpcs3-git
 rsync
 rvm
