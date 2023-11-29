@@ -6,6 +6,7 @@ amd-ucode
 android-file-transfer
 apcupsd
 arandr
+arronax
 asciiquarium
 atool
 autoconf
