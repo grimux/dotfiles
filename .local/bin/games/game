@@ -370,7 +370,7 @@ function restore_save() {
 
 	# Check if arguments were supplied.
 	# If not, prompt for input
-	if [ $game_title == "null" ]; then
+	if [ "$game_title" == "null" ]; then
 		read -p "Please enter game title: " game_title
 	fi
 
@@ -427,14 +427,14 @@ function restore_save() {
 
 	# Logic to check the local save directories.
 	case "$local_directory_status" in
-		0) echo "Local save directory not found.  Creating..."; mkdir "$pc_save";;
+		0) echo "Local save directory not found.  Creating...";;
 		1) echo "Local save files already exist.  Try deleting first."; exit 1;;
 		2) echo "Local save directory found and it's empty.";;
 		3) echo "Special save circumstance.  Not implemented yet."; exit 1;;
 	esac
 
 	# Call to rsync
-	rsync ${rsync_arguments[@]} "$backup_save/" "$pc_save"
+	rsync ${rsync_arguments[@]} --mkpath "$backup_save/" "$pc_save"
 
 }
 
