@@ -107,18 +107,18 @@ awful.spawn.with_shell(
 
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "alacritty"
+local terminal     = os.getenv("TERMINAL") or "xterm"
 local vi_focus     = false -- vi-like client focus https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true  -- cycle with only the previously focused client or all https://github.com/lcpz/awesome-copycats/issues/274
 
 -- Default programs
 local editor       = os.getenv("EDITOR") or "nvim"
-local browser      = "firefox"
+local browser      = os.getenv("BROWSER") or "firefox"
 local htmlwiki     = " ~/vimwiki/_site/index.html"
---local music        = terminal .. " --class ncmpcpp -e ncmpcpp"
-local music        = "cantata"
-local termfile     = terminal .. " --class ranger -e ranger"
-local filemanager  = "pcmanfm-qt"
+--local music        = terminal .. " --class ncmpcpp --title ncmpcpp -e ncmpcpp"
+local music        = os.getenv("MUSIC") or "vlc"
+local termfile     = terminal .. " --class ranger --title ranger -e ranger"
+local filemanager  = os.getenv("FILE") or "pcmanfm-qt"
 
 awful.util.terminal = terminal
 awful.util.tagnames = { "term", "www", "file", "email", "torr", "chat", "mus", "vid", "gfx" }
@@ -480,8 +480,9 @@ globalkeys = mytable.join(
               { description = "pavucontrol", group = "programs"}),
     awful.key({ modkey, "Shift"   }, "z",     function () awful.spawn("filezilla") end,
               { description = "pavucontrol", group = "programs"}),
-    awful.key({ modkey, "Shift"   }, "r",     function () awful.spawn("openrgb") end,
-              { description = "openrgb", group = "programs"}),
+    awful.key({ modkey, "Shift"   }, "b",     function () awful.spawn("backintime-qt") end,
+              { description = "back-in-time", group = "programs"}),
+
 
 
     -- Script Launching
@@ -521,6 +522,8 @@ globalkeys = mytable.join(
     awful.key({ modkey, "Shift"   }, "m",     function () awful.spawn("dm-playlists-music") end,
               { description = "music playlists", group = "dmenu"}),
     awful.key({ modkey, "Shift"   }, "v",     function () awful.spawn("dm-playlists-videos") end,
+              { description = "video playlists", group = "dmenu"}),
+    awful.key({ modkey, "Shift"   }, "r",     function () awful.spawn("dm-relaxing-videos") end,
               { description = "video playlists", group = "dmenu"}),
     awful.key({ modkey, "Shift"   }, "x",     function () awful.spawn("dm-g910") end,
               { description = "keyboard profile", group = "dmenu"}),
@@ -730,7 +733,7 @@ awful.rules.rules = {
         instance = {
           "DTA",  -- Firefox addon DownThemAll.
           "copyq",  -- Includes session name in class.
-	  "Godot_Engine",
+          "Godot_Engine",
           "pinentry",
           "qalculate-gtk",
           "virt-manager",
@@ -738,20 +741,22 @@ awful.rules.rules = {
         class = {
           "Arandr",
           "Blueman-manager",
-	  "fury.bin",
+          "fury.bin",
           "Gpick",
           "Gzdoom",
           "Kruler",
           "MessageWin",  -- kalarm.
           "Nm-connection-editor", -- network-manager-applet
-	  "org-gdstash-ui-GDStashFrame", -- GDStash for Grim Dawn
+          "org-gdstash-ui-GDStashFrame", -- GDStash for Grim Dawn
+          "java.*", -- Any java application
           "PolyMC", --
           "Pavucontrol",
           ".*exe",  -- Automatically float any window that containes "exe".  This works for most games or applications run through wine.
-	  "Raze",
+          "Raze",  -- The Raze sourceport.
           "SGDBoop",
           "smapi",  --  Stardew Valley modding framework.  Runs in alacritty window with class name "smapi".
           "steam_app_%d", -- Let steam games default to floating.  %d is a wildcard for integers.
+          "steam_proton", -- Let steam games default to floating.
           "Sxiv",
           "feh",
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
@@ -788,12 +793,15 @@ awful.rules.rules = {
     --
     -- www
     { rule = { class = "firefox" },        properties = { screen = 1, tag = awful.util.tagnames[2] } },
+    { rule = { class = "Brave-browser" },  properties = { screen = 1, tag = awful.util.tagnames[2] } },
+    { rule = { class = "Tor Browser" },    properties = { screen = 1, tag = awful.util.tagnames[2] } },
     -- file
     -- email
     { rule = { class = "thunderbird" },    properties = { screen = 1, tag = awful.util.tagnames[4] } },
     -- torr
     { rule = { class = "qBittorrent" },    properties = { screen = 1, tag = awful.util.tagnames[5] } },
     { rule = { class = "Transmission-remote-gtk" },    properties = { screen = 1, tag = awful.util.tagnames[5] } },
+    { rule = { class = "org-jdownloader-update-launcher-JDLauncher" },   properties = { screen = 1, tag = awful.util.tagnames[5] } },
     -- chat
     { rule = { class = "discord" },        properties = { screen = 1, tag = awful.util.tagnames[6] } },
     { rule = { class = "Signal" },         properties = { screen = 1, tag = awful.util.tagnames[6] } },
