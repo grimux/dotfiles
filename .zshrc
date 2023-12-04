@@ -10,13 +10,18 @@
 export EDITOR="nvim"
 export READER="zathura"
 export FILE="ranger"
-export BROWSER="firefox"
-#export PAGER="most"
+export BROWSER="brave"
+export MUSIC="cantata"
+#export MUSIC="alacritty --class ncmpcpp -e ncmpcpp"
+export PAGER="less"
+export FILE="pcmanfm-qt"
 export TERMINAL="alacritty"
 export TERMCMD="$TERMINAL"
 
 # Export GTK themes to Qt
 export QT_QPA_PLATFORMTHEME=gtk2
+
+# Directory for clipmenu.
 export CM_DIR="$HOME/.cache/clipmenu"
 
 ############
@@ -124,7 +129,7 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 #################
 ### Functions ###
 #################
-# Prevent nested ranger instances.  From archwiki.
+# Prevent nested ranger instances.  From Arch Wiki.
 # url: https://wiki.archlinux.org/title/Ranger#Preventing_nested_ranger_instances
 ranger() {
 	if [ -z "$RANGER_LEVEL" ]; then
@@ -187,6 +192,29 @@ stopwatch() {
 		sleep 0.1
 	done
 }
+
+############################
+### Dynamic window title ###
+############################
+# Taken from Arch Wiki
+# url: https://wiki.archlinux.org/title/Zsh#xterm_title
+autoload -Uz add-zsh-hook
+
+function xterm_title_precmd () {
+	print -Pn -- '\e]2;%n@%m %~\a'
+	[[ "$TERM" == 'screen'* ]] && print -Pn -- '\e_\005{g}%n\005{-}@\005{m}%m\005{-} \005{B}%~\005{-}\e\\'
+}
+
+function xterm_title_preexec () {
+	print -Pn -- "\e]2; ${(q)1}\a"
+	#print -Pn -- '\e]2;%n@%m %~ %# ' && print -n -- "${(q)1}\a"
+	[[ "$TERM" == 'screen'* ]] && { print -Pn -- '\e_\005{g}%n\005{-}@\005{m}%m\005{-} \005{B}%~\005{-} %# ' && print -n -- "${(q)1}\e\\"; }
+}
+
+if [[ "$TERM" == (alacritty*|gnome*|konsole*|putty*|rxvt*|screen*|tmux*|xterm*) ]]; then
+	add-zsh-hook -Uz precmd xterm\_title\_precmd
+	add-zsh-hook -Uz preexec xterm\_title\_preexec
+fi
 
 ##################
 ### Autostartx ###
