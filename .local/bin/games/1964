@@ -36,7 +36,7 @@ proton_executable="files/bin/wine"
 wine_version="$proton_directory/Proton - Experimental/$proton_executable"
 
 # Wine prefix to use.
-WINEPREFIX="$emudir/bottle"
+WINEPREFIX="$HOME/.local/share/wineprefixes/1964"
 
 ############
 ### Data ###
