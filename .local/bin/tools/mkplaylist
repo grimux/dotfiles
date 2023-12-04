@@ -173,7 +173,7 @@ create_m3u() {
 
 	if [ "$shuffle_mode" -eq 1 ]; then
 		#readlink --canonicalize "$video_directory/**"/*.mkv | shuf >> "$playlist_file"
-		find "$video_directory" -type f $video_extentions -print | shuf >> "$playlist_file"
+		find "$video_directory" -type f $video_extentions | shuf >> "$playlist_file"
 	else
 		#readlink --canonicalize "$video_directory"/**/*.mkv >> "$playlist_file"
 		find "$video_directory" -type f $video_extentions | sort >> "$playlist_file"
