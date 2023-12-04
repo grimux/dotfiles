@@ -23,7 +23,7 @@ bison
 blackchocobo
 bleachbit
 bless
-blueberry
+blueman
 bluez
 bluez-libs
 bluez-utils
