@@ -117,6 +117,34 @@ function usage() {
 }
 
 
+####################################################################################################
+# Headers and Footers
+####################################################################################################
+#
+# Some functions to provide nice headers and footers with custom text.
+#
+
+### header
+#
+# A nice header for information.  Pass in some text to display it.
+#
+function header() {
+	local text="$1"
+
+	echo "================================================"
+	echo "$text"
+	echo "------------------------------------------------"
+}
+
+### footer
+#
+# A footer to use after certain code execution to provide a nice "block" of info.
+# Use below a header obviously.
+#
+function footer() {
+	echo "================================================"
+	echo
+}
 
 
 
