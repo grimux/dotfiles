@@ -19,6 +19,7 @@ alias lu="lsd --sizesort --almost-all --total-size --long --group-directories-fi
 alias lss="/usr/bin/ls -1 --color=auto --group-directories-first"
 alias grep="grep --color=auto"
 alias searchtext="grep -R --color=auto"
+alias dir_size="du -d 1 -h | sort -h"
 
 ## Config files ##
 alias cfa="$EDITOR ~/.config/aliases.sh"
@@ -29,6 +30,8 @@ alias cfb="$EDITOR ~/Videos/playlists/bedtime.m3u"
 alias cfs="$EDITOR ~/.config/script_boilerplate.sh"
 alias cfawe="$EDITOR ~/.config/awesome/rc.lua"
 alias cfd="$EDITOR ~/.config/gzdoom/mod_profiles.sh"
+
+alias gift-list="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto personal/gift-list\""
 
 ## Program shortcuts ##
 alias define="sdcv"			# Dictionary
