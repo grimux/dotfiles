@@ -3,20 +3,49 @@
 # A simple script to print out the playerctl status.
 # Useful for seeing album art and album
 
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
 # Variables rely on playerctl
 artwork=$(playerctl metadata mpris:artUrl)
 artist=$(playerctl metadata artist)
 track=$(playerctl metadata title)
 album=$(playerctl metadata album)
 
+# How long the notification stays on screen.
+expiration=6500
+
+# Info for terminal output.
 info=$(playerctl metadata --format '{{title}} by {{artist}} from {{album}}')
+# File location.
+url=$(playerctl metadata xesam:url)
+# File name
+file=$(basename "$url")
 
 # The format of the message to print
-message=$(printf "%s\n%s\n%s" "$track" "$artist" "$album")
+message=$(printf "Track: %s\nArtist: %s\nAlbum: %s\nFile: %s" "$track" "$artist" "$album" "$file")
 
+##########################
+### Output to terminal ###
+##########################
 #echo $artwork
 #echo $message
-echo $info
+echo Info: $info
+echo File: $file
 
+#####################################
+### Output to notification system ###
+#####################################
 # Print the message using notify-send
-notify-send -i "$artwork" "Currently Playing:"  "$message"
+notify-send \
+	--icon="$artwork" \
+	--expire-time="$expiration" \
+	"Currently Playing:" "$message"
