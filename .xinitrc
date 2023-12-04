@@ -2,12 +2,14 @@
 #
 # xinit script
 #
+# by: Jake "grimux"
+#
 
 # Set awesome as the default, otherwise the argument passed will be the session.
 session=${1:-awesome}
 
 # AwesomeWM config
-awesome() {
+function awesome() {
 	# Picom for transparency
 	picom &
 
@@ -27,8 +29,8 @@ awesome() {
 
 	# Fix for steam
 	#/usr/lib/xdg-desktop-portal-gtk &
-	/usr/lib/xdg-desktop-portal-lxqt &
-	/usr/lib/xdg-desktop-portal &
+	#/usr/lib/xdg-desktop-portal-lxqt &
+	#/usr/lib/xdg-desktop-portal &
 
 	export XDG_SESSION_TYPE='x11'
 
@@ -37,7 +39,7 @@ awesome() {
 }
 
 # Gnome config
-gnome() {
+function gnome() {
 	# Set session to xorg
 	export XDG_SESSION_TYPE=x11
 
@@ -52,7 +54,7 @@ gnome() {
 }
 
 # DWM config
-dwm() {
+function dwm() {
 	# Start dwmblocks
 	dwmblocks &
 
@@ -67,13 +69,13 @@ dwm() {
 }
 
 # KDE plasma config
-plasma() {
+function plasma() {
 	export DESKTOP_SESSION=plasma
 	exec startplasma-x11
 }
 
 # General settings shared by all configs.
-shared_settings() {
+function shared_settings() {
 	# ID names from xrandr for my TV and PC monitor.
 	local monitor_id="DVI-D-0"
 	local tv_id="HDMI-0"
@@ -88,6 +90,10 @@ shared_settings() {
 
 	# Start Universal Media Server
 	ums &
+
+	# OpenRGB for PC's RGB lighting.
+	#openrgb --server --profile Rainbow.orp --startminimized &
+	openrgb --server --startminimized &
 
 	# control mpd with playerctl
 	#mpDris2 &
@@ -107,6 +113,21 @@ shared_settings() {
 	# Start playerctl daemon, tracks recent media players and can control them with media keys.
 	playerctld daemon &
 }
+
+# Source the startup scripts for X11.
+# Loop through directory and source each one.
+function source_startup_files() {
+	if [ -d /etc/X11/xinit/xinitrc.d ]; then
+		for f in /etc/X11/xinit/xinitrc.d/*; do
+			[ -x "$f" ] && . "$f"
+		done
+		unset f
+	fi
+}
+
+# Source all startup scripts for X11.
+# Contains an important one to set DISPLAY properly.
+source_startup_files
 
 # Run the shared settings first.
 shared_settings
