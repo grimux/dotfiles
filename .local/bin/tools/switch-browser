@@ -1,0 +1,291 @@
+#!/usr/bin/env bash
+#
+# A script to easily switch the default web browser.
+#
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+# Array of browser options.
+declare -a browser_options=(
+	[1]='brave'
+	[2]='firefox'
+)
+
+# Array of actually installed browsers.  Will be called in the main function before anything else.
+declare -a installed_browsers
+
+# Shell's profile.
+# Used to set the $BROWSER variable.
+shell_profile="$HOME/.zshrc"
+
+
+# Help Section
+function help_section() {
+	echo "A script to set the default web browser."
+	echo
+	echo "Syntax: $(basename $0) (options) (browser name)"
+	echo "options:"
+	# Space offset: 19
+	echo "h                   : Print this help screen."
+	echo "l                   : List avalible browsers."
+	echo "i                   : Interactive mode."
+	echo "c                   : Check what is currently the default browser."
+	echo
+}
+
+# How to use the script.
+function usage() {
+	echo "$(basename $0) (options) (browser name)"
+}
+
+# Get arguments and set flags
+function get_arguments() {
+	while getopts ":hlic" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1;;
+
+			# Help section
+			h) help_section; exit;;
+
+			# List out the currently installed browsers.
+			l) list_browsers; exit;;
+
+			# Use interactive mode.
+			i) switch_browser_interactive; exit;;
+
+			# Check what the current default browser is.
+			c) check_default_browser; exit;;
+
+			# Catchall.  If command is not recognized.
+			*) usage; exit 1;;
+		esac
+	done
+}
+
+### header
+#
+# A nice header for information.  Pass in some text to display it.
+#
+function header() {
+	local text="$1"
+
+	echo "================================================"
+	echo "$text"
+	echo "------------------------------------------------"
+}
+
+### footer
+#
+# A footer to use after certain code execution to provide a nice "block" of info.
+# Use below a header obviously.
+#
+function footer() {
+	echo "================================================"
+	echo
+}
+
+# Create an array of installed browsers.
+# This function will loop through the "browser_options" array and test to see which ones
+# are installed.  If it is installed, it will be added to the "installed_browsers" array,
+# which will be referenced by the rest of the script.
+function create_installed_browser_array() {
+	# Declare an integer variable for an index counter.
+	declare -i index=1
+
+	# Loop through the options array and check each one, if the command exists or not.
+	# If it does exist, add it to the installed array.
+	for i in "${browser_options[@]}"; do
+		command -v $i &> /dev/null && installed_browsers+=([$index]="$i")
+		index+=1
+	done
+}
+
+# List all installed browsers.
+function list_browsers() {
+	# Declare an integer variable for an index counter.
+	declare -i index=1
+
+	# Output.
+	echo "Currently installed browsers:"
+
+	# Loop through array of browsers and print them out.
+	for browser in "${installed_browsers[@]}"; do
+		echo "$index. $browser"
+		index+=1
+	done
+}
+
+# Switch the default browser.
+function switch_browser() {
+	# Setup local variables.
+	local chosen_browser="$1"
+	local browser_desktop_file
+	local shell_browser
+
+	# Find the associated desktop file for the chosen browser.
+	browser_desktop_file=$(find /usr/share/applications -type f -iname "$chosen_browser*.desktop" -exec basename {} +)
+
+	# Show a header.
+	header "Switching browser to: \"$chosen_browser\""
+
+	# Unset the shell $BROWSER variable.
+	# Needed to run the xdg-settings command.
+	echo "Unsetting \"BROWSER\""
+	unset BROWSER
+	echo "Done."
+
+	# Set default browser using xdg-settings.  This will update the
+	# .config/mimeapps.list file.
+	echo "Setting browser with \"xdg-settings\"..."
+	if ! xdg-settings set default-web-browser $browser_desktop_file; then
+		echo "Error with setting browser using xdg: the desktop file \"$browser_desktop_file\" does not exist."
+		exit 1
+	fi
+	echo "Done."
+
+	# Get the current shell browser setting.
+	echo "Getting shell \"BROWSER\" setting..."
+	shell_browser=$(get_shell_browser_setting)
+	echo "Done."
+
+	# Replace the shell browser with the chosen one.
+	echo "Updating shell \"BROWSER\" to \"$chosen_browser\"..."
+	sed -i "/export BROWSER=\"/s/$shell_browser/$chosen_browser/" $shell_profile
+	echo "Done."
+
+	# Output
+	echo "Browser switched to: $chosen_browser"
+
+	# Show a footer.
+	footer
+}
+
+# Switch the default browser interactively.
+function switch_browser_interactive() {
+	declare -i choice=0
+	local browser_name="null"
+
+	# List out the currently installed browsers.
+	list_browsers
+
+	# Prompt for input from user.
+	read -p "Please select a browser by number: " choice
+	echo
+
+	# Loop through browser array by index, searching for a match.
+	for i in ${!installed_browsers[@]}; do
+		if [ $choice == $i ]; then
+			browser_name="${installed_browsers[i]}"
+			break
+		fi
+	done
+
+	# If the browser was not found in the array, the "browser_name" variable will still
+	# be "null", so then we give an error and exit.
+	if [ "$browser_name" == "null" ]; then
+		echo "Error: That browser is not in the list."
+		exit 1
+	fi
+
+	# Call to switch browser.
+	switch_browser "$browser_name"
+
+	# Warn about restarting the shell.
+	warn_about_logout
+
+}
+
+# Check if the passed browser name exists in the array or not.
+function check_if_browser_exists() {
+	local browser_to_check="$1"
+	local exists=0
+
+	# Loop through browser array to search for the passed argument.
+	for browser in ${installed_browsers[@]}; do
+		if [ "$browser" == "$browser_to_check" ]; then
+			exists=1
+			break
+		fi
+	done
+
+	# Echo the result.
+	echo "$exists"
+}
+
+# Check what the default browser is currently set to.
+function check_default_browser() {
+	local default_browser=$(xdg-settings get default-web-browser)
+	local shell_browser=$(get_shell_browser_setting)
+
+	echo "Current default browser: $(basename -s .desktop $default_browser)"
+	echo "Current shell browser: $shell_browser"
+}
+
+# A small warning/reminder to logout and login to update the shell BROWSER variable.
+function warn_about_logout() {
+	echo "The \"BROWSER\" variable has changed.  Remember to logout and login (or reboot) to update the variable."
+}
+
+# Get the BROWSER variable setting from the shell profile.
+function get_shell_browser_setting() {
+	local shell_browser
+
+	# Using grep, awk, and sed, we get the current "BROWSER" variable from the shell's
+	# profile file.
+	shell_browser=$(grep "BROWSER" $shell_profile | awk -F '=' '{print $2}' | sed 's/"//g')
+
+	# Echo/return the shell_browser
+	echo "$shell_browser"
+}
+
+# Main function.
+function main() {
+	# Create an array of installed browsers, based off of the "browser_options" array.
+	# This function will check which browsers are actually installed.
+	create_installed_browser_array
+
+	# Local variable to track whether a browser exists or not.
+	local does_browser_exist
+
+	# Get any options passed to the script.
+	get_arguments "$@"
+
+	# If no arguments are given.
+	if [ -z "$@" ]; then
+		check_default_browser
+		echo
+		list_browsers
+		exit
+	# Otherwise, the argument is set to the variable "input".
+	else
+		local input="$@"
+	fi
+
+	# Check if the browser given as an argument exists or not.
+	# 1 exists, 0 does not exist.
+	does_browser_exist=$(check_if_browser_exists "$input")
+
+	# Logic for if the browser exists or not.
+	# If it does, call "switch_browser".
+	if [ "$does_browser_exist" -eq 1 ]; then
+		switch_browser "$input"
+		warn_about_logout
+	# If it does not exist, tell us and exit with error.
+	else
+		echo "That browser is not installed/does not exist."
+		exit 1
+	fi
+}
+
+# Call to main
+main "$@"
