@@ -10,7 +10,7 @@
 export EDITOR="nvim"
 export READER="zathura"
 export FILE="ranger"
-export BROWSER="brave"
+export BROWSER="firefox"
 export MUSIC="cantata"
 #export MUSIC="alacritty --class ncmpcpp -e ncmpcpp"
 export PAGER="less"
