@@ -55,7 +55,7 @@ alias mountsd="sudo mount /dev/sdf1"
 alias movies="ranger ~/Videos/movies"
 alias videos="ranger ~/Videos/playlists"
 alias fluffy="cd /mnt/s/modding/Fluffy_Mod_Manager; wine /mnt/s/modding/Fluffy_Mod_Manager/Modmanager.exe"
-
+alias autoremove="pacman -Qtdq | sudo pacman -Rns -"
 alias 7z_update="7z u -up1q0r2x1y2z1w2 -mx9 -mmt16"
 
 ## Dotfile alias ##
