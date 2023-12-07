@@ -11,10 +11,22 @@
 ### TODO ##########################################################################################
 # - Implement a pulseaudio function to switch sinks on Firefox
 # 	- https://askubuntu.com/questions/71863/how-to-change-pulseaudio-sink-with-pacmd-set-default-sink-during-playback
+# - Refactor some sections into better functions.
 #
 # BUGS
 ###################################################################################################
 
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
 
 
 
@@ -38,6 +50,9 @@ monitor_name="DVI-D-0"
 # Temp file to tell if TV mode is active or not.
 tv_mode_file="$HOME/.cache/tv_mode_on"
 
+# Flag for tv mode.
+is_tv_mode_on=0
+
 
 
 
@@ -46,23 +61,31 @@ tv_mode_file="$HOME/.cache/tv_mode_on"
 #################
 
 # Call to xrandr to setup TV as a secondary display.
-xrandr_tv_mode() {
+function xrandr_tv_mode() {
 	xrandr --output $tv_name --left-of $monitor_name
 }
 
 # Call to xrandr to setup TV as a mirror of my main display.
-xrandr_mirror_mode() {
+function xrandr_mirror_mode() {
 	xrandr --output $tv_name --same-as $monitor_name
 }
 
 # Function to enable TV mode.
-enable_tv_mode() {
+function enable_tv_mode() {
 	### TODO ###
 	#
 
+	local is_mpv_running=0
+
 	# Enter debug message
-	if [ $debug_mode -eq 1 ]; then
+	if [ "$debug_mode" -eq 1 ]; then
 		echo "Entering: ${FUNCNAME[0]}"
+	fi
+
+	# Check if TV Mode is already enabled, if so exit with error.
+	if [ -f "$tv_mode_file" ]; then
+		echo "TV Mode already on.  Cancelling..."
+		exit 1
 	fi
 
 	# Use xrandr to setup TV as a second monitor.
@@ -72,58 +95,94 @@ enable_tv_mode() {
 	open_browser
 
 	# Make temporary file to flag that the mode is active.
-	touch $tv_mode_file
+	touch "$tv_mode_file"
+	is_tv_mode_on=1
+
+	# Check if mpv is running, and if so, set the flag.
+	# 1 is running, 0 is not.
+	is_mpv_running=$(check_for_mpv)
+
+	# If mpv is running, turn on mpv_tv_mode.
+	if [ "$is_mpv_running" -eq 1 ]; then
+		echo "mpv is running.  It will be moved to the TV."
+		mpv_tv_mode "on"
+	fi
+
+	# Move cursor back to monitor.
+	xdotool key super+ctrl+k
 
 	# Show enable message
 	enable_message
 
 	# Exit debug message
-	if [ $debug_mode -eq 1 ]; then
+	if [ "$debug_mode" -eq 1 ]; then
 		echo "Leaving: ${FUNCNAME[0]}"
 	fi
 }
 
 # Function to disable TV mode.
-disable_tv_mode() {
+function disable_tv_mode() {
 	### TODO ###
 	# - Fix bugs with close_browser
 
+	local browser_window_id
+	local is_mpv_running=0
+
 	# Enter debug message
-	if [ $debug_mode -eq 1 ]; then
+	if [ "$debug_mode" -eq 1 ]; then
 		echo "Entering: ${FUNCNAME[0]}"
 	fi
 
+	# Check if TV Mode is already enabled, if so exit with error.
+	if [ ! -f "$tv_mode_file" ]; then
+		echo "TV Mode already off.  Cancelling..."
+		exit 1
+	fi
+
 	# Get the id of the browser with YouTube in it
-	local browser_window_id=$(get_browser_id)
+	browser_window_id=$(get_process_id "$custom_class_name")
 
 	# Call to close the firefow window with YouTube
-	close_browser "$browser_window_id"
+	#close_browser "$browser_window_id"
+
+	# Use xdotool to close the browser window.
+	# Use instead of close_browser function.
+	xdotool windowquit "$browser_window_id"
+	#xdotool search --class "$custom_class_name" windowquit
 
 	# Use xrandr to set TV as a mirrored monitor.
 	xrandr_mirror_mode
 
 	# Remove the temporary file
-	rm $tv_mode_file
+	rm "$tv_mode_file"
+	is_tv_mode_on=0
+
+	# Check if mpv is running, and if so, move it to the monitor.
+	is_mpv_running=$(check_for_mpv)
+
+	# If mpv is running, turn on mpv_tv_mode.
+	if [ "$is_mpv_running" -eq 1 ]; then
+		echo "mpv is running.  It will be moved to the monitor."
+		mpv_tv_mode "off"
+	fi
 
 	# Show disable message
 	disable_message
 
 	# Exit debug message
-	if [ $debug_mode -eq 1 ]; then
+	if [ "$debug_mode" -eq 1 ]; then
 		echo "Leaving: ${FUNCNAME[0]}"
 	fi
 }
 
 # Launch the browser
 # This function will launch a new instance of Firefox using a custom profile.
-open_browser() {
+function open_browser() {
 	# Enter debug message
-	if [ $debug_mode -eq 1 ]; then
+	if [ "$debug_mode" -eq 1 ]; then
 		echo "Entering: ${FUNCNAME[0]}"
 	fi
 
-	# Store the currently active window so we can switch back to it after opening firefox.
-	local previously_active_window=$(get_current_window)
 
 	# Call to startup firefox.  Will use its own profile.
 	# Also inialized with its own custom class name so it can be easily found.
@@ -132,27 +191,28 @@ open_browser() {
 		--new-instance \
 		-P tv_mode \
 		--class "$custom_class_name" \
-		> /dev/null &
+		&> /dev/null &
 
 
 	# Prevent race war with starting the browser and getting its ID.
 	sleep 0.75
 
 	# Get the ID of the newly created browser window.
-	local browser_id=$(get_browser_id)
+	local browser_id
+	browser_id=$(get_process_id "$custom_class_name")
 
 	# NOTE: Since I am using a separate profile for firefox, it seems to remember the last
 	# monitor that was used, so the following command is not needed, and will actually move
 	# the firefox window back to my main screen, if it was previously on the TV
 	#
 	# Activate the browser window by ID and send to TV
-	#xdotool windowactivate --sync "$browser_id" key Super_L+o
-
-	# Return to the previous window
-	xdotool windowactivate --sync "$previously_active_window"
+	# Activate the next screen (TV in this case).
+	xdotool key super+ctrl+j
+	# Move browser window to second tag and focus on that tag.
+	xdotool windowactivate --sync "$browser_id" key super+shift+2 super+2
 
 	# Exit debug message
-	if [ $debug_mode -eq 1 ]; then
+	if [ "$debug_mode" -eq 1 ]; then
 		echo "browser_id: $browser_id"
 		echo "previously_active_window: $previously_active_window"
 		echo "Leaving: ${FUNCNAME[0]}"
@@ -161,21 +221,18 @@ open_browser() {
 }
 
 # Close browser
-close_browser() {
+function close_browser() {
 	# Enter debug message
-	if [ $debug_mode -eq 1 ]; then
+	if [ "$debug_mode" -eq 1 ]; then
 		echo "Entering: ${FUNCNAME[0]}"
 	fi
 
 	# Local variable to store the browser id
-	local browser_id=$(get_browser_id)
-
-	# Store the currently active window so we can switch back to it after closing the
-	# firefox tab.
-	local previously_active_window=$(get_current_window)
+	local browser_id
+	browser_id=$(get_process_id "$custom_class_name")
 
 	# Give out some details about the variables.
-	if [ $debug_mode -eq 1 ]; then
+	if [ "$debug_mode" -eq 1 ]; then
 		echo "browser_id: $browser_id"
 		echo "previously_active_window: $previously_active_window"
 	fi
@@ -184,33 +241,118 @@ close_browser() {
 	xdotool windowquit "$browser_id"
 	#xdotool search --class "$custom_class_name" windowquit
 
-	# Return to the previous window
-	xdotool windowactivate --sync "$previously_active_window"
-
-	# Return to the previous window
-	xdotool windowactivate --sync "$previously_active_window"
-
 	# Exit debug message
-	if [ $debug_mode -eq 1 ]; then
+	if [ "$debug_mode" -eq 1 ]; then
 		echo "Leaving: ${FUNCNAME[0]}"
 		#pause
 	fi
 }
 
+# Check if mpv is currently running.
+function check_for_mpv() {
+	# Local variable to store ID for mpv.
+	local mpv_id
+	local is_mpv_running=0
+
+	# Check if mpv is running.
+	# 0 is yes, 1 is no.
+	if pgrep "mpv" &> /dev/null; then
+		is_mpv_running=1
+	fi
+
+	# Return whether mpv is running or not.
+	# 1 is yes, 0 is no.
+	echo "$is_mpv_running"
+}
+
+
+# Function to handle moving mpv around and setting the sound.
+function mpv_tv_mode() {
+	# The status of mpv_tv_mode, passed as an argument.
+	# Options: on, off
+	local status="$1"
+
+	# Get mpv's window ID
+	mpv_id=$(get_process_id "mpv")
+
+	# Activate the window and send to other monitor.
+	xdotool windowactivate --sync "$mpv_id" key super+o super+shift+8 super+8
+
+
+	# Send mpv to tag 8, then switch to tag 8.
+	#xdotool windowactivate --sync "$mpv_id" key super+shift+8 super+8
+
+	# Logic to control what to do based on the "status" variable.
+	case "$status" in
+		# Use xdotool to enable fullscreen for mpv.
+		"on") xdotool windowstate --add FULLSCREEN "$mpv_id";;
+		# Use xdotool to disable fullscreen for mpv.
+		"off") xdotool windowstate --remove FULLSCREEN "$mpv_id";;
+	esac
+
+	# Change the sink of mpv to the TV.
+	change_mpv_sink
+
+}
+
+# A function to toggle tv_mode.  Searches for the temp file created when tv_mode is activated.
+function toggle_tv_mode() {
+	# Flag to check if TV mode is enabled or not.
+	local is_tv_mode_on
+	is_tv_mode_on=$(get_current_mode)
+
+	# Case to control logic.  Checks if the temporary file is present, indicating whether TV Mode
+	# is active or not.
+	case "$is_tv_mode_on" in
+		# If TV mode is currently off.
+		# Call to enable TV mode.
+		0) enable_tv_mode;;
+
+		# If TV mode is currently on.
+		# Call to disable TV mode.
+		1) disable_tv_mode;;
+	esac
+}
+
 # A function to set the browsers sink to the TV
-change_browser_sink() {
-	local tv_alsa_name="alsa_output.pci-0000_0a_00.1.hdmi-stereo"
-	local browser_input_index=$(pacmd list-sink-inputs | grep index | tr -cd '0-9\n')
-	local tv_sink=$(pacmd list-sinks | grep -B 1 "$tv_alsa_name" | head -n 1 | tr -cd '0-9\n')
+function change_browser_sink() {
+	# Declare local variables.
+	local tv_alsa_name
+	local browser_input_index
+	local tv_sink
+
+	# Assign local variables.
+	tv_alsa_name="alsa_output.pci-0000_09_00.1.hdmi-stereo-extra1"
+	browser_input_index=$(pacmd list-sink-inputs | grep index | tr -cd '0-9\n')
+	tv_sink=$(pacmd list-sinks | grep -B 1 "$tv_alsa_name" | head -n 1 | tr -cd '0-9\n')
 
 	echo "tv_alsa_name: $tv_alsa_name"
 	echo "browser_input_index: $browser_input_index"
 	echo "tv_sink: $tv_sink"
 }
 
-pause() {
+# A function to set the sink of mpv to the TV during TV mode.
+function change_mpv_sink() {
+	# Declare local variables.
+	local tv_alsa_name
+	local tv_sink
+	local mpv_sink_input_id
+
+	# Assign local variables.
+	tv_alsa_name="alsa_output.pci-0000_09_00.1.hdmi-stereo-extra1"
+	tv_sink=$(pacmd list-sinks | grep -B 1 "$tv_alsa_name" | head -n 1 | tr -cd '0-9\n')
+	mpv_sink_input_id=$(pactl list sink-inputs | grep -B 24 '.*binary.*mpv' | grep "Sink Input #" | sed 's/Sink Input \#//')
+
+	if [ "$is_tv_mode_on" -eq 1 ]; then
+		pacmd move-sink-input "$mpv_sink_input_id" "$tv_sink"
+	else
+		pacmd move-sink-input "$mpv_sink_input_id" 2
+	fi
+}
+
+function pause() {
 	echo "Debug pause."
-	read -p "Press enter to continue."
+	read -rp "Press enter to continue."
 
 }
 
@@ -221,21 +363,22 @@ pause() {
 ### Helper Functions ###
 ########################
 
-# Get window id of Firefox using xdotool
+# Get window id of a process using xdotool.
 # xdotool will search for our custom class name.  This will return several IDs, so tail
 # is used to grab just the last one.
-get_browser_id() {
-	xdotool search --class "$custom_class_name" | tail -n1
+function get_process_id() {
+	local process_to_check="$1"
+	xdotool search --class "$process_to_check" | tail -n1
 }
 
 # Gets the currently focused window.  Useful to put it in a stack to go back to after switching windows.
-get_current_window() {
+function get_current_window() {
 	xdotool getactivewindow
 }
 
 # Check if TV mode is active.
 # 1 yes, 0 no.
-get_current_mode() {
+function get_current_mode() {
 	# Check if $tv_mode_file exists.
 	if [ -f "$tv_mode_file" ]; then
 		# If it does, return 1.
@@ -247,10 +390,14 @@ get_current_mode() {
 }
 
 # Print out some debug info
-get_debug_info() {
-	# Debug variables
-	local browser_id=$(get_browser_id)
-	local browser_class=$(xprop -id "$browser_id" | grep -i "class")
+function get_debug_info() {
+	# Declare local variables.
+	local browser_id
+	local browser_class
+
+	# Assign local variables.
+	browser_id=$(get_process_id "$custom_class_name")
+	browser_class=$(xprop -id "$browser_id" | grep -i "class")
 
 	# Debug message
 	echo '### DEBUG INFO ###'
@@ -267,46 +414,83 @@ get_debug_info() {
 ################
 
 # Message to display when enabling TV mode.
-enable_message() {
+function enable_message() {
 	echo "TV mode enabled."
-	notify-send "xrandr" "TV mode enabled."
+	notify-send "TV Mode:" "enabled."
 }
 
 # Message to display when disabling TV mode.
-disable_message() {
+function disable_message() {
 	echo "TV mode disabled."
-	notify-send "xrandr" "TV mode disabled."
+	notify-send "TV Mode:" "disabled."
 }
 
 # Help Section
-help_section() {
+function help_section() {
 	echo "A script to enable TV Mode."
 	echo
-	echo "Syntax: tv_mode [-h|d]"
-	echo "options:"
-	echo "h     Print this help screen."
-	echo "d     Enable debug mode."
+	echo "Syntax: tv_mode [-h|d|s] (command)"
 	echo
+	echo "commands:"
+	echo "on     : Turn TV Mode on."
+	echo "off    : Turn TV Mode off."
+	echo "toggle : Toggle TV Mode."
+	echo
+	echo "options:"
+	echo "h     : Print this help screen."
+	echo "d     : Enable debug mode."
+	echo "s     : Show status."
+	echo "t     : Toggle TV Mode."
+	echo
+}
+
+# Display the current status for TV Mode.
+function get_status() {
+	# Declare local variables.
+	local mpv_message
+	local mpv_current_video
+	local current_status
+	local mpv_id
+
+	# Assign local variables.
+	current_status=$(get_current_mode)
+	mpv_id=$(get_process_id "mpv")
+
+	if [ "$current_status" -eq 1 ]; then
+		current_status="ON"
+	else
+		current_status="OFF"
+	fi
+
+	echo "TV Mode Status: $current_status"
+
+	if [ -n "$mpv_id" ]; then
+		mpv_message="running"
+		mpv_current_video=$(xdotool getwindowname "$mpv_id")
+		echo "mpv: $mpv_message"
+		echo "video title: $mpv_current_video"
+	fi
+
 }
 ##############
 
 ### Post script run functions ###
 # Fix wallpaper.
 # Sometimes the wallpaper may not apply when switching monitors around.
-restore_wallpaper() {
+function restore_wallpaper() {
 	#nitrogen --restore
 	~/.fehbg
 }
 
 # Restart awesomewm.  This is to rearanged windows when leaving TV mode.
-restart_awesome() {
+function restart_awesome() {
 	# The following command will echo the awesome restart function into awesome-client
 	echo 'awesome.restart()' | awesome-client
 }
 
 # Reset the device name of the TV in pulseaudio
 # This is needed after running the script as the resolution change changes the name back to default.
-reset_tv_name() {
+function reset_tv_name() {
 	# The following command will rename the TV based on the name from pulseaudio
 	pacmd update-sink-proplist alsa_output.pci-0000_0a_00.1.hdmi-stereo device.description="TV"
 
@@ -315,56 +499,78 @@ reset_tv_name() {
 	pacmd load-module module-combine-sink > /dev/null
 }
 
-# Get arguments
-while getopts ":hd" option; do
-	case $option in
-		d)
-			debug_mode=1
-			;;
-		h)
-			help_section
-			exit
-			;;
-		\?)
-			echo "Error: Invalid option"
-			exit 1
-			;;
-	esac
-done
 
+#####################
+### Get arguments ###
+#####################
+function get_arguments() {
+	while getopts ":hdst" option; do
+		case $option in
+			d) debug_mode=1;;
+			h) help_section; exit;;
+			s) get_status; exit;;
+			t) toggle_tv_mode; exit;;
+			\?) echo "Error: Invalid option"; exit 1;;
+		esac
+	done
+}
+
+
+############
 ### Main ###
-# Flag to check if TV mode is enabled or not.
-is_tv_mode_on=$(get_current_mode)
+############
+function main() {
+	# Store the currently active window so we can switch back to it after opening firefox.
+	local previously_active_window
+	previously_active_window=$(get_current_window)
 
-# Case to control logic
-case $is_tv_mode_on in
-	# If TV mode is currently off.
-	0)
-		# Call to enable TV mode.
-		enable_tv_mode
-		;;
+	# Variable for any commands passed to the script.
+	local user_command
 
-	# If TV mode is currently on.
-	1)
-		disable_tv_mode
-		;;
-esac
+	# Get arguments passed to the script and handle them.
+	get_arguments "$@"
 
-# Recheck flag to see which mode we are in.
-is_tv_mode_on=$(get_current_mode)
+	# If there are more than one argument, remove the first one.
+	if [ "$OPTIND" -gt 1 ]; then
+		shift $((OPTIND - 1))
+	fi
 
-# If TV mode has been disabled, do not get_debug_info() because the browser window is already closed.
-if [ $debug_mode -eq 1 ] && [ $is_tv_mode_on -eq 1 ]; then
-	get_debug_info
-fi
+	# User command is set to the passed command.
+	user_command="$*"
 
-# Ensure that the wallpaper is okay.
-restore_wallpaper
+	## Main Logic ##
+	case "$user_command" in
+		"on") enable_tv_mode;;
+		"off") disable_tv_mode;;
+		"toggle") toggle_tv_mode;;
+		"") echo "No command specified."; help_section; exit;;
+		"/?") echo "Invalid command/option."; exit 1;;
+	esac
 
-# Ensure the TV has the proper sink name in pulseaudio
-#reset_tv_name
+	# Return focus to the previous window.
+	xdotool windowactivate "$previously_active_window"
 
-# Ensure that windows are positioned according to my awesomewm config by restarting awesome
-# This function currently has a bug and won't work properly.
-#restart_awesome
+	# Recheck flag to see which mode we are in.
+	#is_tv_mode_on=$(get_current_mode)
 
+	# If TV mode has been disabled, do not get_debug_info() because the browser window is already closed.
+	if [ $debug_mode -eq 1 ] && [ $is_tv_mode_on -eq 1 ]; then
+		get_debug_info
+	fi
+
+	# Ensure that the wallpaper is okay.
+	restore_wallpaper
+
+	# Ensure the TV has the proper sink name in pulseaudio
+	#reset_tv_name
+
+	# Ensure that windows are positioned according to my awesomewm config by restarting awesome
+	# This function currently has a bug and won't work properly.
+	#restart_awesome
+}
+
+####################
+### Call to main ###
+####################
+# Check for any arguments.
+main "$@"
