@@ -492,7 +492,7 @@ globalkeys = mytable.join(
               { description = "gametime", group = "scripts"}),
 
     awful.key({ modkey,        }, "F5",     function ()
-          awful.spawn.with_line_callback("tv_mode", {
+          awful.spawn.with_line_callback("tv_mode toggle", {
               exit = function()
                   awesome.emit_signal('update_tv_mode_status')
               end})
@@ -556,7 +556,7 @@ globalkeys = mytable.join(
    awful.key({}, "Print", function () awful.spawn("screenshooter") end),
 
    -- Set Caps to escape
-   awful.key({ modkey, "Control" }, "k", function() awful.spawn("set_caps_to_esc") end,
+   awful.key({ modkey, altkey }, "k", function() awful.spawn("set_caps_to_esc") end,
     { description = "Set Caps to ESC", group = "misc"}),
 
   -- Dmenu
