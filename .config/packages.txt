@@ -73,6 +73,7 @@ ficsit-cli-bin
 file-roller
 filezilla
 firefox
+firefox-nightly-bin
 fish
 flac1.3
 flatpak
@@ -137,13 +138,17 @@ kdiskmark
 kvantum
 lftp
 lib32-giflib
+lib32-glslang
 lib32-gst-plugins-base
 lib32-gst-plugins-good
 lib32-gstreamer
+lib32-libass
 lib32-libxslt
+lib32-lv2
 lib32-mpg123
 lib32-openal
 lib32-sdl2_mixer
+lib32-shaderc
 lib32-v4l-utils
 libff7tk-git
 libnewt
@@ -169,6 +174,7 @@ lxsession
 lyrics-in-terminal
 m4
 m64py
+mailutils
 make
 mame-tools
 mangohud
@@ -232,6 +238,7 @@ pkgfile
 playerctl
 plocate
 polymc-bin
+postfix
 powerline-fonts
 ppsspp
 progress
