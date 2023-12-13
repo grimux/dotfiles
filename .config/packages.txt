@@ -74,7 +74,6 @@ file-roller
 filezilla
 firefox
 firefox-nightly-bin
-fish
 flac1.3
 flatpak
 flex
@@ -155,6 +154,7 @@ libnewt
 libreoffice-fresh
 libretro-pcsx2
 libretro-ppsspp
+libstrangle
 libtool
 libxcrypt-compat
 linux
@@ -371,6 +371,8 @@ words
 xash3d-fwgs-git
 xclip
 xdelta3
+xdg-desktop-portal-gnome
+xdg-desktop-portal-gtk
 xdg-desktop-portal-lxqt
 xdg-user-dirs
 xf86-video-vesa
