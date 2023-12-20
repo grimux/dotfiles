@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# A script to toggle the Tor network on or off.
+#
+
+### Script Fail Events ###
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+# Name of the application to check for.
+application="tor"
+
+# Check to see if the application is running.
+if pgrep --uid "$application" > /dev/null; then
+	echo "Turning $application OFF"
+	notify-send "Turning $application OFF"
+	sudo pkill $application &
+else
+	echo "Turning $application ON"
+	notify-send "Turning $application ON"
+	sudo $application &> /dev/null &
+fi
+
+exit 0

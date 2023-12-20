@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+#
+# A script to update a file of my current pacman and yay packages.
+#
+############
+### TODO ###
+############
+#
+# - Add some comments.
+# - Clean up code.
+#
+
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+package_list_file="$HOME/.config/packages.txt"
+package_info_file="$HOME/.config/package-info.txt"
+config="git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
+
+function create_package_file() {
+	pacman \
+		--query \
+		--explicit \
+		--quiet \
+		> "$package_list_file"
+}
+
+function create_info_file() {
+	pacman \
+		--query \
+		--explicit \
+		--info \
+		> "$package_info_file"
+}
+
+function check_file() {
+	local file_changed=0
+	if $config diff --exit-code $package_list_file > /dev/null 2>&1; then
+		echo 0
+	else
+		echo 1
+	fi
+
+}
+
+
+function main() {
+	create_package_file
+	create_info_file
+
+	local has_file_changed=$(check_file)
+
+	if [ $has_file_changed -eq 1 ]; then
+		echo "File has changed.  Adding and commiting..."
+		$config add "$package_list_file"
+		$config commit -m "Installed packages update."
+	else
+		echo "File has not changed.  Aborting..."
+		exit 1
+	fi
+}
+
+main

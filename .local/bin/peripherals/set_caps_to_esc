@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+#
+#
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+set -euox pipefail
+#set -euo pipefail
+
+
+function caps_to_escape() {
+	setxkbmap -option caps:escape
+}
+
+function reset_layout() {
+	setxkbmap -layout us -option ''
+}
+
+function check_for_caps_lock() {
+	local is_caps_lock_on
+
+	is_caps_lock_on=$(xset -q | sed -n 's/^.*Caps Lock:\s*\(\S*\).*$/\1/p')
+
+	if [ "$is_caps_lock_on" == "on" ]; then
+		echo "Turning off Caps Lock."
+		notify-send "X11 Keyboard" "Turning off Caps Lock."
+		# Needs to be sent twice for some reason when wine breaks my keyboard.
+		xdotool key Caps_Lock
+		xdotool key Caps_Lock
+	fi
+}
+
+function send_message() {
+	echo "Caps has been set to ESC."
+	notify-send "X11 Keyboard" "Caps has been set to ESC."
+}
+
+function main() {
+	check_for_caps_lock
+	caps_to_escape
+	send_message
+}
+
+main

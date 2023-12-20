@@ -1,0 +1,220 @@
+#!/usr/bin/bash
+#
+# A script for displaying and playing video files from my Videos directory.
+# Uses mpv to load, configure, and play everything.
+#
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+
+#################
+### Variables ###
+#################
+#
+# Video playlist directory
+video_base_dir="/mnt/v"
+
+# Array of video files.
+# Takes all the files from the Videos directory and adds them to the array.
+# This array is dynamic and will change depending on the contents of the directory
+# It also ignores a few directories that we don't want displayed, i.e. television.
+readarray -d '' video_files < <(find "$video_base_dir" -iname '*.mkv' -o -iname '*.mp4' -not -path "$video_base_dir/television/*" -print0)
+
+# Array of playlist names
+# readarray is used to run a command on each element of "video_files" array, and store it into a new
+# array.  "-t" removes the trailing newline character.
+readarray -t video_names < <(basename --multiple "${video_files[@]}")
+
+# Options for mpv
+mpv_args=(--loop-file)
+
+# Option flags
+watch_later=0
+use_tv_mode=0
+
+#################
+### Functions ###
+#################
+#
+# Help Section
+function help_section() {
+	# Help Message.  5 space offset.
+	echo "A script to open videos in mpv."
+	echo "usage:"
+	echo "    $(basename "$0") [-h|-w|-t]"
+	echo
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "w     Enable watch later mode (default)."
+	echo "t     Use TV_Mode."
+}
+
+# Get arguments and set flags
+function get_arguments() {
+	local option
+	while getopts ":hwt" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1;;
+
+			# Help
+			h) help_section; exit;;
+
+			# Save playlist position on exit.
+			w) watch_later=1; mpv_args+=(--save-position-on-quit); echo "Watch later mode: ON";;
+
+			# Use TV_Mode
+			t) use_tv_mode=1; echo "TV mode: ON";;
+
+		esac
+	done
+}
+
+# Function to open playlist in dmenu
+function open_in_dmenu() {
+	# Piping the array into dmenu.
+	#printf '%s\n' "${video_names[@]}" | dmenu -i -l 20 -p 'Videos:'
+	printf '%s\n' "$(basename --multiple "${video_files[@]}")" | dmenu -i -l 20 -p 'Videos:'
+}
+
+# Check if the playlist exists
+function check_video() {
+	# Exists flag.
+	local exist=0
+
+	# Name of playlist to check.
+	local video="$1"
+
+	# Check for a match in the array.
+	for ((i = 0; i < ${#video_names[@]}; i++)); do
+		if [ "$video" == "${video_names[i]}" ]; then
+			exist=1
+			break
+		fi
+	done
+
+	# Unset i variable used for indexing.
+	unset i
+
+	# Return the result of the check.
+	# 1 if it exists, 0 if not.
+	echo $exist
+}
+
+# Get the full path to the specified video.
+function get_video_path() {
+	local video="$1"
+	local full_path="null"
+
+	# Check for a match in the array.
+	for ((i = 0; i < ${#video_names[@]}; i++)); do
+		if [ "$video" == "${video_names[$i]}" ]; then
+			full_path="${video_files[$i]}"
+			break
+		fi
+	done
+
+	# Unset i variable used for indexing.
+	unset i
+
+	echo "$full_path"
+}
+
+# Message if the playlist is not found.
+function no_video() {
+	echo "Video not found."
+	notify-send "file error" "That video does not exist."
+}
+
+# Prepare mpd for playback and start
+function call_mpv() {
+	# Argument passed is the location of the playlist file.
+	# $video_base_directory/$playlist_name.m3u
+	video_name=$1
+
+	# Display a message if watch_later is enabled.
+	if [ $watch_later -eq 1 ]; then
+		echo "Video resumed: $(basename "$video_name")"
+		notify-send "Video resumed:" "$(basename "$video_name")"
+	fi
+
+
+	# Start mpv and load the playlist.
+	mpv "${mpv_args[@]}" "$video_name"
+
+	# Display a message if watch_later is enabled.
+	if [ "$watch_later" -eq 1 ]; then
+		echo "Video position saved: $(basename "$video_name")"
+		notify-send "Video position saved:" "$(basename "$video_name")"
+	fi
+
+}
+
+# Check the status of mpd.
+function check_mpd_status() {
+	if mpc status | grep 'playing' > /dev/null 2>&1; then
+		echo 1
+	else
+		echo 0
+	fi
+}
+
+############
+### Main ###
+############
+function main() {
+	local full_video_path="null"
+
+	# Get arguments
+	get_arguments "$@"
+
+	# Open dmenu and set the choice to $choice
+	choice=$(open_in_dmenu)
+
+	# Check to see if the playlist has a match in the array
+	does_video_exist=$(check_video "$choice")
+
+	# If it doesn't exist, call the no_video function
+	if [ "$does_video_exist" -eq 0 ]; then
+		no_video
+		exit 1
+	fi
+
+	# Check to see if mpd is playing.
+	is_mpd_playing=$(check_mpd_status)
+
+	# Stop mpd if it is playing.
+	if [ "$is_mpd_playing" -eq 1 ]; then
+		mpc pause > /dev/null
+	fi
+
+	# Get the full path to the selected video.
+	full_video_path=$(get_video_path "$choice")
+
+	# Call to mpv with the playlist as an argument.
+	call_mpv "$full_video_path"
+
+	# Check if "use_tv_mode" was selected.  If so, enable it.
+	if [ "$use_tv_mode" -eq 1 ]; then
+		tv_mode "on"
+	fi
+
+	# If mpd was playing before starting a video, resume playing.
+	if [ "$is_mpd_playing" -eq 1 ]; then
+		mpc play > /dev/null
+	fi
+}
+
+####################
+### Call to main ###
+####################
+# Call main.  pass the `-w` flag by default to save video position and settings on exit.
+main "-w" "$@"
+
+### End ###
+exit 0

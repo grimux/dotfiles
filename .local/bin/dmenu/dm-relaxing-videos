@@ -1,0 +1,147 @@
+#!/usr/bin/bash
+#
+# A script for using my relaxing music videos in mpv.
+# Uses mpv to load, configure, and play everything.
+#
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+### Variables ###
+#
+# MPV video directory
+video_dir="/mnt/v/relaxing"
+playlist_file="$HOME/.cache/relaxing-videos-playlist.m3u"
+
+# Flag for playlist useage.
+use_playlist=0
+
+# Array of videos.
+# Takes all the files from the video directory and adds them to the array.
+# This array is dynamic and will change depending on the contents of the directory
+mapfile -t video_files < <(find $video_dir -type f -iname '*.mkv' -o -iname '*.mp4' | sort)
+
+# Array of video names
+# awk is used to strip the file path and leave just the file name. -F'/' sets the delimiter to /
+# sed is used to strip the file extension.
+mapfile -t video_names < <(printf '%s\n' "${video_files[@]}" | awk -F'/' '{print $NF}' | sed -e 's/.mkv//' -e 's/.mp4//')
+video_names+=(random)
+
+### Functions ###
+#
+# Function to open video in dmenu
+open_in_dmenu() {
+	local prompt="Videos"
+	# Piping the array into dmenu.
+	printf '%s\n' "${video_names[@]}" | dmenu -i -l 20 -p "$prompt: "
+}
+
+# Check if the video exists
+check_video() {
+	# Exists flag.
+	exist=0
+
+	# Name of video to check.
+	name="$1"
+
+	# Check for a match in the array.
+	for i in "${video_names[@]}"; do
+		# If a match is found, set exists flag to 1.
+		if [ "$name" == "$i" ]; then
+			exist=1
+			break
+		fi
+	done
+
+	# Return the result of the check.
+	# 1 if it exists, 0 if not.
+	echo "$exist"
+	exit
+}
+
+# Get the full path of the given video file.
+function get_choice_path() {
+	local choice_name="$1"
+	local choice_path="null"
+
+	choice_path=$(find "$video_dir" -type f -iname "*$choice*")
+
+	echo "$choice_path"
+
+}
+
+# Used to make a random playlist of the video files.
+function make_playlist() {
+	local random_playlist_array
+	echo "Creating playlist"
+
+	printf '%s\n' "${video_files[@]}" | shuf > "$playlist_file"
+
+}
+
+# Message if the video is not found.
+no_video() {
+	echo "Video not found."
+	notify-send "Video playing error." "That video does not exist."
+	exit 1
+}
+
+# Prepare mpd for playback and start
+load_mpv() {
+	# Argument passed is the location of the video file.
+	# $video_directory/$video_name.m3u
+	video_name="$1"
+
+	# Ensure no music is playing.
+	mpc stop > /dev/null
+
+	# Play
+	mpv "$1"
+}
+
+### Main ###
+#
+main() {
+	# Check if the argument passed to the script is empty
+	# If so, capture the output of open_in_dmenu into $choice
+	if [ -z "$@" ]; then
+		choice=$(open_in_dmenu)
+	# Otherwise use the argument as the video name
+	else
+		choice="$1"
+	fi
+
+	# If 'random' is chosen, pick a random video.
+	if [ "$choice" == "random" ]; then
+		choice=$(printf '%s\n' "${video_names[@]}" | shuf -n 1)
+	fi
+
+	# Check to see if the video has a match in the array
+	does_video_exist=$(check_video "$choice")
+
+	# Get the full path of the video file.
+	choice=$(get_choice_path "$choice")
+
+	# If the video exists, pass it to load_mpv function
+	if [ $does_video_exist -eq 1 ]; then
+		#make_playlist
+		load_mpv "$choice"
+	# If it doesn't exist, call the no_video function
+	else
+		no_video
+	fi
+}
+
+# Call main
+main "$@"
+
+### End ###
+exit 0

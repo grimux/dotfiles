@@ -1,0 +1,211 @@
+#!/usr/bin/env bash
+#
+# Small script to generate an HTML file of my gift list.
+#
+
+##########################
+### Script Fail Events ###
+##########################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+set -euox pipefail
+#set -euo pipefail
+
+##############
+### Config ###
+##############
+# The browser to use. Set from system default.
+browser="$BROWSER"
+# The editor to use. Set from system default.
+editor="$EDITOR"
+# CSS file for styling.
+css="file:/home/jake/vimwiki/_site/style.css"
+# Repository for vimwiki.
+vimwiki_repo="$HOME/vimwiki"
+# Git directory for vimwiki repository.
+vimwiki_git_directory="$vimwiki_repo/.git"
+# Markdown gift list
+gift_list_markdown="$vimwiki_repo/personal/gift-list.md"
+# HTML gift list
+gift_list_html="$HOME/Documents/jakes_gift_list.html"
+# PDF gift list
+gift_list_pdf="$HOME/Documents/jakes_gift_list.pdf"
+
+# Help Section
+function help_section() {
+	echo "A script to update my birthday/holiday giftlist."
+	echo "The script can create a pdf or html file from my vimwiki markdown file."
+	echo
+	echo "Syntax: $(basename "$0") [-h|e|g|u|o|p]"
+	echo "options:"
+	echo "h     Print this help screen."
+	echo "e     Edit the gift list using $editor."
+	echo "g     Run git operations on vimwiki."
+	echo "u     Upload the HTML gift list to Google Drive."
+	echo "o     Open gift list in $browser."
+	echo "p     Make pdf."
+	echo "s     Email gift list."
+	echo
+}
+
+# Update the giftlist file in the vimwiki repo.
+# It will check if there are any changes first, if there are, it will add and commit.
+function update_vimwiki_repo(){
+	# Wrapper for git working tree and git directory for vimwiki.
+	local vimwiki_git_wrapper="git --work-tree=$vimwiki_repo --git-dir=$vimwiki_git_directory"
+	local to_continue
+
+	# Check to see if the giftlist file has changed since last commit.
+	if $vimwiki_git_wrapper diff --exit-code "$gift_list_markdown"; then
+		echo "Gift list unchanged.  Nothing to commit."
+		exit
+	else
+		echo "Gift list changes detected."
+		if yes_or_no "Would you like to add and commit?"; then
+			$vimwiki_git_wrapper add $gift_list_markdown
+			$vimwiki_git_wrapper commit -m "Giftlist updated."
+			#vimwiki_git_wrapper push
+		else
+			echo "Aborting.  No changes will be made."
+		fi
+	fi
+}
+
+# Create an html file from the markdown file, using pandoc.
+function markdown2html() {
+	echo "Creating html file..."
+
+	# Call to pandoc.
+	pandoc \
+		--css="$css" \
+		--standalone \
+		--embed-resources \
+		--from=markdown \
+		--to=html \
+		"$gift_list_markdown" \
+		--output="$gift_list_html"
+
+	echo "File created: $gift_list_html"
+}
+
+# Create a pdf file from the markdown file, using pandoc.
+function markdown2pdf() {
+	echo "Creating pdf file..."
+
+	# Call to pandoc
+	pandoc \
+		--css="$css" \
+		--standalone \
+		--embed-resources \
+		--from=markdown \
+		--to=pdf \
+		"$gift_list_markdown" \
+		--output="$gift_list_pdf"
+
+	echo "File created: $gift_list_pdf"
+}
+
+function upload_to_gdrive() {
+	# Arguments for the sync operation of rclone.  Also a placeholder for dry-run mode.
+	local rclone_arguments="--progress --metadata --human-readable --check-first --checksum"
+	local rclone_backup_location="gdrive:Gift List"
+
+	# Use rclone to sync files to Google Drive.
+	# rclone will automatically make the directory if it does not exist.
+	rclone sync $rclone_arguments "$gift_list_html" "$rclone_backup_location"
+
+}
+
+# Open the html file in the configured browser.
+function open_giftlist() {
+	$browser "$gift_list_html" &> /dev/null
+}
+
+# Edit the gift list using default editor, probably nvim.
+function edit_giftlist() {
+	$editor -c "VimwikiIndex" -c "VimwikiGoto personal/gift-list"
+}
+
+# Send an email with the gift list attached.  The email body will contain the last edit date.
+function email_giftlist() {
+	local email_address
+	local subject
+	local body
+	local attachment
+	local current_date
+
+	current_date=$(date +'%m/%d/%Y')
+	#email_address="dandsm78@gmail.com"
+	email_address="jakerm13@gmail.com"
+	subject="Jakes Gift List Updated"
+	body="Last updated: $current_date"
+	attachment="$gift_list_html"
+
+	echo "Sending email to: $email_address"
+
+	# Send an email with the gift list attached.
+	echo "$body" | mail \
+		--attach="$attachment" \
+		--subject="$subject" \
+		"$email_address"
+
+	echo "Mail sent."
+}
+
+# A simple function to return results based on a yes or no statement.
+function yes_or_no() {
+	local choice
+	local prompt="$1"
+
+	while true; do
+		read -p "$prompt (y/n): " choice
+		case $choice in
+			[Yy]*) return 0;;
+			[Nn]*) return 1;;
+		esac
+	done
+}
+
+# Get script arguments.
+function get_arguments() {
+	while getopts ":eoghpus" option; do
+		case $option in
+			# Open in editor.
+			e) edit_giftlist; markdown2html; exit;;
+
+			# Open in browser.
+			o) markdown2html; echo "Opening in $browser"; open_giftlist; exit;;
+
+			# Run git operations on vimwiki, where the gift list is stored.
+			g) echo "Running git operations..."; update_vimwiki_repo; exit;;
+
+			# Upload gift list to Google Drive.
+			u) echo "Uploading to GDrive."; upload_to_gdrive; exit;;
+
+			# Goto the help section.
+			h) help_section; exit;;
+
+			# Make a pdf of the giftlist.
+			p) echo "Creating pdf..."; markdown2pdf; exit;;
+
+			# Send an email with the gift list attached.
+			s) markdown2html; email_giftlist; exit;;
+
+			# Base case, if there is an invalid option
+			\?) echo "Error: Invalid option"; exit 1;;
+
+		esac
+	done
+
+}
+
+function main() {
+	markdown2html
+}
+
+### Main ###
+get_arguments "$@"
+main
