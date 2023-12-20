@@ -143,13 +143,9 @@ lib32-glslang
 lib32-gst-plugins-base
 lib32-gst-plugins-good
 lib32-gstreamer
-lib32-libass
 lib32-libxslt
-lib32-lv2
 lib32-mpg123
-lib32-openal
 lib32-sdl2_mixer
-lib32-shaderc
 lib32-v4l-utils
 libff7tk-git
 libnewt
@@ -171,6 +167,7 @@ lutris
 luxtorpeda-git
 lxappearance
 lxqt-archiver
+lxqt-config
 lxqt-sudo
 lxsession
 lyrics-in-terminal
