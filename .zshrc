@@ -20,6 +20,8 @@ export TERMCMD="$TERMINAL"
 
 # Export GTK themes to Qt
 export QT_QPA_PLATFORMTHEME=gtk2
+#export QT_STYLE_OVERRIDE=kvantum
+#export GTK_USE_PORTAL=1
 
 # Directory for clipmenu.
 export CM_DIR="$HOME/.cache/clipmenu"
@@ -38,6 +40,7 @@ if [ -d "$HOME/.local/bin" ] ; then
 	PATH="$HOME/.local/bin/statusbar:$PATH"
 	PATH="$HOME/.local/bin/dmenu:$PATH"
 	PATH="$HOME/.local/bin/games:$PATH"
+	PATH="$HOME/.local/bin/game-links:$PATH"
 	PATH="$HOME/.local/bin/steamdeck:$PATH"
 	PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
 fi
