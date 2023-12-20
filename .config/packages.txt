@@ -87,6 +87,7 @@ g810-led
 gameconqueror
 gamemode
 gamescope
+gbml-git
 gcc
 gdrive
 genact
