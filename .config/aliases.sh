@@ -35,6 +35,9 @@ alias gift-list="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto personal/gift-list\""
 
 ## Program shortcuts ##
 alias define="sdcv"			# Dictionary
+#alias copy="xclip -rmlastnl -selection clipboard"
+alias copy="xclip -selection clipboard"
+alias paste="xclip -selection clipboard -out"
 alias f="ranger"
 alias ka="killall"
 alias ncm="ncmpcpp"			# Terminal music player for mpd
@@ -75,9 +78,13 @@ alias send_game="rsync -hvrlt --info=progress2 --stats"
 alias copy_files="rsync -rvhtU --info=progress2 --stats"
 
 ## Games ##
-alias im_stuck="steam -applaunch 1010750 map e1m1"
+#alias im_stuck="steam -applaunch 1010750 map e1m1"
+alias im_stuck="nblood"
 alias help_me="nblood"
+alias play_blood="lutris lutris:rungameid/60"
 alias jkdf2="openjkdf2"
+alias perfect-dark="lutris lutris:rungameid/252"
+alias oot="lutris lutris:rungameid/61"
 
 ## Music ##
 alias dangan="mpc clear; mpc searchadd Title \"Into Free\"; mpc play; lyrics"
@@ -94,6 +101,7 @@ alias xavier="mpv $mpv_playlist_settings $video_playlist_dir/xavier.m3u"
 alias xfiles="mpv $mpv_playlist_settings $video_playlist_dir/xfiles.m3u"
 alias twinpeaks="mpv $mpv_playlist_settings $video_playlist_dir/twin_peaks.m3u"
 
+alias brown_noise="mpv --loop --no-video '/mnt/s/music/yt-dlp/Relaxing Colors of Noise 🔊🌈😌/02 - Brown Noise, Black Screen 🟤⬛ • 12 hours • No ads.mp3'"
 alias calm="mpv --loop --fullscreen /mnt/v/relaxing/Autism_Calming_Sensory_Meltdown_Remedy_Soothing_Visuals-Super_Duper_Fun_Music.mkv"
 
 ## Directories ##
