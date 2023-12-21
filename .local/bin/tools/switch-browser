@@ -18,6 +18,7 @@ set -euo pipefail
 declare -a browser_options=(
 	[1]='brave'
 	[2]='firefox'
+	[3]='firefox-nightly'
 )
 
 # Array of actually installed browsers.  Will be called in the main function before anything else.
