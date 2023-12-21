@@ -57,7 +57,7 @@ function main() {
 
 	if [ $has_file_changed -eq 1 ]; then
 		echo "File has changed.  Adding and commiting..."
-		$config add "$package_list_file"
+		$config add "$package_list_file" "$package_info_file"
 		$config commit -m "Installed packages update."
 	else
 		echo "File has not changed.  Aborting..."
