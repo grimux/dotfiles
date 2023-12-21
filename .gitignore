@@ -6,7 +6,6 @@
 .config/dmscripts/*
 .config/GIMP/*
 .config/goverlay/*
-.config/gtk*
 .config/JetBrains/*
 .config/libreoffice/*
 .config/lutris/*
@@ -18,6 +17,7 @@
 .config/OpenRGB/*
 .config/PCSX2/*
 .config/puddletag/*
+.config/rpcs3/*
 .config/satisfactory-mod-manager-gui/*
 .config/Signal/*
 .config/spotify/*
@@ -28,4 +28,3 @@
 .config/UMS/database/*
 .config/unity3d/*
 .config/VirtualBox/*
-.config/rpcs3/*
