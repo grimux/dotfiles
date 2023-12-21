@@ -30,41 +30,50 @@ set -euo pipefail
 ### Variables ###
 #################
 #
-playlist_directory="$HOME/Videos/playlists"
+playlist_directory="/mnt/v/playlists"
 playlist_array=($playlist_directory/*)
 playlist_header="#EXTM3U"
 playlist_name=""
+base_video_directory="/mnt/v"
 video_directory=""
 
-video_extentions="-name *.mkv -o -name *.avi -o -name *.mp4"
+video_extensions="-name *.mkv -o -name *.avi -o -name *.mp4"
 
 shuffle_mode=0
 append_mode=0
 
 
-#cd "$playlist_directory"
+#########################
+### Playlist Profiles ###
+#########################
+# Source the config file of playlist profiles.
+# More info can be found in "playlists.sh".
+source "$HOME/.config/mpv/playlists.sh"
+
 
 #################
 ### Functions ###
 #################
 #
 # How to use the script
-usage() {
+function usage() {
 	echo "$(basename $0) (options) [-n] <name> [-d] <directory>"
 }
 
 # Help Section
-help_section() {
+function help_section() {
 	echo "A script to create video playlists."
 	echo
 	echo "Syntax: $(basename $0) (options) [-n] <playlist name> [-d] <video directory>"
 	echo "options:"
 	echo "h                   : Print this help screen."
-	echo "s                   : Enable shuffle mode."
+	echo "s <playlist name>   : Shuffle a playlist."
+	echo "u <playlist name>   : Unshuffle/sort a playlist."
 	echo "l                   : List playlists."
 	echo "e                   : Open playlist directory in ranger."
 	echo "r <playlist name>   : Remove playlist."
 	echo "a                   : Append to playlist."
+	echo "g <playlist name>   : Auto-generate playlist from profile."
 	echo
 	echo "arguments:"
 	echo "n   : Name of the playlist to create (m3u)."
@@ -74,67 +83,85 @@ help_section() {
 }
 
 # Get arguments and set flags
-get_arguments() {
-	while getopts ":d:n:shlear:" option; do
+function get_arguments() {
+	while getopts ":d:n:s:u:hlg:ear:" option; do
 		case $option in
+			# Append to playlist.
+			a) append_mode=1; echo "Append mode: ON";;
+
+			# Playlist mode.
+			d) video_directory="${OPTARG}";;
+
+			# Open playlist directory in ranger.
+			e) open_in_ranger; exit;;
+
+			# Auto-generate playlist.
+			g) auto_generate_playlist "${OPTARG}"; exit;;
+
+			# Help menu.
+			h) help_section; exit;;
+
+			# List playlists.
+			l) list_playlists; exit;;
+
+			# Name of playlist to create.
+			n) playlist_name="${OPTARG}";;
+
+			# Remove playlist.
+			r) remove_playlist "${OPTARG}"; exit;;
+
+			# Shuffle playlist.
+			s) shuffle_playlist "$playlist_directory/${OPTARG}.m3u"; exit;;
+
+			# Unshuffle/sort playlist.
+			u) unshuffle_playlist "$playlist_directory/${OPTARG}.m3u"; exit;;
+
 			# What to do if there is an invalid argument.
-			\?) echo "Error: Invalid option"; exit 1 ;;
+			\?) echo "Error: Invalid option"; exit 1;;
 
-			# Append to playlist
-			a) append_mode=1; echo "Append mode: ON" ;;
+			# Missing an argument to a flag.
+			:) echo "Missing argument"; help_section; exit 1;;
 
-			# Playlist mode
-			d) video_directory="${OPTARG}" ;;
-
-			# Name of playlist to create
-			n) playlist_name="${OPTARG}" ;;
-
-			# Shuffle playlist
-			s) shuffle_mode=1; echo "Shuffle mode: ON" ;;
-
-			# Help
-			h) help_section; exit ;;
-
-			# List playlists
-			l) list_playlists; exit ;;
-
-			# Open playlist directory in ranger
-			e) open_in_ranger; exit ;;
-
-			# Remove playlist
-			r) remove_playlist "${OPTARG}"; exit ;;
-
-			:) echo "Missing argument"; help_section; exit 1 ;;
-
+			# Anything else.
 			*) usage; exit 1
 		esac
 	done
 }
 
-would_you_like_to_continue() {
+function would_you_like_to_continue() {
 	echo "Would you like to continue? (y/n)"
 	exit 1
 }
 
 # Open the playlist directory in ranger.  Makes it easy to view playlists and delete them if necessary.
-open_in_ranger() {
+function open_in_ranger() {
 	ranger "$playlist_directory"
 }
 
 # List out all the playlists from the directory.
-list_playlists() {
+function list_playlists() {
 	# Local variable to store one name at a time.
 	local playlist_name
 
+	header "Playlists"
 	# Loop through array of files and echo out the basename.
 	for file in "${playlist_array[@]}"; do
 		playlist_name=$(basename $file)
 		echo $playlist_name
 	done
+
+	echo
+
+	header "Playlist Profiles (Dynamic Playlists)"
+	for profile in "${playlist_profiles[@]}"; do
+		echo "$profile"
+	done
+
+	footer
 }
 
 # Check if the playlist exists
-check_playlists() {
+function check_playlists() {
 	# Exists flag.
 	local exist=0
 
@@ -156,32 +183,150 @@ check_playlists() {
 }
 
 # Remove playlist
-remove_playlist() {
+function remove_playlist() {
 	local playlist=$1
 
 	rm --force --verbose "$playlist_directory/$playlist.m3u"
 }
 
 # Create m3u playlist file.
-create_m3u() {
+function create_m3u() {
+	# Playlist file to create.
 	local playlist_file="$playlist_directory/$playlist_name.m3u"
+
+	# Output.
 	echo "Creating playlist for: $playlist_name"
 
+	# If append mode is off, create a new playlist file with the header for UMS.
 	if [ $append_mode -eq 0 ]; then
 		echo "$playlist_header" > "$playlist_file"
 	fi
 
-	if [ "$shuffle_mode" -eq 1 ]; then
-		#readlink --canonicalize "$video_directory/**"/*.mkv | shuf >> "$playlist_file"
-		find "$video_directory" -type f $video_extentions | shuf >> "$playlist_file"
-	else
-		#readlink --canonicalize "$video_directory"/**/*.mkv >> "$playlist_file"
-		find "$video_directory" -type f $video_extentions | sort >> "$playlist_file"
+	# Create m3u file using the find command
+	find "$video_directory" -type f $video_extensions | sort >> "$playlist_file"
+
+	# Final output.
+	echo "Playlist created."
+}
+
+# A function used to automatically generate playlists based on profiles found in
+# `$HOME/.config/mpv/playlists.sh`.
+function auto_generate_playlist() {
+	# Local variables.
+	local profile_name
+	local playlist_file
+	local profile_array
+	local profile_array_directories
+	declare -i does_profile_exist
+
+	# Assign values to local variables.
+	profile_name="$1"
+	playlist_file="$playlist_directory/$profile_name.m3u"
+	profile_array="$1[@]"
+	profile_array_directories=("${!profile_array}")
+	does_profile_exist=0
+
+	# Check the array `playlist_profiles` (sourced from .config/mpv/playlists.sh) for
+	# a match to the supplied profile name.
+	for profile in "${playlist_profiles[@]}"; do
+		if [ "$profile_name" == "$profile" ]; then
+			does_profile_exist=1
+			break
+		fi
+	done
+
+	# If no match is found, report this and exit with error.
+	if [ "$does_profile_exist" -eq 0 ]; then
+		echo "Playlist profile not found: $playlist_name"
+		exit 1
 	fi
 
-	echo "Playlist created."
-	cat "$playlist_file"
+	# If the playlist file already exists, delete it and tell us.
+	if [ -f "$playlist_file" ]; then
+		echo "Playlist file found: $playlist_file"
+		rm --verbose "$playlist_file"
+	fi
 
+	# Loop through the profile array directories, and set it to the a variable.
+	for directory in "${profile_array_directories[@]}"; do
+		local sub_video_directory
+		sub_video_directory=$(find "$base_video_directory" -type d -iname "$directory")
+
+		find "$sub_video_directory" -type f $video_extensions >> "$playlist_file"
+	done
+
+	# Sort the playlist file alphabetically.
+	unshuffle_playlist "$playlist_file"
+
+	# Print out the playlist.
+	print_playlist "$playlist_file"
+}
+
+# Used to print out a given playlist.  Expects just a name and not a full path.
+function print_playlist() {
+	local playlist_file
+	local playlist_name
+
+	playlist_file="$1"
+	playlist_name="$(basename --suffix .m3u $playlist_file)"
+
+	echo "Printing playlist"
+	echo
+
+	header "$playlist_name"
+	cat "$playlist_file"
+	footer
+}
+
+# Shuffle a playlist using shuf.  Replaces playlist file directly.
+function shuffle_playlist() {
+	local playlist_file
+	local playlist_name
+
+	playlist_file="$1"
+	playlist_name="$(basename --suffix .m3u $playlist_file)"
+
+	echo "Shuffling: $playlist_name"
+	shuf "$playlist_file" --output "$playlist_file"
+
+	print_playlist "$playlist_file"
+}
+
+# Unshuffle/sort a playlist using sort.  Replaces playlist file directly.
+function unshuffle_playlist() {
+	local playlist_file
+	local playlist_name
+
+	playlist_file="$1"
+	playlist_name="$(basename --suffix .m3u $playlist_file)"
+
+	echo "Sorting: $(basename $playlist_file)"
+	sort "$playlist_file" --output "$playlist_file"
+
+	print_playlist "$playlist_file"
+
+}
+
+### header
+#
+# A nice header for information.  Pass in some text to display it.
+#
+function header() {
+	local text="$1"
+
+	echo "================================================"
+	echo "$text"
+	echo "------------------------------------------------"
+}
+
+### footer
+#
+# A footer to use after certain code execution to provide a nice "block" of info.
+# Use below a header obviously.
+#
+function footer() {
+	echo "================================================"
+	echo
 }
 
 ############
@@ -202,7 +347,7 @@ main() {
 	if [ $does_playlist_exist -eq 1 ]; then
 		echo "Playlist already exists."
 		#to_continue=$(would_you_like_to_continue)
-		#[[ $to_continue -eq 0 ]] && exit 1
+		[[ $to_continue -eq 0 ]] && exit 1
 	fi
 
 	create_m3u
