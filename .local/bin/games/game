@@ -20,6 +20,7 @@ set -euo pipefail
 # - Add ability to delete and restore archives.
 # - Move config section to separate file.
 # - Add ability to restore special save circumstance.
+# - Break up some code into smaller functions (ex. yes_or_no function)
 #
 ###########################################################
 
@@ -102,6 +103,22 @@ function header() {
 #
 function footer() {
 	echo "================================================"
+}
+
+# A simple function to return results based on a yes or no statement.
+# Notice the logic is reversed when returning integers as opposed to
+# echoing them.  Return 0 is success, return 1 is failure.
+function yes_or_no() {
+	local choice
+	local prompt="$1"
+
+	while true; do
+		read -p "$prompt (y/n): " choice
+		case $choice in
+			[Yy]*) return 0;;
+			[Nn]*) return 1;;
+		esac
+	done
 }
 
 ### list_games
@@ -206,7 +223,7 @@ function backup_saves() {
 	local backup_save
 
 	# If dry-run mode is set, add it to the arguments for rsync.
-	if [ $dry_run_mode -eq 1 ]; then
+	if [ "$dry_run_mode" -eq 1 ]; then
 		rsync_arguments+=("--dry-run")
 	fi
 
@@ -596,6 +613,27 @@ function upload_saves() {
 
 }
 
+# Function used to revert a save file.  Essentially deleting then restoring.
+function revert_save() {
+	# Initialize local variable.
+	local title
+
+	# Variable is set to passed argument.
+	title="$@"
+
+	# Give some output.
+	echo "Reverting save for $title..."
+
+	# Delete the save file(s).
+	delete_save "$title"
+
+	# Restore the save file(s).
+	restore_save "$title"
+
+	# Give some output.
+	echo "Save reverted!"
+}
+
 ### parse_conf
 # Function to parse the configuration files for the script.  The config file information will be
 # stored in two arrays with global access.
@@ -669,30 +707,58 @@ function main() {
 
 	# Main case logic.
 	case "$command" in
-		"") help_section; exit;;
+		"") help_section;;
 
-		backup) backup_saves; exit;;
+		# Backup game save files.
+		backup) backup_saves;;
 
-		archive) archive_saves; exit;;
+		# Create/update archives of game directories.
+		archive) archive_saves;;
 
-		upload) upload_saves; exit;;
+		# Upload save files to GDrive.
+		upload) upload_saves;;
 
-		list) list_games; exit;;
+		# List out the games in the config file.
+		list) list_games;;
 
-		restore)
-			##[[ "$2" == "-a" ]] && restore_archive "$@" && exit
-			restore_save "$@"
-			exit;;
-		delete)
-			delete_save "$@"
-			exit;;
-		revert)
-			delete_save "$@"
-			restore_save "$@"
-			exit;;
+		# Restore a save file that is missing.
+		##restore) [[ "$2" == "-a" ]] && restore_archive "$@" && exit;;
+		restore) restore_save "$@";;
+
+		# Delete a save file.
+		delete)	delete_save "$@";;
+
+		# Delete then restore a save file.
+		revert)	revert_save "$@";;
 
 		*) echo "Invalid command"; exit 1;;
 	esac
+
+	# If dry-run mode was used, ask the user if they would like to run the script again for real.
+	# Also reset some flags to disable dry-run mode.
+	if [ "$dry_run_mode" -eq 1 ]; then
+		# Give some output.
+		echo "Dry-Run complete."
+
+		# Prompt the user if they would like to run the script for real.
+		# If not, give some output and exit with error.
+		# If yes, continue with the script.
+		yes_or_no "Would you like to run the script for real?" || (echo "Cancelling..."; exit 1)
+
+		# Give some output.
+		echo "Running for real..."
+		echo
+
+		# Reset dry-run flag.
+		dry_run_mode=0
+
+		# Remove dry-run flag from the rsync arguments array.
+		rsync_arguments=("${rsync_arguments[@]/--dry-run}")
+
+		# Call main again with the original command.
+		main "$command"
+
+	fi
 }
 
 
