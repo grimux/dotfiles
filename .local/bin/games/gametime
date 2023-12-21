@@ -49,6 +49,8 @@ function launch_lutris() {
 	# Launch lutris
 	lutris &> /dev/null &
 
+	sleep 2
+
 	# Uses wmctrl to minimize lutris.
 	# This loop will try running the command until it succeeds.
 	until wmctrl -r lutris -b add,hidden; do
