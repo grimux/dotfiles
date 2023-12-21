@@ -78,6 +78,7 @@ function show_my_desktop()
   end
 end
 
+
 -- }}}
 
 -- {{{ Autostart windowless processes
@@ -472,8 +473,6 @@ globalkeys = mytable.join(
               { description = "qtpass", group = "programs"}),
     awful.key({ modkey,           }, "c",     function () awful.spawn("qalculate-gtk") end,
               { description = "qalculate-gtk", group = "programs"}),
-    awful.key({ modkey,           }, "t",     function () awful.spawn("transmission-remote-gtk") end,
-              { description = "transmission remote gtk", group = "programs"}),
     awful.key({ modkey, "Shift"   }, "d",     function () awful.spawn("jdownloader") end,
               { description = "jDownloader2", group = "programs"}),
     awful.key({ modkey            }, "v",     function () awful.spawn("pavucontrol --tab=1") end,
@@ -784,6 +783,11 @@ awful.rules.rules = {
       }, properties = { titlebars_enabled = false }
     },
 
+    -- Add a thick border and different color for always on top windows.
+    { rule_any = { properties = { "ontop" }
+      }, properties = { border_color = "red" }
+    },
+
     --
     -- Tag Rules
     --
@@ -823,7 +827,7 @@ awful.rules.rules = {
 -- {{{ Signals
 
 -- Signal function to execute when a new client appears.
-client.connect_signal("manage", function (c)
+client.connect_signal("manage", function (c, startup)
     -- Set the windows at the slave,
     -- i.e. put it at the end of others instead of setting it master.
     -- if not awesome.startup then awful.client.setslave(c) end
@@ -834,6 +838,12 @@ client.connect_signal("manage", function (c)
         -- Prevent clients from being unreachable after screen count changes.
         awful.placement.no_offscreen(c)
     end
+
+
+     -- Move newly created windows to the primary display.
+     -- My monitor in this case (set with xrandr)
+     awful.client.movetoscreen(c, screen.primary)
+     --c:move_to_screen(screen.primary)
 end)
 
 -- Add a titlebar if titlebars_enabled is set to true in the rules.
@@ -883,13 +893,39 @@ client.connect_signal("request::titlebars", function(c)
     }
 end)
 
+
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
     c:emit_signal("request::activate", "mouse_enter", {raise = vi_focus})
 end)
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+-- Signals for focusing/unfocusing windows.
+client.connect_signal("focus", function(c)
+    if c.ontop then
+        c.border_color = "#ff00ff"
+    else
+        c.border_color = beautiful.border_focus
+    end
+end)
+
+client.connect_signal("unfocus", function(c)
+    if c.ontop then
+        c.border_color = "#ff00ff"
+    else
+        c.border_color = beautiful.border_normal
+    end
+end)
+
+-- Signals for always on top windows.
+client.connect_signal("property::ontop", function(c)
+    if c.ontop then
+        c.border_color = "#ff00ff"
+        naughty.notify({ title = "Pinned:", text = c.name })
+    else
+        c.border_color = beautiful.border_focus
+        naughty.notify({ title = "Unpinned:", text = c.name })
+    end
+end)
 
 -- }}}
 
