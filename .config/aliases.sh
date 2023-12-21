@@ -110,3 +110,5 @@ alias steamdir="cd $HOME/.steam/steam"
 alias bin="cd $HOME/.local/bin"
 alias wallpaper="ranger $HOME/Pictures/game-screenshots"
 
+## Information ##
+alias list-fonts="fc-list : family | sort | uniq"
