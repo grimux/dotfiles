@@ -12,6 +12,9 @@
 # - Implement a pulseaudio function to switch sinks on Firefox
 # 	- https://askubuntu.com/questions/71863/how-to-change-pulseaudio-sink-with-pacmd-set-default-sink-during-playback
 # - Refactor some sections into better functions.
+# - Add sleep sections to avoid race wars with xdotool
+# _ Add detection for headset, and switch to it or combined.
+# - Fix bug with the "-t" flag.  It currently skips a bunch of the main function.
 #
 # BUGS
 ###################################################################################################
@@ -63,11 +66,13 @@ is_tv_mode_on=0
 # Call to xrandr to setup TV as a secondary display.
 function xrandr_tv_mode() {
 	xrandr --output $tv_name --left-of $monitor_name
+	xrandr --output $monitor_name --primary
 }
 
 # Call to xrandr to setup TV as a mirror of my main display.
 function xrandr_mirror_mode() {
 	xrandr --output $tv_name --same-as $monitor_name
+	xrandr --output $monitor_name --primary
 }
 
 # Function to enable TV mode.
@@ -92,7 +97,7 @@ function enable_tv_mode() {
 	xrandr_tv_mode
 
 	# Call to open a new firefox window
-	open_browser
+	#open_browser
 
 	# Make temporary file to flag that the mode is active.
 	touch "$tv_mode_file"
@@ -140,14 +145,14 @@ function disable_tv_mode() {
 	fi
 
 	# Get the id of the browser with YouTube in it
-	browser_window_id=$(get_process_id "$custom_class_name")
+	#browser_window_id=$(get_process_id "$custom_class_name")
 
 	# Call to close the firefow window with YouTube
 	#close_browser "$browser_window_id"
 
 	# Use xdotool to close the browser window.
 	# Use instead of close_browser function.
-	xdotool windowquit "$browser_window_id"
+	#xdotool windowquit "$browser_window_id"
 	#xdotool search --class "$custom_class_name" windowquit
 
 	# Use xrandr to set TV as a mirrored monitor.
@@ -271,13 +276,20 @@ function mpv_tv_mode() {
 	# The status of mpv_tv_mode, passed as an argument.
 	# Options: on, off
 	local status="$1"
+	local is_headset_connected=0
+	local mpv_id
+	local headset_id
+
+	# Sink ID for my Bose bluetooth headset.
+	headset_id="bluez_sink.60_AB_D2_42_83_3F.a2dp_sink"
 
 	# Get mpv's window ID
 	mpv_id=$(get_process_id "mpv")
 
+	#is_headset_connected=$(pacmd list-sinks | grep "$headset_id")
+
 	# Activate the window and send to other monitor.
 	xdotool windowactivate --sync "$mpv_id" key super+o super+shift+8 super+8
-
 
 	# Send mpv to tag 8, then switch to tag 8.
 	#xdotool windowactivate --sync "$mpv_id" key super+shift+8 super+8
@@ -290,9 +302,11 @@ function mpv_tv_mode() {
 		"off") xdotool windowstate --remove FULLSCREEN "$mpv_id";;
 	esac
 
-	# Change the sink of mpv to the TV.
-	change_mpv_sink
-
+	# If the headset is not connected, change the sink for mpv.
+	#if [ -z "$is_headset_connected" ]; then
+	#	# Change the sink of mpv to the TV.
+	#	change_mpv_sink
+	#fi
 }
 
 # A function to toggle tv_mode.  Searches for the temp file created when tv_mode is activated.
@@ -509,7 +523,7 @@ function get_arguments() {
 			d) debug_mode=1;;
 			h) help_section; exit;;
 			s) get_status; exit;;
-			t) toggle_tv_mode; exit;;
+			t) main "toggle"; exit;;
 			\?) echo "Error: Invalid option"; exit 1;;
 		esac
 	done
@@ -531,9 +545,9 @@ function main() {
 	get_arguments "$@"
 
 	# If there are more than one argument, remove the first one.
-	if [ "$OPTIND" -gt 1 ]; then
-		shift $((OPTIND - 1))
-	fi
+	#if [ "$OPTIND" -gt 1 ]; then
+	#	shift $((OPTIND - 1))
+	#fi
 
 	# User command is set to the passed command.
 	user_command="$*"
