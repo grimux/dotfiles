@@ -1,48 +1,187 @@
 #!/bin/bash
+#
+# A script to switch the default PulseAudio sink.
+#
+### TODO ###################################################################
+# - Fix bug with moving sink-inputs and the variables not being defined.
+# - Add command options to change to a specific sink.
+# - Add cycle/toggle functionality to a flag/command.
+############################################################################
 
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+
+##################
+### Array Data ###
+##################
+# Declare global arrays for sinks and their descriptions.
+declare -a sinks
+declare -a sink_descriptions
+declare -a sink_names
+
+# Create an array of the actual sink IDs.
+mapfile -t sinks < <(pacmd list-sinks | grep 'index:[[:space:]][[:digit:]]' | sed -n -e 's/.*index:[[:space:]]\([[:digit:]]\)/\1/p')
+
+# Create an array of the sink descriptions.
+mapfile -t sink_descriptions < <(pacmd list-sinks | sed -n -e 's/.*device.description[[:space:]]=[[:space:]]"\(.*\)"/\1/p')
+
+# Create an array of the sink names.
+mapfile -t sink_names < <(pacmd list-sinks | sed -n -e 's/[[:space:]]name:[[:space:]]<\(.*\)>/\1/p')
+
+
+
+########################
+### Global Variables ###
+########################
 # Grab a count of how many audio sinks we have
 sink_count=$(pacmd list-sinks | grep -c "index:[[:space:]][[:digit:]]")
-# Create an array of the actual sink IDs
-sinks=()
-mapfile -t sinks < <(pacmd list-sinks | grep 'index:[[:space:]][[:digit:]]' | sed -n -e 's/.*index:[[:space:]]\([[:digit:]]\)/\1/p')
 # Get the ID of the active sink
 active_sink=$(pacmd list-sinks | sed -n -e 's/[[:space:]]*\*[[:space:]]index:[[:space:]]\([[:digit:]]\)/\1/p')
 # Get the ID of the last sink in the array
 final_sink=${sinks[$((sink_count - 1 ))]}
+# Index of the currenly active sink.  Will be set later in the script.
+declare -i current_sink_index
 
-# Find the index of the active sink
-for index in "${!sinks[@]}"; do
-  if [[ "${sinks[$index]}" == "$active_sink" ]]; then
-    active_sink_index=$index
-  fi
-done
 
-# Default to the first sink in the list
-next_sink=${sinks[0]}
-next_sink_index=0
+######################
+### Pulse Sink IDs ###
+######################
+pc_id="alsa_output.pci-0000_0b_00.3.analog-stereo"
+tv_id="alsa_output.pci-0000_09_00.1.hdmi-stereo-extra1"
+headset_id="bluez_sink.60_AB_D2_42_83_3F.a2dp_sink"
 
-# If we're not at the end of the list, move up the list
-if [[ $active_sink -ne $final_sink ]] ; then
-  next_sink_index=$(( active_sink_index + 1))
-  next_sink=${sinks[$next_sink_index]}
-fi
 
-#change the default sink
-pacmd "set-default-sink ${next_sink}"
+#################
+### Functions ###
+#################
+# Get the active sink's index number from pacmd.
+function get_active_sink_index() {
+	# Find the index of the active sink.
+	# Searches through the "sinks" array by index (!).
+	for index in "${!sinks[@]}"; do
+		if [[ "${sinks[$index]}" == "$active_sink" ]]; then
+			active_sink_index=$index
+			break
+		fi
+	done
+}
 
+# Set the default sink using pacmd.  All programs should automatically switch over.
+function set_default_sink() {
+	# Default to the first sink in the list
+	#next_sink=${sinks[0]}
+	#next_sink_index=0
+
+	# If we're not at the end of the list, move up the list
+	if [[ "$active_sink" -ne "$final_sink" ]] ; then
+		next_sink_index=$(( active_sink_index + 1))
+		next_sink=${sinks[$next_sink_index]}
+	fi
+
+	#change the default sink
+	pacmd "set-default-sink ${next_sink}"
+}
+
+### TODO
+# - Fix undefined variable bug.
+###
 #move all inputs to the new sink
-for app in $(pacmd list-sink-inputs | sed -n -e 's/index:[[:space:]]\([[:digit:]]\)/\1/p');
-do
-  pacmd "move-sink-input $app $next_sink"
-done
+function move_programs_to_sink() {
+	if [ ${sinks[$next_sink]} -eq 2 ]; then
+		echo "Combined sink active, not moving inputs."
+	else
+		for app in $(pacmd list-sink-inputs | sed -n -e 's/[[:space:]]index:[[:space:]]\([[:digit:]]\)/\1/p'); do
+			pacmd "move-sink-input $app $next_sink"
+		done
+	fi
+}
 
-# Create a list of the sink descriptions
-sink_descriptions=()
-mapfile -t sink_descriptions < <(pacmd list-sinks | sed -n -e 's/.*device.description[[:space:]]=[[:space:]]"\(.*\)"/\1/p')
-# Find the index that matches our new active sink
-for sink_index in "${!sink_descriptions[@]}"; do
-  if [[ "$sink_index" == "$next_sink_index" ]] ; then
-    notify-send -i audio-volume-high "Sound output switched to:" "${sink_descriptions[$sink_index]}"
-    exit
-  fi
-done
+# Display a message in terminal and a notification.  It will show the sink switched to.
+function display_message() {
+	# Find the index that matches our new active sink
+	for sink_index in "${!sink_descriptions[@]}"; do
+		if [[ "$sink_index" == "$next_sink_index" ]] ; then
+			notify-send --icon=audio-card "Sound output switched to:" "${sink_descriptions[$sink_index]}"
+			echo "Sound output switched to: ${sink_descriptions[$sink_index]}"
+			exit
+		fi
+	done
+}
+
+### TODO
+# - This function is not working yet.
+#
+# Choose a sink based on a passed argument.
+function choose_sink() {
+	local chosen_sink="$1"
+	local does_sink_exist=0
+	local chosen_sink_id
+	local index=0
+
+
+	for name in ${sink_descriptions[@]}; do
+		if [ "$chosen_sink" == "$name" ]; then
+			does_sink_exist=1
+			chosen_sink_id=${sink_names[$index]}
+			break
+		fi
+		index+=1
+	done
+
+	if [ "$does_sink_exist" -eq 0 ]; then
+		echo "That sink does not exist."
+		exit 1
+	fi
+
+	# Set the sink using pacmd.
+	pacmd "set-default-sink $chosen_sink_id"
+
+	display_message
+}
+
+# Print out the currently available sinks.
+function list_sink_names() {
+	echo "Available sinks:"
+
+	printf '%s\n' "${sink_descriptions[@]}"
+}
+
+
+############
+### Main ###
+############
+function main() {
+	# Declare local variables.  Used to track the next_sink and index of the two arrays.
+	local next_sink
+	local argument="$@"
+	declare -i next_sink_index
+	declare -i active_sink_index
+
+	# Define the local variables.
+	next_sink=${sinks[0]}
+	next_sink_index=0
+
+	# Logic for arguments.
+	case "$argument" in
+		"combined") choose_sink "combined"; exit;;
+		"pc") choose_sink "PC"; exit;;
+		"tv") choose_sink "TV"; exit;;
+	esac
+
+	# Main functions.
+	get_active_sink_index
+	set_default_sink
+	display_message
+}
+
+main "$@"
