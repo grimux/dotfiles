@@ -178,6 +178,9 @@ map <leader>br :BraceyReload<CR>
 " Make current file executable.
 map <leader>x :!chmod +x %<CR><CR>
 
+" Set spaces for tabs
+map <leader>t :call TabsToSpaces()<CR>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -198,9 +201,18 @@ function SpellCheck()
 	setlocal spell! spell?
 endfunction
 
+" Set tabs to spaces
+function TabsToSpaces()
+	setlocal tabstop=4
+	setlocal expandtab
+	setlocal shiftwidth=4
+endfunction
+
 "--- Autofunctions
 " Automatically reload nvim's config file when it is saved.
 autocmd! bufwritepost init.vim source $HOME/.config/nvim/init.vim
+" When my gift list is updateded, run the shell update script.
+autocmd! bufwritepost gift-list.md :silent !update_giftlist
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
