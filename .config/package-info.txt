@@ -4287,7 +4287,7 @@ Groups          : None
 Provides        : None
 Depends On      : boost-libs  gcc-libs  glibc  libebml.so=5-64  libfmt.so=10-64  libmatroska.so=7-64  pugixml  qt6-base  libdvdread  libFLAC.so=12-64  libogg.so=0-64  libvorbis.so=0-64  zlib
 Optional Deps   : None
-Required By     : None
+Required By     : mkvtoolnix-gui
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
@@ -4295,6 +4295,28 @@ Installed Size  : 21.79 MiB
 Packager        : Maxime Gauduin <alucryd@archlinux.org>
 Build Date      : Sat 02 Dec 2023 02:28:55 PM CST
 Install Date    : Thu 21 Dec 2023 01:20:01 AM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
+Name            : mkvtoolnix-gui
+Version         : 81.0-1
+Description     : Set of tools to create, edit and inspect Matroska files
+Architecture    : x86_64
+URL             : https://mkvtoolnix.download/
+Licenses        : GPL2
+Groups          : None
+Provides        : None
+Depends On      : cmark  hicolor-icon-theme  mkvtoolnix-cli  qt6-multimedia  qt6-svg
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 13.33 MiB
+Packager        : Maxime Gauduin <alucryd@archlinux.org>
+Build Date      : Sat 02 Dec 2023 02:28:55 PM CST
+Install Date    : Thu 21 Dec 2023 03:25:12 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature

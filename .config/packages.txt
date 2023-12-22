@@ -183,6 +183,7 @@ materia-gtk-theme
 mediainfo
 mergerfs
 mkvtoolnix-cli
+mkvtoolnix-gui
 most
 mpc
 mpd
