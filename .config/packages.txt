@@ -122,6 +122,7 @@ gvfs-smb
 gzdoom
 haveged
 hdparm
+hollywood
 hplip
 htim
 icoutils
@@ -458,6 +459,7 @@ xorg-xwd
 xorg-xwininfo
 xorg-xwud
 xscreensaver
+xtrlock
 yad
 yay
 yt-dlp

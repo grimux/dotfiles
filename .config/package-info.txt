@@ -601,7 +601,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : bluez
-Version         : 5.71-2
+Version         : 5.71-3
 Description     : Daemons for the bluetooth protocol stack
 Architecture    : x86_64
 URL             : http://www.bluez.org/
@@ -615,15 +615,15 @@ Optional For    : networkmanager
 Conflicts With  : obexd-client  obexd-server
 Replaces        : None
 Installed Size  : 2.65 MiB
-Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Sun 17 Dec 2023 10:54:52 AM CST
-Install Date    : Wed 20 Dec 2023 10:17:37 AM CST
+Packager        : Robin Candau <antiz@archlinux.org>
+Build Date      : Wed 20 Dec 2023 01:52:12 PM CST
+Install Date    : Fri 22 Dec 2023 01:09:37 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : bluez-libs
-Version         : 5.71-2
+Version         : 5.71-3
 Description     : Deprecated libraries for the bluetooth protocol stack
 Architecture    : x86_64
 URL             : http://www.bluez.org/
@@ -637,15 +637,15 @@ Optional For    : None
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 327.24 KiB
-Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Sun 17 Dec 2023 10:54:52 AM CST
-Install Date    : Wed 20 Dec 2023 10:17:37 AM CST
+Packager        : Robin Candau <antiz@archlinux.org>
+Build Date      : Wed 20 Dec 2023 01:52:12 PM CST
+Install Date    : Fri 22 Dec 2023 01:09:37 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : bluez-utils
-Version         : 5.71-2
+Version         : 5.71-3
 Description     : Development and debugging utilities for the bluetooth protocol stack
 Architecture    : x86_64
 URL             : http://www.bluez.org/
@@ -660,9 +660,9 @@ Optional For    : None
 Conflicts With  : bluez-hcidump
 Replaces        : bluez-hcidump  bluez<=4.101
 Installed Size  : 4.03 MiB
-Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Sun 17 Dec 2023 10:54:52 AM CST
-Install Date    : Wed 20 Dec 2023 10:17:38 AM CST
+Packager        : Robin Candau <antiz@archlinux.org>
+Build Date      : Wed 20 Dec 2023 01:52:12 PM CST
+Install Date    : Fri 22 Dec 2023 01:09:37 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -949,7 +949,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : conky
-Version         : 1.18.1-2
+Version         : 1.18.3-1
 Description     : Light-weight system monitor for X, Wayland, and other things, too
 Architecture    : x86_64
 URL             : https://github.com/brndnmtthws/conky
@@ -962,10 +962,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 4.77 MiB
-Packager        : David Runge <dvzrv@archlinux.org>
-Build Date      : Sun 03 Sep 2023 02:15:00 PM CDT
-Install Date    : Sat 16 Sep 2023 03:36:51 PM CDT
+Installed Size  : 4.79 MiB
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Thu 21 Dec 2023 06:59:27 AM CST
+Install Date    : Fri 22 Dec 2023 01:09:37 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -1112,7 +1112,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : dhcpcd
-Version         : 10.0.5-1
+Version         : 10.0.6-1
 Description     : DHCP/ IPv4LL/ IPv6RA/ DHCPv6 client
 Architecture    : x86_64
 URL             : https://roy.marples.name/projects/dhcpcd/
@@ -1125,10 +1125,10 @@ Required By     : None
 Optional For    : networkmanager
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 458.81 KiB
+Installed Size  : 458.87 KiB
 Packager        : David Runge <dvzrv@archlinux.org>
-Build Date      : Sat 11 Nov 2023 08:38:03 AM CST
-Install Date    : Sun 12 Nov 2023 07:41:40 AM CST
+Build Date      : Fri 22 Dec 2023 10:44:22 AM CST
+Install Date    : Fri 22 Dec 2023 01:09:37 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -1724,7 +1724,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : firefox
-Version         : 120.0.1-1
+Version         : 121.0-1
 Description     : Standalone web browser from mozilla.org
 Architecture    : x86_64
 URL             : https://www.mozilla.org/firefox/
@@ -1742,10 +1742,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 223.62 MiB
+Installed Size  : 225.27 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Thu 30 Nov 2023 04:19:12 AM CST
-Install Date    : Fri 01 Dec 2023 08:32:46 AM CST
+Build Date      : Tue 19 Dec 2023 06:24:12 PM CST
+Install Date    : Fri 22 Dec 2023 01:09:38 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -1965,7 +1965,7 @@ Groups          : None
 Provides        : None
 Depends On      : bash
 Optional Deps   : fish: fish keybindings
-                  tmux: fzf-tmux script for launching fzf in a tmux pane
+                  tmux: fzf-tmux script for launching fzf in a tmux pane [installed]
                   vim: plugin [installed]
                   zsh: zsh keybindings [installed]
 Required By     : downgrade
@@ -2025,7 +2025,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : gamemode
-Version         : 1.7-1
+Version         : 1.8.1-1
 Description     : A daemon/lib combo that allows games to request a set of optimisations be temporarily applied to the host OS
 Architecture    : x86_64
 URL             : https://github.com/FeralInteractive/gamemode
@@ -2038,16 +2038,16 @@ Required By     : None
 Optional For    : lutris  steamtinkerlaunch
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 244.93 KiB
+Installed Size  : 279.21 KiB
 Packager        : Maxime Gauduin <alucryd@archlinux.org>
-Build Date      : Tue 09 Aug 2022 12:45:12 PM CDT
-Install Date    : Tue 27 Sep 2022 12:54:00 PM CDT
+Build Date      : Wed 20 Dec 2023 12:41:17 PM CST
+Install Date    : Fri 22 Dec 2023 01:09:38 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : gamescope
-Version         : 3.13.17-1
+Version         : 3.13.19-1
 Description     : SteamOS session compositing window manager
 Architecture    : x86_64
 URL             : https://github.com/ValveSoftware/gamescope
@@ -2060,10 +2060,10 @@ Required By     : None
 Optional For    : mangohud  steamtinkerlaunch
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 3.04 MiB
+Installed Size  : 2.07 MiB
 Packager        : Maxime Gauduin <alucryd@archlinux.org>
-Build Date      : Wed 06 Dec 2023 01:32:48 AM CST
-Install Date    : Thu 07 Dec 2023 03:38:14 PM CST
+Build Date      : Wed 20 Dec 2023 12:43:42 PM CST
+Install Date    : Fri 22 Dec 2023 01:09:38 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -2463,7 +2463,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : grub
-Version         : 2:2.12rc1-7
+Version         : 2:2.12-1
 Description     : GNU GRand Unified Bootloader (2)
 Architecture    : x86_64
 URL             : https://www.gnu.org/software/grub/
@@ -2483,10 +2483,10 @@ Required By     : grub-customizer  update-grub
 Optional For    : None
 Conflicts With  : grub-common  grub-bios  grub-emu  grub-efi-x86_64  grub-legacy
 Replaces        : grub-common  grub-bios  grub-emu  grub-efi-x86_64
-Installed Size  : 33.51 MiB
-Packager        : Tobias Powalowski <tpowa@archlinux.org>
-Build Date      : Tue 12 Dec 2023 11:47:38 AM CST
-Install Date    : Wed 13 Dec 2023 01:22:38 PM CST
+Installed Size  : 33.57 MiB
+Packager        : Christian Hesse <eworm@archlinux.org>
+Build Date      : Wed 20 Dec 2023 02:54:54 PM CST
+Install Date    : Fri 22 Dec 2023 01:09:38 PM CST
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
@@ -2891,6 +2891,28 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
+Name            : hollywood
+Version         : 1.21-7
+Description     : Fill your console with Hollywood melodrama technobabble.
+Architecture    : any
+URL             : https://github.com/dustinkirkland/hollywood
+Licenses        : Apache  Custom:CC0-1.0
+Groups          : None
+Provides        : None
+Depends On      : apg  bmon  byobu  ccze  cmatrix  coreutils  gawk  htop  jp2a  mlocate  man  moreutils  openssh  tree  speedometer  util-linux
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 2.30 MiB
+Packager        : Unknown Packager
+Build Date      : Wed 27 Dec 2023 03:22:23 PM CST
+Install Date    : Wed 27 Dec 2023 03:22:27 PM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : None
+
 Name            : hplip
 Version         : 1:3.23.12-1
 Description     : Drivers for HP DeskJet, OfficeJet, Photosmart, Business Inkjet and some LaserJet
@@ -2931,7 +2953,7 @@ Groups          : None
 Provides        : htop
 Depends On      : ncurses  libnl
 Optional Deps   : None
-Required By     : None
+Required By     : hollywood
 Optional For    : None
 Conflicts With  : htop
 Replaces        : None
@@ -3571,7 +3593,7 @@ Provides        : None
 Depends On      : gpm  popt  slang
 Optional Deps   : python: libnewt support with the _snack module [installed]
                   tcl: whiptcl support [installed]
-Required By     : networkmanager
+Required By     : byobu  networkmanager
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
@@ -3749,7 +3771,7 @@ Replaces        : virtualbox-guest-modules-arch  wireguard-arch
 Installed Size  : 128.76 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 Build Date      : Wed 13 Dec 2023 09:45:42 PM CST
-Install Date    : Wed 20 Dec 2023 10:17:49 AM CST
+Install Date    : Fri 22 Dec 2023 01:09:40 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -3793,7 +3815,7 @@ Replaces        : None
 Installed Size  : 124.19 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 Build Date      : Wed 13 Dec 2023 09:45:42 PM CST
-Install Date    : Wed 20 Dec 2023 10:17:51 AM CST
+Install Date    : Fri 22 Dec 2023 01:09:42 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -4366,7 +4388,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : mpd
-Version         : 0.23.14-3
+Version         : 0.23.15-1
 Description     : Flexible, powerful, server-side application for playing music
 Architecture    : x86_64
 URL             : https://www.musicpd.org/
@@ -4381,8 +4403,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 2.36 MiB
 Packager        : David Runge <dvzrv@archlinux.org>
-Build Date      : Thu 14 Dec 2023 09:03:01 AM CST
-Install Date    : Wed 20 Dec 2023 10:17:51 AM CST
+Build Date      : Thu 21 Dec 2023 03:37:57 AM CST
+Install Date    : Fri 22 Dec 2023 01:09:42 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -4556,7 +4578,7 @@ Optional Deps   : catimg: Display Images
                   chafa: Image to text support
                   feh: Wallpaper Display [installed]
                   imagemagick: Image cropping / Thumbnail creation / Take a screenshot [installed]
-                  jp2a: Display Images
+                  jp2a: Display Images [installed]
                   libcaca: Display Images [installed]
                   nitrogen: Wallpaper Display [installed]
                   w3m: Display Images
@@ -4970,7 +4992,7 @@ Optional Deps   : libfido2: FIDO/U2F support
                   sh: for ssh-copy-id and findssl.sh [installed]
                   x11-ssh-askpass: input passphrase in X
                   xorg-xauth: X11 forwarding [installed]
-Required By     : backintime-cli  gcr  gcr-4  openmpi
+Required By     : backintime-cli  gcr  gcr-4  hollywood  openmpi
 Optional For    : git
 Conflicts With  : None
 Replaces        : None
@@ -5613,7 +5635,7 @@ Groups          : None
 Provides        : mlocate  locate
 Depends On      : zstd  liburing  systemd
 Optional Deps   : None
-Required By     : None
+Required By     : hollywood
 Optional For    : pacman-contrib
 Conflicts With  : mlocate
 Replaces        : None
@@ -7733,7 +7755,7 @@ Install Script  : Yes
 Validated By    : None
 
 Name            : thunderbird
-Version         : 115.5.2-2
+Version         : 115.6.0-1
 Description     : Standalone mail and news reader from mozilla.org
 Architecture    : x86_64
 URL             : https://www.thunderbird.net/
@@ -7748,10 +7770,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 222.21 MiB
+Installed Size  : 222.33 MiB
 Packager        : Leonidas Spyropoulos <artafinde@archlinux.org>
-Build Date      : Tue 12 Dec 2023 09:54:53 AM CST
-Install Date    : Wed 20 Dec 2023 10:17:54 AM CST
+Build Date      : Tue 19 Dec 2023 01:56:43 PM CST
+Install Date    : Fri 22 Dec 2023 01:09:43 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -8412,86 +8434,90 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : vlc
-Version         : 3.0.20-2
+Version         : 3.0.20-4
 Description     : Multi-platform MPEG, VCD/DVD, and DivX player
 Architecture    : x86_64
 URL             : https://www.videolan.org/vlc/
-Licenses        : LGPL2.1  GPL2
+Licenses        : GPL-2.0-or-later  LGPL-2.1-or-later
 Groups          : None
 Provides        : None
-Depends On      : a52dec  libdvbpsi  libxpm  libdca  libproxy  lua  libidn  libmatroska  taglib  libmpcdec  ffmpeg4.4  faad2  libmad  libmpeg2  xcb-util-keysyms  libtar  libxinerama  libsecret  libupnp  libixml.so=11-64  libupnp.so=17-64  libarchive  qt5-base  qt5-x11extras  qt5-svg  freetype2  fribidi  harfbuzz  fontconfig  libxml2  gnutls  libplacebo  aribb24
-Optional Deps   : avahi: service discovery using bonjour protocol [installed]
+Depends On      : a52dec  abseil-cpp  aribb24  bash  cairo  dbus  faad2  ffmpeg4.4  fontconfig  freetype2  fribidi  gcc-libs  gdk-pixbuf2  glib2  glibc  gnutls  harfbuzz  hicolor-icon-theme  libarchive  libdca  libdvbpsi  libglvnd  libidn  libmad  libmatroska  libmpcdec  libmpeg2  libproxy  libsecret  libtar  libupnp  libixml.so=11-64  libupnp.so=17-64  libva  libx11  libxcb  libxinerama  libxml2  libxpm  lua  qt5-base  qt5-svg  qt5-x11extras  taglib  wayland  xcb-util-keysyms  zlib
+Optional Deps   : aalib: ASCII art video output [installed]
+                  alsa-lib: ALSA audio output [installed]
                   aom: AOM AV1 codec [installed]
-                  gst-plugins-base-libs: for libgst plugins [installed]
+                  aribb25: aribcam support
+                  avahi: service discovery using bonjour protocol [installed]
                   dav1d: dav1d AV1 decoder [installed]
-                  libdvdcss: decoding encrypted DVDs
-                  libavc1394: devices using the 1394ta AV/C [installed]
-                  libdc1394: IEEE 1394 access plugin [installed]
-                  kwallet: kwallet keystore
-                  libva-vdpau-driver: vdpau backend nvidia
-                  libva-intel-driver: video backend intel
-                  libbluray: Blu-Ray video input [installed]
                   flac: Free Lossless Audio Codec plugin [installed]
-                  twolame: TwoLAME mpeg2 encoder plugin [installed]
-                  libgme: Game Music Emu plugin [installed]
-                  vcdimager: navigate VCD with libvcdinfo
-                  libmtp: MTP devices discovery [installed]
-                  systemd-libs: udev services discovery [installed]
-                  smbclient: SMB access plugin [installed]
-                  libcdio: audio CD playback [installed]
                   gnu-free-fonts: subtitle font  [installed]
-                  ttf-dejavu: subtitle font [installed]
-                  libssh2: sftp access [installed]
-                  libnfs: NFS access [installed]
-                  mpg123: mpg123 codec [installed]
-                  protobuf: chromecast streaming [installed]
-                  libmicrodns: mDNS services discovery (chromecast etc) [installed]
-                  lua-socket: http interface
-                  libdvdread: DVD input module [installed]
+                  gst-plugins-base-libs: for libgst plugins [installed]
+                  gstreamer: for libgst plugins [installed]
+                  gtk3: notification plugin [installed]
+                  jack: jack audio server [installed]
+                  kwallet: kwallet keystore
+                  libass: Subtitle support [installed]
+                  libavc1394: devices using the 1394ta AV/C [installed]
+                  libbluray: Blu-Ray video input [installed]
+                  libcaca: colored ASCII art video output [installed]
+                  libcdio: audio CD playback [installed]
+                  libdc1394: IEEE 1394 access plugin [installed]
+                  libdvdcss: decoding encrypted DVDs
                   libdvdnav: DVD with navigation input module [installed]
-                  libogg: Ogg and OggSpots codec [installed]
-                  libshout: shoutcast/icecast output plugin [installed]
-                  libmodplug: MOD output plugin [installed]
-                  libvpx: VP8 and VP9 codec [installed]
-                  libvorbis: Vorbis decoder/encoder [installed]
-                  speex: Speex codec [installed]
-                  opus: opus codec [installed]
-                  libtheora: theora codec [installed]
-                  libpng: PNG support [installed]
+                  libdvdread: DVD input module [installed]
+                  libgme: Game Music Emu plugin [installed]
+                  libgoom2: Goom visualization
                   libjpeg-turbo: JPEG support [installed]
+                  libkate: Kate codec [installed]
+                  libmodplug: MOD output plugin [installed]
+                  libmicrodns: mDNS services discovery (chromecast etc) [installed]
+                  libmtp: MTP devices discovery [installed]
+                  libnfs: NFS access [installed]
+                  libnotify: notification plugin [installed]
+                  libogg: Ogg and OggSpots codec [installed]
+                  libpng: PNG support [installed]
+                  libpulse: PulseAudio audio output [installed]
+                  libraw1394: IEEE 1394 access plugin [installed]
                   librsvg: SVG plugin [installed]
+                  libsamplerate: audio Resampler [installed]
+                  libshout: shoutcast/icecast output plugin [installed]
+                  libsoxr: SoX audio Resampler [installed]
+                  libssh2: sftp access [installed]
+                  libtheora: theora codec [installed]
+                  libtiger: Tiger rendering for Kate streams
+                  libva-intel-driver: video backend intel
+                  libva-vdpau-driver: vdpau backend nvidia
+                  libvorbis: Vorbis decoder/encoder [installed]
+                  libvpx: VP8 and VP9 codec [installed]
+                  lirc: lirc control [installed]
+                  live-media: streaming over RTSP
+                  lua-socket: http interface
+                  mpg123: mpg123 codec [installed]
+                  ncurses: ncurses interface [installed]
+                  opus: opus codec [installed]
+                  pcsclite: aribcam support [installed]
+                  projectm: ProjectM visualisation
+                  protobuf: chromecast streaming [installed]
+                  sdl12-compat: SDL image support [installed]
+                  sdl_image: SDL image support
+                  smbclient: SMB access plugin [installed]
+                  speex: Speex codec [installed]
+                  speexdsp: Speex codec [installed]
+                  srt: SRT input/output plugin [installed]
+                  systemd-libs: udev services discovery [installed]
+                  ttf-dejavu: subtitle font [installed]
+                  twolame: TwoLAME mpeg2 encoder plugin [installed]
+                  vcdimager: navigate VCD with libvcdinfo
                   x264: H264 encoding [installed]
                   x265: HEVC/H.265 encoder [installed]
                   zvbi: VBI/Teletext/webcam/v4l2 capture/decoding [installed]
-                  libass: Subtitle support [installed]
-                  libkate: Kate codec [installed]
-                  libtiger: Tiger rendering for Kate streams
-                  sdl_image: SDL image support
-                  srt: SRT input/output plugin [installed]
-                  aalib: ASCII art video output [installed]
-                  libcaca: colored ASCII art video output [installed]
-                  libpulse: PulseAudio audio output [installed]
-                  alsa-lib: ALSA audio output [installed]
-                  jack: jack audio server [installed]
-                  libsamplerate: audio Resampler [installed]
-                  libsoxr: SoX audio Resampler [installed]
-                  lirc: lirc control [installed]
-                  libgoom2: Goom visualization
-                  projectm: ProjectM visualisation
-                  ncurses: ncurses interface [installed]
-                  libnotify: notification plugin [installed]
-                  gtk3: notification plugin [installed]
-                  aribb25: aribcam support
-                  pcsclite: aribcam support [installed]
-                  live-media: streaming over RTSP
 Required By     : None
 Optional For    : ums
 Conflicts With  : vlc-plugin
 Replaces        : vlc-plugin
-Installed Size  : 59.96 MiB
-Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Sun 05 Nov 2023 08:35:13 AM CST
-Install Date    : Wed 08 Nov 2023 10:25:29 AM CST
+Installed Size  : 59.95 MiB
+Packager        : David Runge <dvzrv@archlinux.org>
+Build Date      : Tue 19 Dec 2023 12:41:39 PM CST
+Install Date    : Fri 22 Dec 2023 01:09:43 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -10619,6 +10645,28 @@ Installed Size  : 39.49 MiB
 Packager        : T.J. Townsend <blakkheim@archlinux.org>
 Build Date      : Fri 13 Oct 2023 10:20:17 AM CDT
 Install Date    : Sun 15 Oct 2023 02:55:44 PM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
+Name            : xtrlock
+Version         : 2.15-1
+Description     : Minimal X display lock program
+Architecture    : x86_64
+URL             : https://packages.debian.org/sid/xtrlock
+Licenses        : GPL3
+Groups          : None
+Provides        : None
+Depends On      : glibc  libx11  libxcrypt  libcrypt.so=2-64  libxi  libxfixes
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 19.53 KiB
+Packager        : Levente Polyak <anthraxx@archlinux.org>
+Build Date      : Mon 15 Feb 2021 05:00:00 PM CST
+Install Date    : Wed 27 Dec 2023 03:16:42 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
