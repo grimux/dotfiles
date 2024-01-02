@@ -653,7 +653,7 @@ Licenses        : GPL2
 Groups          : None
 Provides        : bluez-hcidump
 Depends On      : dbus  systemd  systemd-libs  glib2  glibc  readline
-Optional Deps   : ell: for btpclient
+Optional Deps   : ell: for btpclient [installed]
                   json-c: for mesh-cfgclient [installed]
 Required By     : None
 Optional For    : None
@@ -662,7 +662,7 @@ Replaces        : bluez-hcidump  bluez<=4.101
 Installed Size  : 4.03 MiB
 Packager        : Robin Candau <antiz@archlinux.org>
 Build Date      : Wed 20 Dec 2023 01:52:12 PM CST
-Install Date    : Fri 22 Dec 2023 01:09:37 PM CST
+Install Date    : Mon 01 Jan 2024 03:15:34 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -6061,6 +6061,28 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
+Name            : python-aioconsole
+Version         : 0.6.0-2
+Description     : Asynchronous console and interfaces for asyncio
+Architecture    : any
+URL             : https://github.com/vxgmichel/aioconsole
+Licenses        : GPL
+Groups          : None
+Provides        : None
+Depends On      : python
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 185.36 KiB
+Packager        : Felix Yan <felixonmars@archlinux.org>
+Build Date      : Mon 10 Apr 2023 09:28:58 AM CDT
+Install Date    : Mon 01 Jan 2024 02:45:06 PM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
 Name            : python-charset-normalizer
 Version         : 3.3.2-1
 Description     : Encoding and language detection alternative to chardet
@@ -6101,6 +6123,50 @@ Installed Size  : 487.70 KiB
 Packager        : Felix Yan <felixonmars@archlinux.org>
 Build Date      : Thu 06 Apr 2023 12:34:18 PM CDT
 Install Date    : Thu 04 May 2023 10:04:55 AM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
+Name            : python-crc8
+Version         : 0.2.0-1
+Description     : A module with the CRC8 algorithm for Python
+Architecture    : any
+URL             : https://github.com/niccokunzmann/crc8
+Licenses        : MIT
+Groups          : None
+Provides        : None
+Depends On      : python
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 21.78 KiB
+Packager        : Felix Yan <felixonmars@archlinux.org>
+Build Date      : Mon 23 Oct 2023 01:31:11 PM CDT
+Install Date    : Mon 01 Jan 2024 02:45:06 PM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
+Name            : python-hid
+Version         : 1.0.4-8
+Description     : Python hidapi bindings in ctypes (aka pyhidapi)
+Architecture    : any
+URL             : https://github.com/apmorton/pyhidapi
+Licenses        : MIT
+Groups          : None
+Provides        : None
+Depends On      : hidapi  python
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : python-hidapi
+Replaces        : None
+Installed Size  : 32.16 KiB
+Packager        : Felix Yan <felixonmars@archlinux.org>
+Build Date      : Thu 06 Apr 2023 10:06:32 AM CDT
+Install Date    : Mon 01 Jan 2024 02:45:06 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature

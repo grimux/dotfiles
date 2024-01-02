@@ -259,8 +259,11 @@ pulseaudio-alsa
 pulseaudio-bluetooth
 pulseaudio-equalizer
 pv
+python-aioconsole
 python-charset-normalizer
 python-cogapp
+python-crc8
+python-hid
 python-httplib2
 python-internetarchive
 python-mutagen
