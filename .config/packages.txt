@@ -13,6 +13,7 @@ autoconf
 automake
 awesome
 backintime
+balena-etcher
 barrier
 base
 base-devel

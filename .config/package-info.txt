@@ -355,6 +355,28 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
 
+Name            : balena-etcher
+Version         : 2:1.18.14-1
+Description     : Flash OS images to SD cards & USB drives, safely and easily
+Architecture    : x86_64
+URL             : https://balena.io/etcher
+Licenses        : Apache
+Groups          : None
+Provides        : None
+Depends On      : electron25  gtk3  libxtst  libxss  nss  alsa-lib  glib2  polkit  libusb
+Optional Deps   : libnotify: for notifications [installed]
+Required By     : None
+Optional For    : None
+Conflicts With  : etcher  etcher-git  etcher-bin
+Replaces        : None
+Installed Size  : 4.31 MiB
+Packager        : Unknown Packager
+Build Date      : Tue 16 Jan 2024 01:58:10 PM CST
+Install Date    : Tue 16 Jan 2024 02:02:55 PM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : None
+
 Name            : barrier
 Version         : 2.4.0-2
 Description     : Open-source KVM software based on Synergy (GUI)
@@ -8035,7 +8057,7 @@ Provides        : None
 Depends On      : python-psutil  python-six
 Optional Deps   : None
 Required By     : None
-Optional For    : None
+Optional For    : electron25
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 573.97 KiB
