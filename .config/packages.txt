@@ -38,6 +38,7 @@ calcurse
 calibre
 cantata
 cava
+cemu
 clipmenu
 cmake
 conky
