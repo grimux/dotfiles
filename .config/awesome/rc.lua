@@ -465,8 +465,6 @@ globalkeys = mytable.join(
               { description = "ranger", group = "programs"}),
     awful.key({ modkey,           }, "p",     function () awful.spawn("passmenu -p pass:") end,
               { description = "passmenu", group = "programs"}),
-    awful.key({ modkey, "Shift"   }, "p",     function () awful.spawn("qtpass") end,
-              { description = "qtpass", group = "programs"}),
     awful.key({ modkey,           }, "`",     function () awful.spawn("dm-emoji") end,
               { description = "emoji menu", group = "programs"}),
     awful.key({ "Control",        }, "`",     function () awful.spawn("clipmenu -p clips:") end,
@@ -479,9 +477,6 @@ globalkeys = mytable.join(
               { description = "pavucontrol", group = "programs"}),
     awful.key({ modkey, "Shift"   }, "z",     function () awful.spawn("filezilla") end,
               { description = "pavucontrol", group = "programs"}),
-    awful.key({ modkey, "Shift"   }, "b",     function () awful.spawn("backintime-qt") end,
-              { description = "back-in-time", group = "programs"}),
-
 
 
     -- Script Launching
@@ -508,24 +503,30 @@ globalkeys = mytable.join(
               { description = "toggle transmission", group = "scripts"}),
     awful.key({ modkey,        }, "F10",     function () awful.spawn("toggle-tor") end,
               { description = "toggle Tor Network", group = "scripts"}),
+    awful.key({ modkey, "Shift"   }, "b",     function () awful.spawn("bt_battery_levels") end,
+              { description = "bluetooth battery levels", group = "scripts"}),
+    awful.key({ modkey, "Shift"   }, "n",     function () awful.spawn("brown_noise -t") end,
+              { description = "brown noise", group = "scripts"}),
 
     awful.key({ modkey, }, "z", function () quake:toggle() end),
 
    -- dmenu scripts
     awful.key({ modkey, "Shift" }, "e",     function () awful.spawn("dm-confedit") end,
-              { description = "edit configs", group = "dmenu"}),
+              { description = "edit configs", group = "dmenu scripts"}),
     awful.key({ modkey, "Shift" }, "s",     function () awful.spawn("dm-sounds") end,
-              { description = "soundscapes", group = "dmenu"}),
+              { description = "soundscapes", group = "dmenu scripts"}),
     awful.key({ modkey }, "s",     function () awful.spawn("dm-websearch") end,
-              { description = "web search", group = "dmenu"}),
+              { description = "web search", group = "dmenu scripts"}),
     awful.key({ modkey, "Shift"   }, "m",     function () awful.spawn("dm-playlists-music") end,
-              { description = "music playlists", group = "dmenu"}),
-    awful.key({ modkey, "Shift"   }, "v",     function () awful.spawn("dm-playlists-videos") end,
-              { description = "video playlists", group = "dmenu"}),
+              { description = "music playlists", group = "dmenu scripts"}),
+    awful.key({ modkey, "Shift"   }, "p",     function () awful.spawn("dm-playlists-videos") end,
+              { description = "video playlists", group = "dmenu scripts"}),
     awful.key({ modkey, "Shift"   }, "r",     function () awful.spawn("dm-relaxing-videos") end,
-              { description = "video playlists", group = "dmenu"}),
+              { description = "video playlists", group = "dmenu scripts"}),
+    awful.key({ modkey, "Shift"   }, "v",     function () awful.spawn("dm-videos") end,
+              { description = "video playlists", group = "dmenu scripts"}),
     awful.key({ modkey, "Shift"   }, "x",     function () awful.spawn("dm-g910") end,
-              { description = "keyboard profile", group = "dmenu"}),
+              { description = "keyboard profile", group = "dmenu scripts"}),
 
 
    -- Functions
@@ -552,17 +553,22 @@ globalkeys = mytable.join(
      awful.util.spawn("volume_adjust up", false) end),
 
    -- Screenshot
-   awful.key({}, "Print", function () awful.spawn("screenshooter") end),
+   awful.key({}, "Print", function () awful.spawn("screenshooter") end,
+    { description = "Take a screenshot", group = "misc"}),
 
    -- Set Caps to escape
    awful.key({ modkey, altkey }, "k", function() awful.spawn("set_caps_to_esc") end,
     { description = "Set Caps to ESC", group = "misc"}),
 
+   -- Lock keyboard and mouse, but keep screen on.
+   awful.key({ modkey, altkey}, "l", function() awful.spawn("lock_kbm") end,
+    { description = "Lock keyboard and mouse", group = "misc"}),
+
   -- Dmenu
   awful.key({ modkey,         }, "space", function () awful.spawn("dmenu_run -i -p run:") end,
-    { description = "dmenu", group = "programs"}),
+    { description = "dmenu", group = "dmenu scripts"}),
   awful.key({ modkey, "Shift" }, "space", function () awful.spawn("sudo dmenu_run -i -p sudo:") end,
-    { description = "sudo dmenu", group = "programs"}),
+    { description = "sudo dmenu", group = "dmenu scripts"}),
 
 
 
@@ -936,10 +942,14 @@ beautiful.gap_single_client = true
 -- Disable window snapping
 awful.mouse.snap.edge_enabled = false
 
--- Startup
+--### Startup ###--
 -- Restart picom to avoid visual bugs
 --awful.spawn.with_shell("picom")
+
 -- Restore nitrogen
 --awful.spawn.with_shell("nitrogen --restore")
 -- Restore feh
 awful.spawn.with_shell("~/.fehbg")
+
+-- Run custom signals for awesome/lain status bar
+awful.spawn.with_shell("~/.config/awesome/custom_signals.sh")

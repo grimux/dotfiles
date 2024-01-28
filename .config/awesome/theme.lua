@@ -99,30 +99,66 @@ local markup = lain.util.markup
 --local tv_mode_status = awful.widget.watch('tv_mode_status', 5)
 --
 -- Get the status of TV Mode.
-function get_tv_mode_status ()
-	local file = io.open(os.getenv("HOME") .. "/.cache/tv_mode_on","r")
-	if file ~= nil then io.close(file) return true else return false end
+function get_tv_mode_status()
+    local file = io.open(os.getenv("HOME") .. "/.cache/tv_mode_on","r")
+    if file ~= nil then io.close(file) return true else return false end
 end
 
 -- TV Mode widget and icon
 local tvmode_widget = wibox.widget ({
-	widget = wibox.widget.textbox,
-	--text = string.format("%s", get_tv_status)
-	--text = string.format("%s", tv_status),
-	opacity = 0.75,
+    widget = wibox.widget.textbox,
+    --text = string.format("%s", get_tv_status)
+    --text = string.format("%s", tv_status),
+    opacity = 0.75,
 })
 
 -- Signal to send for TV Mode.
 awesome.connect_signal('update_tv_mode_status', function()
-	local tv_status = get_tv_mode_status()
+    local tv_status = get_tv_mode_status()
 
-	if( tv_status ) then
-		tvmode_widget.text = "📺"
-	else
-		tvmode_widget.text = ""
-	end
+    if( tv_status ) then
+        tvmode_widget.text = "📺"
+    else
+        tvmode_widget.text = ""
+    end
+end)
 
+-- Brown Noise widget (mpv)
+-- Get the status of mpv.
+local brownnoiseicon = wibox.widget.imagebox()
+function get_brown_noise_status()
+    local file = io.open(os.getenv("HOME") .. "/.cache/brown_noise_on","r")
+    if file ~= nil then
+        io.close(file)
+        return true
+    else
+        return false
+    end
+end
 
+-- Brown noise widget and icon
+local brownnoise_widget = wibox.widget({
+    widget = wibox.widget.textbox,
+    --text = string.format("%s", get_brown_noise_status)
+    --text = string.format("%s", brown_noise_status),
+    opacity = 0.75,
+    --labelColor = { default = { 114, 77, 34 }, over = { 114, 77, 34 } },
+    --widget:set_markup(markup.fontfg(theme.font, "#eca4c4", "Brown Noise"))
+
+})
+brownnoise_widget.font = theme.font
+
+-- Signal to send for brown noise.
+awesome.connect_signal('update_brown_noise_status', function()
+    local mpv_status = get_brown_noise_status()
+
+    if( mpv_status ) then
+        brownnoiseicon:set_image(theme.widget_note_on)
+        brownnoise_widget.text = "Brown Noise"
+    else
+        brownnoiseicon:set_image(nil)
+        brownnoise_widget.text = ""
+    end
 end)
 
 
@@ -226,7 +262,7 @@ local bat = lain.widget.bat({
 
 -- ALSA volume
 local volicon = wibox.widget.imagebox(theme.widget_vol)
-theme.volume = lain.widget.alsa({
+local volumealsa = lain.widget.alsa({
     settings = function()
         if volume_now.status == "off" then
             volume_now.level = volume_now.level .. "M"
@@ -235,6 +271,18 @@ theme.volume = lain.widget.alsa({
         widget:set_markup(markup.fontfg(theme.font, "#7493d2", volume_now.level .. "% "))
     end
 })
+
+-- PulseAudio volume (based on multicolor theme)
+local volumepulse = lain.widget.pulse {
+    timeout = 2,
+    settings = function()
+        vlevel = volume_now.left .. "-" .. volume_now.right .. "% | " .. volume_now.description
+        if volume_now.muted == "yes" then
+            vlevel = vlevel .. " M"
+        end
+        widget:set_markup(lain.util.markup("#7493d2", vlevel))
+    end
+}
 
 -- Net
 local netdownicon = wibox.widget.imagebox(theme.widget_netdown)
@@ -343,7 +391,9 @@ function theme.at_screen_connect(s)
         nil,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
-	    tvmode_widget,
+            brownnoiseicon,
+            brownnoise_widget,
+            tvmode_widget,
             --mailicon,
             --theme.mail.widget,
             netdownicon,
@@ -351,13 +401,15 @@ function theme.at_screen_connect(s)
             netupicon,
             netupinfo.widget,
             volicon,
-            theme.volume.widget,
+            --theme.volume.widget
+            volumepulse.widget,
+            --volumealsa.widget,
             memicon,
             memory.widget,
             cpuicon,
             cpu.widget,
             tempicon,
-	    --cputemp,
+            --cputemp,
             temp.widget,
             fsicon,
             theme.fs.widget,
