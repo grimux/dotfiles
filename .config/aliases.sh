@@ -32,6 +32,7 @@ alias cfawe="$EDITOR ~/.config/awesome/rc.lua"
 alias cfd="$EDITOR ~/.config/gzdoom/mod_profiles.sh"
 
 alias gift-list="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto personal/gift-list\""
+alias cfbn="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto notes/behavioral_notes\""
 
 ## Program shortcuts ##
 alias define="sdcv"			# Dictionary
@@ -65,7 +66,7 @@ alias 7z_update="7z u -up1q0r2x1y2z1w2 -mx9 -mmt16"
 # An alias to manage my dotfiles.
 alias config="git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
 alias cstat="clear && config status"
-alias cdiff="clear && config diff"
+alias cdiff="config diff && clear"
 
 ## yt-dlp ##
 alias yta="$yt_app $yt_config_location/audio_single"
@@ -74,6 +75,7 @@ alias ytas="$yt_app $yt_config_location/audio_split"
 alias ytpod="$yt_app $yt_config_location/podcast"
 alias ytv="$yt_app $yt_config_location/video_single"
 alias ytvp="$yt_app $yt_config_location/video_playlist"
+alias ytu="$yt_app $yt_config_location/video_single --batch-file $HOME/urls.txt && echo \"\" > $HOME/urls.txt"
 
 # Copy game files using rsync
 alias send_game="rsync -hvrlt --info=progress2 --stats"
@@ -103,7 +105,7 @@ alias xavier="mpv $mpv_playlist_settings $video_playlist_dir/xavier.m3u"
 alias xfiles="mpv $mpv_playlist_settings $video_playlist_dir/xfiles.m3u"
 alias twinpeaks="mpv $mpv_playlist_settings $video_playlist_dir/twin_peaks.m3u"
 
-alias brown_noise="mpv --loop --no-video '/mnt/s/music/yt-dlp/Relaxing Colors of Noise 🔊🌈😌/02 - Brown Noise, Black Screen 🟤⬛ • 12 hours • No ads.mp3'"
+## Helpful ##
 alias calm="mpv --loop --fullscreen /mnt/v/relaxing/Autism_Calming_Sensory_Meltdown_Remedy_Soothing_Visuals-Super_Duper_Fun_Music.mkv"
 
 ## Directories ##
