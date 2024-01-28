@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+#
+#
+#
+
+#
+# Add comments, description, etc...
+#
+# - Add ability to change volume with flag, `-v`.
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+volume="85"
+music_file="/mnt/s/music/study-music/Brown_Noise_8-Hours.mp3"
+mpv_arguments="--loop --no-video --volume=$volume"
+mpv_process_string="mpv $mpv_arguments $music_file"
+cache_file="$HOME/.cache/brown_noise_on"
+user_command=""
+
+# Get arguments and set flags
+function get_arguments() {
+	while getopts ":chkt" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Check if mpv is already playing brown noise.
+			c) user_command="check";;
+
+			# Help section
+			h) help_section; exit ;;
+
+			# Stop mpv from playing.
+			k) user_command="stop";;
+
+			# Toggle brown noise.
+			t) user_command="toggle";;
+
+			# What to do if the argument is missing.
+			:) echo "Missing argument"; help_section; exit 1 ;;
+
+			# Catchall.  If command is not recognized.
+			*) usage; exit 1
+		esac
+	done
+}
+
+# Help Section
+function help_section() {
+	echo "A short description of script"
+	echo
+	echo "Syntax: $(basename $0) (options)"
+	echo "options:"
+	# Space offset: 19
+	echo "h                   : Print this help screen."
+	echo "k                   : Stop playing."
+	echo "c                   : Check if mpv is playing."
+	echo
+}
+
+function start_playing() {
+	local is_mpv_playing
+	is_mpv_playing=$(check_if_running)
+
+	if [ "$is_mpv_playing" -eq 1 ]; then
+		echo "mpv is already playing brown noise."
+		exit 1
+	fi
+
+	echo "Starting brown noise..."
+
+	nohup $mpv_process_string &> /dev/null &
+
+	touch "$cache_file"
+}
+
+function stop_playing() {
+	local is_mpv_playing
+	is_mpv_playing=$(check_if_running)
+
+	if [ "$is_mpv_playing" -eq 0 ]; then
+		echo "mpv is not playing."
+		exit 1
+	fi
+
+	echo "Stopping brown noise..."
+
+	pkill \
+		--full \
+		"$mpv_process_string"
+
+	rm "$cache_file"
+}
+
+function check_if_running() {
+	local is_running
+	is_running="0"
+
+	if pgrep --full "$mpv_process_string" > /dev/null; then
+		is_running="1"
+	fi
+
+	echo "$is_running"
+}
+
+function toggle_brown_noise() {
+	local is_mpv_playing
+	is_mpv_playing=$(check_if_running)
+
+	case "$is_mpv_playing" in
+		0) start_playing;;
+		1) stop_playing;;
+	esac
+}
+
+function signal_awesome() {
+	echo "Sending signal to awesome-wm..."
+	awesome-client 'awesome.emit_signal("update_brown_noise_status")'
+}
+
+function main() {
+	get_arguments "$@"
+
+	case "$user_command" in
+		"toggle") toggle_brown_noise;;
+		"start") start_playing;;
+		"stop") stop_playing;;
+		"check") check_if_running; exit;;
+		"") start_playing;;
+	esac
+
+	signal_awesome
+}
+
+main "$@"
