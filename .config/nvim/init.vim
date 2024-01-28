@@ -25,6 +25,7 @@ Plug 'chrisbra/Colorizer'
 " Addes new commands to read and write on root files
 Plug 'lambdalisue/suda.vim'
 Plug 'chrisbra/unicode.vim'
+Plug 'bling/vim-bufferline'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -135,19 +136,16 @@ vnoremap <leader>p "_dP
 " Call trim white space function
 map <F3> :call TrimWhiteSpace()<CR>
 
-" Magit
-map <leader>mg :Magit<CR>
-
 " Reload vim config file
 nnoremap <leader>r :source $HOME/.config/nvim/init.vim<CR>
 
-" Goyo
-map <leader>g :Goyo <BAR> set linebreak<CR>
+" Buffer keybind shortcuts
+map <leader>bn :bnext<CR>
+map <leader>bp :bprevious<CR>
+map <leader>bd :bdelete<CR>
 
+" Show whitespace as characters.
 map <leader>l :call ShowWhiteSpace()<CR>
-" vimwiki
-map <leader>wm :VimwikiAll2HTML<CR>
-map <leader>wa :VimwikiGoto personal/mental-health/autism/autism-notes<CR>
 
 " Shortcut split navigation
 map <C-h> <C-w>h
@@ -170,16 +168,34 @@ nnoremap <F6> "=strftime("%I:%M %p")<CR>P
 inoremap <F6> <C-R>=strftime("%I:%M %p")<CR>
 map <leader>t "=strftime("%I:%M %p")<CR>P
 
-" Start Bracey (html live server)
-map <leader>bb :Bracey<CR>
-map <leader>bs :BraceyStop<CR>
-map <leader>br :BraceyReload<CR>
-
 " Make current file executable.
 map <leader>x :!chmod +x %<CR><CR>
 
 " Set spaces for tabs
 map <leader>t :call TabsToSpaces()<CR>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"--- Plugin Configuration
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Magit
+map <leader>mg :Magit<CR>
+
+" Goyo
+map <leader>g :Goyo <BAR> set linebreak<CR>
+
+" vimwiki
+map <leader>wm :VimwikiAll2HTML<CR>
+map <leader>wa :VimwikiGoto personal/mental-health/autism/autism-notes<CR>
+
+" Start Bracey (html live server)
+map <leader>bb :Bracey<CR>
+map <leader>bs :BraceyStop<CR>
+map <leader>br :BraceyReload<CR>
+
+" Vim-Bufferline
+let g:bufferline_echo = 0
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Functions
@@ -208,7 +224,9 @@ function TabsToSpaces()
 	setlocal shiftwidth=4
 endfunction
 
-"--- Autofunctions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"--- Auto-Functions
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Automatically reload nvim's config file when it is saved.
 autocmd! bufwritepost init.vim source $HOME/.config/nvim/init.vim
 " When my gift list is updateded, run the shell update script.
