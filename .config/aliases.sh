@@ -65,8 +65,8 @@ alias 7z_update="7z u -up1q0r2x1y2z1w2 -mx9 -mmt16"
 ## Dotfile alias ##
 # An alias to manage my dotfiles.
 alias config="git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
-alias cstat="clear && config status"
-alias cdiff="config diff && clear"
+alias cstat="clear; config status"
+alias cdiff="config diff; clear"
 
 ## yt-dlp ##
 alias yta="$yt_app $yt_config_location/audio_single"
