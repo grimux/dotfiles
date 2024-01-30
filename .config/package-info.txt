@@ -711,13 +711,13 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : brave-bin
-Version         : 1:1.61.116-1
+Version         : 1:1.62.153-1
 Description     : Web browser that blocks ads and trackers by default (binary release)
 Architecture    : x86_64
 URL             : https://brave.com
 Licenses        : MPL2  BSD  custom:chromium
 Groups          : None
-Provides        : brave=1.61.116  brave-browser
+Provides        : brave=1.62.153  brave-browser
 Depends On      : alsa-lib  gtk3  libxss  nss  ttf-font
 Optional Deps   : cups: Printer support [installed]
                   libgnome-keyring: Enable GNOME keyring support
@@ -726,10 +726,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : brave
 Replaces        : None
-Installed Size  : 339.06 MiB
+Installed Size  : 344.89 MiB
 Packager        : Unknown Packager
-Build Date      : Fri 12 Jan 2024 01:03:02 PM CST
-Install Date    : Fri 12 Jan 2024 01:04:52 PM CST
+Build Date      : Mon 29 Jan 2024 03:20:01 PM CST
+Install Date    : Mon 29 Jan 2024 03:27:11 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -875,33 +875,33 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : cantata
-Version         : 2.5.0-3
+Version         : 2.5.0-4
 Description     : Qt5 client for the music player daemon (MPD)
 Architecture    : x86_64
 URL             : https://github.com/CDrummond/cantata
 Licenses        : GPL3
 Groups          : None
 Provides        : None
-Depends On      : libmtp  libmusicbrainz5  mpg123  qt5-multimedia  qt5-svg  taglib  media-player-info  libcdio-paranoia  udisks2  libcddb
-Optional Deps   : perl-uri: dynamic playlist [installed]
-                  mpd: playback [installed]
-                  ffmpeg: ReplayGain support [installed]
+Depends On      : libcddb  libcdio-paranoia  libmtp  libmusicbrainz5  media-player-info  mpg123  qt5-multimedia  qt5-svg  taglib  udisks2
+Optional Deps   : ffmpeg: ReplayGain support [installed]
                   libebur128: ReplayGain support
+                  mpd: playback [installed]
+                  perl-uri: dynamic playlist [installed]
                   sshfs: remote devices support
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 10.03 MiB
-Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Wed 01 Mar 2023 12:22:22 PM CST
-Install Date    : Thu 16 Mar 2023 01:59:18 PM CDT
+Installed Size  : 11.60 MiB
+Packager        : Unknown Packager
+Build Date      : Mon 29 Jan 2024 03:20:20 PM CST
+Install Date    : Mon 29 Jan 2024 03:27:11 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
-Validated By    : Signature
+Validated By    : None
 
 Name            : cava
-Version         : 0.9.1-1
+Version         : 0.10.0-1
 Description     : Console-based Audio Visualizer for Alsa
 Architecture    : any
 URL             : https://github.com/karlstav/cava
@@ -914,10 +914,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 123.31 KiB
+Installed Size  : 123.34 KiB
 Packager        : Unknown Packager
-Build Date      : Thu 16 Nov 2023 10:57:35 AM CST
-Install Date    : Thu 16 Nov 2023 01:20:08 PM CST
+Build Date      : Mon 29 Jan 2024 03:20:09 PM CST
+Install Date    : Mon 29 Jan 2024 03:27:11 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -1427,14 +1427,14 @@ Install Script  : No
 Validated By    : None
 
 Name            : duckstation-git
-Version         : r6474.538266aa-1
+Version         : 0.1.r6348.ge9a21c4-1
 Description     : A Sony PlayStation (PSX) emulator, focusing on playability, speed, and long-term maintainability (git version)
 Architecture    : x86_64
 URL             : https://github.com/stenzek/duckstation
-Licenses        : GPL3
+Licenses        : GPL-3.0-only
 Groups          : None
 Provides        : duckstation
-Depends On      : sdl2  qt6-base  libxrandr  libglvnd  libx11  dbus  curl  hicolor-icon-theme
+Depends On      : sh  glibc  gcc-libs  sdl2  qt6-base  libxrandr  libglvnd  libx11  dbus  curl  hicolor-icon-theme
 Optional Deps   : qt6-wayland: Wayland support
                   libpulse: Pulseaudio support [installed]
                   sndio: Small audio support [installed]
@@ -1444,10 +1444,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : duckstation
 Replaces        : None
-Installed Size  : 29.62 MiB
+Installed Size  : 30.90 MiB
 Packager        : Unknown Packager
-Build Date      : Mon 30 Oct 2023 02:45:36 PM CDT
-Install Date    : Mon 30 Oct 2023 02:47:34 PM CDT
+Build Date      : Mon 29 Jan 2024 03:23:52 PM CST
+Install Date    : Mon 29 Jan 2024 03:27:12 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -3223,13 +3223,13 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : jre
-Version         : 21.0.1-1
+Version         : 21.0.2-1
 Description     : Oracle Java Runtime Environment
 Architecture    : x86_64
 URL             : https://www.oracle.com/java/
 Licenses        : custom
 Groups          : None
-Provides        : java-runtime=21  java-runtime-jdk21  jre21-jdk=21.0.1-1  java-runtime-headless=21  java-runtime-headless-jdk=21  jre21-jdk-headless=21.0.1-1
+Provides        : java-runtime=21  java-runtime-jdk21  jre21-jdk=21.0.2-1  java-runtime-headless=21  java-runtime-headless-jdk=21  jre21-jdk-headless=21.0.2-1
 Depends On      : java-runtime-common  ca-certificates-utils  freetype2  libx11  libxext  libxi  libxtst  libxrender
 Optional Deps   : alsa-lib: for basic sound support [installed]
                   gtk2: for the Gtk+ 2 look and feel - desktop usage [installed]
@@ -3238,10 +3238,10 @@ Required By     : jdownloader2  polymc-bin
 Optional For    : libbluray  libjpeg-turbo  libjxl  libreoffice-fresh  texlive-latexextra  ums
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 189.13 MiB
+Installed Size  : 189.30 MiB
 Packager        : Unknown Packager
-Build Date      : Thu 16 Nov 2023 11:03:03 AM CST
-Install Date    : Thu 16 Nov 2023 01:20:09 PM CST
+Build Date      : Mon 29 Jan 2024 03:25:32 PM CST
+Install Date    : Mon 29 Jan 2024 03:27:12 PM CST
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : None
@@ -5025,7 +5025,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : openrgb-bin
-Version         : 0.9-1
+Version         : 0.9-2
 Description     : Open source RGB lighting control that doesn't depend on manufacturer software. Precompiled binary
 Architecture    : x86_64
 URL             : https://gitlab.com/CalcProgrammer1/OpenRGB
@@ -5041,8 +5041,8 @@ Conflicts With  : openrgb
 Replaces        : None
 Installed Size  : 7.02 MiB
 Packager        : Unknown Packager
-Build Date      : Thu 20 Jul 2023 11:24:36 AM CDT
-Install Date    : Thu 20 Jul 2023 11:31:24 AM CDT
+Build Date      : Mon 29 Jan 2024 03:26:57 PM CST
+Install Date    : Mon 29 Jan 2024 03:27:12 PM CST
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : None
@@ -6667,7 +6667,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : rmg
-Version         : 0.5.4-1
+Version         : 0.5.7-1
 Description     : Rosalie's Mupen GUI
 Architecture    : x86_64
 URL             : https://github.com/Rosalie241/rmg
@@ -6680,10 +6680,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 78.00 MiB
+Installed Size  : 77.62 MiB
 Packager        : Unknown Packager
-Build Date      : Wed 20 Dec 2023 03:40:05 PM CST
-Install Date    : Wed 20 Dec 2023 03:45:14 PM CST
+Build Date      : Mon 29 Jan 2024 03:22:21 PM CST
+Install Date    : Mon 29 Jan 2024 03:27:12 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -8372,7 +8372,7 @@ Provides        : None
 Depends On      : gcc-libs  glibc
 Optional Deps   : None
 Required By     : None
-Optional For    : atool  file-roller
+Optional For    : atool  file-roller  python-rarfile
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 313.08 KiB
