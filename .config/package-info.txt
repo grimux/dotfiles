@@ -2024,28 +2024,6 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
-Name            : g810-led
-Version         : 0.4.3-1
-Description     : Linux led controller for Logitech G213, G410, G413. G512, G513, G610, G810, G815, G910 and GPRO Keyboards
-Architecture    : any
-URL             : https://github.com/matmoul/g810-led
-Licenses        : GPL3
-Groups          : None
-Provides        : g213-led=0.4.3  g410-led=0.4.3  g413-led=0.4.3  g512-led=0.4.3  g513-led=0.4.3  g610-led=0.4.3  g810-led=0.4.3  g815-led=0.4.3  g910-led=0.4.3  gpro-led=0.4.3
-Depends On      : hidapi
-Optional Deps   : libusb: old implementation, for developpers [installed]
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 192.03 KiB
-Packager        : Unknown Packager
-Build Date      : Thu 08 Jun 2023 08:12:02 PM CDT
-Install Date    : Thu 08 Jun 2023 08:12:21 PM CDT
-Install Reason  : Explicitly installed
-Install Script  : Yes
-Validated By    : None
-
 Name            : gameconqueror
 Version         : 0.17-7
 Description     : Memory scanner designed to isolate the address of an arbitrary variable in an executing process (gtk GUI)
