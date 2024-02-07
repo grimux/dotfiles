@@ -315,7 +315,6 @@ starship
 steam
 steam-metadata-editor-git
 steamcmd
-steamtinkerlaunch
 subdl
 subliminal
 sudo
