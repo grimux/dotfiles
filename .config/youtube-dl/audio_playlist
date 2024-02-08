@@ -1,7 +1,6 @@
 --paths "$HOME/Music/yt-dlp"
---output "%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s"
+--output "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s"
 --sponsorblock-remove sponsor
---restrict-filenames
 --add-metadata
 --embed-thumbnail
 --extract-audio

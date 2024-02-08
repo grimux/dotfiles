@@ -1,8 +1,8 @@
 --paths "$HOME/Videos/yt-dlp"
---output "%(title)s-%(channel)s.%(ext)s"
+--output "%(channel)s - %(title)s.%(ext)s"
 --format "bestvideo[height<=1080]+bestaudio"
 --sponsorblock-remove sponsor
---restrict-filenames
+--download-archive "$HOME/Videos/yt-dlp/urls.archive.txt"
 --add-metadata
 --embed-thumbnail
 --embed-subs

@@ -1,8 +1,7 @@
 --paths "$HOME/Videos/yt-dlp"
---output "%(playlist)s/%(playlist_index)s-%(title)s.%(ext)s"
+--output "%(channel)s/%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s"
 --format "bestvideo[height<=1080]+bestaudio"
 --sponsorblock-remove sponsor
---restrict-filenames
 --add-metadata
 --embed-thumbnail
 --embed-subs
