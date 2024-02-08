@@ -82,7 +82,7 @@ get_arguments() {
 # Function to open playlist in dmenu
 open_in_dmenu() {
 	# Piping the array into dmenu.
-	printf '%s\n' "${playlist_names[@]}" | dmenu -i -l 20 -p 'Playlist:'
+	printf '%s\n' "${playlist_names[@]}" | dmenu -i -l 20 -p 'Video Playlist:'
 }
 
 # Check if the playlist exists
