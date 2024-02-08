@@ -875,7 +875,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : cantata
-Version         : 2.5.0-4
+Version         : 2.5.0-5
 Description     : Qt5 client for the music player daemon (MPD)
 Architecture    : x86_64
 URL             : https://github.com/CDrummond/cantata
@@ -892,10 +892,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 11.60 MiB
+Installed Size  : 11.61 MiB
 Packager        : Unknown Packager
-Build Date      : Mon 29 Jan 2024 03:20:20 PM CST
-Install Date    : Mon 29 Jan 2024 03:27:11 PM CST
+Build Date      : Wed 07 Feb 2024 08:12:03 PM CST
+Install Date    : Wed 07 Feb 2024 08:13:44 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -6434,8 +6434,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 1171.13 KiB
 Packager        : Unknown Packager
-Build Date      : Tue 06 Feb 2024 10:34:10 AM CST
-Install Date    : Tue 06 Feb 2024 10:34:31 AM CST
+Build Date      : Wed 07 Feb 2024 08:08:22 PM CST
+Install Date    : Wed 07 Feb 2024 08:08:39 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
