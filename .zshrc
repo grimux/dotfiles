@@ -36,6 +36,7 @@ if [ -d "$HOME/.local/bin" ] ; then
 	PATH="$HOME/.local/bin/tools:$PATH"
 	PATH="$HOME/.local/bin/toggles:$PATH"
 	PATH="$HOME/.local/bin/phone:$PATH"
+	PATH="$HOME/.local/bin/fun:$PATH"
 	PATH="$HOME/.local/bin/peripherals:$PATH"
 	PATH="$HOME/.local/bin/statusbar:$PATH"
 	PATH="$HOME/.local/bin/dmenu:$PATH"
