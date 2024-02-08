@@ -484,7 +484,8 @@ globalkeys = mytable.join(
               { description = "gametime", group = "scripts"}),
     awful.key({ modkey, "Shift"   }, "F1",     function () awful.spawn("play -d") end,
               { description = "gametime", group = "scripts"}),
-
+    awful.key({ modkey,        }, "F2",     function () awful.spawn("brown_noise -t") end,
+              { description = "brown noise", group = "scripts"}),
     awful.key({ modkey,        }, "F5",     function ()
           awful.spawn.with_line_callback("tv_mode toggle", {
               exit = function()
@@ -492,7 +493,6 @@ globalkeys = mytable.join(
               end})
     end,
               { description = "TV mode toggle", group = "scripts"}),
-
     awful.key({ modkey,        }, "F6",     function () awful.spawn("toggle-conky") end,
               { description = "toggle conky", group = "scripts"}),
     awful.key({ modkey,        }, "F7",     function () awful.spawn("toggle-alpha") end,
@@ -505,10 +505,8 @@ globalkeys = mytable.join(
               { description = "toggle Tor Network", group = "scripts"}),
     awful.key({ modkey, "Shift"   }, "b",     function () awful.spawn("bt_battery_levels") end,
               { description = "bluetooth battery levels", group = "scripts"}),
-    awful.key({ modkey, "Shift"   }, "n",     function () awful.spawn("brown_noise -t") end,
-              { description = "brown noise", group = "scripts"}),
 
-    awful.key({ modkey, }, "z", function () quake:toggle() end),
+    --awful.key({ modkey, }, "z", function () quake:toggle() end),
 
    -- dmenu scripts
     awful.key({ modkey, "Shift" }, "e",     function () awful.spawn("dm-confedit") end,
@@ -848,7 +846,7 @@ client.connect_signal("manage", function (c, startup)
 
      -- Move newly created windows to the primary display.
      -- My monitor in this case (set with xrandr)
-     awful.client.movetoscreen(c, screen.primary)
+     --awful.client.movetoscreen(c, screen.primary)
      --c:move_to_screen(screen.primary)
 end)
 
