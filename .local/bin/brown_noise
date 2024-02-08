@@ -67,6 +67,16 @@ function help_section() {
 	echo
 }
 
+function display_notification() {
+	local title
+	local message
+
+	title="$(basename $0)"
+	message="$1"
+
+	notify-send --app-name="$(basename $0)" "$title" "$message"
+}
+
 function start_playing() {
 	local is_mpv_playing
 	is_mpv_playing=$(check_if_running)
@@ -77,6 +87,7 @@ function start_playing() {
 	fi
 
 	echo "Starting brown noise..."
+	display_notification "▶️ Starting"
 
 	nohup $mpv_process_string &> /dev/null &
 
@@ -93,6 +104,7 @@ function stop_playing() {
 	fi
 
 	echo "Stopping brown noise..."
+	display_notification "⏹️ Stopping"
 
 	pkill \
 		--full \
