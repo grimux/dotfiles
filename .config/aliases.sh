@@ -31,7 +31,7 @@ alias cfs="$EDITOR ~/.config/script_boilerplate.sh"
 alias cfawe="$EDITOR ~/.config/awesome/rc.lua"
 alias cfd="$EDITOR ~/.config/gzdoom/mod_profiles.sh"
 
-alias gift-list="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto personal/gift-list\""
+alias cfgl="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto personal/gift-list\""
 alias cfbn="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto notes/behavioral_notes\""
 
 ## Program shortcuts ##
@@ -76,6 +76,7 @@ alias ytpod="$yt_app $yt_config_location/podcast"
 alias ytv="$yt_app $yt_config_location/video_single"
 alias ytvp="$yt_app $yt_config_location/video_playlist"
 alias ytu="$yt_app $yt_config_location/video_single --batch-file $HOME/urls.txt && echo \"\" > $HOME/urls.txt"
+alias ytua="echo $1 >> $HOME/urls.txt"
 
 # Copy game files using rsync
 alias send_game="rsync -hvrlt --info=progress2 --stats"
