@@ -127,6 +127,17 @@ end)
 -- Get the status of mpv.
 local brownnoiseicon = wibox.widget.imagebox()
 function get_brown_noise_status()
+    -- Check for running mpv process.
+    local processName = "Brown_Noise_8%-Hours%.mp3"
+    local processList = io.popen("ps -ef"):read("*a")
+    if string.match(processList, processName) then
+        return true
+    else
+        return false
+    end
+
+    -- Using file to detect if mpv is running.
+    --[[
     local file = io.open(os.getenv("HOME") .. "/.cache/brown_noise_on","r")
     if file ~= nil then
         io.close(file)
@@ -134,6 +145,7 @@ function get_brown_noise_status()
     else
         return false
     end
+    --]]
 end
 
 -- Brown noise widget and icon
