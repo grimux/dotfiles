@@ -23,7 +23,8 @@ video_base_dir="/mnt/v"
 # Takes all the files from the Videos directory and adds them to the array.
 # This array is dynamic and will change depending on the contents of the directory
 # It also ignores a few directories that we don't want displayed, i.e. television.
-readarray -d '' video_files < <(find "$video_base_dir" -iname '*.mkv' -o -iname '*.mp4' -not -path "$video_base_dir/television/*" -print0)
+# The "'('" are needed to correctly parse the names for the find command.
+readarray -d '' video_files < <(find "$video_base_dir" '(' -iname '*.mkv' -o -iname '*.mp4' ')' -not -path "$video_base_dir/television/*" -print0)
 
 # Array of playlist names
 # readarray is used to run a command on each element of "video_files" array, and store it into a new
@@ -214,7 +215,8 @@ function main() {
 ### Call to main ###
 ####################
 # Call main.  pass the `-w` flag by default to save video position and settings on exit.
-main "-w" "$@"
+#main "-w" "$@"
+main "$@"
 
 ### End ###
 exit 0
