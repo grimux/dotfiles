@@ -16,8 +16,8 @@ set -euo pipefail
 ############
 # - Decide if I want mpv to open on a specific tab.
 # - Add more comments to functions.
-#
-#
+# - Mimimize console window on startup.
+# - Cleanup output and make less confusing.
 #
 
 # Bedtime playlist file.
@@ -30,10 +30,16 @@ tv_alsa_id="alsa_output.pci-0000_0a_00.1.hdmi-stereo"
 pc_alsa_id="alsa_output.pci-0000_0c_00.3.analog-stereo"
 combined_alsa_id="combined"
 
+# Delaying and allowing the screensaver.
+# This script will extend and enable the screensaver for when mpv is playing.
+# This can be set here (in seconds).
+mpv_screensaver_timeout="3600" # 1 hour
+# The default time to reset to is taken from the current setting using awk.
+default_screensaver_timeout=$(xset q | awk '/timeout/{print $2}')
 
 # Save the currently active window at the time of script execution.  This makes
 # it convenient to switch back later.
-previous_window=$(xdotool getactivewindow)
+console_window=$(xdotool getactivewindow)
 
 # Get arguments
 get_arguments() {
@@ -79,7 +85,58 @@ launch_mpv() {
 
 	# Call to mpv with the playlist file.
 	# If there is a watch later file, ignore it.
-	mpv --no-resume-playback --playlist="$playlist"
+	# Don't disable the screensaver.
+	mpv \
+		--no-resume-playback \
+		--stop-screensaver=no \
+		--playlist="$playlist"
+}
+
+function play_brown_noise() {
+	local is_brown_noise_playing
+
+	# Old Method
+	#mpc clear
+	#mpc load brown_noise
+	#mpc volume 90
+	#mpc play
+
+	# Use brown_noise script to check if it is playing or not.
+	is_brown_noise_playing=$(brown_noise -c)
+
+	# Logic to control what to do.
+	if [ "$is_brown_noise_playing" -eq 0 ]; then
+		brown_noise
+	else
+		echo "Brown noise already playing."
+	fi
+}
+
+function play_game_chill() {
+	mpc clear
+	mpc load game_chill
+	mpc volume 100
+	mpc play
+}
+
+function set_mpd_playlist() {
+	local playlist
+	declare -i volume
+
+	playlist="$1"
+	volume="$2"
+
+	echo "--- MPD ---"
+	echo "Loading playlist: $playlist"
+
+	mpc clear
+	mpc load "$playlist"
+	sleep 1
+	mpc volume $volume
+	mpc play
+
+	echo "Done."
+	echo "-----------"
 }
 
 # Switch to tag 8 in awesomewm.  This tag is for video players such as mpv.
@@ -90,7 +147,19 @@ move_to_video_tag() {
 
 # Move back to the previous window.
 move_to_previous_window() {
-	xdotool windowactivate $previous_window
+	xdotool windowactivate $console_window
+}
+
+set_screensaver_timeout() {
+	local timeout="$1"
+	declare -i real_timeout
+
+	xset s "$timeout"
+
+	real_timeout=$(($timeout / 60))
+
+	echo "=== Screensaver timeout: $real_timeout mins. ==="
+
 }
 
 # Switch to change the audio sink.
@@ -117,6 +186,14 @@ change_audio_sink() {
 
 }
 
+minimize_console_window(){
+	xdotool windowminimize --sync "$console_window"
+}
+
+restore_console_window(){
+	xdotool windowactivate --sync "$console_window"
+}
+
 # Function that returns the index in pacmd for the given alsa name.
 get_device_index() {
 	local alsa_name="$1"
@@ -137,11 +214,24 @@ main() {
 	# Get arguments
 	get_arguments "$@"
 
+	# Using mpc, play brown noise with mpd.
+	play_brown_noise
+	#set_mpd_playlist "brown_noise" "90"
+
 	# Immediately stop mpd, so music won't play over video.
 	mpc stop > /dev/null
 
 	# Switch the pulseaudio sink to the TV for video playback.
-	change_audio_sink "combined"
+	#change_audio_sink "combined"
+
+	# Set timeout for screensaver (xset s time).
+	set_screensaver_timeout "$mpv_screensaver_timeout"
+
+	# Display output to tell about the screensaver.
+	echo "Screensaver will still activate while video is playing."
+
+	# Minimize the console window.
+	minimize_console_window
 
 	# Launch mpv and play the playlist file.
 	launch_mpv "$bedtime_playlist"
@@ -154,13 +244,22 @@ main() {
 	wait
 
 	# Once the playlist is complete, switch back to the previous window.
-	move_to_previous_window
+	#move_to_previous_window
 
 	# Switch the pulseaudio sink back to the PC.
-	change_audio_sink "pc"
+	#change_audio_sink "pc"
+
+	# Set screensaver timeout back to default.
+	set_screensaver_timeout "$default_screensaver_timeout"
+
+	# Restore console window from being minimized.
+	restore_console_window
 
 	# Start music, won't happen until video playlist is completed.
-	mpc play
+	# Uses mpc to control mpd.
+	mpc play > /dev/null
+	#play_game_chill
+	#set_mpd_playlist "game_chill" "100"
 
 	# Good morning message
 	echo
