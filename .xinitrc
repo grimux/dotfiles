@@ -22,6 +22,9 @@ function awesome() {
 	# Restore wallpaper using feh
 	~/.fehbg &
 
+	# Run custom signals for awesome/lain status bar
+	~/.config/awesome/custom_signals.sh &
+
 	# Redshift for bluelight filter
 	# Use either the gtk tray icon or not.  Use `redshift -p` to check status.
 	redshift-gtk &
@@ -93,7 +96,7 @@ function shared_settings() {
 
 	# OpenRGB for PC's RGB lighting.
 	#openrgb --server --profile Rainbow.orp --startminimized &
-	openrgb --server --startminimized &
+	openrgb --server --profile default_profile --startminimized &
 
 	# control mpd with playerctl
 	#mpDris2 &
