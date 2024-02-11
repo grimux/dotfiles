@@ -27,6 +27,7 @@ bless
 blueman
 bluez
 bluez-libs
+bluez-obex
 bluez-utils
 boost
 brave-bin
@@ -39,6 +40,7 @@ calibre
 cantata
 cava
 cemu
+chromium
 clipmenu
 cmake
 conky
@@ -211,6 +213,8 @@ ntfs-3g
 numlockx
 nvidia-dkms
 nvidia-settings
+obexftp
+obextool
 obs-studio
 openbsd-netcat
 openrgb-bin

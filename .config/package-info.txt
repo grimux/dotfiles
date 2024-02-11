@@ -654,7 +654,7 @@ Groups          : None
 Provides        : libbluetooth.so=3-64
 Depends On      : glibc
 Optional Deps   : None
-Required By     : blueman  dolphin-emu  networkmanager  pulseaudio-bluetooth
+Required By     : blueman  dolphin-emu  networkmanager  openobex  pulseaudio-bluetooth
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
@@ -662,6 +662,28 @@ Installed Size  : 327.24 KiB
 Packager        : Andreas Radke <andyrtr@archlinux.org>
 Build Date      : Sun 14 Jan 2024 07:56:00 AM CST
 Install Date    : Wed 17 Jan 2024 02:49:01 PM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
+Name            : bluez-obex
+Version         : 5.72-2
+Description     : Object Exchange daemon for sharing content
+Architecture    : x86_64
+URL             : http://www.bluez.org/
+Licenses        : GPL-2.0-only
+Groups          : None
+Provides        : None
+Depends On      : systemd  glib2  libical  dbus  readline  glibc
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 869.77 KiB
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Sun 14 Jan 2024 07:56:00 AM CST
+Install Date    : Sat 10 Feb 2024 02:06:00 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -944,6 +966,33 @@ Install Date    : Sun 21 Jan 2024 10:12:54 AM CST
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : None
+
+Name            : chromium
+Version         : 121.0.6167.139-2
+Description     : A web browser built for speed, simplicity, and security
+Architecture    : x86_64
+URL             : https://www.chromium.org/Home
+Licenses        : BSD-3-Clause
+Groups          : None
+Provides        : None
+Depends On      : gtk3  nss  alsa-lib  xdg-utils  libxss  libcups  libgcrypt  ttf-liberation  systemd  dbus  libpulse  pciutils  libva  libffi  desktop-file-utils  hicolor-icon-theme  fontconfig  libjpeg  icu  dav1d  flac  libxml2  libwebp  minizip  opus  harfbuzz  libxslt  libpng  freetype2
+Optional Deps   : pipewire: WebRTC desktop sharing under Wayland [installed]
+                  kdialog: support for native dialogs in Plasma
+                  qt5-base: enable Qt5 with --enable-features=AllowQt [installed]
+                  gtk4: for --gtk-version=4 (GTK4 IME might work better on Wayland) [installed]
+                  org.freedesktop.secrets: password storage backend on GNOME / Xfce [installed]
+                  kwallet: support for storing passwords in KWallet on Plasma
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 333.26 MiB
+Packager        : Evangelos Foutras <foutrelis@archlinux.org>
+Build Date      : Wed 31 Jan 2024 01:28:12 PM CST
+Install Date    : Sat 10 Feb 2024 01:39:47 PM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
 
 Name            : clipmenu
 Version         : 6.2.0-2
@@ -1536,8 +1585,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 6.01 MiB
 Packager        : Unknown Packager
-Build Date      : Fri 12 Jan 2024 12:57:37 PM CST
-Install Date    : Fri 12 Jan 2024 01:04:51 PM CST
+Build Date      : Sat 10 Feb 2024 12:07:31 PM CST
+Install Date    : Sat 10 Feb 2024 12:22:52 PM CST
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : None
@@ -1943,7 +1992,7 @@ Groups          : None
 Provides        : fuse=2.9.9
 Depends On      : glibc  fuse-common
 Optional Deps   : None
-Required By     : android-file-transfer  backintime-cli  fuseiso  glusterfs  jmtpfs  mtpfs  ntfs-3g  simple-mtpfs
+Required By     : android-file-transfer  backintime-cli  fuseiso  glusterfs  jmtpfs  mtpfs  ntfs-3g  obexftp  simple-mtpfs
 Optional For    : mergerfs
 Conflicts With  : fuse
 Replaces        : fuse
@@ -4952,6 +5001,51 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
+Name            : obexftp
+Version         : 0.24.2-5
+Description     : A tool for transfer files to/from any OBEX enabled device
+Architecture    : x86_64
+URL             : http://dev.zuckschwerdt.org/openobex/wiki/ObexFtp
+Licenses        : GPL
+Groups          : None
+Provides        : obexfs=0.24.2
+Depends On      : openobex  expat  fuse2
+Optional Deps   : ruby: ruby bindings [installed]
+                  tk: TCL/Tk bindings [installed]
+Required By     : obextool
+Optional For    : None
+Conflicts With  : obexfs
+Replaces        : obexfs
+Installed Size  : 384.07 KiB
+Packager        : Unknown Packager
+Build Date      : Sat 10 Feb 2024 01:50:23 PM CST
+Install Date    : Sat 10 Feb 2024 01:50:39 PM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : None
+
+Name            : obextool
+Version         : 0.35-5
+Description     : A front-end of obexftp
+Architecture    : any
+URL             : https://www.tech-edv.co.at/00_Home/20_Software/50_Freie~20Software/10_ObexTool
+Licenses        : GPL
+Groups          : None
+Provides        : None
+Depends On      : perl  obexftp  bwidget  tklib  tk
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 425.12 KiB
+Packager        : Unknown Packager
+Build Date      : Sat 10 Feb 2024 01:50:41 PM CST
+Install Date    : Sat 10 Feb 2024 01:50:46 PM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : None
+
 Name            : obs-studio
 Version         : 30.0.2-3
 Description     : Free, open source software for live streaming and recording
@@ -7881,8 +7975,8 @@ Groups          : None
 Provides        : None
 Depends On      : tcl  libxss  libxft
 Optional Deps   : None
-Required By     : steam-metadata-editor-git
-Optional For    : git  python  python-matplotlib  python-pillow  ruby  stk  sysstat  timidity++
+Required By     : obextool  steam-metadata-editor-git  tklib
+Optional For    : git  obexftp  python  python-matplotlib  python-pillow  ruby  stk  sysstat  timidity++
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 12.26 MiB
@@ -8168,7 +8262,7 @@ Groups          : None
 Provides        : ttf-font
 Depends On      : None
 Optional Deps   : None
-Required By     : brave-bin  calibre  firefox  mplayer  qt5-webengine  qt6-webengine  steam  thunderbird
+Required By     : brave-bin  calibre  chromium  firefox  mplayer  qt5-webengine  qt6-webengine  steam  thunderbird
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
