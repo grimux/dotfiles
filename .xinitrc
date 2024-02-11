@@ -102,7 +102,7 @@ function shared_settings() {
 	#mpDris2 &
 
 	# Set caps lock to escape
-	setxkbmap -option caps:escape &
+	#setxkbmap -option caps:escape &
 
 	# Turn on the numlock
 	numlockx on &
