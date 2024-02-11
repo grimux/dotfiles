@@ -1,0 +1,27 @@
+#
+# Settings for programs not in `.config`.  This might be config files located at a system level.
+#
+
+#################
+### pasystray ###
+#################
+# A .desktop file is created in `/etc/xdg/autostart` named `pasystray.desktop`.
+# Be sure to make sure the `Exec` line is as follows to enable all notifications:
+#
+# ```
+# Exec=pasystray --notify=all
+# ```
+#
+# Entire desktop file:
+[Desktop Entry]
+Version=1.0
+Name=PulseAudio System Tray
+GenericName=
+Comment=An Applet for PulseAudio
+Exec=pasystray --notify=all
+Icon=pasystray
+StartupNotify=true
+Type=Application
+Categories=AudioVideo;Audio;
+Keywords=pulseaudio;tray;system tray;applet;volume;
+

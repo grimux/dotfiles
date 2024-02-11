@@ -1,5 +1,5 @@
 #!/usr/bin/bash
-# 
+#
 # A script to toggle autologin and autostartx
 #
 
@@ -13,7 +13,7 @@ set -euo pipefail
 
 # Autologin variables
 drop_in_file=/etc/systemd/system/getty@tty1.service.d/autologin.conf
-backup_file=$HOME/.config/autologin.conf
+backup_file=$HOME/.config/system-wide/autologin.conf
 
 # Autostartx variables
 shell_profile="$HOME/.zshrc"
@@ -132,7 +132,7 @@ toggle_login() {
 		# Remove the drop-in file
 		echo "Disabling autologin..."
 		autologin_disable && echo "Done."
-	
+
 		# Disable autostartx
 		echo "Disabling autostartx..."
 		autostartx_disable && echo "Done."
@@ -140,7 +140,7 @@ toggle_login() {
 		# Add the drop-in file
 		echo "Enabling autologin..."
 		autologin_enable && echo "Done."
-		
+
 		# Enable autostartx
 		echo "Enabling autostartx..."
 		autostartx_enable && echo "Done."
