@@ -134,6 +134,7 @@ imagemagick
 img2pdf
 innoextract
 iptables-nft
+jdk17-openjdk
 jdownloader2
 jmtpfs
 jq
@@ -247,7 +248,7 @@ pkgconf
 pkgfile
 playerctl
 plocate
-polymc-bin
+polymc
 postfix
 powerline-fonts
 ppsspp
