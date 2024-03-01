@@ -467,7 +467,6 @@ xorg-xwayland
 xorg-xwd
 xorg-xwininfo
 xorg-xwud
-xpadneo-dkms-git
 xscreensaver
 xtrlock
 yad
