@@ -3106,7 +3106,7 @@ Optional Deps   : ghostscript: PS/PDF support [installed]
                   djvulibre: DJVU support
                   pango: Text rendering [installed]
 Required By     : zbar
-Optional For    : feh  neofetch  python-matplotlib  ranger
+Optional For    : feh  neofetch  python-matplotlib  python-sphinx  ranger
 Conflicts With  : None
 Replaces        : imagemagick-doc
 Installed Size  : 21.88 MiB
@@ -7798,7 +7798,7 @@ Depends On      : texlive-bin  texlive-latexrecommended  texlive-pictures
 Optional Deps   : java-runtime: for pdfannotextractor [installed]
                   python-pygments: for pygmentex [installed]
 Required By     : None
-Optional For    : None
+Optional For    : python-sphinx
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 78.89 MiB
