@@ -90,7 +90,6 @@ fuseiso
 fzf
 gameconqueror
 gamemode
-gamescope
 gbml-git
 gcc
 gdrive
@@ -142,7 +141,6 @@ jre
 jre-openjdk
 jre8
 jstest-gtk-git
-kde-gtk-config
 kdiskmark
 kvantum
 lftp
@@ -228,7 +226,6 @@ pacman-log-orphans-hook
 pacutils
 palenight-gtk-theme
 pamixer
-pandoc-cli
 papirus-icon-theme
 paprefs
 pass
@@ -329,18 +326,6 @@ system-config-printer
 terminus-font
 terrafirma
 texinfo
-texlive-basic
-texlive-bibtexextra
-texlive-fontsextra
-texlive-formatsextra
-texlive-games
-texlive-humanities
-texlive-latexextra
-texlive-mathscience
-texlive-music
-texlive-pictures
-texlive-pstricks
-texlive-publishers
 theforceengine
 thunderbird
 timeshift
@@ -383,11 +368,9 @@ winetricks
 wkhtmltox
 wmctrl
 words
-xash3d-fwgs-git
 xclip
 xdelta3
 xdg-desktop-portal-gtk
-xdg-desktop-portal-kde
 xdg-desktop-portal-lxqt
 xdg-user-dirs
 xf86-video-vesa
@@ -467,7 +450,6 @@ xorg-xwayland
 xorg-xwd
 xorg-xwininfo
 xorg-xwud
-xscreensaver
 xtrlock
 yad
 yay

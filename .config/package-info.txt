@@ -96,10 +96,10 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : amd-ucode
-Version         : 20240220.97b693d2-1
+Version         : 20240312.3b128b60-1
 Description     : Microcode update image for AMD CPUs
 Architecture    : any
-URL             : https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git;a=summary
+URL             : https://gitlab.com/kernel-firmware/linux-firmware
 Licenses        : custom
 Groups          : None
 Provides        : None
@@ -111,8 +111,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 158.98 KiB
 Packager        : Tobias Powalowski <tpowa@archlinux.org>
-Build Date      : Tue 20 Feb 2024 01:30:44 PM CST
-Install Date    : Thu 29 Feb 2024 10:19:14 AM CST
+Build Date      : Wed 13 Mar 2024 06:34:36 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:32 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -623,7 +623,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : bluez
-Version         : 5.72-2
+Version         : 5.73-4
 Description     : Daemons for the bluetooth protocol stack
 Architecture    : x86_64
 URL             : http://www.bluez.org/
@@ -636,16 +636,16 @@ Required By     : blueman  pulseaudio-bluetooth
 Optional For    : networkmanager
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 1660.62 KiB
+Installed Size  : 1563.16 KiB
 Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Sun 14 Jan 2024 07:56:00 AM CST
-Install Date    : Wed 17 Jan 2024 02:49:01 PM CST
+Build Date      : Wed 13 Mar 2024 03:33:41 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:36 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : bluez-libs
-Version         : 5.72-2
+Version         : 5.73-4
 Description     : Deprecated libraries for the bluetooth protocol stack
 Architecture    : x86_64
 URL             : http://www.bluez.org/
@@ -658,16 +658,16 @@ Required By     : blueman  dolphin-emu  openobex  pulseaudio-bluetooth
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 327.24 KiB
+Installed Size  : 315.90 KiB
 Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Sun 14 Jan 2024 07:56:00 AM CST
-Install Date    : Wed 17 Jan 2024 02:49:01 PM CST
+Build Date      : Wed 13 Mar 2024 03:33:41 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:36 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : bluez-obex
-Version         : 5.72-2
+Version         : 5.73-4
 Description     : Object Exchange daemon for sharing content
 Architecture    : x86_64
 URL             : http://www.bluez.org/
@@ -680,32 +680,32 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 869.77 KiB
+Installed Size  : 543.72 KiB
 Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Sun 14 Jan 2024 07:56:00 AM CST
-Install Date    : Sat 10 Feb 2024 02:06:00 PM CST
+Build Date      : Wed 13 Mar 2024 03:33:41 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:36 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : bluez-utils
-Version         : 5.72-2
+Version         : 5.73-4
 Description     : Development and debugging utilities for the bluetooth protocol stack
 Architecture    : x86_64
 URL             : http://www.bluez.org/
 Licenses        : GPL-2.0-only
 Groups          : None
-Provides        : None
+Provides        : bluez-plugins
 Depends On      : dbus  systemd-libs  glib2  glibc  readline
 Optional Deps   : ell: for btpclient [installed]
 Required By     : None
 Optional For    : None
 Conflicts With  : None
-Replaces        : None
-Installed Size  : 3.46 MiB
+Replaces        : bluez-plugins
+Installed Size  : 3.28 MiB
 Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Sun 14 Jan 2024 07:56:00 AM CST
-Install Date    : Wed 17 Jan 2024 02:49:01 PM CST
+Build Date      : Wed 13 Mar 2024 03:33:41 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:36 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -873,7 +873,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : calibre
-Version         : 7.6.0-1
+Version         : 7.7.0-1
 Description     : Ebook management application
 Architecture    : x86_64
 URL             : https://calibre-ebook.com
@@ -888,10 +888,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : calibre-common  calibre-python3
 Replaces        : calibre-common  calibre-python3
-Installed Size  : 117.27 MiB
+Installed Size  : 117.47 MiB
 Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Fri 01 Mar 2024 02:37:12 AM CST
-Install Date    : Tue 05 Mar 2024 02:19:19 PM CST
+Build Date      : Thu 14 Mar 2024 04:51:20 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:39 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -968,28 +968,28 @@ Install Script  : Yes
 Validated By    : None
 
 Name            : chromium
-Version         : 122.0.6261.94-1
+Version         : 123.0.6312.46-1
 Description     : A web browser built for speed, simplicity, and security
 Architecture    : x86_64
 URL             : https://www.chromium.org/Home
 Licenses        : BSD-3-Clause
 Groups          : None
 Provides        : None
-Depends On      : gtk3  nss  alsa-lib  xdg-utils  libxss  libcups  libgcrypt  ttf-liberation  systemd  dbus  libpulse  pciutils  libva  libffi  desktop-file-utils  hicolor-icon-theme  fontconfig  libjpeg  icu  dav1d  flac  libxml2  libwebp  minizip  opus  harfbuzz  libxslt  libpng  freetype2
+Depends On      : gtk3  nss  alsa-lib  xdg-utils  libxss  libcups  libgcrypt  ttf-liberation  systemd  dbus  libpulse  pciutils  libva  libffi  desktop-file-utils  hicolor-icon-theme  fontconfig  brotli  libjpeg  icu  dav1d  flac  libxml2  libwebp  minizip  opus  harfbuzz  libxslt  libpng  freetype2
 Optional Deps   : pipewire: WebRTC desktop sharing under Wayland [installed]
                   kdialog: support for native dialogs in Plasma
                   qt5-base: enable Qt5 with --enable-features=AllowQt [installed]
                   gtk4: for --gtk-version=4 (GTK4 IME might work better on Wayland) [installed]
-                  org.freedesktop.secrets: password storage backend on GNOME / Xfce [installed]
+                  org.freedesktop.secrets: password storage backend on GNOME / Xfce
                   kwallet: support for storing passwords in KWallet on Plasma
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 315.83 MiB
+Installed Size  : 315.38 MiB
 Packager        : Evangelos Foutras <foutrelis@archlinux.org>
-Build Date      : Wed 28 Feb 2024 12:15:39 AM CST
-Install Date    : Thu 29 Feb 2024 10:19:22 AM CST
+Build Date      : Fri 15 Mar 2024 04:17:23 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:40 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -1087,7 +1087,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : crystal
-Version         : 1.11.2-1
+Version         : 1.11.2-2
 Description     : The Crystal Programming Language
 Architecture    : x86_64
 URL             : https://crystal-lang.org
@@ -1104,9 +1104,9 @@ Optional For    : None
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 129.24 MiB
-Packager        : Anatol Pomozov <anatolik@archlinux.org>
-Build Date      : Mon 26 Feb 2024 06:53:56 PM CST
-Install Date    : Thu 29 Feb 2024 10:19:23 AM CST
+Packager        : Evangelos Foutras <foutrelis@archlinux.org>
+Build Date      : Sat 02 Mar 2024 10:31:24 AM CST
+Install Date    : Mon 18 Mar 2024 10:34:41 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -1249,7 +1249,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : discord
-Version         : 0.0.43-1
+Version         : 0.0.45-1
 Description     : All-in-one voice and text chat for gamers
 Architecture    : x86_64
 URL             : https://discord.com
@@ -1264,10 +1264,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 221.35 MiB
+Installed Size  : 221.36 MiB
 Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Mon 12 Feb 2024 03:44:26 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:22 AM CST
+Build Date      : Tue 12 Mar 2024 12:15:33 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:42 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -1484,7 +1484,7 @@ Licenses        : GPL-3.0-only
 Groups          : None
 Provides        : duckstation
 Depends On      : sh  glibc  gcc-libs  sdl2  qt6-base  libxrandr  libglvnd  libx11  zstd  zlib  dbus  curl  hicolor-icon-theme
-Optional Deps   : qt6-wayland: Wayland support
+Optional Deps   : qt6-wayland: Wayland support [installed]
                   libpulse: Pulseaudio support [installed]
                   sndio: Small audio support [installed]
                   alsa-lib: ALSA support [installed]
@@ -1592,23 +1592,23 @@ Install Script  : Yes
 Validated By    : None
 
 Name            : efibootmgr
-Version         : 18-2
+Version         : 18-3
 Description     : Linux user-space application to modify the EFI Boot Manager
 Architecture    : x86_64
 URL             : https://github.com/rhboot/efibootmgr
-Licenses        : GPL2
+Licenses        : GPL-2.0-or-later
 Groups          : None
 Provides        : None
-Depends On      : glibc  popt  libefiboot.so=1-64  libefivar.so=1-64
+Depends On      : glibc  popt  efivar  libefiboot.so=1-64  libefivar.so=1-64
 Optional Deps   : None
 Required By     : None
 Optional For    : grub
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 79.57 KiB
+Installed Size  : 83.71 KiB
 Packager        : David Runge <dvzrv@archlinux.org>
-Build Date      : Sat 18 Mar 2023 10:56:01 AM CDT
-Install Date    : Sun 19 Mar 2023 03:57:28 PM CDT
+Build Date      : Wed 13 Mar 2024 04:47:21 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:42 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -1702,7 +1702,7 @@ Install Script  : No
 Validated By    : None
 
 Name            : eza
-Version         : 0.18.5-1
+Version         : 0.18.7-1
 Description     : A modern replacement for ls (community fork of exa)
 Architecture    : x86_64
 URL             : https://github.com/eza-community/eza
@@ -1715,10 +1715,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : exa
 Replaces        : exa
-Installed Size  : 1146.14 KiB
-Packager        : Orhun Parmaksız <orhun@archlinux.org>
-Build Date      : Thu 29 Feb 2024 01:02:42 AM CST
-Install Date    : Thu 29 Feb 2024 10:19:23 AM CST
+Installed Size  : 1126.57 KiB
+Packager        : Caleb Maclennan <alerque@archlinux.org>
+Build Date      : Thu 14 Mar 2024 11:12:43 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:42 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -2014,7 +2014,7 @@ Groups          : None
 Provides        : None
 Depends On      : fuse-common  glibc
 Optional Deps   : None
-Required By     : dwarfs  exfat-utils  flatpak  fuse-overlayfs  gvfs  kio-fuse  ostree  xdg-desktop-portal
+Required By     : dwarfs  exfat-utils  flatpak  fuse-overlayfs  gvfs  ostree  xdg-desktop-portal
 Optional For    : grub  rclone
 Conflicts With  : None
 Replaces        : None
@@ -2049,7 +2049,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : fzf
-Version         : 0.46.1-1
+Version         : 0.48.0-1
 Description     : Command-line fuzzy finder
 Architecture    : x86_64
 URL             : https://github.com/junegunn/fzf
@@ -2065,10 +2065,10 @@ Required By     : downgrade
 Optional For    : clipmenu
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 3.87 MiB
-Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Sat 03 Feb 2024 09:41:30 AM CST
-Install Date    : Tue 06 Feb 2024 10:12:56 AM CST
+Installed Size  : 3.73 MiB
+Packager        : Morten Linderud <foxboron@archlinux.org>
+Build Date      : Wed 13 Mar 2024 10:42:34 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:42 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -2113,28 +2113,6 @@ Installed Size  : 279.21 KiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 Build Date      : Wed 17 Jan 2024 02:29:35 PM CST
 Install Date    : Fri 26 Jan 2024 01:00:32 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : gamescope
-Version         : 3.14.2-1
-Description     : SteamOS session compositing window manager
-Architecture    : x86_64
-URL             : https://github.com/ValveSoftware/gamescope
-Licenses        : BSD
-Groups          : None
-Provides        : None
-Depends On      : gcc-libs  glibc  glm  libavif  libcap.so=2-64  libdisplay-info.so=1-64  libdrm  libliftoff.so=0-64  libpipewire-0.3.so=0-64  libvulkan.so  libwlroots.so=12-64  libx11  libxcb  libxcomposite  libxdamage  libxext  libxfixes  libxkbcommon.so=0-64  libxmu  libxrender  libxres  libxtst  libxxf86vm  openvr  sdl2  vulkan-icd-loader  wayland  xorg-server-xwayland
-Optional Deps   : None
-Required By     : None
-Optional For    : mangohud
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 2.08 MiB
-Packager        : Maxime Gauduin <alucryd@archlinux.org>
-Build Date      : Sun 25 Feb 2024 09:25:36 PM CST
-Install Date    : Tue 05 Mar 2024 02:19:20 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -2250,23 +2228,23 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : ghostscript
-Version         : 10.02.1-1
+Version         : 10.03.0-2
 Description     : An interpreter for the PostScript language
 Architecture    : x86_64
 URL             : https://www.ghostscript.com/
-Licenses        : AGPL3  custom
+Licenses        : AGPL-3.0-or-later
 Groups          : None
 Provides        : None
 Depends On      : libxt  libcups  fontconfig  zlib  libpng  libjpeg  jbig2dec  libtiff  lcms2  libpaper  ijs  openjpeg2  libidn  poppler-data  cairo  glibc  libx11  gdk-pixbuf2  glib2
 Optional Deps   : gtk3: needed for gsx [installed]
-Required By     : cups-pdf  dvisvgm  graphviz  hplip
-Optional For    : gimp  imagemagick  python-matplotlib  texlive-pictures
+Required By     : cups-pdf  graphviz  hplip
+Optional For    : gimp  imagemagick  python-matplotlib
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 43.01 MiB
+Installed Size  : 42.50 MiB
 Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Wed 01 Nov 2023 03:46:03 PM CDT
-Install Date    : Thu 02 Nov 2023 11:26:23 AM CDT
+Build Date      : Thu 14 Mar 2024 09:19:59 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:42 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -2317,7 +2295,7 @@ Optional Deps   : tk: gitk and git gui [installed]
                   perl-cgi: gitweb (web interface) support
                   python: git svn & git p4 [installed]
                   subversion: git svn [installed]
-                  org.freedesktop.secrets: keyring credential helper [installed]
+                  org.freedesktop.secrets: keyring credential helper
                   libsecret: libsecret credential helper [installed]
 Required By     : shards  yay
 Optional For    : gettext  goverlay  pass
@@ -2500,7 +2478,7 @@ Optional Deps   : netpbm: for use together with man -H command interaction in br
                   libxaw: for gxditview [installed]
                   perl-file-homedir: for use with glilypond
 Required By     : base-devel  man-db
-Optional For    : haskell-pandoc
+Optional For    : None
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 9.69 MiB
@@ -2534,7 +2512,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : grub
-Version         : 2:2.12-1
+Version         : 2:2.12-2
 Description     : GNU GRand Unified Bootloader (2)
 Architecture    : x86_64
 URL             : https://www.gnu.org/software/grub/
@@ -2554,10 +2532,10 @@ Required By     : grub-customizer  update-grub
 Optional For    : None
 Conflicts With  : grub-common  grub-bios  grub-emu  grub-efi-x86_64  grub-legacy
 Replaces        : grub-common  grub-bios  grub-emu  grub-efi-x86_64
-Installed Size  : 33.57 MiB
+Installed Size  : 33.67 MiB
 Packager        : Christian Hesse <eworm@archlinux.org>
-Build Date      : Wed 20 Dec 2023 02:54:54 PM CST
-Install Date    : Fri 22 Dec 2023 01:09:38 PM CST
+Build Date      : Sat 16 Mar 2024 02:09:18 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:43 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
@@ -2632,124 +2610,124 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : gst-libav
-Version         : 1.22.10-1
+Version         : 1.24.0-1
 Description     : Multimedia graph framework - libav plugin
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
 Licenses        : LGPL-2.1-or-later
 Groups          : None
-Provides        : gst-ffmpeg=1.22.10
-Depends On      : gst-plugins-base-libs=1.22.10  bzip2  ffmpeg
+Provides        : gst-ffmpeg=1.24.0
+Depends On      : gst-plugins-base-libs=1.24.0  bzip2  ffmpeg
 Optional Deps   : None
 Required By     : None
 Optional For    : qt5-multimedia  webkit2gtk  webkit2gtk-4.1
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 238.56 KiB
+Installed Size  : 254.75 KiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Wed 14 Feb 2024 05:15:31 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:23 AM CST
+Build Date      : Tue 05 Mar 2024 10:35:48 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:43 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : gst-plugins-bad
-Version         : 1.22.10-1
+Version         : 1.24.0-1
 Description     : Multimedia graph framework - bad plugins
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
 Licenses        : LGPL-2.1-or-later
 Groups          : None
 Provides        : None
-Depends On      : gst-plugins-bad-libs=1.22.10  aom  bzip2  chromaprint  curl  faac  faad2  fluidsynth  gsm  json-glib  lcms2  libass  libavtp  libbs2b  libdc1394  libdca  libde265  libdvdnav  libdvdread  libfdk-aac  libfreeaptx  libgme  libkate  libldac  liblrdf  libltc  libmicrodns  libmodplug  libmpcdec  libopenmpt  librsvg  libsndfile  libsrtp  libwebp  libxml2  lilv  mjpegtools  neon  nettle  openal  openexr  openjpeg2  openssl  opus  pango  qrencode  rtmpdump  sbc  soundtouch  spandsp  srt  svt-hevc  webrtc-audio-processing  wildmidi  x265  zbar  zvbi  zxing-cpp
+Depends On      : gst-plugins-bad-libs=1.24.0  aom  bzip2  chromaprint  curl  faac  faad2  fluidsynth  gsm  json-glib  lcms2  libass  libavtp  libbs2b  libdc1394  libdca  libde265  libdvdnav  libdvdread  libfdk-aac  libfreeaptx  libgme  liblc3  libldac  liblrdf  libltc  libmicrodns  libmodplug  libmpcdec  libopenmpt  librsvg  libsndfile  libsrtp  libwebp  libxml2  lilv  mjpegtools  neon  nettle  openal  openexr  openjpeg2  openssl  opus  pango  qrencode  rtmpdump  sbc  soundtouch  spandsp  srt  svt-av1  svt-hevc  webrtc-audio-processing-1  wildmidi  x265  zbar  zvbi  zxing-cpp
 Optional Deps   : None
 Required By     : None
 Optional For    : pulseaudio-bluetooth  qt5-multimedia  webkit2gtk  webkit2gtk-4.1
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 3.60 MiB
+Installed Size  : 3.71 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Wed 14 Feb 2024 05:15:31 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:24 AM CST
+Build Date      : Tue 05 Mar 2024 10:35:48 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:43 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : gst-plugins-base
-Version         : 1.22.10-1
+Version         : 1.24.0-1
 Description     : Multimedia graph framework - base plugins
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
 Licenses        : LGPL-2.1-or-later
 Groups          : None
 Provides        : None
-Depends On      : gst-plugins-base-libs=1.22.10  alsa-lib  cdparanoia  graphene  libjpeg  libpng  libtheora  libvorbis  opus  pango
+Depends On      : gst-plugins-base-libs=1.24.0  alsa-lib  cdparanoia  graphene  libjpeg  libpng  libtheora  libvorbis  opus  pango
 Optional Deps   : None
 Required By     : lib32-gst-plugins-base  qt5-multimedia
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 967.69 KiB
+Installed Size  : 963.62 KiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Wed 14 Feb 2024 05:15:31 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:24 AM CST
+Build Date      : Tue 05 Mar 2024 10:35:48 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:43 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : gst-plugins-good
-Version         : 1.22.10-1
+Version         : 1.24.0-1
 Description     : Multimedia graph framework - good plugins
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
 Licenses        : LGPL-2.1-or-later
 Groups          : None
 Provides        : None
-Depends On      : gst-plugins-base-libs=1.22.10  aalib  cairo  flac  gdk-pixbuf2  lame  libavc1394  libcaca  libdv  libgudev  libiec61883  libpulse  libraw1394  libshout  libsoup3  libvpx  libxdamage  mpg123  nettle  speex  taglib  twolame  v4l-utils  wavpack  libjack.so=0-64
-Optional Deps   : None
+Depends On      : gst-plugins-base-libs=1.24.0  aalib  cairo  flac  gdk-pixbuf2  lame  libavc1394  libcaca  libdv  libgudev  libiec61883  libpulse  libraw1394  libshout  libsoup3  libvpx  libxdamage  libxtst  mpg123  nettle  opencore-amr  speex  taglib  twolame  v4l-utils  wavpack
+Optional Deps   : jack: JACK backend [installed]
 Required By     : lib32-gst-plugins-good
 Optional For    : qt5-multimedia  webkit2gtk  webkit2gtk-4.1
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 7.03 MiB
+Installed Size  : 7.20 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Wed 14 Feb 2024 05:15:31 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:24 AM CST
+Build Date      : Tue 05 Mar 2024 10:35:48 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:43 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : gst-plugins-ugly
-Version         : 1.22.10-1
+Version         : 1.24.0-1
 Description     : Multimedia graph framework - ugly plugins
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
 Licenses        : LGPL-2.1-or-later
 Groups          : None
 Provides        : None
-Depends On      : gst-plugins-base-libs=1.22.10  a52dec  libcdio  libdvdread  libmpeg2  opencore-amr  x264
+Depends On      : gst-plugins-base-libs=1.24.0  a52dec  libcdio  libdvdread  libmpeg2  x264
 Optional Deps   : None
 Required By     : None
 Optional For    : qt5-multimedia
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 654.38 KiB
+Installed Size  : 561.40 KiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Wed 14 Feb 2024 05:15:31 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:24 AM CST
+Build Date      : Tue 05 Mar 2024 10:35:48 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:43 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : gstreamer-vaapi
-Version         : 1.22.10-1
+Version         : 1.24.0-1
 Description     : Multimedia graph framework - vaapi plugin
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
 Licenses        : LGPL-2.1-or-later
 Groups          : None
 Provides        : None
-Depends On      : gst-plugins-bad-libs=1.22.10  libxrandr
+Depends On      : gst-plugins-bad-libs=1.24.0  libxrandr
 Optional Deps   : None
 Required By     : None
 Optional For    : None
@@ -2757,8 +2735,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 812.58 KiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Wed 14 Feb 2024 05:15:31 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:24 AM CST
+Build Date      : Tue 05 Mar 2024 10:35:48 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:43 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -2985,7 +2963,7 @@ Install Script  : No
 Validated By    : None
 
 Name            : hplip
-Version         : 1:3.23.12-2
+Version         : 1:3.23.12-3
 Description     : Drivers for HP DeskJet, OfficeJet, Photosmart, Business Inkjet and some LaserJet
 Architecture    : x86_64
 URL             : https://hplipopensource.com
@@ -3006,10 +2984,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 38.93 MiB
-Packager        : Felix Yan <felixonmars@archlinux.org>
-Build Date      : Tue 09 Jan 2024 01:44:36 AM CST
-Install Date    : Wed 17 Jan 2024 02:49:05 PM CST
+Installed Size  : 38.90 MiB
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Fri 15 Mar 2024 06:20:33 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:44 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -3284,7 +3262,7 @@ Optional Deps   : alsa-lib: for basic sound support [installed]
                   gtk2: for the Gtk+ 2 look and feel - desktop usage [installed]
                   gtk3: for the Gtk+ 3 look and feel - desktop usage [installed]
 Required By     : jdownloader2  polymc
-Optional For    : libbluray  libjpeg-turbo  libjxl  libreoffice-fresh  texlive-latexextra  ums
+Optional For    : libbluray  libjpeg-turbo  libjxl  libreoffice-fresh  ums
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 189.30 MiB
@@ -3308,7 +3286,7 @@ Optional Deps   : alsa-lib: for basic sound support [installed]
                   gtk2: for the Gtk+ 2 look and feel - desktop usage [installed]
                   gtk3: for the Gtk+ 3 look and feel - desktop usage [installed]
 Required By     : jdownloader2  polymc
-Optional For    : libbluray  libjpeg-turbo  libjxl  libreoffice-fresh  texlive-latexextra  ums
+Optional For    : libbluray  libjpeg-turbo  libjxl  libreoffice-fresh  ums
 Conflicts With  : jdk-openjdk  jre-openjdk-headless
 Replaces        : None
 Installed Size  : 151.08 MiB
@@ -3331,7 +3309,7 @@ Depends On      : ca-certificates-java  hicolor-icon-theme  java-runtime-common 
 Optional Deps   : alsa-lib: for basic sound support [installed]
                   gtk2: for Gtk+ look and feel (desktop) [installed]
 Required By     : jdownloader2  polymc
-Optional For    : libbluray  libjxl  libreoffice-fresh  texlive-latexextra  ums
+Optional For    : libbluray  libjxl  libreoffice-fresh  ums
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 262.11 MiB
@@ -3364,29 +3342,6 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
 
-Name            : kde-gtk-config
-Version         : 5.27.10-1
-Description     : GTK2 and GTK3 Configurator for KDE
-Architecture    : x86_64
-URL             : https://kde.org/plasma-desktop/
-Licenses        : LGPL
-Groups          : plasma
-Provides        : None
-Depends On      : qt5-svg  kdecoration  kconfigwidgets5  kdbusaddons5  kwindowsystem5
-Optional Deps   : gtk3: GTK3 apps support [installed]
-                  xsettingsd: apply settings to GTK applications on the fly
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 297.77 KiB
-Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Tue 05 Dec 2023 04:31:23 PM CST
-Install Date    : Wed 13 Dec 2023 02:10:54 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
 Name            : kdiskmark
 Version         : 3.1.4-1
 Description     : HDD and SSD benchmark tool with a very friendly graphical user interface
@@ -3410,23 +3365,23 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : kvantum
-Version         : 1.0.10-2
-Description     : SVG-based theme engine for Qt5/6 (including config tool and extra themes)
+Version         : 1.1.0-1
+Description     : SVG-based theme engine for Qt6 (including config tool and extra themes)
 Architecture    : x86_64
 URL             : https://github.com/tsujan/Kvantum
-Licenses        : GPL
+Licenses        : GPL-3.0-or-later
 Groups          : None
 Provides        : None
-Depends On      : kwindowsystem5  qt5-svg
-Optional Deps   : qt6-svg: Qt6 style [installed]
+Depends On      : gcc-libs  glibc  libx11  kwindowsystem  qt6-base  qt6-svg
+Optional Deps   : kvantum-qt5: Qt5 style
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 9.02 MiB
+Installed Size  : 8.07 MiB
 Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Sun 01 Oct 2023 02:39:42 AM CDT
-Install Date    : Fri 06 Oct 2023 02:55:31 PM CDT
+Build Date      : Sun 17 Mar 2024 12:04:34 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:44 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -3498,51 +3453,51 @@ Install Script  : No
 Validated By    : None
 
 Name            : lib32-gst-plugins-base
-Version         : 1.22.10-1
+Version         : 1.24.0-2
 Description     : Multimedia graph framework (32-bit) - base plugins
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
 Licenses        : LGPL-2.1-or-later
 Groups          : None
 Provides        : None
-Depends On      : lib32-gst-plugins-base-libs=1.22.10  lib32-alsa-lib  lib32-cdparanoia  lib32-libjpeg  lib32-libpng  lib32-libtheora  lib32-libvorbis  lib32-opus  lib32-pango  gst-plugins-base
+Depends On      : lib32-gst-plugins-base-libs=1.24.0  lib32-alsa-lib  lib32-cdparanoia  lib32-libjpeg  lib32-libpng  lib32-libtheora  lib32-libvorbis  lib32-opus  lib32-pango  gst-plugins-base
 Optional Deps   : None
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 1078.36 KiB
-Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Wed 14 Feb 2024 05:17:17 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:27 AM CST
+Installed Size  : 1074.23 KiB
+Packager        : Laurent Carlier <lordheavym@archlinux.org>
+Build Date      : Tue 05 Mar 2024 11:38:14 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:45 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : lib32-gst-plugins-good
-Version         : 1.22.10-1
+Version         : 1.24.0-2
 Description     : Multimedia graph framework (32-bit) - good plugins
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
 Licenses        : LGPL-2.1-or-later
 Groups          : None
 Provides        : None
-Depends On      : lib32-gst-plugins-base-libs=1.22.10  lib32-aalib  lib32-cairo  lib32-flac  lib32-gdk-pixbuf2  lib32-libavc1394  lib32-libcaca  lib32-libdv  lib32-libgudev  lib32-libiec61883  lib32-libpulse  lib32-libraw1394  lib32-libshout  lib32-libsoup3  lib32-libvpx  lib32-libxdamage  lib32-mpg123  lib32-nettle  lib32-speex  lib32-taglib  lib32-twolame  lib32-v4l-utils  lib32-wavpack  libjack.so=0-32  gst-plugins-good
-Optional Deps   : None
+Depends On      : lib32-gst-plugins-base-libs=1.24.0  lib32-aalib  lib32-cairo  lib32-flac  lib32-gdk-pixbuf2  lib32-libavc1394  lib32-libcaca  lib32-libdv  lib32-libgudev  lib32-libiec61883  lib32-libpulse  lib32-libraw1394  lib32-libshout  lib32-libsoup3  lib32-libvpx  lib32-libxdamage  lib32-libxtst  lib32-mpg123  lib32-nettle  lib32-speex  lib32-taglib  lib32-twolame  lib32-v4l-utils  lib32-wavpack  gst-plugins-good
+Optional Deps   : lib32-jack: JACK backend [installed]
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 7.47 MiB
-Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Wed 14 Feb 2024 05:17:17 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:27 AM CST
+Installed Size  : 7.61 MiB
+Packager        : Laurent Carlier <lordheavym@archlinux.org>
+Build Date      : Tue 05 Mar 2024 11:38:14 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:45 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : lib32-gstreamer
-Version         : 1.22.10-1
+Version         : 1.24.0-2
 Description     : Multimedia graph framework (32-bit) - core
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
@@ -3555,10 +3510,10 @@ Required By     : lib32-gst-plugins-base-libs
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 3.33 MiB
-Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Wed 14 Feb 2024 05:17:17 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:27 AM CST
+Installed Size  : 3.93 MiB
+Packager        : Laurent Carlier <lordheavym@archlinux.org>
+Build Date      : Tue 05 Mar 2024 11:38:14 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:44 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
@@ -3610,7 +3565,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : lib32-sdl2_mixer
-Version         : 2.6.3-1
+Version         : 2.8.0-1
 Description     : A simple multi-channel audio mixer
 Architecture    : x86_64
 URL             : https://github.com/libsdl-org/SDL_mixer
@@ -3623,10 +3578,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 312.08 KiB
-Packager        : Maxime Gauduin <alucryd@archlinux.org>
-Build Date      : Thu 09 Feb 2023 07:50:04 AM CST
-Install Date    : Sun 20 Aug 2023 04:12:00 PM CDT
+Installed Size  : 316.17 KiB
+Packager        : Antonio Rojas <arojas@archlinux.org>
+Build Date      : Sat 09 Mar 2024 06:56:37 AM CST
+Install Date    : Mon 18 Mar 2024 10:34:45 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -3676,7 +3631,7 @@ Install Script  : Yes
 Validated By    : None
 
 Name            : libnewt
-Version         : 0.52.23-2
+Version         : 0.52.24-1
 Description     : Not Erik's Windowing Toolkit - text mode windowing with slang
 Architecture    : x86_64
 URL             : https://pagure.io/newt
@@ -3690,16 +3645,16 @@ Required By     : byobu  networkmanager
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 278.66 KiB
-Packager        : Felix Yan <felixonmars@archlinux.org>
-Build Date      : Thu 06 Apr 2023 09:25:20 AM CDT
-Install Date    : Thu 04 May 2023 10:04:48 AM CDT
+Installed Size  : 274.95 KiB
+Packager        : Alexander F. Rødseth <xyproto@archlinux.org>
+Build Date      : Wed 06 Mar 2024 09:02:03 AM CST
+Install Date    : Mon 18 Mar 2024 10:34:46 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : libreoffice-fresh
-Version         : 24.2.0-2
+Version         : 24.2.1-4
 Description     : LibreOffice branch which contains new features and program enhancements
 Architecture    : x86_64
 URL             : https://www.libreoffice.org/
@@ -3722,16 +3677,16 @@ Optional Deps   : java-runtime: adds java support [installed]
                   coin-or-mp: required by the Calc solver
                   gtk3: for GTK3 integration [installed]
                   gtk4: for GTK4 integration (experimental) [installed]
-                  kio5: for KF5 KDE desktop integration [installed]
+                  kio: for KF6 KDE desktop integration
                   qt6-base: for Qt6 desktop integration [installed]
 Required By     : None
 Optional For    : None
 Conflicts With  : libreoffice-still
 Replaces        : None
-Installed Size  : 433.88 MiB
+Installed Size  : 410.91 MiB
 Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Wed 31 Jan 2024 01:11:30 PM CST
-Install Date    : Thu 29 Feb 2024 10:19:28 AM CST
+Build Date      : Fri 15 Mar 2024 01:43:42 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:48 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -3847,11 +3802,11 @@ Install Script  : Yes
 Validated By    : Signature
 
 Name            : linux
-Version         : 6.7.8.arch1-1
+Version         : 6.8.1.arch1-1
 Description     : The Linux kernel and modules
 Architecture    : x86_64
 URL             : https://github.com/archlinux/linux
-Licenses        : GPL2
+Licenses        : GPL-2.0-only
 Groups          : None
 Provides        : KSMBD-MODULE  VIRTUALBOX-GUEST-MODULES  WIREGUARD-MODULE
 Depends On      : coreutils  initramfs  kmod
@@ -3861,19 +3816,19 @@ Required By     : virtualbox-guest-utils
 Optional For    : base  libratbag
 Conflicts With  : None
 Replaces        : virtualbox-guest-modules-arch  wireguard-arch
-Installed Size  : 130.96 MiB
+Installed Size  : 132.25 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Sat 02 Mar 2024 06:30:36 PM CST
-Install Date    : Tue 05 Mar 2024 02:19:26 PM CST
+Build Date      : Sat 16 Mar 2024 12:15:35 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:49 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : linux-firmware
-Version         : 20240220.97b693d2-1
+Version         : 20240312.3b128b60-1
 Description     : Firmware files for Linux
 Architecture    : any
-URL             : https://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git;a=summary
+URL             : https://gitlab.com/kernel-firmware/linux-firmware
 Licenses        : GPL2  GPL3  custom
 Groups          : None
 Provides        : None
@@ -3883,20 +3838,20 @@ Required By     : None
 Optional For    : linux
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 222.21 MiB
+Installed Size  : 224.31 MiB
 Packager        : Tobias Powalowski <tpowa@archlinux.org>
-Build Date      : Tue 20 Feb 2024 01:30:44 PM CST
-Install Date    : Thu 29 Feb 2024 10:19:30 AM CST
+Build Date      : Wed 13 Mar 2024 06:34:36 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:50 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : linux-headers
-Version         : 6.7.8.arch1-1
+Version         : 6.8.1.arch1-1
 Description     : Headers and scripts for building modules for the Linux kernel
 Architecture    : x86_64
 URL             : https://github.com/archlinux/linux
-Licenses        : GPL2
+Licenses        : GPL-2.0-only
 Groups          : None
 Provides        : None
 Depends On      : pahole
@@ -3905,10 +3860,10 @@ Required By     : None
 Optional For    : dkms
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 127.19 MiB
+Installed Size  : 127.76 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Sat 02 Mar 2024 06:30:36 PM CST
-Install Date    : Tue 05 Mar 2024 02:19:29 PM CST
+Build Date      : Sat 16 Mar 2024 12:15:35 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:52 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -3936,7 +3891,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : lld
-Version         : 16.0.6-1
+Version         : 17.0.6-1
 Description     : Linker from the LLVM project
 Architecture    : x86_64
 URL             : https://lld.llvm.org/
@@ -3949,16 +3904,16 @@ Required By     : pcsx2-git
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 6.54 MiB
+Installed Size  : 5.58 MiB
 Packager        : Evangelos Foutras <foutrelis@archlinux.org>
-Build Date      : Fri 18 Aug 2023 11:58:45 AM CDT
-Install Date    : Tue 05 Sep 2023 09:43:36 PM CDT
+Build Date      : Sat 02 Mar 2024 08:57:14 AM CST
+Install Date    : Mon 18 Mar 2024 10:34:52 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : lmms
-Version         : 1.2.2-21
+Version         : 1.2.2-22
 Description     : The Linux MultiMedia Studio
 Architecture    : x86_64
 URL             : https://lmms.io
@@ -3974,10 +3929,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 34.74 MiB
-Packager        : David Runge <dvzrv@archlinux.org>
-Build Date      : Thu 01 Feb 2024 10:43:41 AM CST
-Install Date    : Tue 06 Feb 2024 10:13:09 AM CST
+Installed Size  : 34.54 MiB
+Packager        : Antonio Rojas <arojas@archlinux.org>
+Build Date      : Thu 14 Mar 2024 09:53:49 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:53 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -4006,7 +3961,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : lsof
-Version         : 4.99.0-1
+Version         : 4.99.3-2
 Description     : Lists open files for running Unix processes
 Architecture    : x86_64
 URL             : https://github.com/lsof-org/lsof
@@ -4019,10 +3974,10 @@ Required By     : steam
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 360.00 KiB
-Packager        : Anatol Pomozov <anatolik@archlinux.org>
-Build Date      : Tue 28 Nov 2023 10:53:54 AM CST
-Install Date    : Wed 29 Nov 2023 08:45:09 AM CST
+Installed Size  : 356.14 KiB
+Packager        : kpcyrd <kpcyrd@archlinux.org>
+Build Date      : Wed 13 Mar 2024 07:05:58 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:53 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -4336,7 +4291,7 @@ Provides        : None
 Depends On      : dbus  fmt  gcc-libs  glew  hicolor-icon-theme  libglvnd  libx11  python  python-matplotlib  python-numpy  vulkan-icd-loader  vulkan-icd-loader  libvulkan.so
 Optional Deps   : libxnvctrl: NVIDIA GPU stats by XNVCtrl [installed]
                   glfw-x11: Required for MangoApp [installed]
-                  gamescope: Use MangoApp as an overlay within gamescope [installed]
+                  gamescope: Use MangoApp as an overlay within gamescope
 Required By     : goverlay
 Optional For    : None
 Conflicts With  : mangohud-common  mangohud-common-wayland  mangohud-common-x11  mangoapp  mangohud-x11  mangohud-wayland
@@ -4417,7 +4372,7 @@ Install Script  : No
 Validated By    : None
 
 Name            : mkvtoolnix-cli
-Version         : 82.0-2
+Version         : 83.0-1
 Description     : Set of tools to create, edit and inspect Matroska files
 Architecture    : x86_64
 URL             : https://mkvtoolnix.download/
@@ -4430,16 +4385,16 @@ Required By     : mkvtoolnix-gui
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 21.81 MiB
-Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Tue 30 Jan 2024 01:52:11 PM CST
-Install Date    : Tue 06 Feb 2024 10:13:09 AM CST
+Installed Size  : 18.47 MiB
+Packager        : Maxime Gauduin <alucryd@archlinux.org>
+Build Date      : Mon 11 Mar 2024 01:43:50 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:53 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : mkvtoolnix-gui
-Version         : 82.0-2
+Version         : 83.0-1
 Description     : Set of tools to create, edit and inspect Matroska files
 Architecture    : x86_64
 URL             : https://mkvtoolnix.download/
@@ -4452,10 +4407,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 13.34 MiB
-Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Tue 30 Jan 2024 01:52:11 PM CST
-Install Date    : Tue 06 Feb 2024 10:13:09 AM CST
+Installed Size  : 12.30 MiB
+Packager        : Maxime Gauduin <alucryd@archlinux.org>
+Build Date      : Mon 11 Mar 2024 01:43:50 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:53 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -4980,7 +4935,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : nvidia-dkms
-Version         : 550.54.14-4
+Version         : 550.54.14-5
 Description     : NVIDIA drivers - module sources
 Architecture    : x86_64
 URL             : http://www.nvidia.com/
@@ -4995,8 +4950,8 @@ Conflicts With  : NVIDIA-MODULE  nvidia
 Replaces        : None
 Installed Size  : 68.15 MiB
 Packager        : Sven-Hendrik Haase <svenstaro@archlinux.org>
-Build Date      : Sat 02 Mar 2024 11:22:31 AM CST
-Install Date    : Tue 05 Mar 2024 02:19:29 PM CST
+Build Date      : Wed 13 Mar 2024 08:23:21 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:54 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -5069,7 +5024,7 @@ Install Script  : No
 Validated By    : None
 
 Name            : obs-studio
-Version         : 30.0.2-4
+Version         : 30.1.0-1
 Description     : Free, open source software for live streaming and recording
 Architecture    : x86_64
 URL             : https://obsproject.com
@@ -5088,10 +5043,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 21.33 MiB
-Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Fri 16 Feb 2024 03:10:47 PM CST
-Install Date    : Thu 29 Feb 2024 10:19:34 AM CST
+Installed Size  : 22.14 MiB
+Packager        : Jonathan Steel <jsteel@archlinux.org>
+Build Date      : Sun 17 Mar 2024 03:45:33 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:55 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -5142,7 +5097,7 @@ Install Script  : Yes
 Validated By    : None
 
 Name            : openssh
-Version         : 9.6p1-3
+Version         : 9.7p1-1
 Description     : SSH protocol implementation for remote login, command execution and file transfer
 Architecture    : x86_64
 URL             : https://www.openssh.com/portable.html
@@ -5158,10 +5113,10 @@ Required By     : backintime-cli  gcr  gcr-4  hollywood
 Optional For    : git  openmpi  prrte
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 5.50 MiB
+Installed Size  : 5.51 MiB
 Packager        : David Runge <dvzrv@archlinux.org>
-Build Date      : Tue 20 Feb 2024 03:42:21 AM CST
-Install Date    : Thu 29 Feb 2024 10:19:34 AM CST
+Build Date      : Mon 11 Mar 2024 08:55:35 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:42 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -5233,11 +5188,11 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : pacman-contrib
-Version         : 1.10.4-1
+Version         : 1.10.5-1
 Description     : Contributed scripts and tools for pacman systems
 Architecture    : x86_64
 URL             : https://gitlab.archlinux.org/pacman/pacman-contrib
-Licenses        : GPL
+Licenses        : GPL-2.0-or-later
 Groups          : None
 Provides        : None
 Depends On      : fakeroot  pacman  perl
@@ -5250,10 +5205,10 @@ Required By     : downgrade
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 129.03 KiB
+Installed Size  : 131.18 KiB
 Packager        : Daniel M. Capella <polyzen@archlinux.org>
-Build Date      : Mon 29 Jan 2024 03:34:21 PM CST
-Install Date    : Tue 06 Feb 2024 10:13:09 AM CST
+Build Date      : Sat 16 Mar 2024 02:32:51 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:55 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -5281,23 +5236,23 @@ Install Script  : No
 Validated By    : None
 
 Name            : pacutils
-Version         : 0.11.1-1
+Version         : 0.11.1-2
 Description     : Helper tools for libalpm
 Architecture    : x86_64
 URL             : https://github.com/andrewgregory/pacutils
 Licenses        : MIT
 Groups          : None
 Provides        : None
-Depends On      : pacman
+Depends On      : glibc  libarchive  pacman
 Optional Deps   : None
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 490.27 KiB
-Packager        : Johannes Löthberg <demize@archlinux.org>
-Build Date      : Sat 14 Aug 2021 04:07:19 AM CDT
-Install Date    : Sun 17 Sep 2023 01:31:44 PM CDT
+Installed Size  : 441.68 KiB
+Packager        : kpcyrd <kpcyrd@archlinux.org>
+Build Date      : Mon 11 Mar 2024 01:20:49 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:55 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -5343,28 +5298,6 @@ Installed Size  : 255.87 KiB
 Packager        : David Runge <dvzrv@archlinux.org>
 Build Date      : Sat 17 Feb 2024 11:28:38 AM CST
 Install Date    : Thu 29 Feb 2024 10:19:34 AM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : pandoc-cli
-Version         : 0.1.1.1-74
-Description     : Conversion between documentation formats
-Architecture    : x86_64
-URL             : https://pandoc.org
-Licenses        : GPL-2.0-or-later
-Groups          : None
-Provides        : pandoc
-Depends On      : ghc-libs  hslua-cli  haskell-pandoc  haskell-pandoc-lua-engine  haskell-pandoc-server  haskell-safe  haskell-temporary  haskell-wai-extra  haskell-warp
-Optional Deps   : None
-Required By     : None
-Optional For    : None
-Conflicts With  : pandoc
-Replaces        : pandoc
-Installed Size  : 87.63 KiB
-Packager        : Felix Yan <felixonmars@archlinux.org>
-Build Date      : Sun 03 Mar 2024 04:08:21 PM CST
-Install Date    : Tue 05 Mar 2024 02:19:29 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -5434,7 +5367,7 @@ Optional Deps   : git: for Git support [installed]
                   gtk2: pinentry backend (gtk2) [installed]
                   gcr: pinentry backend (gnome3) [installed]
                   qt5-x11extras: pinentry backend (qt) [installed]
-                  kwayland5: pinentry backend (qt) [installed]
+                  kwayland5: pinentry backend (qt)
 Required By     : passff-host  qtpass
 Optional For    : None
 Conflicts With  : passmenu
@@ -5571,7 +5504,7 @@ Licenses        : GPL2  GPL3  LGPL2.1  LGPL3
 Groups          : None
 Provides        : pcsx2
 Depends On      : libaio  libpcap  libglvnd  libxrandr  alsa-lib  ffmpeg  sdl2  lld  qt6-base  qt6-svg  soundtouch  wayland  libpng  hicolor-icon-theme  xcb-util-cursor
-Optional Deps   : qt6-wayland: Wayland support
+Optional Deps   : qt6-wayland: Wayland support [installed]
                   libpulse: Pulseaudio support [installed]
                   libpipewire: Pipewire support [installed]
 Required By     : None
@@ -5723,11 +5656,11 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : pkgconf
-Version         : 2.1.0-2
+Version         : 2.1.1-1
 Description     : Package compiler and linker metadata toolkit
 Architecture    : x86_64
 URL             : https://gitea.treehouse.systems/ariadne/pkgconf
-Licenses        : custom:ISC
+Licenses        : ISC
 Groups          : None
 Provides        : libpkgconf.so=4-64  pkg-config  pkgconfig
 Depends On      : glibc  sh
@@ -5736,10 +5669,10 @@ Required By     : base-devel
 Optional For    : None
 Conflicts With  : pkg-config
 Replaces        : pkg-config
-Installed Size  : 172.16 KiB
+Installed Size  : 164.45 KiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Tue 05 Dec 2023 09:24:51 AM CST
-Install Date    : Thu 07 Dec 2023 03:38:16 PM CST
+Build Date      : Thu 14 Mar 2024 08:26:01 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:55 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -5836,7 +5769,7 @@ Install Script  : No
 Validated By    : None
 
 Name            : postfix
-Version         : 3.8.5-2
+Version         : 3.8.6-1
 Description     : Fast, easy to administer, secure mail server
 Architecture    : x86_64
 URL             : https://www.postfix.org/
@@ -5856,10 +5789,10 @@ Required By     : None
 Optional For    : cronie  e2fsprogs  s-nail  xfsprogs
 Conflicts With  : smtp-server  smtp-forwarder
 Replaces        : None
-Installed Size  : 4.43 MiB
+Installed Size  : 4.30 MiB
 Packager        : David Runge <dvzrv@archlinux.org>
-Build Date      : Wed 24 Jan 2024 08:21:21 AM CST
-Install Date    : Fri 26 Jan 2024 01:00:42 PM CST
+Build Date      : Wed 06 Mar 2024 04:38:32 AM CST
+Install Date    : Mon 18 Mar 2024 10:34:55 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
@@ -6271,7 +6204,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : python-cogapp
-Version         : 3.3.0-3
+Version         : 3.3.0-4
 Description     : A code generator for executing Python snippets in source files
 Architecture    : any
 URL             : https://nedbatchelder.com/code/cog
@@ -6282,12 +6215,12 @@ Depends On      : python
 Optional Deps   : None
 Required By     : None
 Optional For    : None
-Conflicts With  : None
+Conflicts With  : cocogitto
 Replaces        : None
-Installed Size  : 487.70 KiB
-Packager        : Jelle van der Waa <jelle@archlinux.org>
-Build Date      : Sat 06 Jan 2024 07:48:18 AM CST
-Install Date    : Thu 11 Jan 2024 04:01:16 PM CST
+Installed Size  : 487.55 KiB
+Packager        : Caleb Maclennan <alerque@archlinux.org>
+Build Date      : Tue 12 Mar 2024 09:58:03 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:55 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -6493,11 +6426,11 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : qalculate-gtk
-Version         : 4.9.0-1
+Version         : 5.0.0-2
 Description     : GTK frontend for libqalculate
 Architecture    : x86_64
 URL             : https://qalculate.github.io/
-Licenses        : GPL
+Licenses        : GPL-2.0-only
 Groups          : None
 Provides        : None
 Depends On      : cairo  gcc-libs  gdk-pixbuf2  glib2  glibc  gtk3  libqalculate  pango
@@ -6506,10 +6439,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 6.03 MiB
+Installed Size  : 6.09 MiB
 Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Mon 27 Nov 2023 12:13:09 PM CST
-Install Date    : Wed 29 Nov 2023 08:45:10 AM CST
+Build Date      : Tue 12 Mar 2024 06:08:40 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:55 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -6716,7 +6649,7 @@ Install Script  : Yes
 Validated By    : None
 
 Name            : rclone
-Version         : 1.65.2-1
+Version         : 1.66.0-1
 Description     : Sync files to and from Google Drive, S3, Swift, Cloudfiles, Dropbox and Google Cloud Storage
 Architecture    : x86_64
 URL             : https://github.com/rclone/rclone
@@ -6729,10 +6662,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 88.41 MiB
+Installed Size  : 80.27 MiB
 Packager        : Morten Linderud <foxboron@archlinux.org>
-Build Date      : Tue 06 Feb 2024 12:59:45 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:29 AM CST
+Build Date      : Wed 13 Mar 2024 10:45:02 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:56 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -7031,7 +6964,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : shards
-Version         : 0.17.3-2
+Version         : 0.17.4-1
 Description     : The package manager for the Crystal language
 Architecture    : x86_64
 URL             : https://github.com/crystal-lang/shards
@@ -7044,10 +6977,10 @@ Required By     : None
 Optional For    : crystal
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 904.48 KiB
-Packager        : Anatol Pomozov <anatol.pomozov@gmail.com>
-Build Date      : Mon 17 Apr 2023 05:21:33 PM CDT
-Install Date    : Wed 19 Apr 2023 07:09:26 PM CDT
+Installed Size  : 976.54 KiB
+Packager        : Anatol Pomozov <anatolik@archlinux.org>
+Build Date      : Wed 13 Mar 2024 06:44:07 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:57 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -7076,7 +7009,7 @@ Install Script  : No
 Validated By    : None
 
 Name            : shellcheck
-Version         : 0.9.0-83
+Version         : 0.10.0-1
 Description     : Shell script analysis tool
 Architecture    : x86_64
 URL             : https://www.shellcheck.net
@@ -7089,10 +7022,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 19.67 MiB
-Packager        : Felix Yan <felixonmars@archlinux.org>
-Build Date      : Sun 03 Mar 2024 03:07:29 PM CST
-Install Date    : Tue 05 Mar 2024 02:19:29 PM CST
+Installed Size  : 20.12 MiB
+Packager        : Caleb Maclennan <alerque@archlinux.org>
+Build Date      : Fri 08 Mar 2024 02:01:35 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:57 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -7309,7 +7242,7 @@ Optional Deps   : festival: Speech output using Festival
                   espeak-ng: Speech output using ESpeak-ng [installed]
                   pulseaudio: PulseAudio support [installed]
 Required By     : None
-Optional For    : calibre  firefox  firefox-nightly-bin  qt5-speech
+Optional For    : calibre  firefox  firefox-nightly-bin
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 26.35 MiB
@@ -7365,7 +7298,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : starship
-Version         : 1.17.1-1
+Version         : 1.17.1-2
 Description     : The cross-shell prompt for astronauts
 Architecture    : x86_64
 URL             : https://starship.rs/
@@ -7380,8 +7313,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 9.39 MiB
 Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Wed 03 Jan 2024 01:54:53 AM CST
-Install Date    : Thu 11 Jan 2024 04:01:18 PM CST
+Build Date      : Sun 17 Mar 2024 04:07:06 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:57 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -7653,272 +7586,6 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
-Name            : texlive-basic
-Version         : 2023.66594-20
-Description     : TeX Live - Essential programs and files
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-core  texlive-amsfonts  texlive-bibtex  texlive-cm  texlive-colorprofiles  texlive-dvipdfmx  texlive-dvips  texlive-ec  texlive-enctex  texlive-etex  texlive-etex-pkg  texlive-glyphlist  texlive-graphics-def  texlive-hyph-utf8  texlive-hyphen-base  texlive-hyphenex  texlive-ifplatform  texlive-iftex  texlive-knuth-lib  texlive-knuth-local  texlive-kpathsea  texlive-lua-alt-getopt  texlive-luahbtex  texlive-makeindex  texlive-metafont  texlive-mflogo  texlive-mfware  texlive-modes  texlive-pdftex  texlive-plain  texlive-tex  texlive-tex-ini-files  texlive-texlive-common  texlive-texlive-en  texlive-texlive-msg-translations  texlive-texlive-scripts  texlive-texlive.infra  texlive-tlshell  texlive-unicode-data  texlive-xdvi
-Depends On      : texlive-bin  perl
-Optional Deps   : perl-tk: for the tlmgr GUI
-                  biber: for bibliography processing
-Required By     : texlive-fontsextra  texlive-fontsrecommended  texlive-formatsextra  texlive-latex  texlive-pictures  texlive-plaingeneric  texlive-pstricks
-Optional For    : None
-Conflicts With  : texlive-core
-Replaces        : texlive-core
-Installed Size  : 31.96 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:19 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : texlive-bibtexextra
-Version         : 2023.66594-20
-Description     : TeX Live - BibTeX additional styles
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-aaai-named  texlive-aichej  texlive-ajl  texlive-amsrefs  texlive-annotate  texlive-apacite  texlive-apalike-ejor  texlive-apalike2  texlive-archaeologie  texlive-authordate  texlive-beebe  texlive-besjournals  texlive-bestpapers  texlive-bib2gls  texlive-bibarts  texlive-bibcop  texlive-biber  texlive-biber-ms  texlive-bibexport  texlive-bibhtml  texlive-biblatex  texlive-biblatex-abnt  texlive-biblatex-ajc2020unofficial  texlive-biblatex-anonymous  texlive-biblatex-apa  texlive-biblatex-apa6  texlive-biblatex-archaeology  texlive-biblatex-arthistory-bonn  texlive-biblatex-bath  texlive-biblatex-bookinarticle  texlive-biblatex-bookinother  texlive-biblatex-bwl  texlive-biblatex-caspervector  texlive-biblatex-chem  texlive-biblatex-chicago  texlive-biblatex-claves  texlive-biblatex-cv  texlive-biblatex-dw  texlive-biblatex-enc  texlive-biblatex-ext  texlive-biblatex-fiwi  texlive-biblatex-gb7714-2015  texlive-biblatex-german-legal  texlive-biblatex-gost  texlive-biblatex-historian  texlive-biblatex-ieee  texlive-biblatex-ijsra  texlive-biblatex-iso690  texlive-biblatex-jura2  texlive-biblatex-juradiss  texlive-biblatex-license  texlive-biblatex-lncs  texlive-biblatex-lni  texlive-biblatex-luh-ipw  texlive-biblatex-manuscripts-philology  texlive-biblatex-mla  texlive-biblatex-morenames  texlive-biblatex-ms  texlive-biblatex-multiple-dm  texlive-biblatex-musuos  texlive-biblatex-nature  texlive-biblatex-nejm  texlive-biblatex-nottsclassic  texlive-biblatex-opcit-booktitle  texlive-biblatex-oxref  texlive-biblatex-philosophy  texlive-biblatex-phys  texlive-biblatex-publist  texlive-biblatex-readbbl  texlive-biblatex-realauthor  texlive-biblatex-sbl  texlive-biblatex-science  texlive-biblatex-shortfields  texlive-biblatex-socialscienceshuberlin  texlive-biblatex-software  texlive-biblatex-source-division  texlive-biblatex-spbasic  texlive-biblatex-subseries  texlive-biblatex-swiss-legal  texlive-biblatex-trad  texlive-biblatex-true-citepages-omit  texlive-biblatex-unified  texlive-biblatex-vancouver  texlive-biblatex2bibitem  texlive-biblist  texlive-bibtexperllibs  texlive-bibtopic  texlive-bibtopicprefix  texlive-bibunits  texlive-biolett-bst  texlive-bookdb  texlive-breakcites  texlive-cell  texlive-chbibref  texlive-chembst  texlive-chicago  texlive-chicago-annote  texlive-chicagoa  texlive-chscite  texlive-citation-style-language  texlive-citeall  texlive-citeref  texlive-collref  texlive-compactbib  texlive-crossrefware  texlive-custom-bib  texlive-din1505  texlive-dk-bib  texlive-doipubmed  texlive-ecobiblatex  texlive-econ-bst  texlive-economic  texlive-fbs  texlive-figbib  texlive-footbib  texlive-francais-bst  texlive-gbt7714  texlive-geschichtsfrkl  texlive-harvard  texlive-harvmac  texlive-hep-bibliography  texlive-historische-zeitschrift  texlive-icite  texlive-ietfbibs  texlive-ijqc  texlive-inlinebib  texlive-iopart-num  texlive-is-bst  texlive-jbact  texlive-jmb  texlive-jneurosci  texlive-jurabib  texlive-ksfh_nat  texlive-listbib  texlive-logreq  texlive-ltb2bib  texlive-luabibentry  texlive-margbib  texlive-multibib  texlive-multibibliography  texlive-munich  texlive-nar  texlive-newcastle-bst  texlive-nmbib  texlive-notes2bib  texlive-notex-bst  texlive-oscola  texlive-perception  texlive-plainyr  texlive-pnas2009  texlive-rsc  texlive-showtags  texlive-sort-by-letters  texlive-splitbib  texlive-turabian-formatting  texlive-uni-wtal-ger  texlive-uni-wtal-lin  texlive-urlbst  texlive-usebib  texlive-vak  texlive-windycity  texlive-xcite  texlive-zootaxa-bst
-Depends On      : texlive-bin  texlive-latex
-Optional Deps   : None
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 31.14 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:20 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : texlive-fontsextra
-Version         : 2023.66594-20
-Description     : TeX Live - Additional fonts
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-aboensis  texlive-academicons  texlive-accanthis  texlive-adforn  texlive-adfsymbols  texlive-aesupp  texlive-alegreya  texlive-alfaslabone  texlive-algolrevived  texlive-allrunes  texlive-almendra  texlive-almfixed  texlive-andika  texlive-anonymouspro  texlive-antiqua  texlive-antt  texlive-archaic  texlive-archivo  texlive-arev  texlive-arimo  texlive-arvo  texlive-asana-math  texlive-asapsym  texlive-ascii-font  texlive-aspectratio  texlive-astro  texlive-atkinson  texlive-augie  texlive-auncial-new  texlive-aurical  texlive-b1encoding  texlive-barcodes  texlive-baskervald  texlive-baskervaldx  texlive-baskervillef  texlive-bbding  texlive-bbm  texlive-bbm-macros  texlive-bbold  texlive-bbold-type1  texlive-bboldx  texlive-belleek  texlive-bera  texlive-berenisadf  texlive-beuron  texlive-bguq  texlive-bitter  texlive-blacklettert1  texlive-boisik  texlive-bookhands  texlive-boondox  texlive-braille  texlive-brushscr  texlive-cabin  texlive-caladea  texlive-calligra  texlive-calligra-type1  texlive-cantarell  texlive-carlito  texlive-carolmin-ps  texlive-cascadia-code  texlive-ccicons  texlive-cfr-initials  texlive-cfr-lm  texlive-charissil  texlive-cherokee  texlive-chivo  texlive-cinzel  texlive-clara  texlive-clearsans  texlive-cm-lgc  texlive-cm-mf-extra-bold  texlive-cm-unicode  texlive-cmathbb  texlive-cmbright  texlive-cmexb  texlive-cmll  texlive-cmpica  texlive-cmsrb  texlive-cmtiup  texlive-cmupint  texlive-cochineal  texlive-coelacanth  texlive-comfortaa  texlive-comicneue  texlive-concmath-fonts  texlive-concmath-otf  texlive-cookingsymbols  texlive-cooperhewitt  texlive-cormorantgaramond  texlive-countriesofeurope  texlive-courier-scaled  texlive-courierten  texlive-crimson  texlive-crimsonpro  texlive-cryst  texlive-cuprum  texlive-cyklop  texlive-dancers  texlive-dantelogo  texlive-dejavu  texlive-dejavu-otf  texlive-dice  texlive-dictsym  texlive-dingbat  texlive-domitian  texlive-doublestroke  texlive-doulossil  texlive-dozenal  texlive-drm  texlive-droid  texlive-dsserif  texlive-duerer  texlive-duerer-latex  texlive-dutchcal  texlive-ean  texlive-ebgaramond  texlive-ebgaramond-maths  texlive-ecc  texlive-eco  texlive-eczar  texlive-eiad  texlive-eiad-ltx  texlive-ektype-tanka  texlive-electrum  texlive-elvish  texlive-epigrafica  texlive-epsdice  texlive-erewhon  texlive-erewhon-math  texlive-esrelation  texlive-esstix  texlive-esvect  texlive-etbb  texlive-euler-math  texlive-eulervm  texlive-euxm  texlive-fbb  texlive-fdsymbol  texlive-fetamont  texlive-feyn  texlive-fge  texlive-fira  texlive-firamath  texlive-firamath-otf  texlive-foekfont  texlive-fonetika  texlive-fontawesome  texlive-fontawesome5  texlive-fontmfizz  texlive-fonts-churchslavonic  texlive-forum  texlive-fourier  texlive-fouriernc  texlive-frcursive  texlive-frederika2016  texlive-frimurer  texlive-garamond-libre  texlive-garamond-math  texlive-genealogy  texlive-gentium-tug  texlive-gfsartemisia  texlive-gfsbodoni  texlive-gfscomplutum  texlive-gfsdidot  texlive-gfsdidotclassic  texlive-gfsneohellenic  texlive-gfsneohellenicmath  texlive-gfssolomos  texlive-gillcm  texlive-gillius  texlive-gnu-freefont  texlive-gofonts  texlive-gothic  texlive-greenpoint  texlive-grotesq  texlive-gudea  texlive-hacm  texlive-hamnosys  texlive-hands  texlive-hep-font  texlive-hep-math-font  texlive-heros-otf  texlive-heuristica  texlive-hfbright  texlive-hfoldsty  texlive-hindmadurai  texlive-ibarra  texlive-ifsym  texlive-imfellenglish  texlive-inconsolata  texlive-initials  texlive-inriafonts  texlive-inter  texlive-ipaex-type1  texlive-iwona  texlive-jablantile  texlive-jamtimes  texlive-josefin  texlive-junicode  texlive-kixfont  texlive-kpfonts  texlive-kpfonts-otf  texlive-kurier  texlive-lato  texlive-lexend  texlive-lfb  texlive-libertine  texlive-libertinegc  texlive-libertinus  texlive-libertinus-fonts  texlive-libertinus-otf  texlive-libertinus-type1  texlive-libertinust1math  texlive-librebaskerville  texlive-librebodoni  texlive-librecaslon  texlive-librefranklin  texlive-libris  texlive-lineara  texlive-linguisticspro  texlive-lobster2  texlive-logix  texlive-lxfonts  texlive-ly1  texlive-magra  texlive-marcellus  texlive-mathabx  texlive-mathabx-type1  texlive-mathdesign  texlive-mdputu  texlive-mdsymbol  texlive-merriweather  texlive-miama  texlive-mintspirit  texlive-missaali  texlive-mlmodern  texlive-mnsymbol  texlive-montserrat  texlive-mpfonts  texlive-mweights  texlive-newcomputermodern  texlive-newpx  texlive-newtx  texlive-newtxsf  texlive-newtxtt  texlive-niceframe-type1  texlive-nimbus15  texlive-nkarta  texlive-noto  texlive-noto-emoji  texlive-notomath  texlive-nunito  texlive-obnov  texlive-ocherokee  texlive-ocr-b  texlive-ocr-b-outline  texlive-ogham  texlive-oinuit  texlive-old-arrows  texlive-oldlatin  texlive-oldstandard  texlive-opensans  texlive-orkhun  texlive-oswald  texlive-overlock  texlive-pacioli  texlive-pagella-otf  texlive-paratype  texlive-phaistos  texlive-phonetic  texlive-pigpen  texlive-playfair  texlive-plex  texlive-plex-otf  texlive-plimsoll  texlive-poiretone  texlive-poltawski  texlive-prodint  texlive-punk  texlive-punk-latex  texlive-punknova  texlive-pxtxalfa  texlive-qualitype  texlive-quattrocento  texlive-raleway  texlive-recycle  texlive-roboto  texlive-romande  texlive-rosario  texlive-rsfso  texlive-sansmathaccent  texlive-sansmathfonts  texlive-sauter  texlive-sauterfonts  texlive-schola-otf  texlive-scholax  texlive-schulschriften  texlive-semaphor  texlive-shobhika  texlive-simpleicons  texlive-skull  texlive-sourcecodepro  texlive-sourcesanspro  texlive-sourceserifpro  texlive-spectral  texlive-srbtiks  texlive-starfont  texlive-staves  texlive-step  texlive-stepgreek  texlive-stickstoo  texlive-stix  texlive-stix2-otf  texlive-stix2-type1  texlive-superiors  texlive-svrsymbols  texlive-symbats3  texlive-tapir  texlive-tempora  texlive-tengwarscript  texlive-termes-otf  texlive-tfrupee  texlive-theanodidot  texlive-theanomodern  texlive-theanooldstyle  texlive-tinos  texlive-tpslifonts  texlive-trajan  texlive-twemoji-colr  texlive-txfontsb  texlive-txuprcal  texlive-typicons  texlive-umtypewriter  texlive-universa  texlive-universalis  texlive-uppunctlm  texlive-urwchancal  texlive-venturisadf  texlive-wsuipa  texlive-xcharter  texlive-xcharter-math  texlive-xits  texlive-yfonts  texlive-yfonts-otf  texlive-yfonts-t1  texlive-yinit-otf  texlive-zlmtt
-Depends On      : texlive-bin  texlive-basic
-Optional Deps   : None
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 1433.62 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:30 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : texlive-formatsextra
-Version         : 2023.66594-20
-Description     : TeX Live - Additional formats
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-aleph  texlive-antomega  texlive-edmac  texlive-eplain  texlive-hitex  texlive-jadetex  texlive-lambda  texlive-lollipop  texlive-mltex  texlive-mxedruli  texlive-omega  texlive-omegaware  texlive-otibet  texlive-passivetex  texlive-psizzl  texlive-startex  texlive-texsis  texlive-xmltex  texlive-xmltexconfig
-Depends On      : texlive-bin  texlive-basic  texlive-latex  texlive-plaingeneric  texlive-fontsrecommended
-Optional Deps   : None
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 8.51 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:31 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : texlive-games
-Version         : 2023.66594-20
-Description     : TeX Live - Games typesetting
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-bartel-chess-fonts  texlive-chess  texlive-chess-problem-diagrams  texlive-chessboard  texlive-chessfss  texlive-chinesechess  texlive-crossword  texlive-crosswrd  texlive-customdice  texlive-egameps  texlive-gamebook  texlive-gamebooklib  texlive-go  texlive-hanoi  texlive-havannah  texlive-hexboard  texlive-hexgame  texlive-hmtrump  texlive-horoscop  texlive-jeuxcartes  texlive-jigsaw  texlive-labyrinth  texlive-logicpuzzle  texlive-mahjong  texlive-maze  texlive-musikui  texlive-nimsticks  texlive-onedown  texlive-othello  texlive-othelloboard  texlive-pas-crosswords  texlive-psgo  texlive-realtranspose  texlive-reverxii  texlive-rubik  texlive-schwalbe-chess  texlive-scrabble  texlive-sgame  texlive-skak  texlive-skaknew  texlive-soup  texlive-sudoku  texlive-sudokubundle  texlive-tangramtikz  texlive-wargame  texlive-xq  texlive-xskak
-Depends On      : texlive-bin  texlive-latex
-Optional Deps   : None
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 9.54 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:31 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : texlive-humanities
-Version         : 2023.66594-20
-Description     : TeX Live - Humanities packages
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-adtrees  texlive-bibleref  texlive-bibleref-lds  texlive-bibleref-mouth  texlive-bibleref-parse  texlive-covington  texlive-diadia  texlive-dramatist  texlive-dvgloss  texlive-ecltree  texlive-edfnotes  texlive-eledform  texlive-eledmac  texlive-expex  texlive-gb4e  texlive-gmverse  texlive-jura  texlive-juraabbrev  texlive-juramisc  texlive-jurarsp  texlive-langnames  texlive-ledmac  texlive-lexikon  texlive-lexref  texlive-ling-macros  texlive-linguex  texlive-liturg  texlive-metrix  texlive-nnext  texlive-parallel  texlive-parrun  texlive-phonrule  texlive-plari  texlive-play  texlive-poemscol  texlive-poetry  texlive-poetrytex  texlive-qobitree  texlive-qtree  texlive-reledmac  texlive-rrgtrees  texlive-rtklage  texlive-screenplay  texlive-screenplay-pkg  texlive-sides  texlive-stage  texlive-textglos  texlive-thalie  texlive-theatre  texlive-tree-dvips  texlive-verse  texlive-xyling
-Depends On      : texlive-bin  texlive-latex
-Optional Deps   : None
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 3.19 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:31 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : texlive-latexextra
-Version         : 2023.66594-20
-Description     : TeX Live - LaTeX additional packages
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-2up  texlive-a0poster  texlive-a4wide  texlive-a5comb  texlive-abraces  texlive-abspos  texlive-abstract  texlive-accessibility  texlive-accsupp  texlive-achemso  texlive-acro  texlive-acronym  texlive-acroterm  texlive-actuarialangle  texlive-actuarialsymbol  texlive-addfont  texlive-addlines  texlive-adjmulticol  texlive-adjustbox  texlive-adrconv  texlive-advdate  texlive-akktex  texlive-akletter  texlive-alchemist  texlive-alertmessage  texlive-alnumsec  texlive-alphalph  texlive-alterqcm  texlive-altfont  texlive-altsubsup  texlive-amsaddr  texlive-animate  texlive-anonchap  texlive-answers  texlive-anyfontsize  texlive-appendix  texlive-appendixnumberbeamer  texlive-apptools  texlive-arabicfront  texlive-arcs  texlive-arraycols  texlive-arrayjobx  texlive-arraysort  texlive-arydshln  texlive-asciilist  texlive-askinclude  texlive-assignment  texlive-assoccnt  texlive-association-matrix  texlive-atenddvi  texlive-atendofenv  texlive-attachfile  texlive-aurl  texlive-authoraftertitle  texlive-authorarchive  texlive-authorindex  texlive-autofancyhdr  texlive-autonum  texlive-autopdf  texlive-autopuncitems  texlive-avremu  texlive-axessibility  texlive-background  texlive-bankstatement  texlive-bashful  texlive-basicarith  texlive-bchart  texlive-beamer-rl  texlive-beamer2thesis  texlive-beamerappendixnote  texlive-beameraudience  texlive-beamerauxtheme  texlive-beamercolorthemeowl  texlive-beamerdarkthemes  texlive-beamerposter  texlive-beamersubframe  texlive-beamertheme-arguelles  texlive-beamertheme-cuerna  texlive-beamertheme-detlevcm  texlive-beamertheme-epyt  texlive-beamertheme-focus  texlive-beamertheme-light  texlive-beamertheme-metropolis  texlive-beamertheme-npbt  texlive-beamertheme-phnompenh  texlive-beamertheme-pure-minimalistic  texlive-beamertheme-saintpetersburg  texlive-beamertheme-simpledarkblue  texlive-beamertheme-simpleplus  texlive-beamertheme-tcolorbox  texlive-beamertheme-trigon  texlive-beamertheme-upenn-bc  texlive-beamerthemeamurmaple  texlive-beamerthemejltree  texlive-beamerthemelalic  texlive-beamerthemenirma  texlive-beamerthemenord  texlive-bearwear  texlive-beaulivre  texlive-beton  texlive-bewerbung  texlive-bez123  texlive-bhcexam  texlive-bibletext  texlive-bigfoot  texlive-bigints  texlive-bilingualpages  texlive-biochemistry-colors  texlive-bithesis  texlive-bizcard  texlive-blindtext  texlive-blkarray  texlive-block  texlive-blowup  texlive-bnumexpr  texlive-boites  texlive-bold-extra  texlive-book-of-common-prayer  texlive-bookcover  texlive-bookest  texlive-booklet  texlive-bookshelf  texlive-boolexpr  texlive-bophook  texlive-boxedminipage  texlive-boxhandler  texlive-bracketkey  texlive-braket  texlive-breakurl  texlive-bubblesort  texlive-bullcntr  texlive-bxcalc  texlive-bxdpx-beamer  texlive-bxdvidriver  texlive-bxenclose  texlive-bxnewfont  texlive-bxpapersize  texlive-bxpdfver  texlive-bxtexlogo  texlive-calcage  texlive-calctab  texlive-calculator  texlive-calrsfs  texlive-cals  texlive-calxxxx-yyyy  texlive-cancel  texlive-canoniclayout  texlive-capt-of  texlive-captcont  texlive-captdef  texlive-carbohydrates  texlive-cases  texlive-casyl  texlive-catchfile  texlive-catchfilebetweentags  texlive-catechis  texlive-catoptions  texlive-cbcoptic  texlive-ccaption  texlive-cclicenses  texlive-cd  texlive-cd-cover  texlive-cdcmd  texlive-cdpbundl  texlive-cellprops  texlive-cellspace  texlive-censor  texlive-centeredline  texlive-centerlastline  texlive-changebar  texlive-changelayout  texlive-changelog  texlive-changepage  texlive-changes  texlive-chappg  texlive-chapterfolder  texlive-cheatsheet  texlive-checkend  texlive-chet  texlive-chextras  texlive-childdoc  texlive-chkfloat  texlive-chletter  texlive-chngcntr  texlive-chronology  texlive-circ  texlive-circledsteps  texlive-circledtext  texlive-classics  texlive-classpack  texlive-clefval  texlive-cleveref  texlive-clicks  texlive-clipboard  texlive-clistmap  texlive-clock  texlive-clrdblpg  texlive-clrstrip  texlive-cmdstring  texlive-cmdtrack  texlive-cmsd  texlive-cnltx  texlive-cntformats  texlive-cntperchap  texlive-codebox  texlive-codedoc  texlive-codehigh  texlive-codepage  texlive-codesection  texlive-collcell  texlive-collectbox  texlive-colophon  texlive-color-edits  texlive-colordoc  texlive-colorframed  texlive-colorinfo  texlive-coloring  texlive-colorist  texlive-colorspace  texlive-colortab  texlive-colorwav  texlive-colorweb  texlive-colourchange  texlive-combelow  texlive-combine  texlive-comma  texlive-commado  texlive-commedit  texlive-comment  texlive-commonunicode  texlive-competences  texlive-concepts  texlive-concprog  texlive-conditext  texlive-constants  texlive-continue  texlive-contour  texlive-contracard  texlive-conv-xkv  texlive-cooking  texlive-cooking-units  texlive-cool  texlive-coolfn  texlive-coollist  texlive-coolstr  texlive-coolthms  texlive-cooltooltips  texlive-coop-writing  texlive-coordsys  texlive-copyedit  texlive-copyrightbox  texlive-coseoul  texlive-counttexruns  texlive-courseoutline  texlive-coursepaper  texlive-coverpage  texlive-cprotect  texlive-cprotectinside  texlive-crbox  texlive-create-theorem  texlive-crefthe  texlive-crossreference  texlive-crossreftools  texlive-crumbs  texlive-csquotes  texlive-css-colors  texlive-csvmerge  texlive-csvsimple  texlive-cuisine  texlive-currency  texlive-currfile  texlive-currvita  texlive-cutwin  texlive-cv  texlive-cv4tw  texlive-cweb-latex  texlive-cyber  texlive-cybercic  texlive-darkmode  texlive-dashbox  texlive-dashrule  texlive-dashundergaps  texlive-dataref  texlive-datatool  texlive-datax  texlive-dateiliste  texlive-datenumber  texlive-datestamp  texlive-datetime  texlive-datetime2  texlive-datetime2-bahasai  texlive-datetime2-basque  texlive-datetime2-breton  texlive-datetime2-bulgarian  texlive-datetime2-catalan  texlive-datetime2-croatian  texlive-datetime2-czech  texlive-datetime2-danish  texlive-datetime2-dutch  texlive-datetime2-en-fulltext  texlive-datetime2-english  texlive-datetime2-esperanto  texlive-datetime2-estonian  texlive-datetime2-finnish  texlive-datetime2-french  texlive-datetime2-galician  texlive-datetime2-german  texlive-datetime2-greek  texlive-datetime2-hebrew  texlive-datetime2-icelandic  texlive-datetime2-irish  texlive-datetime2-it-fulltext  texlive-datetime2-italian  texlive-datetime2-latin  texlive-datetime2-lsorbian  texlive-datetime2-magyar  texlive-datetime2-norsk  texlive-datetime2-polish  texlive-datetime2-portuges  texlive-datetime2-romanian  texlive-datetime2-russian  texlive-datetime2-samin  texlive-datetime2-scottish  texlive-datetime2-serbian  texlive-datetime2-slovak  texlive-datetime2-slovene  texlive-datetime2-spanish  texlive-datetime2-swedish  texlive-datetime2-turkish  texlive-datetime2-ukrainian  texlive-datetime2-usorbian  texlive-datetime2-welsh  texlive-dblfloatfix  texlive-dbshow  texlive-debate  texlive-decimal  texlive-decorule  texlive-delimtxt  texlive-democodetools  texlive-denisbdoc  texlive-diabetes-logbook  texlive-diagbox  texlive-diagnose  texlive-dialogl  texlive-dichokey  texlive-dimnum  texlive-dinbrief  texlive-directory  texlive-dirtytalk  texlive-dlfltxb  texlive-dnaseq  texlive-doclicense  texlive-docmfp  texlive-docmute  texlive-docshots  texlive-doctools  texlive-documentation  texlive-docutils  texlive-doi  texlive-dotarrow  texlive-dotlessi  texlive-dotseqn  texlive-download  texlive-dox  texlive-dpfloat  texlive-dprogress  texlive-drac  texlive-draftcopy  texlive-draftfigure  texlive-draftwatermark  texlive-dtk  texlive-dtxdescribe  texlive-dtxgallery  texlive-ducksay  texlive-duckuments  texlive-dvdcoll  texlive-dynamicnumber  texlive-dynblocks  texlive-ean13isbn  texlive-easy  texlive-easy-todo  texlive-easybook  texlive-easyfig  texlive-easyfloats  texlive-easyformat  texlive-easylist  texlive-easyreview  texlive-ebezier  texlive-ecclesiastic  texlive-econlipsum  texlive-ecv  texlive-ed  texlive-edichokey  texlive-edmargin  texlive-eemeir  texlive-efbox  texlive-egplot  texlive-ehhline  texlive-einfart  texlive-elements  texlive-ellipsis  texlive-elmath  texlive-elocalloc  texlive-elpres  texlive-elzcards  texlive-emarks  texlive-embedall  texlive-embedfile  texlive-embrac  texlive-emptypage  texlive-emulateapj  texlive-endfloat  texlive-endheads  texlive-endnotes  texlive-endnotes-hy  texlive-engpron  texlive-engrec  texlive-enotez  texlive-enumitem  texlive-enumitem-zref  texlive-envbig  texlive-environ  texlive-envlab  texlive-epigraph  texlive-epigraph-keys  texlive-epiolmec  texlive-eq-pin2corr  texlive-eqell  texlive-eqlist  texlive-eqnalign  texlive-eqname  texlive-eqparbox  texlive-errata  texlive-erw-l3  texlive-esami  texlive-esdiff  texlive-esieecv  texlive-esindex  texlive-esint  texlive-esint-type1  texlive-etaremune  texlive-etextools  texlive-etl  texlive-etoc  texlive-eukdate  texlive-eulerpx  texlive-europasscv  texlive-europecv  texlive-everyhook  texlive-everypage  texlive-exam  texlive-exam-lite  texlive-exam-n  texlive-exam-randomizechoices  texlive-examdesign  texlive-example  texlive-examplep  texlive-exceltex  texlive-excludeonly  texlive-exercise  texlive-exercisebank  texlive-exercisepoints  texlive-exercises  texlive-exesheet  texlive-exframe  texlive-exp-testopt  texlive-expdlist  texlive-export  texlive-exsheets  texlive-exsol  texlive-extract  texlive-facsimile  texlive-factura  texlive-familytree  texlive-fancyhandout  texlive-fancylabel  texlive-fancynum  texlive-fancypar  texlive-fancyqr  texlive-fancyslides  texlive-fancytabs  texlive-fancytooltips  texlive-fbox  texlive-fcolumn  texlive-fetchcls  texlive-fewerfloatpages  texlive-ffcode  texlive-ffslides  texlive-fgruler  texlive-fifo-stack  texlive-figsize  texlive-filecontents  texlive-filecontentsdef  texlive-filedate  texlive-fileinfo  texlive-filemod  texlive-fink  texlive-finstrut  texlive-fistrum  texlive-fithesis  texlive-fixcmex  texlive-fixfoot  texlive-fixme  texlive-fixmetodonotes  texlive-fjodor  texlive-flabels  texlive-flacards  texlive-flagderiv  texlive-flashcards  texlive-flashmovie  texlive-flexipage  texlive-flipbook  texlive-flippdf  texlive-floatflt  texlive-floatrow  texlive-flowfram  texlive-fmp  texlive-fmtcount  texlive-fn2end  texlive-fnbreak  texlive-fncychap  texlive-fncylab  texlive-fnpara  texlive-fnpct  texlive-fnumprint  texlive-foilhtml  texlive-foliono  texlive-fontaxes  texlive-fontsetup  texlive-fontsize  texlive-fonttable  texlive-footmisc  texlive-footmisx  texlive-footnotebackref  texlive-footnoterange  texlive-footnpag  texlive-forarray  texlive-foreign  texlive-forloop  texlive-formlett  texlive-forms16be  texlive-formular  texlive-fragments  texlive-frame  texlive-framed  texlive-frankenstein  texlive-frege  texlive-froufrou  texlive-ftcap  texlive-ftnxtra  texlive-fullblck  texlive-fullminipage  texlive-fullwidth  texlive-functional  texlive-fundus-calligra  texlive-fundus-cyr  texlive-fundus-sueterlin  texlive-fvextra  texlive-fwlw  texlive-g-brief  texlive-gatherenum  texlive-gauss  texlive-gcard  texlive-gcite  texlive-gender  texlive-genmpage  texlive-gensymb  texlive-getfiledate  texlive-getitems  texlive-gindex  texlive-ginpenc  texlive-gitfile-info  texlive-gitinfo  texlive-gitinfo2  texlive-gitlog  texlive-gitstatus  texlive-gitver  texlive-globalvals  texlive-gloss  texlive-glossaries  texlive-glossaries-danish  texlive-glossaries-dutch  texlive-glossaries-english  texlive-glossaries-estonian  texlive-glossaries-extra  texlive-glossaries-finnish  texlive-glossaries-french  texlive-glossaries-german  texlive-glossaries-irish  texlive-glossaries-italian  texlive-glossaries-magyar  texlive-glossaries-nynorsk  texlive-glossaries-polish  texlive-glossaries-portuges  texlive-glossaries-serbian  texlive-glossaries-slovene  texlive-glossaries-spanish  texlive-gmdoc  texlive-gmdoc-enhance  texlive-gmiflink  texlive-gmutils  texlive-gmverb  texlive-grabbox  texlive-gradient-text  texlive-grading-scheme  texlive-graphbox  texlive-graphicscache  texlive-graphicx-psmin  texlive-graphicxbox  texlive-graphpaper  texlive-grayhints  texlive-grfpaste  texlive-grid  texlive-grid-system  texlive-gridpapers  texlive-gridset  texlive-gridslides  texlive-gs1  texlive-guitlogo  texlive-ha-prosper  texlive-hackthefootline  texlive-halloweenmath  texlive-handin  texlive-handout  texlive-handoutwithnotes  texlive-hang  texlive-hanging  texlive-hardwrap  texlive-harnon-cv  texlive-harpoon  texlive-hc  texlive-he-she  texlive-hep-acronym  texlive-hep-float  texlive-hep-math  texlive-hep-text  texlive-hep-title  texlive-hereapplies  texlive-hhtensor  texlive-hideanswer  texlive-highlightlatex  texlive-histogr  texlive-hitec  texlive-hitreport  texlive-hletter  texlive-hobsub  texlive-hpsdiss  texlive-href-ul  texlive-hrefhide  texlive-huawei  texlive-hvextern  texlive-hvindex  texlive-hvlogos  texlive-hvpygmentex  texlive-hvqrurl  texlive-hwemoji  texlive-hypdestopt  texlive-hypdoc  texlive-hypdvips  texlive-hyper  texlive-hyperbar  texlive-hypernat  texlive-hyperxmp  texlive-hyphenat  texlive-identkey  texlive-idxcmds  texlive-idxlayout  texlive-iexec  texlive-ifallfalse  texlive-iffont  texlive-ifmslide  texlive-ifmtarg  texlive-ifnextok  texlive-ifoddpage  texlive-ifthenx  texlive-iitem  texlive-image-gallery  texlive-imakeidx  texlive-import  texlive-incgraph  texlive-indextools  texlive-inline-images  texlive-inlinedef  texlive-inlinelabel  texlive-inputenx  texlive-inputtrc  texlive-interactiveworkbook  texlive-interfaces  texlive-intopdf  texlive-inversepath  texlive-invoice  texlive-invoice-class  texlive-invoice2  texlive-iso  texlive-iso10303  texlive-isodate  texlive-isodoc  texlive-isonums  texlive-isopt  texlive-isorot  texlive-isotope  texlive-issuulinks  texlive-iwhdp  texlive-jlabels  texlive-jmsdelim  texlive-jobname-suffix  texlive-jslectureplanner  texlive-jumplines  texlive-jvlisting  texlive-kalendarium  texlive-kantlipsum  texlive-kerntest  texlive-keycommand  texlive-keyfloat  texlive-keyindex  texlive-keyparse  texlive-keyreader  texlive-keystroke  texlive-keyval2e  texlive-keyvaltable  texlive-kix  texlive-knowledge  texlive-koma-moderncvclassic  texlive-koma-script-sfs  texlive-komacv  texlive-komacv-rg  texlive-ktv-texdata  texlive-l3build  texlive-labbook  texlive-labels  texlive-labels4easylist  texlive-labelschanged  texlive-lambdax  texlive-lastpackage  texlive-lastpage  texlive-latex-amsmath-dev  texlive-latex-base-dev  texlive-latex-bin-dev  texlive-latex-firstaid-dev  texlive-latex-graphics-dev  texlive-latex-lab-dev  texlive-latex-tools-dev  texlive-latex-uni8  texlive-latexcolors  texlive-latexdemo  texlive-latexgit  texlive-layouts  texlive-lazylist  texlive-lccaps  texlive-lcd  texlive-lcg  texlive-leading  texlive-leaflet  texlive-lebhart  texlive-lectures  texlive-lectureslides  texlive-leftidx  texlive-leftindex  texlive-leipzig  texlive-lengthconvert  texlive-lettre  texlive-lettrine  texlive-lewis  texlive-lhelp  texlive-libgreek  texlive-limap  texlive-linegoal  texlive-linop  texlive-lipsum  texlive-lisp-on-tex  texlive-listing  texlive-listingsutf8  texlive-listlbls  texlive-listliketab  texlive-listofsymbols  texlive-lkproof  texlive-lmake  texlive-locality  texlive-logbox  texlive-logical-markup-utils  texlive-logpap  texlive-longfbox  texlive-longfigure  texlive-longnamefilelist  texlive-loops  texlive-lsc  texlive-lstaddons  texlive-lstfiracode  texlive-lt3graph  texlive-lt3rawobjects  texlive-ltablex  texlive-ltabptch  texlive-ltxdockit  texlive-ltxguidex  texlive-ltxkeys  texlive-ltxnew  texlive-ltxtools  texlive-lua-check-hyphen  texlive-lua-physical  texlive-luatodonotes  texlive-macrolist  texlive-macroswap  texlive-magaz  texlive-magicnum  texlive-magicwatermark  texlive-mailing  texlive-mailmerge  texlive-makebarcode  texlive-makebase  texlive-makebox  texlive-makecell  texlive-makecirc  texlive-makecmds  texlive-makecookbook  texlive-makedtx  texlive-makeglos  texlive-makelabels  texlive-makerobust  texlive-mandi  texlive-manfnt  texlive-manuscript  texlive-manyind  texlive-marginfit  texlive-marginfix  texlive-marginnote  texlive-markdown  texlive-mathalpha  texlive-mathastext  texlive-mathexam  texlive-mathfam256  texlive-mathfont  texlive-maybemath  texlive-mcaption  texlive-mceinleger  texlive-mcexam  texlive-mcite  texlive-mciteplus  texlive-mdframed  texlive-media4svg  texlive-media9  texlive-medstarbeamer  texlive-meetingmins  texlive-memexsupp  texlive-memory  texlive-mensa-tex  texlive-menu  texlive-menucard  texlive-menukeys  texlive-metalogox  texlive-metanorma  texlive-metastr  texlive-method  texlive-metre  texlive-mfirstuc  texlive-mftinc  texlive-mi-solns  texlive-midpage  texlive-mindflow  texlive-minibox  texlive-minidocument  texlive-minifp  texlive-minimalist  texlive-minipage-marginpar  texlive-minitoc  texlive-minorrevision  texlive-minted  texlive-minutes  texlive-mla-paper  texlive-mleftright  texlive-mlist  texlive-mmap  texlive-mnotes  texlive-moderncv  texlive-modernposter  texlive-moderntimeline  texlive-modref  texlive-modroman  texlive-modular  texlive-monofill  texlive-moodle  texlive-moreenum  texlive-morefloats  texlive-morehype  texlive-moresize  texlive-moreverb  texlive-morewrites  texlive-movie15  texlive-mparhack  texlive-mpostinl  texlive-msc  texlive-msg  texlive-mslapa  texlive-mtgreek  texlive-multenum  texlive-multiaudience  texlive-multibbl  texlive-multicap  texlive-multicolrule  texlive-multidef  texlive-multienv  texlive-multiexpand  texlive-multifootnote  texlive-multilang  texlive-multiple-choice  texlive-multirow  texlive-mversion  texlive-mwe  texlive-mycv  texlive-mylatex  texlive-mylatexformat  texlive-nag  texlive-nameauth  texlive-namespc  texlive-ncclatex  texlive-ncctools  texlive-needspace  texlive-nestquot  texlive-newcommand  texlive-newenviron  texlive-newfile  texlive-newlfm  texlive-newspaper  texlive-newunicodechar  texlive-newvbtm  texlive-newverbs  texlive-nextpage  texlive-nfssext-cfr  texlive-nicefilelist  texlive-niceframe  texlive-nicetext  texlive-nidanfloat  texlive-ninecolors  texlive-nlctdoc  texlive-noconflict  texlive-noindentafter  texlive-noitcrul  texlive-nolbreaks  texlive-nomencl  texlive-nomentbl  texlive-nonfloat  texlive-nonumonpart  texlive-nopageno  texlive-normalcolor  texlive-notes  texlive-notespages  texlive-notestex  texlive-notoccite  texlive-nowidow  texlive-nox  texlive-ntheorem  texlive-numberedblock  texlive-numname  texlive-numprint  texlive-numspell  texlive-ocg-p  texlive-ocgx  texlive-ocgx2  texlive-ocr-latex  texlive-octavo  texlive-oldstyle  texlive-onlyamsmath  texlive-opcit  texlive-opencolor  texlive-optidef  texlive-optional  texlive-options  texlive-orcidlink  texlive-orientation  texlive-outline  texlive-outliner  texlive-outlines  texlive-outlining  texlive-overlays  texlive-overpic  texlive-padcount  texlive-pagecolor  texlive-pagecont  texlive-pagegrid  texlive-pagelayout  texlive-pagenote  texlive-pagerange  texlive-pageslts  texlive-palette  texlive-pangram  texlive-paper  texlive-papercdcase  texlive-papermas  texlive-papertex  texlive-paracol  texlive-parades  texlive-paralist  texlive-paresse  texlive-parnotes  texlive-parsa  texlive-parselines  texlive-pas-cours  texlive-pas-cv  texlive-pas-tableur  texlive-patch  texlive-patchcmd  texlive-pauldoc  texlive-pawpict  texlive-pax  texlive-pbalance  texlive-pbox  texlive-pbsheet  texlive-pdf14  texlive-pdfcol  texlive-pdfcolmk  texlive-pdfcomment  texlive-pdfcprot  texlive-pdfmarginpar  texlive-pdfoverlay  texlive-pdfpagediff  texlive-pdfpc  texlive-pdfpc-movie  texlive-pdfprivacy  texlive-pdfreview  texlive-pdfscreen  texlive-pdfslide  texlive-pdfsync  texlive-pdfwin  texlive-pdfx  texlive-pecha  texlive-perltex  texlive-permute  texlive-petiteannonce  texlive-pgfmath-xfp  texlive-phfcc  texlive-phfextendedabstract  texlive-phffullpagefigure  texlive-phfnote  texlive-phfparen  texlive-phfqit  texlive-phfquotetext  texlive-phfsvnwatermark  texlive-phfthm  texlive-philex  texlive-phonenumbers  texlive-photo  texlive-photobook  texlive-picture  texlive-piff  texlive-pkgloader  texlive-placeins  texlive-plantslabels  texlive-plates  texlive-plweb  texlive-pmboxdraw  texlive-polynom  texlive-polynomial  texlive-polytable  texlive-postcards  texlive-poster-mac  texlive-postnotes  texlive-powerdot  texlive-ppr-prv  texlive-ppt-slides  texlive-practicalreports  texlive-precattl  texlive-prelim2e  texlive-preprint  texlive-pressrelease  texlive-prettyref  texlive-prettytok  texlive-preview  texlive-printlen  texlive-probsoln  texlive-program  texlive-progress  texlive-progressbar  texlive-projlib  texlive-proofread  texlive-properties  texlive-prosper  texlive-protex  texlive-protocol  texlive-psfragx  texlive-pstool  texlive-pstring  texlive-pxgreeks  texlive-pygmentex  texlive-python  texlive-pythonimmediate  texlive-qcm  texlive-qstest  texlive-qsymbols  texlive-quicktype  texlive-quiz2socrative  texlive-quotchap  texlive-quoting  texlive-quotmark  texlive-ran_toks  texlive-randtext  texlive-rccol  texlive-rcs-multi  texlive-rcsinfo  texlive-readablecv  texlive-readarray  texlive-realboxes  texlive-recipe  texlive-recipebook  texlive-recipecard  texlive-rectopma  texlive-refcheck  texlive-refenums  texlive-reflectgraphics  texlive-refman  texlive-refstyle  texlive-regcount  texlive-regexpatch  texlive-register  texlive-regstats  texlive-relenc  texlive-relsize  texlive-repeatindex  texlive-repltext  texlive-rescansync  texlive-resmes  texlive-returntogrid  texlive-rgltxdoc  texlive-rjlparshap  texlive-rlepsf  texlive-rmpage  texlive-robustcommand  texlive-robustindex  texlive-romanbar  texlive-romanbarpagenumber  texlive-romanneg  texlive-romannum  texlive-rotfloat  texlive-rotpages  texlive-roundbox  texlive-rterface  texlive-rtkinenc  texlive-rulerbox  texlive-rulercompass  texlive-runcode  texlive-rvwrite  texlive-sanitize-umlaut  texlive-sauerj  texlive-saveenv  texlive-savefnmark  texlive-savesym  texlive-savetrees  texlive-scale  texlive-scalebar  texlive-scalerel  texlive-scanpages  texlive-schedule  texlive-schooldocs  texlive-scontents  texlive-scrambledenvs  texlive-scrlayer-fancyhdr  texlive-scrlttr2copy  texlive-sdaps  texlive-sdrt  texlive-secdot  texlive-secnum  texlive-sectionbox  texlive-sectionbreak  texlive-sectsty  texlive-seealso  texlive-selectp  texlive-selinput  texlive-semantex  texlive-semantic  texlive-semantic-markup  texlive-semesterplanner  texlive-semioneside  texlive-semproc  texlive-semtex  texlive-sepfootnotes  texlive-seqsplit  texlive-sesstime  texlive-sf298  texlive-sffms  texlive-sfmath  texlive-shadethm  texlive-shadow  texlive-shadowtext  texlive-shapepar  texlive-shdoc  texlive-shipunov  texlive-shorttoc  texlive-show2e  texlive-showcharinbox  texlive-showdim  texlive-showexpl  texlive-showlabels  texlive-sidecap  texlive-sidenotes  texlive-sidenotesplus  texlive-silence  texlive-sillypage  texlive-simplecd  texlive-simplecv  texlive-simpleinvoice  texlive-simplivre  texlive-sitem  texlive-skb  texlive-skdoc  texlive-skeldoc  texlive-skeycommand  texlive-skeyval  texlive-skills  texlive-skrapport  texlive-slantsc  texlive-smalltableof  texlive-smart-eqn  texlive-smartref  texlive-smartunits  texlive-snapshot  texlive-snaptodo  texlive-snotez  texlive-soulpos  texlive-spacingtricks  texlive-spark-otf  texlive-sparklines  texlive-sphack  texlive-splitindex  texlive-spot  texlive-spotcolor  texlive-spreadtab  texlive-spverbatim  texlive-srbook-mem  texlive-srcltx  texlive-sseq  texlive-sslides  texlive-stack  texlive-stackengine  texlive-standalone  texlive-stdclsdv  texlive-stdpage  texlive-stealcaps  texlive-stex  texlive-storebox  texlive-storecmd  texlive-stringstrings  texlive-sttools  texlive-stubs  texlive-studenthandouts  texlive-styledcmd  texlive-subdepth  texlive-subdocs  texlive-subeqn  texlive-subeqnarray  texlive-subfigmat  texlive-subfigure  texlive-subfiles  texlive-subfloat  texlive-substitutefont  texlive-substr  texlive-supertabular  texlive-suppose  texlive-svg  texlive-svgcolor  texlive-svn  texlive-svn-multi  texlive-svn-prov  texlive-svninfo  texlive-swfigure  texlive-swungdash  texlive-syntax  texlive-syntrace  texlive-synttree  texlive-tabbing  texlive-tabfigures  texlive-tableaux  texlive-tablefootnote  texlive-tableof  texlive-tablists  texlive-tabls  texlive-tablvar  texlive-tabstackengine  texlive-tabto-ltx  texlive-tabu  texlive-tabularborder  texlive-tabularcalc  texlive-tabularew  texlive-tabularray  texlive-tabulary  texlive-tagging  texlive-tagpair  texlive-tagpdf  texlive-talk  texlive-tamefloats  texlive-tasks  texlive-tcldoc  texlive-tcolorbox  texlive-tdclock  texlive-technics  texlive-ted  texlive-templatetools  texlive-termcal  texlive-termlist  texlive-termsim  texlive-testhyphens  texlive-testidx  texlive-tex-label  texlive-tex-locale  texlive-texlogos  texlive-texmate  texlive-texments  texlive-texpower  texlive-texshade  texlive-texsurgery  texlive-textcsc  texlive-textfit  texlive-textmerg  texlive-textpos  texlive-textualicomma  texlive-texvc  texlive-theoremref  texlive-thinsp  texlive-thmtools  texlive-threadcol  texlive-threeparttable  texlive-threeparttablex  texlive-thumb  texlive-thumbs  texlive-thumby  texlive-ticket  texlive-tipauni  texlive-titlecaps  texlive-titlefoot  texlive-titlepic  texlive-titleref  texlive-titlesec  texlive-titling  texlive-to-be-determined  texlive-tocbibind  texlive-tocdata  texlive-tocloft  texlive-tocvsec2  texlive-todo  texlive-todonotes  texlive-tokcycle  texlive-tokenizer  texlive-toolbox  texlive-topfloat  texlive-topiclongtable  texlive-totalcount  texlive-totcount  texlive-totpages  texlive-tramlines  texlive-translations  texlive-transparent  texlive-trfsigns  texlive-trimspaces  texlive-trivfloat  texlive-trsym  texlive-truncate  texlive-tucv  texlive-turnthepage  texlive-twoinone  texlive-twoup  texlive-txgreeks  texlive-type1cm  texlive-typed-checklist  texlive-typeface  texlive-typoaid  texlive-typogrid  texlive-uassign  texlive-ucs  texlive-uebungsblatt  texlive-umoline  texlive-underlin  texlive-underoverlap  texlive-undolabl  texlive-uni-titlepage  texlive-unicodefonttable  texlive-unisc  texlive-unitconv  texlive-units  texlive-unravel  texlive-upmethodology  texlive-upquote  texlive-uri  texlive-ushort  texlive-uspace  texlive-utf8add  texlive-uwmslide  texlive-variablelm  texlive-varindex  texlive-varsfromjobname  texlive-varwidth  texlive-vcell  texlive-vdmlisting  texlive-verbasef  texlive-verbatimbox  texlive-verbatimcopy  texlive-verbdef  texlive-verbments  texlive-verifiche  texlive-version  texlive-versions  texlive-versonotes  texlive-vertbars  texlive-vgrid  texlive-vhistory  texlive-vmargin  texlive-volumes  texlive-vpe  texlive-vruler  texlive-vtable  texlive-vwcol  texlive-wallcalendar  texlive-wallpaper  texlive-warning  texlive-warpcol  texlive-was  texlive-webquiz  texlive-widetable  texlive-widows-and-orphans  texlive-williams  texlive-willowtreebook  texlive-withargs  texlive-wordcount  texlive-wordlike  texlive-worksheet  texlive-wrapfig  texlive-wrapfig2  texlive-wrapstuff  texlive-writeongrid  texlive-wtref  texlive-xargs  texlive-xassoccnt  texlive-xbmks  texlive-xcntperchap  texlive-xcolor-material  texlive-xcolor-solarized  texlive-xcomment  texlive-xcookybooky  texlive-xcpdftips  texlive-xdoc  texlive-xellipsis  texlive-xfakebold  texlive-xfor  texlive-xhfill  texlive-xifthen  texlive-xint  texlive-xkcdcolors  texlive-xltabular  texlive-xmpincl  texlive-xnewcommand  texlive-xoptarg  texlive-xpatch  texlive-xpeek  texlive-xprintlen  texlive-xpunctuate  texlive-xsavebox  texlive-xsim  texlive-xstring  texlive-xtab  texlive-xurl  texlive-xwatermark  texlive-xytree  texlive-yafoot  texlive-yagusylo  texlive-yaletter  texlive-ycbook  texlive-ydoc  texlive-yplan  texlive-zebra-goodies  texlive-zed-csp  texlive-zennote  texlive-ziffer  texlive-zref  texlive-zref-check  texlive-zref-clever  texlive-zref-vario  texlive-zwgetfdate  texlive-zwpagelayout
-Depends On      : texlive-bin  texlive-latexrecommended  texlive-pictures
-Optional Deps   : java-runtime: for pdfannotextractor [installed]
-                  python-pygments: for pygmentex [installed]
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 78.89 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:33 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : texlive-mathscience
-Version         : 2023.66594-20
-Description     : TeX Live - Mathematics, natural sciences, computer science packages
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-science  texlive-12many  texlive-accents  texlive-alg  texlive-algobox  texlive-algorithm2e  texlive-algorithmicx  texlive-algorithms  texlive-algpseudocodex  texlive-algxpar  texlive-aligned-overset  texlive-amscdx  texlive-amstex  texlive-annotate-equations  texlive-apxproof  texlive-autobreak  texlive-axodraw2  texlive-backnaur  texlive-begriff  texlive-binomexp  texlive-biocon  texlive-bitpattern  texlive-bodeplot  texlive-bohr  texlive-boldtensors  texlive-bosisio  texlive-bpchem  texlive-bropd  texlive-bussproofs  texlive-bussproofs-extra  texlive-bytefield  texlive-calculation  texlive-cartonaugh  texlive-cascade  texlive-causets  texlive-ccfonts  texlive-ccool  texlive-chemarrow  texlive-chemcompounds  texlive-chemcono  texlive-chemexec  texlive-chemformula  texlive-chemgreek  texlive-chemmacros  texlive-chemnum  texlive-chemobabel  texlive-chemplants  texlive-chemschemex  texlive-chemsec  texlive-chemstyle  texlive-clrscode  texlive-clrscode3e  texlive-codeanatomy  texlive-commath  texlive-commutative-diagrams  texlive-complexity  texlive-computational-complexity  texlive-concmath  texlive-concrete  texlive-conteq  texlive-correctmathalign  texlive-cryptocode  texlive-csassignments  texlive-cvss  texlive-decision-table  texlive-delim  texlive-delimseasy  texlive-delimset  texlive-derivative  texlive-diffcoeff  texlive-digiconfigs  texlive-dijkstra  texlive-drawmatrix  texlive-drawstack  texlive-dyntree  texlive-easing  texlive-ebproof  texlive-econometrics  texlive-eltex  texlive-emf  texlive-endiagram  texlive-engtlc  texlive-eolang  texlive-eqexpl  texlive-eqnarray  texlive-eqnnumwarn  texlive-euclideangeometry  texlive-extarrows  texlive-extpfeil  texlive-faktor  texlive-fascicules  texlive-fixdif  texlive-fixmath  texlive-fnspe  texlive-formal-grammar  texlive-fouridx  texlive-functan  texlive-galois  texlive-gastex  texlive-gene-logic  texlive-ghsystem  texlive-glosmathtools  texlive-gotoh  texlive-grundgesetze  texlive-gu  texlive-helmholtz-ellis-ji-notation  texlive-hep  texlive-hep-reference  texlive-hepnames  texlive-hepparticles  texlive-hepthesis  texlive-hepunits  texlive-ibrackets  texlive-includernw  texlive-interval  texlive-ionumbers  texlive-isomath  texlive-jkmath  texlive-jupynotex  texlive-karnaugh  texlive-karnaugh-map  texlive-karnaughmap  texlive-kvmap  texlive-letterswitharrows  texlive-lie-hasse  texlive-logicproof  texlive-longdivision  texlive-lpform  texlive-lplfitch  texlive-lstbayes  texlive-mathcommand  texlive-mathcomp  texlive-mathfixs  texlive-mathlig  texlive-mathpartir  texlive-mathpunctspace  texlive-mathsemantics  texlive-matlab-prettifier  texlive-matrix-skeleton  texlive-mattens  texlive-mecaso  texlive-membranecomputing  texlive-memorygraphs  texlive-messagepassing  texlive-mgltex  texlive-mhchem  texlive-mhequ  texlive-miller  texlive-mismath  texlive-multiobjective  texlive-naive-ebnf  texlive-namedtensor  texlive-natded  texlive-nath  texlive-nchairx  texlive-nicematrix  texlive-nuc  texlive-nucleardata  texlive-numerica  texlive-numerica-plus  texlive-numerica-tables  texlive-objectz  texlive-oplotsymbl  texlive-ot-tableau  texlive-oubraces  texlive-overarrows  texlive-pascaltriangle  texlive-perfectcut  texlive-pfdicons  texlive-physconst  texlive-physics  texlive-physics2  texlive-physunits  texlive-pinoutikz  texlive-pm-isomath  texlive-polexpr  texlive-prftree  texlive-principia  texlive-proba  texlive-proof-at-the-end  texlive-prooftrees  texlive-pseudo  texlive-pseudocode  texlive-pythonhighlight  texlive-qsharp  texlive-rank-2-roots  texlive-rbt-mathnotes  texlive-rec-thy  texlive-resolsysteme  texlive-rest-api  texlive-revquantum  texlive-ribbonproofs  texlive-rmathbr  texlive-sankey  texlive-sasnrdisplay  texlive-sciposter  texlive-sclang-prettifier  texlive-scratchx  texlive-sesamanuel  texlive-sfg  texlive-shuffle  texlive-simplebnf  texlive-simpler-wick  texlive-simples-matrices  texlive-simplewick  texlive-sistyle  texlive-siunits  texlive-siunitx  texlive-skmath  texlive-spalign  texlive-spbmark  texlive-stanli  texlive-statex  texlive-statex2  texlive-statistics  texlive-statistik  texlive-statmath  texlive-steinmetz  texlive-stmaryrd  texlive-structmech  texlive-struktex  texlive-substances  texlive-subsupscripts  texlive-subtext  texlive-susy  texlive-syllogism  texlive-sympytexpackage  texlive-synproof  texlive-t-angles  texlive-tablor  texlive-tensind  texlive-tensor  texlive-tex-ewd  texlive-textgreek  texlive-textopo  texlive-thermodynamics  texlive-thmbox  texlive-tiscreen  texlive-turnstile  texlive-ulqda  texlive-unitsdef  texlive-venn  texlive-witharrows  texlive-xymtex  texlive-yhmath  texlive-youngtab  texlive-yquant  texlive-ytableau  texlive-zx-calculus
-Depends On      : texlive-bin  texlive-fontsrecommended  texlive-latex
-Optional Deps   : None
-Required By     : None
-Optional For    : None
-Conflicts With  : texlive-science
-Replaces        : texlive-science
-Installed Size  : 17.68 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:33 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : texlive-music
-Version         : 2023.66594-20
-Description     : TeX Live - Music packages
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-abc  texlive-autosp  texlive-bagpipe  texlive-chordbars  texlive-chordbox  texlive-ddphonism  texlive-figbas  texlive-gchords  texlive-gregoriotex  texlive-gtrcrd  texlive-guitar  texlive-guitarchordschemes  texlive-guitartabs  texlive-harmony  texlive-latex4musicians  texlive-leadsheets  texlive-lilyglyphs  texlive-lyluatex  texlive-m-tx  texlive-musical  texlive-musicography  texlive-musixguit  texlive-musixtex  texlive-musixtex-fonts  texlive-musixtnt  texlive-octave  texlive-piano  texlive-pmx  texlive-pmxchords  texlive-recorder-fingering  texlive-songbook  texlive-songproj  texlive-songs  texlive-xml2pmx  texlive-xpiano
-Depends On      : texlive-bin  texlive-latex
-Optional Deps   : fontforge: for scripts from the lilyglyphs package
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 50.50 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:33 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : texlive-pictures
-Version         : 2023.66594-20
-Description     : TeX Live - Graphics, pictures, diagrams
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-adigraph  texlive-aobs-tikz  texlive-askmaps  texlive-asyfig  texlive-asypictureb  texlive-autoarea  texlive-bardiag  texlive-beamerswitch  texlive-binarytree  texlive-blochsphere  texlive-bloques  texlive-blox  texlive-bodegraph  texlive-bondgraph  texlive-bondgraphs  texlive-braids  texlive-bxeepic  texlive-byo-twemojis  texlive-byrne  texlive-cachepic  texlive-callouts  texlive-celtic  texlive-chemfig  texlive-circuit-macros  texlive-circuitikz  texlive-coffeestains  texlive-combinedgraphics  texlive-curve  texlive-curve2e  texlive-curves  texlive-dcpic  texlive-diagmac2  texlive-ditaa  texlive-doc-pictex  texlive-dot2texi  texlive-dottex  texlive-dpcircling  texlive-dratex  texlive-drs  texlive-duotenzor  texlive-dynkin-diagrams  texlive-ecgdraw  texlive-eepic  texlive-ellipse  texlive-endofproofwd  texlive-epspdf  texlive-epspdfconversion  texlive-esk  texlive-euflag  texlive-fast-diagram  texlive-fig4latex  texlive-figchild  texlive-figput  texlive-fitbox  texlive-flowchart  texlive-forest  texlive-genealogytree  texlive-getmap  texlive-gincltex  texlive-gnuplottex  texlive-gradientframe  texlive-grafcet  texlive-graph35  texlive-graphicxpsd  texlive-graphviz  texlive-gtrlib-largetrees  texlive-harveyballs  texlive-here  texlive-hf-tikz  texlive-hobby  texlive-hvfloat  texlive-istgame  texlive-kblocks  texlive-kinematikz  texlive-knitting  texlive-knittingpattern  texlive-ladder  texlive-lapdf  texlive-latex-make  texlive-liftarm  texlive-lpic  texlive-lroundrect  texlive-luamesh  texlive-luasseq  texlive-maker  texlive-makeshape  texlive-mathspic  texlive-mercatormap  texlive-milsymb  texlive-miniplot  texlive-mkpic  texlive-modiagram  texlive-neuralnetwork  texlive-nl-interval  texlive-nndraw  texlive-numericplots  texlive-outilsgeomtikz  texlive-pb-diagram  texlive-penrose  texlive-petri-nets  texlive-pgf  texlive-pgf-blur  texlive-pgf-interference  texlive-pgf-periodictable  texlive-pgf-pie  texlive-pgf-soroban  texlive-pgf-spectra  texlive-pgf-umlcd  texlive-pgf-umlsd  texlive-pgfgantt  texlive-pgfkeyx  texlive-pgfmolbio  texlive-pgfmorepages  texlive-pgfopts  texlive-pgfornament  texlive-pgfplots  texlive-picinpar  texlive-pict2e  texlive-pictex  texlive-pictex2  texlive-pinlabel  texlive-pixelart  texlive-pixelarttikz  texlive-pmgraph  texlive-postage  texlive-prerex  texlive-productbox  texlive-ptolemaicastronomy  texlive-puyotikz  texlive-pxpgfmark  texlive-pxpic  texlive-qcircuit  texlive-qrcode  texlive-quantikz  texlive-randbild  texlive-randomwalk  texlive-realhats  texlive-reotex  texlive-robotarm  texlive-rviewport  texlive-sa-tikz  texlive-sacsymb  texlive-schemabloc  texlive-scratch  texlive-scratch3  texlive-scsnowman  texlive-setdeck  texlive-signchart  texlive-simplenodes  texlive-simpleoptics  texlive-smartdiagram  texlive-spath3  texlive-spectralsequences  texlive-strands  texlive-swimgraf  texlive-syntaxdi  texlive-table-fct  texlive-texdraw  texlive-ticollege  texlive-tikz-3dplot  texlive-tikz-among-us  texlive-tikz-bagua  texlive-tikz-bayesnet  texlive-tikz-bbox  texlive-tikz-cd  texlive-tikz-dependency  texlive-tikz-dimline  texlive-tikz-ext  texlive-tikz-feynhand  texlive-tikz-feynman  texlive-tikz-imagelabels  texlive-tikz-inet  texlive-tikz-kalender  texlive-tikz-karnaugh  texlive-tikz-ladder  texlive-tikz-lake-fig  texlive-tikz-layers  texlive-tikz-mirror-lens  texlive-tikz-nef  texlive-tikz-network  texlive-tikz-opm  texlive-tikz-optics  texlive-tikz-page  texlive-tikz-palattice  texlive-tikz-planets  texlive-tikz-qtree  texlive-tikz-relay  texlive-tikz-sfc  texlive-tikz-swigs  texlive-tikz-timing  texlive-tikz-trackschematic  texlive-tikz-truchet  texlive-tikzbricks  texlive-tikzcodeblocks  texlive-tikzducks  texlive-tikzfill  texlive-tikzinclude  texlive-tikzlings  texlive-tikzmark  texlive-tikzmarmots  texlive-tikzorbital  texlive-tikzpackets  texlive-tikzpagenodes  texlive-tikzpeople  texlive-tikzpfeile  texlive-tikzpingus  texlive-tikzposter  texlive-tikzscale  texlive-tikzsymbols  texlive-tikztosvg  texlive-tikzviolinplots  texlive-tile-graphic  texlive-timing-diagrams  texlive-tipfr  texlive-tkz-base  texlive-tkz-berge  texlive-tkz-doc  texlive-tkz-euclide  texlive-tkz-fct  texlive-tkz-graph  texlive-tkz-orm  texlive-tkz-tab  texlive-tkzexample  texlive-tonevalue  texlive-tqft  texlive-tsemlines  texlive-tufte-latex  texlive-twemojis  texlive-tzplot  texlive-utfsym  texlive-venndiagram  texlive-visualpstricks  texlive-wheelchart  texlive-worldflags  texlive-xistercian  texlive-xpicture  texlive-xypic
-Depends On      : texlive-bin  texlive-basic
-Optional Deps   : ghostscript: for epspdf [installed]
-Required By     : texlive-latexextra
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 72.32 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:32 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : texlive-pstricks
-Version         : 2023.66594-20
-Description     : TeX Live - PSTricks
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-auto-pst-pdf  texlive-bclogo  texlive-dsptricks  texlive-luapstricks  texlive-makeplot  texlive-pdftricks  texlive-pdftricks2  texlive-pedigree-perl  texlive-psbao  texlive-pst-2dplot  texlive-pst-3d  texlive-pst-3dplot  texlive-pst-abspos  texlive-pst-am  texlive-pst-antiprism  texlive-pst-arrow  texlive-pst-asr  texlive-pst-bar  texlive-pst-barcode  texlive-pst-bezier  texlive-pst-blur  texlive-pst-bspline  texlive-pst-calculate  texlive-pst-calendar  texlive-pst-cie  texlive-pst-circ  texlive-pst-coil  texlive-pst-contourplot  texlive-pst-cox  texlive-pst-dart  texlive-pst-dbicons  texlive-pst-diffraction  texlive-pst-electricfield  texlive-pst-eps  texlive-pst-eucl  texlive-pst-exa  texlive-pst-feyn  texlive-pst-fill  texlive-pst-fit  texlive-pst-flags  texlive-pst-fr3d  texlive-pst-fractal  texlive-pst-fun  texlive-pst-func  texlive-pst-gantt  texlive-pst-geo  texlive-pst-geometrictools  texlive-pst-gr3d  texlive-pst-grad  texlive-pst-graphicx  texlive-pst-hsb  texlive-pst-infixplot  texlive-pst-intersect  texlive-pst-jtree  texlive-pst-knot  texlive-pst-labo  texlive-pst-layout  texlive-pst-lens  texlive-pst-light3d  texlive-pst-lsystem  texlive-pst-magneticfield  texlive-pst-marble  texlive-pst-math  texlive-pst-mirror  texlive-pst-moire  texlive-pst-node  texlive-pst-ob3d  texlive-pst-ode  texlive-pst-optexp  texlive-pst-optic  texlive-pst-osci  texlive-pst-ovl  texlive-pst-pad  texlive-pst-pdf  texlive-pst-pdgr  texlive-pst-perspective  texlive-pst-platon  texlive-pst-plot  texlive-pst-poker  texlive-pst-poly  texlive-pst-pulley  texlive-pst-qtree  texlive-pst-rputover  texlive-pst-rubans  texlive-pst-shell  texlive-pst-sigsys  texlive-pst-slpe  texlive-pst-solarsystem  texlive-pst-solides3d  texlive-pst-soroban  texlive-pst-spectra  texlive-pst-spinner  texlive-pst-stru  texlive-pst-support  texlive-pst-text  texlive-pst-thick  texlive-pst-tools  texlive-pst-tree  texlive-pst-turtle  texlive-pst-tvz  texlive-pst-uml  texlive-pst-vectorian  texlive-pst-vehicle  texlive-pst-venn  texlive-pst-vowel  texlive-pst2pdf  texlive-pstricks-add  texlive-pstricks_calcnotes  texlive-uml  texlive-vaucanson-g  texlive-vocaltract
-Depends On      : texlive-bin  texlive-basic  texlive-plaingeneric
-Optional Deps   : None
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 46.28 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:33 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : texlive-publishers
-Version         : 2023.66594-20
-Description     : TeX Live - Publisher styles, theses, etc.
-Architecture    : any
-URL             : http://tug.org/texlive/
-Licenses        : GPL
-Groups          : texlive
-Provides        : texlive-aastex  texlive-abnt  texlive-abntex2  texlive-abntexto  texlive-acmart  texlive-acmconf  texlive-active-conf  texlive-adfathesis  texlive-afparticle  texlive-afthesis  texlive-aguplus  texlive-aiaa  texlive-anonymous-acm  texlive-anufinalexam  texlive-aomart  texlive-apa  texlive-apa6  texlive-apa6e  texlive-apa7  texlive-arsclassica  texlive-articleingud  texlive-asaetr  texlive-ascelike  texlive-asmeconf  texlive-asmejour  texlive-aucklandthesis  texlive-bangorcsthesis  texlive-bangorexam  texlive-bath-bst  texlive-beamer-fuberlin  texlive-beamer-verona  texlive-beilstein  texlive-bfh-ci  texlive-bgteubner  texlive-bjfuthesis  texlive-bmstu  texlive-bmstu-iu8  texlive-br-lex  texlive-brandeis-dissertation  texlive-brandeis-problemset  texlive-brandeis-thesis  texlive-buctthesis  texlive-cascadilla  texlive-cesenaexam  texlive-chem-journal  texlive-chifoot  texlive-chs-physics-report  texlive-cje  texlive-classicthesis  texlive-cleanthesis  texlive-cmpj  texlive-confproc  texlive-cquthesis  texlive-dccpaper  texlive-dithesis  texlive-ebook  texlive-ebsthesis  texlive-ecothesis  texlive-ejpecp  texlive-ekaia  texlive-elbioimp  texlive-els-cas-templates  texlive-elsarticle  texlive-elteikthesis  texlive-emisa  texlive-erdc  texlive-estcpmm  texlive-etsvthor  texlive-facture-belge-simple-sans-tva  texlive-fbithesis  texlive-fcavtex  texlive-fcltxdoc  texlive-fei  texlive-ftc-notebook  texlive-gaceta  texlive-gammas  texlive-geradwp  texlive-gfdl  texlive-gradstudentresume  texlive-grant  texlive-gsemthesis  texlive-gzt  texlive-h2020proposal  texlive-hagenberg-thesis  texlive-har2nat  texlive-hecthese  texlive-hep-paper  texlive-hfutexam  texlive-hfutthesis  texlive-hithesis  texlive-hitszbeamer  texlive-hitszthesis  texlive-hobete  texlive-hu-berlin-bundle  texlive-hustthesis  texlive-icsv  texlive-ieeeconf  texlive-ieeepes  texlive-ieeetran  texlive-ijmart  texlive-ijsra  texlive-imac  texlive-imtekda  texlive-inkpaper  texlive-iodhbwm  texlive-iscram  texlive-jacow  texlive-jmlr  texlive-jnuexam  texlive-jourcl  texlive-jpsj  texlive-jwjournal  texlive-kdgdocs  texlive-kdpcover  texlive-kfupm-math-exam  texlive-kluwer  texlive-ksp-thesis  texlive-ku-template  texlive-langsci  texlive-langsci-avm  texlive-limecv  texlive-lion-msc  texlive-llncs  texlive-llncsconf  texlive-lni  texlive-lps  texlive-matc3  texlive-matc3mem  texlive-mcmthesis  texlive-mentis  texlive-mlacls  texlive-mluexercise  texlive-mnras  texlive-modeles-factures-belges-assocs  texlive-msu-thesis  texlive-mucproc  texlive-mugsthesis  texlive-muling  texlive-musuos  texlive-muthesis  texlive-mynsfc  texlive-nature  texlive-navydocs  texlive-nddiss  texlive-ndsu-thesis  texlive-ndsu-thesis-2022  texlive-nih  texlive-nihbiosketch  texlive-njustthesis  texlive-njuthesis  texlive-njuvisual  texlive-nostarch  texlive-novel  texlive-nrc  texlive-nwafuthesis  texlive-nwejm  texlive-onrannual  texlive-opteng  texlive-oup-authoring-template  texlive-philosophersimprint  texlive-pittetd  texlive-pkuthss  texlive-powerdot-fuberlin  texlive-powerdot-tuliplab  texlive-pracjourn  texlive-prociagssymp  texlive-proposal  texlive-prtec  texlive-ptptex  texlive-qrbill  texlive-quantumarticle  texlive-resphilosophica  texlive-resumecls  texlive-revtex  texlive-revtex4  texlive-revtex4-1  texlive-rutitlepage  texlive-ryersonsgsthesis  texlive-ryethesis  texlive-sageep  texlive-sapthesis  texlive-schule  texlive-scientific-thesis-cover  texlive-scripture  texlive-scrjrnl  texlive-sduthesis  texlive-se2thesis  texlive-seu-ml-assign  texlive-seuthesis  texlive-seuthesix  texlive-shortmathj  texlive-shtthesis  texlive-smflatex  texlive-soton  texlive-sphdthesis  texlive-spie  texlive-sr-vorl  texlive-srdp-mathematik  texlive-stellenbosch  texlive-suftesi  texlive-sugconf  texlive-tabriz-thesis  texlive-technion-thesis-template  texlive-texilikechaps  texlive-texilikecover  texlive-thesis-ekf  texlive-thesis-gwu  texlive-thesis-qom  texlive-thesis-titlepage-fhac  texlive-thuaslogos  texlive-thubeamer  texlive-thucoursework  texlive-thuthesis  texlive-tidyres  texlive-timbreicmc  texlive-tlc-article  texlive-topletter  texlive-toptesi  texlive-tuda-ci  texlive-tudscr  texlive-tugboat  texlive-tugboat-plain  texlive-tui  texlive-turabian  texlive-uaclasses  texlive-uafthesis  texlive-uantwerpendocs  texlive-ucalgmthesis  texlive-ucbthesis  texlive-ucdavisthesis  texlive-ucsmonograph  texlive-ucthesis  texlive-udes-genie-these  texlive-uestcthesis  texlive-ufrgscca  texlive-uhhassignment  texlive-uiucredborder  texlive-uiucthesis  texlive-ukbill  texlive-ulthese  texlive-umbclegislation  texlive-umich-thesis  texlive-umthesis  texlive-unam-thesis  texlive-unamth-template  texlive-unamthesis  texlive-unbtex  texlive-unifith  texlive-unigrazpub  texlive-unitn-bimrep  texlive-univie-ling  texlive-unizgklasa  texlive-unswcover  texlive-uol-physics-report  texlive-uothesis  texlive-uowthesis  texlive-uowthesistitlepage  texlive-urcls  texlive-uspatent  texlive-ut-thesis  texlive-utexasthesis  texlive-uvaletter  texlive-uwa-colours  texlive-uwa-letterhead  texlive-uwa-pcf  texlive-uwa-pif  texlive-uwthesis  texlive-vancouver  texlive-wsemclassic  texlive-xduthesis  texlive-xduts  texlive-xmuthesis  texlive-yathesis  texlive-yazd-thesis  texlive-yb-book  texlive-york-thesis
-Depends On      : texlive-bin  texlive-latex
-Optional Deps   : None
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 58.29 MiB
-Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 04 Jan 2024 02:29:42 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:33 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
 Name            : theforceengine
 Version         : 1.09.100-2
 Description     : Modern "Jedi Engine" replacement supporting Dark Forces, Outlaws and the mods
@@ -7942,7 +7609,7 @@ Install Script  : Yes
 Validated By    : None
 
 Name            : thunderbird
-Version         : 115.8.0-1
+Version         : 115.8.1-1
 Description     : Standalone mail and news reader from mozilla.org
 Architecture    : x86_64
 URL             : https://www.thunderbird.net/
@@ -7957,10 +7624,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 212.73 MiB
+Installed Size  : 212.74 MiB
 Packager        : Leonidas Spyropoulos <artafinde@archlinux.org>
-Build Date      : Wed 21 Feb 2024 06:46:37 AM CST
-Install Date    : Thu 29 Feb 2024 10:19:36 AM CST
+Build Date      : Tue 05 Mar 2024 03:10:55 AM CST
+Install Date    : Mon 18 Mar 2024 10:34:57 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -7990,7 +7657,7 @@ Install Script  : Yes
 Validated By    : Signature
 
 Name            : tk
-Version         : 8.6.13-2
+Version         : 8.6.14-1
 Description     : A windowing toolkit for use with tcl
 Architecture    : x86_64
 URL             : http://tcl.sourceforge.net/
@@ -8003,10 +7670,10 @@ Required By     : obextool  steam-metadata-editor-git  tklib
 Optional For    : git  obexftp  python  python-matplotlib  python-pillow  ruby  stk  sysstat  timidity++
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 12.26 MiB
-Packager        : Jelle van der Waa <jelle@archlinux.org>
-Build Date      : Tue 22 Aug 2023 01:35:45 PM CDT
-Install Date    : Sun 27 Aug 2023 02:28:46 PM CDT
+Installed Size  : 12.17 MiB
+Packager        : Antonio Rojas <arojas@archlinux.org>
+Build Date      : Tue 05 Mar 2024 04:37:43 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:57 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -8189,7 +7856,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : ttf-dejavu
-Version         : 2.37+18+g9b5d1b2f-6
+Version         : 2.37+18+g9b5d1b2f-7
 Description     : Font family based on the Bitstream Vera Fonts with a wider range of characters
 Architecture    : any
 URL             : https://dejavu-fonts.github.io
@@ -8203,9 +7870,9 @@ Optional For    : goverlay  vlc
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 9.79 MiB
-Packager        : Frederik Schwan <freswa@archlinux.org>
-Build Date      : Mon 08 Jan 2024 12:21:19 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:00 PM CST
+Packager        : Caleb Maclennan <alerque@archlinux.org>
+Build Date      : Mon 18 Mar 2024 04:07:31 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:38 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -8504,14 +8171,14 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : vim
-Version         : 9.1.0080-1
+Version         : 9.1.0151-2
 Description     : Vi Improved, a highly configurable, improved version of the vi text editor
 Architecture    : x86_64
 URL             : https://www.vim.org
 Licenses        : custom:vim
 Groups          : None
 Provides        : xxd  vim-minimal  vim-plugin-runtime
-Depends On      : vim-runtime=9.1.0080-1  gpm  acl  glibc  libgcrypt  zlib
+Depends On      : vim-runtime=9.1.0151-2  gpm  acl  glibc  libgcrypt  zlib
 Optional Deps   : python: Python language support [installed]
                   ruby: Ruby language support [installed]
                   lua: Lua language support [installed]
@@ -8521,10 +8188,10 @@ Required By     : None
 Optional For    : fzf  pacman-contrib  pass
 Conflicts With  : gvim  vim-minimal
 Replaces        : vim-minimal
-Installed Size  : 4.91 MiB
+Installed Size  : 4.69 MiB
 Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Tue 06 Feb 2024 09:30:35 AM CST
-Install Date    : Tue 06 Feb 2024 10:13:18 AM CST
+Build Date      : Tue 05 Mar 2024 04:43:21 PM CST
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -8733,7 +8400,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : wget
-Version         : 1.21.4-1
+Version         : 1.24.5-1
 Description     : Network utility to retrieve files from the Web
 Architecture    : x86_64
 URL             : https://www.gnu.org/software/wget/wget.html
@@ -8746,10 +8413,10 @@ Required By     : None
 Optional For    : hplip
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 3.18 MiB
+Installed Size  : 3.23 MiB
 Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Sat 20 May 2023 11:20:37 AM CDT
-Install Date    : Tue 23 May 2023 11:13:58 AM CDT
+Build Date      : Sun 10 Mar 2024 11:50:43 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -8964,28 +8631,6 @@ Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
 
-Name            : xash3d-fwgs-git
-Version         : r2285.74ce7e9b-1
-Description     : A custom GoldSrc engine implementation
-Architecture    : x86_64
-URL             : http://xash.su/
-Licenses        : GPL3
-Groups          : None
-Provides        : xash3d
-Depends On      : lib32-freetype2  lib32-fontconfig  lib32-libpulse  lib32-sdl2
-Optional Deps   : None
-Required By     : None
-Optional For    : None
-Conflicts With  : xash3d-hlsdk  xash3d-git
-Replaces        : None
-Installed Size  : 5.76 MiB
-Packager        : Unknown Packager
-Build Date      : Fri 13 Jan 2023 09:57:54 AM CST
-Install Date    : Fri 13 Jan 2023 09:58:46 AM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : None
-
 Name            : xclip
 Version         : 0.13-4
 Description     : Command line interface to the X11 clipboard
@@ -9047,28 +8692,6 @@ Replaces        : None
 Installed Size  : 461.23 KiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 Build Date      : Sat 21 Oct 2023 05:13:05 PM CDT
-Install Date    : Wed 13 Dec 2023 02:02:33 PM CST
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
-Name            : xdg-desktop-portal-kde
-Version         : 5.27.10-1
-Description     : A backend implementation for xdg-desktop-portal using Qt/KF5
-Architecture    : x86_64
-URL             : https://kde.org/plasma-desktop/
-Licenses        : LGPL
-Groups          : plasma
-Provides        : xdg-desktop-portal-impl
-Depends On      : kirigami2  plasma-framework5  kio-fuse  xdg-desktop-portal
-Optional Deps   : None
-Required By     : lutris
-Optional For    : xdg-desktop-portal
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 1049.72 KiB
-Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Tue 05 Dec 2023 05:04:14 PM CST
 Install Date    : Wed 13 Dec 2023 02:02:33 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
@@ -9172,7 +8795,7 @@ Groups          : None
 Provides        : None
 Depends On      : libxt
 Optional Deps   : None
-Required By     : xscreensaver
+Required By     : None
 Optional For    : None
 Conflicts With  : xorg-res-utils
 Replaces        : None
@@ -9471,23 +9094,23 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : xorg-iceauth
-Version         : 1.0.9-1
+Version         : 1.0.10-1
 Description     : ICE authority file utility
 Architecture    : x86_64
-URL             : https://xorg.freedesktop.org/
-Licenses        : custom
+URL             : https://gitlab.freedesktop.org/xorg/app/iceauth
+Licenses        : MIT-open-group
 Groups          : xorg-apps  xorg
 Provides        : None
-Depends On      : libice
+Depends On      : libice  glibc
 Optional Deps   : None
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 40.75 KiB
+Installed Size  : 36.93 KiB
 Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Sun 03 Apr 2022 02:12:25 PM CDT
-Install Date    : Thu 16 Mar 2023 01:43:23 PM CDT
+Build Date      : Mon 11 Mar 2024 01:23:13 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -9537,33 +9160,33 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : xorg-server
-Version         : 21.1.11-1
+Version         : 21.1.11-2
 Description     : Xorg X server
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
-Licenses        : custom
+Licenses        : LicenseRef-Adobe-Display-PostScript  BSD-3-Clause  LicenseRef-DEC-3-Clause  HPND  LicenseRef-HPND-sell-MIT-disclaimer-xserver  HPND-sell-variant  ICU  ISC  MIT  MIT-open-group  NTP  SGI-B-2.0  SMLNJ  X11  X11-distribute-modifications-variant
 Groups          : xorg
 Provides        : X-ABI-VIDEODRV_VERSION=25.2  X-ABI-XINPUT_VERSION=24.4  X-ABI-EXTENSION_VERSION=10.0  x-server
-Depends On      : libepoxy  libxfont2  pixman  xorg-server-common  libunwind  dbus  libgl  xf86-input-libinput  nettle  libpciaccess  libdrm  libxshmfence  libxcvt
+Depends On      : libepoxy  libxfont2  pixman  xorg-server-common  libunwind  dbus  libgl  xf86-input-libinput  nettle  libxdmcp  sh  glibc  libxau  systemd-libs  libtirpc  libpciaccess  libdrm  libxshmfence  libxcvt
 Optional Deps   : None
 Required By     : None
 Optional For    : nvidia-utils
 Conflicts With  : nvidia-utils<=331.20  glamor-egl  xf86-video-modesetting
 Replaces        : glamor-egl  xf86-video-modesetting
-Installed Size  : 3.73 MiB
-Packager        : Christian Hesse <eworm@archlinux.org>
-Build Date      : Tue 16 Jan 2024 06:43:00 AM CST
-Install Date    : Wed 17 Jan 2024 02:49:16 PM CST
+Installed Size  : 3.62 MiB
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Sun 17 Mar 2024 05:52:30 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
 
 Name            : xorg-server-common
-Version         : 21.1.11-1
+Version         : 21.1.11-2
 Description     : Xorg server common files
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
-Licenses        : custom
+Licenses        : LicenseRef-Adobe-Display-PostScript  BSD-3-Clause  LicenseRef-DEC-3-Clause  HPND  LicenseRef-HPND-sell-MIT-disclaimer-xserver  HPND-sell-variant  ICU  ISC  MIT  MIT-open-group  NTP  SGI-B-2.0  SMLNJ  X11  X11-distribute-modifications-variant
 Groups          : xorg
 Provides        : None
 Depends On      : xkeyboard-config  xorg-xkbcomp  xorg-setxkbmap
@@ -9573,97 +9196,97 @@ Optional For    : None
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 127.09 KiB
-Packager        : Christian Hesse <eworm@archlinux.org>
-Build Date      : Tue 16 Jan 2024 06:43:00 AM CST
-Install Date    : Wed 17 Jan 2024 02:49:16 PM CST
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Sun 17 Mar 2024 05:52:30 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : xorg-server-devel
-Version         : 21.1.11-1
+Version         : 21.1.11-2
 Description     : Development files for the X.Org X server
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
-Licenses        : custom
+Licenses        : LicenseRef-Adobe-Display-PostScript  BSD-3-Clause  LicenseRef-DEC-3-Clause  HPND  LicenseRef-HPND-sell-MIT-disclaimer-xserver  HPND-sell-variant  ICU  ISC  MIT  MIT-open-group  NTP  SGI-B-2.0  SMLNJ  X11  X11-distribute-modifications-variant
 Groups          : xorg
 Provides        : None
-Depends On      : xorgproto  mesa  libpciaccess  xorg-util-macros
+Depends On      : xorgproto  mesa  libpciaccess  pixman  xorg-util-macros
 Optional Deps   : None
 Required By     : None
 Optional For    : nvidia-utils
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 1224.73 KiB
-Packager        : Christian Hesse <eworm@archlinux.org>
-Build Date      : Tue 16 Jan 2024 06:43:00 AM CST
-Install Date    : Wed 17 Jan 2024 02:49:16 PM CST
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Sun 17 Mar 2024 05:52:30 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : xorg-server-xephyr
-Version         : 21.1.11-1
+Version         : 21.1.11-2
 Description     : A nested X server that runs as an X application
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
-Licenses        : custom
+Licenses        : LicenseRef-Adobe-Display-PostScript  BSD-3-Clause  LicenseRef-DEC-3-Clause  HPND  LicenseRef-HPND-sell-MIT-disclaimer-xserver  HPND-sell-variant  ICU  ISC  MIT  MIT-open-group  NTP  SGI-B-2.0  SMLNJ  X11  X11-distribute-modifications-variant
 Groups          : xorg
 Provides        : None
-Depends On      : libxfont2  libgl  libepoxy  libunwind  systemd-libs  libxv  pixman  xorg-server-common  xcb-util-image  xcb-util-renderutil  xcb-util-wm  xcb-util-keysyms  nettle  libtirpc
+Depends On      : libxfont2  libgl  libepoxy  libunwind  systemd-libs  pixman  xorg-server-common  xcb-util-image  xcb-util-renderutil  xcb-util-wm  xcb-util-keysyms  nettle  libtirpc  xcb-util  libxdmcp  libx11  libxau  libxshmfence  glibc
 Optional Deps   : None
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 2.26 MiB
-Packager        : Christian Hesse <eworm@archlinux.org>
-Build Date      : Tue 16 Jan 2024 06:43:00 AM CST
-Install Date    : Wed 17 Jan 2024 02:49:16 PM CST
+Installed Size  : 2.18 MiB
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Sun 17 Mar 2024 05:52:30 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : xorg-server-xnest
-Version         : 21.1.11-1
+Version         : 21.1.11-2
 Description     : A nested X server that runs as an X application
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
-Licenses        : custom
+Licenses        : LicenseRef-Adobe-Display-PostScript  BSD-3-Clause  LicenseRef-DEC-3-Clause  HPND  LicenseRef-HPND-sell-MIT-disclaimer-xserver  HPND-sell-variant  ICU  ISC  MIT  MIT-open-group  NTP  SGI-B-2.0  SMLNJ  X11  X11-distribute-modifications-variant
 Groups          : xorg
 Provides        : None
-Depends On      : libxfont2  libunwind  libxext  pixman  xorg-server-common  nettle  libtirpc  systemd-libs
+Depends On      : libxfont2  libunwind  libxext  pixman  xorg-server-common  nettle  libtirpc  systemd-libs  libxdmcp  glibc  libx11  libxau
 Optional Deps   : None
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 1437.39 KiB
-Packager        : Christian Hesse <eworm@archlinux.org>
-Build Date      : Tue 16 Jan 2024 06:43:00 AM CST
-Install Date    : Wed 17 Jan 2024 02:49:16 PM CST
+Installed Size  : 1397.47 KiB
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Sun 17 Mar 2024 05:52:30 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : xorg-server-xvfb
-Version         : 21.1.11-1
+Version         : 21.1.11-2
 Description     : Virtual framebuffer X server
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
-Licenses        : custom
+Licenses        : MIT  GPL-2.0-only
 Groups          : xorg
 Provides        : None
-Depends On      : libxfont2  libunwind  pixman  xorg-server-common  xorg-xauth  libgl  nettle  libtirpc  systemd-libs
+Depends On      : libxfont2  libunwind  pixman  xorg-server-common  xorg-xauth  libgl  nettle  libtirpc  systemd-libs  libxdmcp  sh  glibc  libxau
 Optional Deps   : None
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 1952.09 KiB
-Packager        : Christian Hesse <eworm@archlinux.org>
-Build Date      : Tue 16 Jan 2024 06:43:00 AM CST
-Install Date    : Wed 17 Jan 2024 02:49:16 PM CST
+Installed Size  : 1880.17 KiB
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Sun 17 Mar 2024 05:52:30 AM CDT
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -10737,8 +10360,8 @@ Groups          : xorg
 Provides        : xorg-server-xwayland
 Depends On      : nettle  libepoxy  systemd-libs  libxfont2  pixman  xorg-server-common  libxcvt  mesa  libglvnd  libxau  wayland  libdrm  libtirpc  libxshmfence  glibc
 Optional Deps   : None
-Required By     : gamescope
-Optional For    : wlroots
+Required By     : None
+Optional For    : None
 Conflicts With  : xorg-server-xwayland
 Replaces        : xorg-server-xwayland
 Installed Size  : 2.24 MiB
@@ -10815,28 +10438,6 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
-Name            : xscreensaver
-Version         : 6.08-1
-Description     : Screen saver and locker for the X Window System
-Architecture    : x86_64
-URL             : https://www.jwz.org/xscreensaver/
-Licenses        : BSD
-Groups          : None
-Provides        : None
-Depends On      : gtk3  glu  xorg-appres  libglvnd  libjpeg-turbo  libjpeg.so=8-64  libsystemd.so=0-64  libx11  libxcrypt  libcrypt.so=2-64  libxext  libxft  libxi  libxinerama  libxmu  libxrandr  libxt  libxxf86vm  perl-libwww  pam  libpam.so=0-64  glibc  glib2  gdk-pixbuf2
-Optional Deps   : gdm: for login manager support
-Required By     : None
-Optional For    : None
-Conflicts With  : None
-Replaces        : None
-Installed Size  : 39.49 MiB
-Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Fri 13 Oct 2023 10:20:17 AM CDT
-Install Date    : Sun 15 Oct 2023 02:55:44 PM CDT
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : Signature
-
 Name            : xtrlock
 Version         : 2.15-1
 Description     : Minimal X display lock program
@@ -10905,14 +10506,14 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : yt-dlp
-Version         : 2023.12.30-1
+Version         : 2024.03.10-1
 Description     : A youtube-dl fork with additional features and fixes
 Architecture    : any
 URL             : https://github.com/yt-dlp/yt-dlp
 Licenses        : Unlicense
 Groups          : None
 Provides        : None
-Depends On      : python  python-certifi  python-requests
+Depends On      : python  python-certifi  python-requests  python-urllib3
 Optional Deps   : ffmpeg: for video post-processing [installed]
                   rtmpdump: for rtmp streams support [installed]
                   atomicparsley: for embedding thumbnails into m4a files
@@ -10931,20 +10532,20 @@ Required By     : None
 Optional For    : mpv
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 30.77 MiB
+Installed Size  : 31.39 MiB
 Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Fri 05 Jan 2024 05:53:06 PM CST
-Install Date    : Thu 11 Jan 2024 04:01:35 PM CST
+Build Date      : Sun 10 Mar 2024 06:51:24 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : zathura
-Version         : 0.5.4-2
+Version         : 0.5.5-1
 Description     : Minimalistic document viewer
 Architecture    : x86_64
 URL             : https://pwmt.org/projects/zathura/
-Licenses        : custom
+Licenses        : Zlib
 Groups          : None
 Provides        : None
 Depends On      : girara  sqlite  desktop-file-utils  file  libsynctex  file  libseccomp
@@ -10957,16 +10558,16 @@ Required By     : zathura-pdf-mupdf
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 640.52 KiB
+Installed Size  : 637.96 KiB
 Packager        : Robin Candau <antiz@archlinux.org>
-Build Date      : Sun 14 Jan 2024 05:52:00 AM CST
-Install Date    : Wed 17 Jan 2024 02:49:16 PM CST
+Build Date      : Tue 05 Mar 2024 03:00:15 AM CST
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : zathura-pdf-mupdf
-Version         : 0.4.1-16
+Version         : 0.4.1-17
 Description     : PDF support for Zathura (MuPDF backend) (Supports PDF, ePub, and OpenXPS)
 Architecture    : x86_64
 URL             : https://pwmt.org/projects/zathura-pdf-mupdf/
@@ -10981,8 +10582,8 @@ Conflicts With  : zathura-pdf-poppler
 Replaces        : None
 Installed Size  : 23.60 KiB
 Packager        : Robin Candau <antiz@archlinux.org>
-Build Date      : Fri 23 Feb 2024 01:53:12 PM CST
-Install Date    : Thu 29 Feb 2024 10:19:37 AM CST
+Build Date      : Tue 05 Mar 2024 03:09:50 AM CST
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -11032,23 +10633,23 @@ Install Script  : No
 Validated By    : None
 
 Name            : zsh
-Version         : 5.9-4
+Version         : 5.9-5
 Description     : A very advanced and programmable command interpreter (shell) for UNIX
 Architecture    : x86_64
 URL             : https://www.zsh.org/
 Licenses        : custom
 Groups          : None
 Provides        : None
-Depends On      : pcre  libcap  gdbm
+Depends On      : pcre2  libcap  gdbm
 Optional Deps   : None
 Required By     : zsh-fast-syntax-highlighting-git
 Optional For    : fzf  shell-color-scripts
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 6.62 MiB
-Packager        : Frederik Schwan <freswa@archlinux.org>
-Build Date      : Tue 04 Jul 2023 04:09:21 AM CDT
-Install Date    : Sun 09 Jul 2023 03:19:07 PM CDT
+Installed Size  : 6.56 MiB
+Packager        : Christian Hesse <eworm@archlinux.org>
+Build Date      : Thu 14 Mar 2024 05:28:04 PM CDT
+Install Date    : Mon 18 Mar 2024 10:34:58 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
