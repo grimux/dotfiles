@@ -184,11 +184,11 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : arronax
-Version         : 0.8.1-3
+Version         : 0.8.1-4
 Description     : A GTK based GUI program to create and modify starters (*.desktop files) for applications, files, and URIs.
 Architecture    : any
 URL             : https://www.florian-diesch.de/software/arronax
-Licenses        : GPL3
+Licenses        : GPL-3.0-or-later
 Groups          : None
 Provides        : None
 Depends On      : libwnck3  python-gobject  python-pyxdg
@@ -199,10 +199,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 884.83 KiB
+Installed Size  : 686.27 KiB
 Packager        : Unknown Packager
-Build Date      : Tue 28 Nov 2023 12:53:23 PM CST
-Install Date    : Tue 28 Nov 2023 12:53:44 PM CST
+Build Date      : Tue 19 Mar 2024 10:20:53 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:29 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -733,13 +733,13 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : brave-bin
-Version         : 1:1.62.165-1
+Version         : 1:1.63.174-1
 Description     : Web browser that blocks ads and trackers by default (binary release)
 Architecture    : x86_64
 URL             : https://brave.com
 Licenses        : MPL2  BSD  custom:chromium
 Groups          : None
-Provides        : brave=1.62.165  brave-browser
+Provides        : brave=1.63.174  brave-browser
 Depends On      : alsa-lib  gtk3  libxss  nss  ttf-font
 Optional Deps   : cups: Printer support [installed]
                   libgnome-keyring: Enable GNOME keyring support
@@ -748,10 +748,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : brave
 Replaces        : None
-Installed Size  : 344.96 MiB
+Installed Size  : 345.62 MiB
 Packager        : Unknown Packager
-Build Date      : Thu 15 Feb 2024 02:23:57 PM CST
-Install Date    : Thu 15 Feb 2024 02:29:18 PM CST
+Build Date      : Tue 19 Mar 2024 10:07:00 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:28 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -945,7 +945,7 @@ Install Script  : No
 Validated By    : None
 
 Name            : cemu
-Version         : 2.0.468-1
+Version         : 2.0.509-1
 Description     : Software to emulate Wii U games and applications on PC
 Architecture    : x86_64
 URL             : https://cemu.info
@@ -959,10 +959,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 39.52 MiB
+Installed Size  : 39.50 MiB
 Packager        : Unknown Packager
-Build Date      : Sun 21 Jan 2024 10:10:18 AM CST
-Install Date    : Sun 21 Jan 2024 10:12:54 AM CST
+Build Date      : Tue 19 Mar 2024 10:17:45 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:28 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : None
@@ -1249,7 +1249,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : discord
-Version         : 0.0.45-1
+Version         : 0.0.46-1
 Description     : All-in-one voice and text chat for gamers
 Architecture    : x86_64
 URL             : https://discord.com
@@ -1266,8 +1266,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 221.36 MiB
 Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Tue 12 Mar 2024 12:15:33 PM CDT
-Install Date    : Mon 18 Mar 2024 10:34:42 AM CDT
+Build Date      : Mon 18 Mar 2024 12:36:15 PM CDT
+Install Date    : Tue 19 Mar 2024 10:06:44 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -1476,14 +1476,14 @@ Install Script  : No
 Validated By    : None
 
 Name            : duckstation-git
-Version         : 0.1.r6388.ga1da722-1
+Version         : 0.1.r6477.g8db0fce-1
 Description     : A Sony PlayStation (PSX) emulator, focusing on playability, speed, and long-term maintainability (git version)
 Architecture    : x86_64
 URL             : https://github.com/stenzek/duckstation
 Licenses        : GPL-3.0-only
 Groups          : None
 Provides        : duckstation
-Depends On      : sh  glibc  gcc-libs  sdl2  qt6-base  libxrandr  libglvnd  libx11  zstd  zlib  dbus  curl  hicolor-icon-theme
+Depends On      : sh  glibc  gcc-libs  sdl2  qt6-base  libxrandr  libx11  zstd  zlib  dbus  curl  systemd-libs  hicolor-icon-theme
 Optional Deps   : qt6-wayland: Wayland support [installed]
                   libpulse: Pulseaudio support [installed]
                   sndio: Small audio support [installed]
@@ -1493,10 +1493,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : duckstation
 Replaces        : None
-Installed Size  : 30.04 MiB
+Installed Size  : 30.09 MiB
 Packager        : Unknown Packager
-Build Date      : Thu 15 Feb 2024 02:27:41 PM CST
-Install Date    : Thu 15 Feb 2024 02:29:18 PM CST
+Build Date      : Tue 19 Mar 2024 10:13:11 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:28 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -1568,7 +1568,7 @@ Install Script  : No
 Validated By    : None
 
 Name            : eduke32
-Version         : 20231224.r10548_842047589-1
+Version         : 20240217.r10554_8afa42e38-1
 Description     : An advanced Duke Nukem 3D source port
 Architecture    : x86_64
 URL             : http://eduke32.com/
@@ -1585,8 +1585,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 6.01 MiB
 Packager        : Unknown Packager
-Build Date      : Sat 10 Feb 2024 12:07:31 PM CST
-Install Date    : Sat 10 Feb 2024 12:22:52 PM CST
+Build Date      : Tue 19 Mar 2024 10:19:48 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:29 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : None
@@ -1939,7 +1939,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : flips
-Version         : 142-1
+Version         : 145-1
 Description     : Patcher for IPS and BPS files
 Architecture    : x86_64
 URL             : https://github.com/Alcaro/Flips
@@ -1954,8 +1954,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 158.08 KiB
 Packager        : Unknown Packager
-Build Date      : Sat 15 Apr 2023 08:06:30 PM CDT
-Install Date    : Sat 15 Apr 2023 08:09:57 PM CDT
+Build Date      : Tue 19 Mar 2024 10:20:32 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:29 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -1992,7 +1992,7 @@ Groups          : None
 Provides        : fuse=2.9.9
 Depends On      : glibc  fuse-common
 Optional Deps   : None
-Required By     : android-file-transfer  backintime-cli  fuseiso  glusterfs  jmtpfs  mtpfs  ntfs-3g  obexftp  simple-mtpfs
+Required By     : android-file-transfer  backintime-cli  fuseiso  glusterfs  jmtpfs  mtpfs  ntfs-3g  obexftp  protonup-qt-bin  simple-mtpfs
 Optional For    : mergerfs
 Conflicts With  : fuse
 Replaces        : fuse
@@ -3736,7 +3736,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : libstrangle
-Version         : 0.1.1-3
+Version         : 0.1.1-4
 Description     : Simple FPS Limiter
 Architecture    : x86_64
 URL             : https://gitlab.com/torkel104/libstrangle
@@ -3751,8 +3751,8 @@ Conflicts With  : libstrangle
 Replaces        : None
 Installed Size  : 424.01 KiB
 Packager        : Unknown Packager
-Build Date      : Tue 12 Dec 2023 11:02:05 PM CST
-Install Date    : Tue 12 Dec 2023 11:02:12 PM CST
+Build Date      : Tue 19 Mar 2024 10:21:02 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:29 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -4349,7 +4349,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : mergerfs
-Version         : 2.39.0-1
+Version         : 2.40.2-1
 Description     : Featureful union filesystem
 Architecture    : x86_64
 URL             : https://github.com/trapexit/mergerfs
@@ -4363,10 +4363,10 @@ Required By     : None
 Optional For    : rbdoom-3-bfg
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 1019.79 KiB
+Installed Size  : 1026.22 KiB
 Packager        : Unknown Packager
-Build Date      : Thu 15 Feb 2024 02:23:26 PM CST
-Install Date    : Thu 15 Feb 2024 02:29:17 PM CST
+Build Date      : Tue 19 Mar 2024 10:24:02 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:29 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -5496,7 +5496,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : pcsx2-git
-Version         : 1.7.5316.r0.gc3bafa2a4-1
+Version         : 1.7.5624.r0.g8f381a4e16-1
 Description     : A Sony PlayStation 2 emulator
 Architecture    : x86_64
 URL             : https://github.com/PCSX2/pcsx2
@@ -5511,10 +5511,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : pcsx2
 Replaces        : None
-Installed Size  : 40.69 MiB
+Installed Size  : 42.05 MiB
 Packager        : Unknown Packager
-Build Date      : Wed 20 Dec 2023 03:41:57 PM CST
-Install Date    : Wed 20 Dec 2023 03:45:14 PM CST
+Build Date      : Tue 19 Mar 2024 10:14:54 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:28 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : None
@@ -5820,7 +5820,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : ppsspp
-Version         : 1.16.6-1
+Version         : 1.17.1-1
 Description     : A PSP emulator written in C++
 Architecture    : x86_64
 URL             : https://www.ppsspp.org/
@@ -5833,10 +5833,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 45.81 MiB
+Installed Size  : 44.08 MiB
 Packager        : Maxime Gauduin <alucryd@archlinux.org>
-Build Date      : Thu 12 Oct 2023 04:07:54 PM CDT
-Install Date    : Tue 17 Oct 2023 01:01:53 PM CDT
+Build Date      : Mon 18 Mar 2024 12:17:52 PM CDT
+Install Date    : Tue 19 Mar 2024 10:06:44 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -5908,11 +5908,11 @@ Install Script  : No
 Validated By    : None
 
 Name            : protontricks
-Version         : 1.11.0-1
+Version         : 1.11.1-1
 Description     : A simple wrapper that does winetricks things for Proton enabled games.
 Architecture    : any
 URL             : https://github.com/Matoking/protontricks
-Licenses        : GPL3
+Licenses        : GPL-3.0-or-later
 Groups          : None
 Provides        : protontricks
 Depends On      : python  python-vdf  winetricks  python-setuptools  python-pillow
@@ -5922,10 +5922,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : protontricks-git
 Replaces        : None
-Installed Size  : 454.59 KiB
+Installed Size  : 457.76 KiB
 Packager        : Unknown Packager
-Build Date      : Fri 12 Jan 2024 12:58:28 PM CST
-Install Date    : Fri 12 Jan 2024 01:04:52 PM CST
+Build Date      : Tue 19 Mar 2024 10:12:58 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:28 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -5953,23 +5953,23 @@ Install Script  : No
 Validated By    : None
 
 Name            : protonup-qt-bin
-Version         : 2.8.2-1
+Version         : 2.9.1-1
 Description     : Install and manage Proton-GE for Steam and Wine-GE for Lutris with this graphical user interface.
 Architecture    : x86_64
 URL             : https://davidotek.github.io/protonup-qt
 Licenses        : GPL3
 Groups          : None
 Provides        : protonup-qt
-Depends On      : None
+Depends On      : fuse2>=2.9.9
 Optional Deps   : None
 Required By     : None
 Optional For    : None
 Conflicts With  : protonup-qt
 Replaces        : None
-Installed Size  : 58.16 MiB
+Installed Size  : 60.19 MiB
 Packager        : Unknown Packager
-Build Date      : Thu 17 Aug 2023 02:37:38 PM CDT
-Install Date    : Thu 17 Aug 2023 02:42:20 PM CDT
+Build Date      : Tue 19 Mar 2024 10:20:47 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:29 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -5997,11 +5997,11 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : ps3iso-utils-git
-Version         : r29.8780909-1
+Version         : r29.8780909-2
 Description     : Estwald's PS3 utilities: extractps3iso, makeps3iso, patchps3iso, splitps3iso
 Architecture    : x86_64
 URL             : https://github.com/bucanero/ps3iso-utils
-Licenses        : GPL3
+Licenses        : GPL-3.0-or-later
 Groups          : None
 Provides        : extractps3iso  makeps3iso  patchps3iso  splitps3iso
 Depends On      : glibc
@@ -6012,21 +6012,21 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 133.69 KiB
 Packager        : Unknown Packager
-Build Date      : Tue 31 Oct 2023 04:36:41 PM CDT
-Install Date    : Tue 31 Oct 2023 04:36:48 PM CDT
+Build Date      : Tue 19 Mar 2024 10:12:51 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:28 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
 
 Name            : puddletag
-Version         : 2.2.0-2
+Version         : 2.3.0-1
 Description     : An audio tag editor for GNU/Linux
 Architecture    : any
 URL             : https://docs.puddletag.net/
-Licenses        : GPL3
+Licenses        : GPL-3.0-or-later
 Groups          : None
 Provides        : None
-Depends On      : python-configobj  python-mutagen  python-pyparsing  python-pyqt5  qt5-svg
+Depends On      : python-configobj  python-distro  python-mutagen  python-pyparsing  python-pyqt5  python-unidecode  qt5-svg
 Optional Deps   : chromaprint: AcoustID support [installed]
                   python-levenshtein: faster duplicate matching
                   python-lxml: additional tag sources [installed]
@@ -6035,10 +6035,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 7.22 MiB
+Installed Size  : 5.32 MiB
 Packager        : Unknown Packager
-Build Date      : Tue 23 May 2023 11:22:17 AM CDT
-Install Date    : Tue 23 May 2023 11:22:35 AM CDT
+Build Date      : Tue 19 Mar 2024 10:06:49 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:27 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -6485,8 +6485,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 1171.13 KiB
 Packager        : Unknown Packager
-Build Date      : Thu 29 Feb 2024 10:21:58 AM CST
-Install Date    : Thu 29 Feb 2024 10:22:15 AM CST
+Build Date      : Tue 19 Mar 2024 09:39:16 AM CDT
+Install Date    : Tue 19 Mar 2024 09:39:39 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -6600,7 +6600,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : raze
-Version         : 1.9.1-1
+Version         : 1.9.1-2
 Description     : Build engine port backed by GZDoom tech
 Architecture    : x86_64
 URL             : https://github.com/coelckers/Raze
@@ -6617,8 +6617,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 22.06 MiB
 Packager        : Unknown Packager
-Build Date      : Fri 12 Jan 2024 12:58:53 PM CST
-Install Date    : Fri 12 Jan 2024 01:04:52 PM CST
+Build Date      : Tue 19 Mar 2024 10:21:11 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:29 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -7097,7 +7097,7 @@ Install Script  : No
 Validated By    : None
 
 Name            : soh
-Version         : 8.0.4-1
+Version         : 8.0.5-1
 Description     : An unofficial port of The Legend of Zelda Ocarina of Time for PC, Wii U, and Switch
 Architecture    : x86_64
 URL             : https://shipofharkinian.com/
@@ -7111,16 +7111,16 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 22.09 MiB
+Installed Size  : 22.20 MiB
 Packager        : Unknown Packager
-Build Date      : Wed 20 Dec 2023 03:33:36 PM CST
-Install Date    : Wed 20 Dec 2023 03:45:06 PM CST
+Build Date      : Tue 19 Mar 2024 10:07:25 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:29 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : None
 
 Name            : soh-otr-exporter
-Version         : 8.0.4-1
+Version         : 8.0.5-1
 Description     : OTR generation tools for SoH. Includes asset XML files needed for generation.
 Architecture    : x86_64
 URL             : https://shipofharkinian.com/
@@ -7135,8 +7135,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 15.54 MiB
 Packager        : Unknown Packager
-Build Date      : Wed 20 Dec 2023 03:33:36 PM CST
-Install Date    : Wed 20 Dec 2023 03:45:06 PM CST
+Build Date      : Tue 19 Mar 2024 10:07:25 AM CDT
+Install Date    : Tue 19 Mar 2024 11:00:28 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -7657,11 +7657,11 @@ Install Script  : Yes
 Validated By    : Signature
 
 Name            : tk
-Version         : 8.6.14-1
+Version         : 8.6.14-2
 Description     : A windowing toolkit for use with tcl
 Architecture    : x86_64
 URL             : http://tcl.sourceforge.net/
-Licenses        : custom
+Licenses        : TCL
 Groups          : None
 Provides        : None
 Depends On      : tcl  libxss  libxft
@@ -7671,9 +7671,9 @@ Optional For    : git  obexftp  python  python-matplotlib  python-pillow  ruby  
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 12.17 MiB
-Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Tue 05 Mar 2024 04:37:43 PM CST
-Install Date    : Mon 18 Mar 2024 10:34:57 AM CDT
+Packager        : Caleb Maclennan <alerque@archlinux.org>
+Build Date      : Mon 18 Mar 2024 03:40:17 PM CDT
+Install Date    : Tue 19 Mar 2024 10:06:44 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -10483,11 +10483,11 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : yay
-Version         : 12.2.0-1
+Version         : 12.3.4-1
 Description     : Yet another yogurt. Pacman wrapper and AUR helper written in go.
 Architecture    : x86_64
 URL             : https://github.com/Jguer/yay
-Licenses        : GPL3
+Licenses        : GPL-3.0-or-later
 Groups          : None
 Provides        : None
 Depends On      : pacman>5  git
@@ -10497,13 +10497,13 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 9.12 MiB
-Packager        : Noodle <noodle at cock dot li>
-Build Date      : Thu 14 Dec 2023 09:07:31 AM CST
-Install Date    : Wed 20 Dec 2023 10:17:55 AM CST
+Installed Size  : 9.32 MiB
+Packager        : Unknown Packager
+Build Date      : Tue 19 Mar 2024 09:37:39 AM CDT
+Install Date    : Tue 19 Mar 2024 09:38:29 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
-Validated By    : Signature
+Validated By    : None
 
 Name            : yt-dlp
 Version         : 2024.03.10-1
