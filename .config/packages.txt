@@ -357,6 +357,7 @@ virtualbox
 virtualbox-guest-iso
 virtualbox-guest-utils
 viu
+vkd3d
 vlc
 vulkan-tools
 wget

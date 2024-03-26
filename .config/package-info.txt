@@ -3998,7 +3998,7 @@ Optional Deps   : gamemode: Allows games to request a temporary set of optimisat
                   lib32-vkd3d: DirectX 12 support
                   lib32-vulkan-icd-loader: Vulkan support [installed]
                   python-protobuf: Battle.net support
-                  vkd3d: DirectX 12 support
+                  vkd3d: DirectX 12 support [installed]
                   vulkan-icd-loader: Vulkan support [installed]
                   vulkan-tools: Vulkan support [installed]
                   wine: Windows support [installed]
@@ -8283,6 +8283,28 @@ Installed Size  : 3.62 MiB
 Packager        : Orhun Parmaksız <orhun@archlinux.org>
 Build Date      : Tue 21 Nov 2023 04:20:47 PM CST
 Install Date    : Wed 22 Nov 2023 11:04:52 AM CST
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
+Name            : vkd3d
+Version         : 1.10-1
+Description     : Direct3D 12 to Vulkan translation library By WineHQ
+Architecture    : x86_64
+URL             : https://wiki.winehq.org/Vkd3d
+Licenses        : LGPL
+Groups          : None
+Provides        : None
+Depends On      : spirv-tools  vulkan-icd-loader
+Optional Deps   : None
+Required By     : None
+Optional For    : lutris
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 2.69 MiB
+Packager        : Antonio Rojas <arojas@archlinux.org>
+Build Date      : Mon 25 Dec 2023 02:28:48 AM CST
+Install Date    : Mon 25 Mar 2024 01:27:17 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
