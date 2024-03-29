@@ -326,7 +326,6 @@ system-config-printer
 terminus-font
 terrafirma
 texinfo
-theforceengine
 thunderbird
 timeshift
 tk
