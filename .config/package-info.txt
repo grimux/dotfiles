@@ -2117,6 +2117,28 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
+Name            : gamescope
+Version         : 3.14.2-1
+Description     : SteamOS session compositing window manager
+Architecture    : x86_64
+URL             : https://github.com/ValveSoftware/gamescope
+Licenses        : BSD
+Groups          : None
+Provides        : None
+Depends On      : gcc-libs  glibc  glm  libavif  libcap.so=2-64  libdisplay-info.so=1-64  libdrm  libliftoff.so=0-64  libpipewire-0.3.so=0-64  libvulkan.so  libwlroots.so=12-64  libx11  libxcb  libxcomposite  libxdamage  libxext  libxfixes  libxkbcommon.so=0-64  libxmu  libxrender  libxres  libxtst  libxxf86vm  openvr  sdl2  vulkan-icd-loader  wayland  xorg-server-xwayland
+Optional Deps   : None
+Required By     : None
+Optional For    : mangohud
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 2.08 MiB
+Packager        : Maxime Gauduin <alucryd@archlinux.org>
+Build Date      : Sun 25 Feb 2024 09:25:36 PM CST
+Install Date    : Tue 02 Apr 2024 09:19:06 AM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
 Name            : gbml-git
 Version         : v1.4.0.0.r1.gea899ea-1
 Description     : Backup utility and database for Linux Steam games
@@ -4288,7 +4310,7 @@ Provides        : None
 Depends On      : dbus  fmt  gcc-libs  glew  hicolor-icon-theme  libglvnd  libx11  python  python-matplotlib  python-numpy  vulkan-icd-loader  vulkan-icd-loader  libvulkan.so
 Optional Deps   : libxnvctrl: NVIDIA GPU stats by XNVCtrl [installed]
                   glfw-x11: Required for MangoApp [installed]
-                  gamescope: Use MangoApp as an overlay within gamescope
+                  gamescope: Use MangoApp as an overlay within gamescope [installed]
 Required By     : goverlay
 Optional For    : None
 Conflicts With  : mangohud-common  mangohud-common-wayland  mangohud-common-x11  mangoapp  mangohud-x11  mangohud-wayland
@@ -10357,8 +10379,8 @@ Groups          : xorg
 Provides        : xorg-server-xwayland
 Depends On      : nettle  libepoxy  systemd-libs  libxfont2  pixman  xorg-server-common  libxcvt  mesa  libglvnd  libxau  wayland  libdrm  libtirpc  libxshmfence  glibc
 Optional Deps   : None
-Required By     : None
-Optional For    : None
+Required By     : gamescope
+Optional For    : wlroots
 Conflicts With  : xorg-server-xwayland
 Replaces        : xorg-server-xwayland
 Installed Size  : 2.24 MiB

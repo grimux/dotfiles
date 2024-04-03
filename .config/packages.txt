@@ -90,6 +90,7 @@ fuseiso
 fzf
 gameconqueror
 gamemode
+gamescope
 gbml-git
 gcc
 gdrive
