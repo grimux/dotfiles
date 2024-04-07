@@ -248,6 +248,7 @@ playerctl
 plocate
 polymc
 postfix
+powerkit-git
 powerline-fonts
 ppsspp
 progress
@@ -451,6 +452,7 @@ xorg-xwayland
 xorg-xwd
 xorg-xwininfo
 xorg-xwud
+xscreensaver
 xtrlock
 yad
 yay

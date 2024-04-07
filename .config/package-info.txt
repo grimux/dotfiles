@@ -1838,7 +1838,7 @@ Replaces        : None
 Installed Size  : 236.28 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 Build Date      : Tue 02 Apr 2024 05:49:02 PM CDT
-Install Date    : Fri 05 Apr 2024 05:19:07 PM CDT
+Install Date    : Sat 06 Apr 2024 11:30:49 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -3181,23 +3181,26 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : jdk17-openjdk
-Version         : 17.0.10.u7-1
+Version         : 17.0.10.u7-3
 Description     : OpenJDK Java 17 development kit
 Architecture    : x86_64
 URL             : https://openjdk.java.net/
-Licenses        : custom
+Licenses        : LicenseRef-Java
 Groups          : None
-Provides        : java-environment=17  java-environment-openjdk=17  jdk17-openjdk=17.0.10.u7-1
-Depends On      : jre17-openjdk=17.0.10.u7-1  java-environment-common=3  hicolor-icon-theme  libelf  glibc  gcc-libs
-Optional Deps   : None
-Required By     : None
-Optional For    : libreoffice-fresh  subversion
-Conflicts With  : None
+Provides        : java-environment=17  java-environment-openjdk=17  jdk17-openjdk=17.0.10.u7-3  java-runtime=17  java-runtime-openjdk=17  jre17-openjdk=17.0.10.u7-3  java-runtime-headless=17  java-runtime-headless-openjdk=17  jre17-openjdk-headless=17.0.10.u7-3
+Depends On      : java-runtime-common>=3  ca-certificates-utils  nss  libjpeg-turbo  libjpeg.so=8-64  lcms2  liblcms2.so=2-64  libnet  freetype2  libfreetype.so=6-64  harfbuzz  libharfbuzz.so=0-64  glibc  gcc-libs  java-environment-common=3  hicolor-icon-theme  libelf  libgif.so=7-64  libpng  ca-certificates-utils  nss  libjpeg-turbo  libjpeg.so=8-64  lcms2  liblcms2.so=2-64  libnet  freetype2  libfreetype.so=6-64  harfbuzz  libharfbuzz.so=0-64
+Optional Deps   : java-rhino: for some JavaScript support
+                  alsa-lib: for basic sound support [installed]
+                  gtk2: for the Gtk+ 2 look and feel - desktop usage [installed]
+                  gtk3: for the Gtk+ 3 look and feel - desktop usage [installed]
+Required By     : jdownloader2  polymc
+Optional For    : libbluray  libjpeg-turbo  libjxl  libreoffice-fresh  subversion  ums
+Conflicts With  : jre17-openjdk  jre17-openjdk-headless
 Replaces        : None
-Installed Size  : 247.40 MiB
+Installed Size  : 398.14 MiB
 Packager        : Frederik Schwan <freswa@archlinux.org>
-Build Date      : Tue 16 Jan 2024 04:30:45 PM CST
-Install Date    : Thu 15 Feb 2024 02:09:11 PM CST
+Build Date      : Thu 28 Mar 2024 05:01:23 AM CDT
+Install Date    : Sat 06 Apr 2024 11:30:50 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
@@ -5128,7 +5131,7 @@ Optional Deps   : libfido2: FIDO/U2F support
                   sh: for ssh-copy-id and findssl.sh [installed]
                   x11-ssh-askpass: input passphrase in X
                   xorg-xauth: X11 forwarding [installed]
-Required By     : backintime-cli  gcr  gcr-4  hollywood
+Required By     : backintime-cli  gcr-4  hollywood
 Optional For    : git  openmpi  prrte
 Conflicts With  : None
 Replaces        : None
@@ -5384,7 +5387,7 @@ Optional Deps   : git: for Git support [installed]
                   wl-clipboard: for clipboard support on Wayland
                   pinentry [installed]
                   gtk2: pinentry backend (gtk2) [installed]
-                  gcr: pinentry backend (gnome3) [installed]
+                  gcr: pinentry backend (gnome3)
                   qt5-x11extras: pinentry backend (qt) [installed]
                   kwayland5: pinentry backend (qt)
 Required By     : passff-host  qtpass
@@ -5815,6 +5818,28 @@ Install Date    : Mon 18 Mar 2024 10:34:55 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
+
+Name            : powerkit-git
+Version         : r355.0178e00-1
+Description     : A Lightweight Desktop Independent full featured power manager
+Architecture    : x86_64
+URL             : https://github.com/rodlie/powerkit
+Licenses        : BSD
+Groups          : None
+Provides        : powerkit
+Depends On      : xscreensaver  upower  qt5-base  libxss
+Optional Deps   : adwaita-icon-theme [installed]
+Required By     : None
+Optional For    : None
+Conflicts With  : powerkit
+Replaces        : None
+Installed Size  : 412.65 KiB
+Packager        : Unknown Packager
+Build Date      : Sat 06 Apr 2024 12:23:26 PM CDT
+Install Date    : Sat 06 Apr 2024 12:23:48 PM CDT
+Install Reason  : Explicitly installed
+Install Script  : Yes
+Validated By    : None
 
 Name            : powerline-fonts
 Version         : 2.8.3-3
@@ -8814,7 +8839,7 @@ Groups          : None
 Provides        : None
 Depends On      : libxt
 Optional Deps   : None
-Required By     : None
+Required By     : xscreensaver
 Optional For    : None
 Conflicts With  : xorg-res-utils
 Replaces        : None
@@ -10453,6 +10478,28 @@ Installed Size  : 33.37 KiB
 Packager        : Andreas Radke <andyrtr@archlinux.org>
 Build Date      : Mon 11 Jul 2022 01:33:11 PM CDT
 Install Date    : Thu 16 Mar 2023 01:43:23 PM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
+Name            : xscreensaver
+Version         : 6.08-1
+Description     : Screen saver and locker for the X Window System
+Architecture    : x86_64
+URL             : https://www.jwz.org/xscreensaver/
+Licenses        : BSD
+Groups          : None
+Provides        : None
+Depends On      : gtk3  glu  xorg-appres  libglvnd  libjpeg-turbo  libjpeg.so=8-64  libsystemd.so=0-64  libx11  libxcrypt  libcrypt.so=2-64  libxext  libxft  libxi  libxinerama  libxmu  libxrandr  libxt  libxxf86vm  perl-libwww  pam  libpam.so=0-64  glibc  glib2  gdk-pixbuf2
+Optional Deps   : gdm: for login manager support
+Required By     : powerkit-git
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 39.49 MiB
+Packager        : T.J. Townsend <blakkheim@archlinux.org>
+Build Date      : Fri 13 Oct 2023 10:20:17 AM CDT
+Install Date    : Sat 06 Apr 2024 11:35:22 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
