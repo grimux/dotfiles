@@ -277,6 +277,7 @@ python-oauth2client
 python-pathvalidate
 python-pip
 python-pipx
+python-pynvim
 qalculate-gtk
 qbittorrent
 qt5-styleplugins

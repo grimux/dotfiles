@@ -4702,7 +4702,7 @@ Licenses        : custom:neovim
 Groups          : None
 Provides        : vim-plugin-runtime
 Depends On      : libluv  libtermkey  libuv  libvterm>0.1.4  luajit  msgpack-c  tree-sitter  tree-sitter-bash  tree-sitter-c  tree-sitter-lua  tree-sitter-markdown  tree-sitter-python  tree-sitter-query  tree-sitter-vimdoc  unibilium
-Optional Deps   : python-pynvim: for Python plugin support (see :help python)
+Optional Deps   : python-pynvim: for Python plugin support (see :help python) [installed]
                   xclip: for clipboard support on X11 (or xsel) (see :help clipboard) [installed]
                   xsel: for clipboard support on X11 (or xclip) (see :help clipboard) [installed]
                   wl-clipboard: for clipboard support on wayland (see :help clipboard)
@@ -6465,6 +6465,28 @@ Installed Size  : 776.89 KiB
 Packager        : Antonio Rojas <arojas@archlinux.org>
 Build Date      : Sun 31 Mar 2024 06:22:05 AM CDT
 Install Date    : Fri 05 Apr 2024 05:19:13 PM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
+Name            : python-pynvim
+Version         : 0.5.0-2
+Description     : Python client for Neovim
+Architecture    : any
+URL             : https://github.com/neovim/pynvim
+Licenses        : Apache
+Groups          : None
+Provides        : python-neovim
+Depends On      : python  python-msgpack  python-greenlet
+Optional Deps   : None
+Required By     : None
+Optional For    : neovim
+Conflicts With  : None
+Replaces        : python-neovim
+Installed Size  : 507.18 KiB
+Packager        : Sven-Hendrik Haase <svenstaro@archlinux.org>
+Build Date      : Wed 20 Dec 2023 01:00:48 PM CST
+Install Date    : Sun 07 Apr 2024 04:20:30 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
