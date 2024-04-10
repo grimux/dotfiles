@@ -1027,7 +1027,7 @@ Groups          : None
 Provides        : None
 Depends On      : curl  libarchive  hicolor-icon-theme  jsoncpp  libjsoncpp.so=25-64  libuv  rhash  cppdap
 Optional Deps   : make: for unix Makefile generator [installed]
-                  ninja: for ninja generator [installed]
+                  ninja: for ninja generator
                   qt6-base: cmake-gui [installed]
 Required By     : None
 Optional For    : None
