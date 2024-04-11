@@ -259,7 +259,7 @@ protonup-git
 protonup-qt-bin
 proxychains-ng
 ps3iso-utils-git
-puddletag
+puddletag-git
 pulseaudio
 pulseaudio-alsa
 pulseaudio-bluetooth

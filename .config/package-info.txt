@@ -6062,14 +6062,14 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
 
-Name            : puddletag
-Version         : 2.3.0-1
-Description     : An audio tag editor for GNU/Linux
+Name            : puddletag-git
+Version         : 2.3.0.r5.gee60cda-1
+Description     : An audio tag editor for GNU/Linux, git version
 Architecture    : any
-URL             : https://docs.puddletag.net/
+URL             : https://github.com/puddletag/puddletag
 Licenses        : GPL-3.0-or-later
 Groups          : None
-Provides        : None
+Provides        : puddletag
 Depends On      : python-configobj  python-distro  python-mutagen  python-pyparsing  python-pyqt5  python-unidecode  qt5-svg
 Optional Deps   : chromaprint: AcoustID support [installed]
                   python-levenshtein: faster duplicate matching
@@ -6077,12 +6077,12 @@ Optional Deps   : chromaprint: AcoustID support [installed]
                   quodlibet: QuodLibet library support
 Required By     : None
 Optional For    : None
-Conflicts With  : None
-Replaces        : None
+Conflicts With  : puddletag
+Replaces        : puddletag-qt5-git
 Installed Size  : 5.32 MiB
 Packager        : Unknown Packager
-Build Date      : Thu 28 Mar 2024 05:00:47 PM CDT
-Install Date    : Thu 28 Mar 2024 05:00:54 PM CDT
+Build Date      : Wed 10 Apr 2024 05:59:44 PM CDT
+Install Date    : Wed 10 Apr 2024 05:59:56 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -6369,7 +6369,7 @@ Groups          : None
 Provides        : None
 Depends On      : python
 Optional Deps   : None
-Required By     : puddletag
+Required By     : puddletag-git
 Optional For    : mpdris2  yt-dlp
 Conflicts With  : None
 Replaces        : None
@@ -6551,8 +6551,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 1171.13 KiB
 Packager        : Unknown Packager
-Build Date      : Thu 28 Mar 2024 04:59:59 PM CDT
-Install Date    : Thu 28 Mar 2024 05:00:16 PM CDT
+Build Date      : Wed 10 Apr 2024 05:43:35 PM CDT
+Install Date    : Wed 10 Apr 2024 05:43:49 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
@@ -8098,7 +8098,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : ums
-Version         : 13.8.1-1
+Version         : 13.9.0-1
 Description     : Universal Media Server: a DLNA-compliant UPnP Media Server.
 Architecture    : x86_64
 URL             : http://www.universalmediaserver.com/
@@ -8116,10 +8116,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 300.73 MiB
+Installed Size  : 300.78 MiB
 Packager        : Unknown Packager
-Build Date      : Fri 12 Jan 2024 01:03:23 PM CST
-Install Date    : Fri 12 Jan 2024 01:04:53 PM CST
+Build Date      : Wed 10 Apr 2024 07:50:09 PM CDT
+Install Date    : Wed 10 Apr 2024 07:50:33 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
