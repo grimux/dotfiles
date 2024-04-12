@@ -6,14 +6,12 @@ amd-ucode
 android-file-transfer
 apcupsd
 arandr
-arronax
 asciiquarium
 atool
 autoconf
 automake
-awesome
+awesome-git
 backintime
-balena-etcher
 barrier
 base
 base-devel
@@ -27,11 +25,9 @@ bless
 blueman
 bluez
 bluez-libs
-bluez-obex
 bluez-utils
 boost
 brave-bin
-bridge-utils
 browserpass
 btrfs-progs
 buildgdx
@@ -69,12 +65,10 @@ dxvk-bin
 eduke32
 efibootmgr
 espeak-ng
-espeakup
 exfat-utils
 extundelete
 eza
 feh
-ficsit-cli-bin
 file-roller
 filezilla
 firefox
@@ -90,8 +84,6 @@ fuseiso
 fzf
 gameconqueror
 gamemode
-gamescope
-gbml-git
 gcc
 gdrive
 genact
@@ -157,9 +149,6 @@ lib32-v4l-utils
 libff7tk-git
 libnewt
 libreoffice-fresh
-libretro-pcsx2
-libretro-ppsspp
-libstrangle
 libtool
 libxcrypt-compat
 linux
@@ -189,7 +178,6 @@ mediainfo
 mergerfs
 mkvtoolnix-cli
 mkvtoolnix-gui
-most
 mpc
 mpd
 mpdris2
@@ -213,8 +201,6 @@ ntfs-3g
 numlockx
 nvidia-dkms
 nvidia-settings
-obexftp
-obextool
 obs-studio
 openbsd-netcat
 openrgb-bin
@@ -239,7 +225,7 @@ pcsx2-git
 perl-image-exiftool
 perl-rename
 pev
-phantomjs-bin
+phantomjs
 picom
 piper
 pkgconf
@@ -248,7 +234,6 @@ playerctl
 plocate
 polymc
 postfix
-powerkit-git
 powerline-fonts
 ppsspp
 progress
@@ -257,7 +242,6 @@ protonhax
 protontricks
 protonup-git
 protonup-qt-bin
-proxychains-ng
 ps3iso-utils-git
 puddletag-git
 pulseaudio
@@ -283,7 +267,6 @@ qbittorrent
 qt5-styleplugins
 qtpass
 quakespasm
-qzdl-git
 ranger
 raze
 rbdoom-3-bfg
@@ -368,9 +351,9 @@ wine-gecko
 wine-mono
 wine-staging
 winetricks
-wkhtmltox
 wmctrl
 words
+xcb-util-errors
 xclip
 xdelta3
 xdg-desktop-portal-gtk
@@ -457,6 +440,7 @@ xscreensaver
 xtrlock
 yad
 yay
+yaycache
 yt-dlp
 zathura
 zathura-pdf-mupdf
