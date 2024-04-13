@@ -160,7 +160,6 @@ lmms
 lsd
 lsof
 lutris
-luxtorpeda-git
 lxappearance
 lxqt-archiver
 lxqt-sudo
@@ -303,6 +302,7 @@ starship
 steam
 steam-metadata-editor-git
 steamcmd
+strace
 subdl
 subliminal
 sudo

@@ -998,7 +998,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : crystal
-Version         : 1.12.0-1
+Version         : 1.12.1-1
 Description     : The Crystal Programming Language
 Architecture    : x86_64
 URL             : https://crystal-lang.org
@@ -1016,8 +1016,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 132.70 MiB
 Packager        : Anatol Pomozov <anatolik@archlinux.org>
-Build Date      : Tue 09 Apr 2024 07:41:51 PM CDT
-Install Date    : Thu 11 Apr 2024 05:03:42 PM CDT
+Build Date      : Thu 11 Apr 2024 07:17:19 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:25 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -1435,7 +1435,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : dwarfs
-Version         : 0.9.6-1
+Version         : 0.9.7-1
 Description     : A fast high compression read-only file system
 Architecture    : x86_64
 URL             : https://github.com/mhx/dwarfs
@@ -1448,10 +1448,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 38.50 MiB
+Installed Size  : 38.73 MiB
 Packager        : Noodle <silentnoodle@cock.li>
-Build Date      : Sat 24 Feb 2024 12:29:39 PM CST
-Install Date    : Thu 28 Mar 2024 05:12:53 PM CDT
+Build Date      : Fri 12 Apr 2024 01:02:32 AM CDT
+Install Date    : Fri 12 Apr 2024 02:03:25 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : SHA-256 Sum  Signature
@@ -3298,14 +3298,14 @@ Install Script  : No
 Validated By    : None
 
 Name            : lib32-gst-plugins-base
-Version         : 1.24.1-1
+Version         : 1.24.2-1
 Description     : Multimedia graph framework (32-bit) - base plugins
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
 Licenses        : LGPL-2.1-or-later
 Groups          : None
 Provides        : None
-Depends On      : lib32-gst-plugins-base-libs=1.24.1  lib32-alsa-lib  lib32-cdparanoia  lib32-libjpeg  lib32-libpng  lib32-libtheora  lib32-libvorbis  lib32-opus  lib32-pango  gst-plugins-base
+Depends On      : lib32-gst-plugins-base-libs=1.24.2  lib32-alsa-lib  lib32-cdparanoia  lib32-libjpeg  lib32-libpng  lib32-libtheora  lib32-libvorbis  lib32-opus  lib32-pango  gst-plugins-base
 Optional Deps   : None
 Required By     : None
 Optional For    : None
@@ -3313,36 +3313,36 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 1074.23 KiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Fri 22 Mar 2024 01:52:59 PM CDT
-Install Date    : Thu 28 Mar 2024 05:12:57 PM CDT
+Build Date      : Thu 11 Apr 2024 07:02:45 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:26 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : lib32-gst-plugins-good
-Version         : 1.24.1-1
+Version         : 1.24.2-1
 Description     : Multimedia graph framework (32-bit) - good plugins
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
 Licenses        : LGPL-2.1-or-later
 Groups          : None
 Provides        : None
-Depends On      : lib32-gst-plugins-base-libs=1.24.1  lib32-aalib  lib32-cairo  lib32-flac  lib32-gdk-pixbuf2  lib32-libavc1394  lib32-libcaca  lib32-libdv  lib32-libgudev  lib32-libiec61883  lib32-libpulse  lib32-libraw1394  lib32-libshout  lib32-libsoup3  lib32-libvpx  lib32-libxdamage  lib32-libxtst  lib32-mpg123  lib32-nettle  lib32-speex  lib32-taglib  lib32-twolame  lib32-v4l-utils  lib32-wavpack  gst-plugins-good
+Depends On      : lib32-gst-plugins-base-libs=1.24.2  lib32-aalib  lib32-cairo  lib32-flac  lib32-gdk-pixbuf2  lib32-libavc1394  lib32-libcaca  lib32-libdv  lib32-libgudev  lib32-libiec61883  lib32-libpulse  lib32-libraw1394  lib32-libshout  lib32-libsoup3  lib32-libvpx  lib32-libxdamage  lib32-libxtst  lib32-mpg123  lib32-nettle  lib32-speex  lib32-taglib  lib32-twolame  lib32-v4l-utils  lib32-wavpack  gst-plugins-good
 Optional Deps   : lib32-jack: JACK backend [installed]
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 7.61 MiB
+Installed Size  : 7.62 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Fri 22 Mar 2024 01:52:59 PM CDT
-Install Date    : Thu 28 Mar 2024 05:12:57 PM CDT
+Build Date      : Thu 11 Apr 2024 07:02:45 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:26 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : lib32-gstreamer
-Version         : 1.24.1-1
+Version         : 1.24.2-1
 Description     : Multimedia graph framework (32-bit) - core
 Architecture    : x86_64
 URL             : https://gstreamer.freedesktop.org/
@@ -3357,8 +3357,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 3.93 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Fri 22 Mar 2024 01:52:59 PM CDT
-Install Date    : Thu 28 Mar 2024 05:12:56 PM CDT
+Build Date      : Thu 11 Apr 2024 07:02:45 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:25 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
@@ -3581,7 +3581,7 @@ Install Script  : Yes
 Validated By    : Signature
 
 Name            : linux
-Version         : 6.8.4.arch1-1
+Version         : 6.8.5.arch1-1
 Description     : The Linux kernel and modules
 Architecture    : x86_64
 URL             : https://github.com/archlinux/linux
@@ -3595,10 +3595,10 @@ Required By     : virtualbox-guest-utils
 Optional For    : base  libratbag
 Conflicts With  : None
 Replaces        : virtualbox-guest-modules-arch  wireguard-arch
-Installed Size  : 132.37 MiB
+Installed Size  : 132.40 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Thu 04 Apr 2024 07:14:23 PM CDT
-Install Date    : Thu 11 Apr 2024 05:03:46 PM CDT
+Build Date      : Wed 10 Apr 2024 08:47:33 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:27 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -3626,7 +3626,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : linux-headers
-Version         : 6.8.4.arch1-1
+Version         : 6.8.5.arch1-1
 Description     : Headers and scripts for building modules for the Linux kernel
 Architecture    : x86_64
 URL             : https://github.com/archlinux/linux
@@ -3639,10 +3639,10 @@ Required By     : None
 Optional For    : dkms
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 127.77 MiB
+Installed Size  : 127.78 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Thu 04 Apr 2024 07:14:23 PM CDT
-Install Date    : Thu 11 Apr 2024 05:03:49 PM CDT
+Build Date      : Wed 10 Apr 2024 08:47:33 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:29 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -3762,7 +3762,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : lutris
-Version         : 0.5.16-2
+Version         : 0.5.17-1
 Description     : Open Gaming Platform
 Architecture    : any
 URL             : https://lutris.net
@@ -3786,35 +3786,13 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 9.52 MiB
+Installed Size  : 9.71 MiB
 Packager        : Robin Candau <antiz@archlinux.org>
-Build Date      : Fri 05 Apr 2024 01:52:28 AM CDT
-Install Date    : Fri 05 Apr 2024 05:19:12 PM CDT
+Build Date      : Thu 11 Apr 2024 01:47:25 AM CDT
+Install Date    : Fri 12 Apr 2024 02:03:30 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
-
-Name            : luxtorpeda-git
-Version         : 65.0.1.r414.d2e80db-1
-Description     : Steam Play compatibility tool to run games using native Linux engines
-Architecture    : x86_64
-URL             : https://github.com/luxtorpeda-dev/luxtorpeda
-Licenses        : GPL2
-Groups          : None
-Provides        : luxtorpeda
-Depends On      : None
-Optional Deps   : steam: The Steam client [installed]
-Required By     : None
-Optional For    : None
-Conflicts With  : luxtorpeda
-Replaces        : None
-Installed Size  : 45.86 MiB
-Packager        : Unknown Packager
-Build Date      : Tue 20 Jun 2023 09:50:35 PM CDT
-Install Date    : Tue 20 Jun 2023 10:03:34 PM CDT
-Install Reason  : Explicitly installed
-Install Script  : No
-Validated By    : None
 
 Name            : lxappearance
 Version         : 0.6.3-4
@@ -7017,7 +6995,7 @@ Provides        : None
 Depends On      : bash  desktop-file-utils  diffutils  hicolor-icon-theme  curl  dbus  freetype2  gdk-pixbuf2  ttf-font  zenity  lsb-release  nss  usbutils  xorg-xrandr  vulkan-driver  vulkan-icd-loader  lsof  python  xdg-user-dirs  glibc  libxcrypt  libxcrypt-compat  gcc-libs  lib32-glibc  lib32-libxcrypt  lib32-libxcrypt-compat  lib32-libgl  lib32-gcc-libs  lib32-libx11  lib32-libxss  lib32-alsa-plugins  lib32-libgpg-error  lib32-nss  lib32-vulkan-driver  lib32-vulkan-icd-loader
 Optional Deps   : steam-native-runtime: steam native runtime support
 Required By     : samrewritten-git
-Optional For    : luxtorpeda-git
+Optional For    : None
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 3.96 MiB
@@ -7071,6 +7049,28 @@ Install Date    : Thu 11 Apr 2024 05:19:28 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : None
+
+Name            : strace
+Version         : 6.8-1
+Description     : A diagnostic, debugging and instructional userspace tracer
+Architecture    : x86_64
+URL             : https://strace.io/
+Licenses        : LGPL-2.1-or-later
+Groups          : None
+Provides        : None
+Depends On      : perl  libunwind
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 1408.33 KiB
+Packager        : Anatol Pomozov <anatolik@archlinux.org>
+Build Date      : Fri 29 Mar 2024 08:33:16 PM CDT
+Install Date    : Fri 12 Apr 2024 05:24:38 PM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
 
 Name            : subdl
 Version         : 1.1.2-3
@@ -7344,7 +7344,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : tor
-Version         : 0.4.8.10-2
+Version         : 0.4.8.11-1
 Description     : Anonymizing overlay network.
 Architecture    : x86_64
 URL             : https://www.torproject.org/download/tor/
@@ -7357,10 +7357,10 @@ Required By     : torbrowser-launcher
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 15.67 MiB
-Packager        : kpcyrd <kpcyrd@archlinux.org>
-Build Date      : Thu 29 Feb 2024 02:25:37 PM CST
-Install Date    : Tue 05 Mar 2024 02:19:29 PM CST
+Installed Size  : 21.96 MiB
+Packager        : Lukas Fleischer <lfleischer@archlinux.org>
+Build Date      : Fri 12 Apr 2024 01:43:44 AM CDT
+Install Date    : Fri 12 Apr 2024 02:03:30 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -7543,7 +7543,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : ttf-inconsolata-nerd
-Version         : 3.2.0-1
+Version         : 3.2.1-1
 Description     : Patched font Inconsolata from nerd fonts library
 Architecture    : any
 URL             : https://github.com/ryanoasis/nerd-fonts
@@ -7556,10 +7556,10 @@ Required By     : None
 Optional For    : starship
 Conflicts With  : nerd-fonts-inconsolata
 Replaces        : nerd-fonts-inconsolata
-Installed Size  : 12.00 MiB
+Installed Size  : 12.03 MiB
 Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Thu 04 Apr 2024 10:31:33 AM CDT
-Install Date    : Fri 05 Apr 2024 05:19:15 PM CDT
+Build Date      : Fri 12 Apr 2024 10:21:25 AM CDT
+Install Date    : Fri 12 Apr 2024 02:03:30 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -7631,7 +7631,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : ttf-mononoki-nerd
-Version         : 3.2.0-1
+Version         : 3.2.1-1
 Description     : Patched font Mononoki from nerd fonts library
 Architecture    : any
 URL             : https://github.com/ryanoasis/nerd-fonts
@@ -7644,16 +7644,16 @@ Required By     : None
 Optional For    : starship
 Conflicts With  : nerd-fonts-mononoki
 Replaces        : nerd-fonts-mononoki
-Installed Size  : 24.24 MiB
+Installed Size  : 24.29 MiB
 Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Thu 04 Apr 2024 10:31:33 AM CDT
-Install Date    : Fri 05 Apr 2024 05:19:15 PM CDT
+Build Date      : Fri 12 Apr 2024 10:21:25 AM CDT
+Install Date    : Fri 12 Apr 2024 02:03:30 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : ttf-noto-nerd
-Version         : 3.2.0-1
+Version         : 3.2.1-1
 Description     : Patched font Noto from nerd fonts library
 Architecture    : any
 URL             : https://github.com/ryanoasis/nerd-fonts
@@ -7666,10 +7666,10 @@ Required By     : None
 Optional For    : starship
 Conflicts With  : nerd-fonts-noto
 Replaces        : nerd-fonts-noto
-Installed Size  : 968.54 MiB
+Installed Size  : 970.86 MiB
 Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Thu 04 Apr 2024 10:31:33 AM CDT
-Install Date    : Fri 05 Apr 2024 05:19:17 PM CDT
+Build Date      : Fri 12 Apr 2024 10:21:25 AM CDT
+Install Date    : Fri 12 Apr 2024 02:03:32 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -8847,7 +8847,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : xorg-server
-Version         : 21.1.12-1
+Version         : 21.1.13-1
 Description     : Xorg X server
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
@@ -8861,15 +8861,15 @@ Optional For    : nvidia-utils
 Conflicts With  : nvidia-utils<=331.20  glamor-egl  xf86-video-modesetting
 Replaces        : glamor-egl  xf86-video-modesetting
 Installed Size  : 3.62 MiB
-Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Wed 03 Apr 2024 05:04:41 PM CDT
-Install Date    : Fri 05 Apr 2024 05:19:18 PM CDT
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Fri 12 Apr 2024 01:22:35 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:32 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
 
 Name            : xorg-server-common
-Version         : 21.1.12-1
+Version         : 21.1.13-1
 Description     : Xorg server common files
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
@@ -8883,15 +8883,15 @@ Optional For    : None
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 127.16 KiB
-Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Wed 03 Apr 2024 05:04:41 PM CDT
-Install Date    : Fri 05 Apr 2024 05:19:18 PM CDT
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Fri 12 Apr 2024 01:22:35 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:32 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : xorg-server-devel
-Version         : 21.1.12-1
+Version         : 21.1.13-1
 Description     : Development files for the X.Org X server
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
@@ -8905,15 +8905,15 @@ Optional For    : nvidia-utils
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 1224.83 KiB
-Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Wed 03 Apr 2024 05:04:41 PM CDT
-Install Date    : Fri 05 Apr 2024 05:19:18 PM CDT
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Fri 12 Apr 2024 01:22:35 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:32 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : xorg-server-xephyr
-Version         : 21.1.12-1
+Version         : 21.1.13-1
 Description     : A nested X server that runs as an X application
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
@@ -8927,15 +8927,15 @@ Optional For    : None
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 2.18 MiB
-Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Wed 03 Apr 2024 05:04:41 PM CDT
-Install Date    : Fri 05 Apr 2024 05:19:18 PM CDT
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Fri 12 Apr 2024 01:22:35 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:32 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : xorg-server-xnest
-Version         : 21.1.12-1
+Version         : 21.1.13-1
 Description     : A nested X server that runs as an X application
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
@@ -8948,16 +8948,16 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 1393.47 KiB
-Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Wed 03 Apr 2024 05:04:41 PM CDT
-Install Date    : Fri 05 Apr 2024 05:19:18 PM CDT
+Installed Size  : 1397.47 KiB
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Fri 12 Apr 2024 01:22:35 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:32 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : xorg-server-xvfb
-Version         : 21.1.12-1
+Version         : 21.1.13-1
 Description     : Virtual framebuffer X server
 Architecture    : x86_64
 URL             : https://xorg.freedesktop.org
@@ -8971,9 +8971,9 @@ Optional For    : None
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 1880.17 KiB
-Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Wed 03 Apr 2024 05:04:41 PM CDT
-Install Date    : Fri 05 Apr 2024 05:19:18 PM CDT
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Fri 12 Apr 2024 01:22:35 PM CDT
+Install Date    : Fri 12 Apr 2024 02:03:32 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
