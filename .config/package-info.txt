@@ -938,7 +938,7 @@ Groups          : None
 Provides        : None
 Depends On      : curl  libarchive  hicolor-icon-theme  jsoncpp  libjsoncpp.so=25-64  libuv  rhash  cppdap
 Optional Deps   : make: for unix Makefile generator [installed]
-                  ninja: for ninja generator
+                  ninja: for ninja generator [installed]
                   qt6-base: cmake-gui [installed]
 Required By     : None
 Optional For    : None
@@ -4128,6 +4128,28 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
 
+Name            : meson
+Version         : 1.4.0-2
+Description     : High productivity build system
+Architecture    : any
+URL             : https://mesonbuild.com/
+Licenses        : Apache
+Groups          : None
+Provides        : None
+Depends On      : ninja  python-tqdm  python-typing_extensions
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 13.40 MiB
+Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
+Build Date      : Wed 13 Mar 2024 09:16:05 PM CDT
+Install Date    : Sat 13 Apr 2024 01:12:37 PM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
 Name            : mkvtoolnix-cli
 Version         : 83.0-1
 Description     : Set of tools to create, edit and inspect Matroska files
@@ -4509,6 +4531,28 @@ Installed Size  : 8.67 MiB
 Packager        : T.J. Townsend <blakkheim@archlinux.org>
 Build Date      : Tue 02 Apr 2024 01:46:53 PM CDT
 Install Date    : Fri 05 Apr 2024 05:19:12 PM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
+Name            : ninja
+Version         : 1.11.1-3
+Description     : Small build system with a focus on speed
+Architecture    : x86_64
+URL             : https://ninja-build.org/
+Licenses        : Apache
+Groups          : None
+Provides        : None
+Depends On      : gcc-libs
+Optional Deps   : None
+Required By     : meson
+Optional For    : cmake
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 357.16 KiB
+Packager        : Felix Yan <felixonmars@archlinux.org>
+Build Date      : Thu 06 Apr 2023 12:27:57 PM CDT
+Install Date    : Sat 13 Apr 2024 01:12:37 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -5980,6 +6024,28 @@ Installed Size  : 909.40 KiB
 Packager        : Antonio Rojas <arojas@archlinux.org>
 Build Date      : Sat 02 Sep 2023 12:22:07 PM CDT
 Install Date    : Sat 16 Sep 2023 03:37:15 PM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
+Name            : python-mako
+Version         : 1.3.2-1
+Description     : A super-fast templating language that borrows the best ideas from the existing templating languages
+Architecture    : any
+URL             : https://www.makotemplates.org/
+Licenses        : MIT
+Groups          : None
+Provides        : None
+Depends On      : python-markupsafe
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 1032.66 KiB
+Packager        : Antonio Rojas <arojas@archlinux.org>
+Build Date      : Sun 18 Feb 2024 05:22:09 AM CST
+Install Date    : Sat 13 Apr 2024 01:14:43 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature

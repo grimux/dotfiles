@@ -175,6 +175,7 @@ mangohud
 materia-gtk-theme
 mediainfo
 mergerfs
+meson
 mkvtoolnix-cli
 mkvtoolnix-gui
 mpc
@@ -191,6 +192,7 @@ neovim
 network-manager-applet
 networkmanager
 newsboat
+ninja
 nitrogen
 notepadqq
 noto-fonts
@@ -255,6 +257,7 @@ python-crc8
 python-hid
 python-httplib2
 python-internetarchive
+python-mako
 python-mutagen
 python-oauth2client
 python-pathvalidate
