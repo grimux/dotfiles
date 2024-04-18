@@ -214,6 +214,7 @@ pacman-log-orphans-hook
 pacutils
 palenight-gtk-theme
 pamixer
+pandoc-cli
 papirus-icon-theme
 paprefs
 pass
@@ -315,6 +316,9 @@ system-config-printer
 terminus-font
 terrafirma
 texinfo
+texlive-basic
+texlive-formatsextra
+texlive-latexextra
 thunderbird
 timeshift
 tk
