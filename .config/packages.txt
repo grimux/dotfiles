@@ -278,6 +278,7 @@ redshift
 rmg
 rpcs3-git
 rsync
+ruby
 rvm
 s-nail
 samba
@@ -358,6 +359,7 @@ wine-gecko
 wine-mono
 wine-staging
 winetricks
+wkhtmltopdf
 wmctrl
 words
 xcb-util-errors

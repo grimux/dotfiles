@@ -4522,7 +4522,7 @@ Optional Deps   : buku: for bookmark-buku.sh
                   kitty: for kitty-img-pager.sh
                   perl: for pinboard.pl [installed]
                   python: for exportOPMLWithTags.py [installed]
-                  ruby: for feedgrabber.rb, heise.rb, and slashdot.rb
+                  ruby: for feedgrabber.rb, heise.rb, and slashdot.rb [installed]
 Required By     : None
 Optional For    : None
 Conflicts With  : None
@@ -6514,6 +6514,29 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
+Name            : ruby
+Version         : 3.0.6-1
+Description     : An object-oriented language for quick and easy programming
+Architecture    : x86_64
+URL             : https://www.ruby-lang.org/en/
+Licenses        : BSD  custom
+Groups          : None
+Provides        : None
+Depends On      : gdbm  openssl  libffi  libyaml  libxcrypt  gmp  zlib  rubygems  ruby-stdlib  ruby-bundledgems
+Optional Deps   : ruby-docs: Ruby documentation
+                  tk: for Ruby/TK [installed]
+Required By     : ruby-abbrev  ruby-base64  ruby-benchmark  ruby-bigdecimal  ruby-bundler  ruby-cgi  ruby-csv  ruby-date  ruby-delegate  ruby-did_you_mean  ruby-digest  ruby-drb  ruby-english  ruby-erb  ruby-etc  ruby-fcntl  ruby-fiddle  ruby-fileutils  ruby-find  ruby-forwardable  ruby-getoptlong  ruby-io-console  ruby-io-nonblock  ruby-io-wait  ruby-ipaddr  ruby-irb  ruby-json  ruby-logger  ruby-minitest  ruby-mutex_m  ruby-net-http  ruby-open-uri  ruby-power_assert  ruby-psych  ruby-racc  ruby-rake  ruby-rdoc  ruby-reline  ruby-rexml  ruby-ruby2_keywords  ruby-stringio  ruby-test-unit  ruby-time  ruby-tmpdir  ruby-uri  rubygems
+Optional For    : newsboat  subversion  vim
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 11.43 MiB
+Packager        : Andreas Schleifer <segaja@archlinux.org>
+Build Date      : Mon 31 Jul 2023 02:21:17 PM CDT
+Install Date    : Thu 18 Apr 2024 01:30:53 PM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
 Name            : rvm
 Version         : 1.29.12-1
 Description     : RVM is a command-line tool which allows you to easily install, manage, and work with multiple ruby environments from interpreters to sets of gems.
@@ -7488,7 +7511,7 @@ Provides        : None
 Depends On      : tcl  libxss  libxft
 Optional Deps   : None
 Required By     : steam-metadata-editor-git
-Optional For    : git  python  python-matplotlib  python-pillow  stk  sysstat  timidity++
+Optional For    : git  python  python-matplotlib  python-pillow  ruby  stk  sysstat  timidity++
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 12.17 MiB
@@ -8001,7 +8024,7 @@ Groups          : None
 Provides        : xxd  vim-minimal  vim-plugin-runtime
 Depends On      : vim-runtime=9.1.0252-1  gpm  acl  glibc  libgcrypt  zlib
 Optional Deps   : python: Python language support [installed]
-                  ruby: Ruby language support
+                  ruby: Ruby language support [installed]
                   lua: Lua language support [installed]
                   perl: Perl language support [installed]
                   tcl: Tcl language support [installed]
@@ -8407,6 +8430,28 @@ Install Date    : Thu 11 Jan 2024 04:01:35 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
+
+Name            : wkhtmltopdf
+Version         : 0.12.6-1
+Description     : Command line tools to render HTML into PDF and various image formats
+Architecture    : x86_64
+URL             : https://wkhtmltopdf.org/
+Licenses        : LGPL3
+Groups          : None
+Provides        : None
+Depends On      : qt5-webkit  qt5-svg  qt5-xmlpatterns
+Optional Deps   : xorg-server: wkhtmltopdf needs X or Xvfb to operate [installed]
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 621.07 KiB
+Packager        : Unknown Packager
+Build Date      : Thu 18 Apr 2024 01:26:58 PM CDT
+Install Date    : Thu 18 Apr 2024 01:27:33 PM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : None
 
 Name            : wmctrl
 Version         : 1.07-6
@@ -9013,7 +9058,7 @@ Provides        : X-ABI-VIDEODRV_VERSION=25.2  X-ABI-XINPUT_VERSION=24.4  X-ABI-
 Depends On      : libepoxy  libxfont2  pixman  xorg-server-common  libunwind  dbus  libgl  xf86-input-libinput  nettle  libxdmcp  sh  glibc  libxau  systemd-libs  libtirpc  libpciaccess  libdrm  libxshmfence  libxcvt
 Optional Deps   : None
 Required By     : None
-Optional For    : nvidia-utils
+Optional For    : nvidia-utils  wkhtmltopdf
 Conflicts With  : nvidia-utils<=331.20  glamor-egl  xf86-video-modesetting
 Replaces        : glamor-egl  xf86-video-modesetting
 Installed Size  : 3.62 MiB
