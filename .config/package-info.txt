@@ -3016,7 +3016,7 @@ Optional Deps   : java-rhino: for some JavaScript support
                   alsa-lib: for basic sound support [installed]
                   gtk2: for the Gtk+ 2 look and feel - desktop usage [installed]
                   gtk3: for the Gtk+ 3 look and feel - desktop usage [installed]
-Required By     : jdownloader2  polymc
+Required By     : jdownloader2  jpdfbookmarks  polymc
 Optional For    : libbluray  libjpeg-turbo  libjxl  libreoffice-fresh  subversion  texlive-latexextra  ums
 Conflicts With  : jre17-openjdk  jre17-openjdk-headless
 Replaces        : None
@@ -3070,6 +3070,28 @@ Build Date      : Fri 23 Dec 2022 12:48:27 PM CST
 Install Date    : Fri 23 Dec 2022 12:48:38 PM CST
 Install Reason  : Explicitly installed
 Install Script  : No
+Validated By    : None
+
+Name            : jpdfbookmarks
+Version         : 2.5.2-3
+Description     : Java PDF bookmarks editor
+Architecture    : any
+URL             : https://flavianopetrocchi.blogspot.com/
+Licenses        : GPL3
+Groups          : None
+Provides        : None
+Depends On      : java-environment  hicolor-icon-theme
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 8.38 MiB
+Packager        : Unknown Packager
+Build Date      : Sat 20 Apr 2024 09:47:07 AM CDT
+Install Date    : Sat 20 Apr 2024 09:47:19 AM CDT
+Install Reason  : Explicitly installed
+Install Script  : Yes
 Validated By    : None
 
 Name            : jq

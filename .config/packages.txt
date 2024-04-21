@@ -129,6 +129,7 @@ iptables-nft
 jdk17-openjdk
 jdownloader2
 jmtpfs
+jpdfbookmarks
 jq
 jre
 jre-openjdk
