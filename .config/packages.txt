@@ -210,6 +210,7 @@ openssh
 openssl-1.1
 openxray
 os-prober
+osdlyrics
 pacman-contrib
 pacman-log-orphans-hook
 pacutils

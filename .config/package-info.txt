@@ -654,7 +654,7 @@ Provides        : None
 Depends On      : boost-libs=1.83.0
 Optional Deps   : python: for python bindings [installed]
 Required By     : None
-Optional For    : None
+Optional For    : xmms2
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 178.93 MiB
@@ -4943,6 +4943,28 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
+Name            : osdlyrics
+Version         : 0.5.15-1
+Description     : A lyric show compatible with various media players
+Architecture    : x86_64
+URL             : https://github.com/osdlyrics/osdlyrics
+Licenses        : GPL3
+Groups          : None
+Provides        : None
+Depends On      : gtk2  dbus-glib  curl  libnotify  libmpd  xmms2  desktop-file-utils  hicolor-icon-theme  sqlite  python  python-future  python-pycurl  python-dbus  python-chardet  python-gobject  libappindicator-gtk2
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 1643.92 KiB
+Packager        : Antonio Rojas <arojas@archlinux.org>
+Build Date      : Mon 25 Dec 2023 02:25:26 AM CST
+Install Date    : Mon 22 Apr 2024 09:27:17 PM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
+
 Name            : pacman-contrib
 Version         : 1.10.5-1
 Description     : Contributed scripts and tools for pacman systems
@@ -5817,7 +5839,7 @@ Optional Deps   : pulseaudio-alsa: ALSA configuration (recommended) [installed]
                   pulseaudio-rtp: RTP and RAOP support
                   pulseaudio-zeroconf: Zeroconf support
 Required By     : paprefs  pulseaudio-alsa  pulseaudio-bluetooth  pulseaudio-equalizer
-Optional For    : cava  dolphin-emu  firefox  firefox-nightly-bin  libpulse  lmms  pasystray  pavucontrol  speech-dispatcher
+Optional For    : cava  dolphin-emu  firefox  firefox-nightly-bin  libpulse  lmms  pasystray  pavucontrol  speech-dispatcher  xmms2
 Conflicts With  : pipewire-pulse
 Replaces        : pulseaudio-gconf<=11.1  pulseaudio-xen<=9.0
 Installed Size  : 6.02 MiB
@@ -6548,7 +6570,7 @@ Depends On      : gdbm  openssl  libffi  libyaml  libxcrypt  gmp  zlib  rubygems
 Optional Deps   : ruby-docs: Ruby documentation
                   tk: for Ruby/TK [installed]
 Required By     : ruby-abbrev  ruby-base64  ruby-benchmark  ruby-bigdecimal  ruby-bundler  ruby-cgi  ruby-csv  ruby-date  ruby-delegate  ruby-did_you_mean  ruby-digest  ruby-drb  ruby-english  ruby-erb  ruby-etc  ruby-fcntl  ruby-fiddle  ruby-fileutils  ruby-find  ruby-forwardable  ruby-getoptlong  ruby-io-console  ruby-io-nonblock  ruby-io-wait  ruby-ipaddr  ruby-irb  ruby-json  ruby-logger  ruby-minitest  ruby-mutex_m  ruby-net-http  ruby-open-uri  ruby-power_assert  ruby-psych  ruby-racc  ruby-rake  ruby-rdoc  ruby-reline  ruby-rexml  ruby-ruby2_keywords  ruby-stringio  ruby-test-unit  ruby-time  ruby-tmpdir  ruby-uri  rubygems
-Optional For    : newsboat  subversion  vim
+Optional For    : newsboat  subversion  vim  xmms2
 Conflicts With  : None
 Replaces        : None
 Installed Size  : 11.43 MiB
