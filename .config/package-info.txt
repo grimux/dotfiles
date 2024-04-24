@@ -3407,6 +3407,28 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
+Name            : lib32-mangohud-git
+Version         : 0.7.2.rc3.r0.g046b6ce-1
+Description     : 32-bit libraries for MangoHud and MangoApp
+Architecture    : x86_64
+URL             : https://github.com/flightlessmango/MangoHud
+Licenses        : MIT
+Groups          : None
+Provides        : lib32-mangohud  lib32-mangoapp
+Depends On      : lib32-dbus  lib32-gcc-libs  lib32-glew  lib32-libx11  lib32-libxkbcommon  lib32-vulkan-icd-loader
+Optional Deps   : None
+Required By     : None
+Optional For    : None
+Conflicts With  : lib32-mangohud  lib32-mangoapp
+Replaces        : None
+Installed Size  : 13.08 MiB
+Packager        : Unknown Packager
+Build Date      : Tue 23 Apr 2024 10:51:09 AM CDT
+Install Date    : Tue 23 Apr 2024 10:57:42 AM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : None
+
 Name            : lib32-mpg123
 Version         : 1.32.5-1
 Description     : Console based real time MPEG Audio Player for Layer 1, 2 and 3 (32-bit)
@@ -4059,29 +4081,29 @@ Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
-Name            : mangohud
-Version         : 0.7.1-1
+Name            : mangohud-git
+Version         : 0.7.2.rc3.r0.g046b6ce-1
 Description     : A Vulkan overlay layer for monitoring FPS, temperatures, CPU/GPU load and more.
 Architecture    : x86_64
 URL             : https://github.com/flightlessmango/MangoHud
 Licenses        : MIT
 Groups          : None
-Provides        : None
-Depends On      : dbus  fmt  gcc-libs  glew  hicolor-icon-theme  libglvnd  libx11  python  python-matplotlib  python-numpy  vulkan-icd-loader  vulkan-icd-loader  libvulkan.so
+Provides        : mangohud  mangoapp
+Depends On      : dbus  fmt  gcc-libs  glew  hicolor-icon-theme  libglvnd  libx11  python-matplotlib  python-numpy  vulkan-icd-loader
 Optional Deps   : libxnvctrl: NVIDIA GPU stats by XNVCtrl [installed]
-                  glfw-x11: Required for MangoApp [installed]
+                  glfw: Required for MangoApp [installed]
                   gamescope: Use MangoApp as an overlay within gamescope
 Required By     : goverlay
 Optional For    : None
-Conflicts With  : mangohud-common  mangohud-common-wayland  mangohud-common-x11  mangoapp  mangohud-x11  mangohud-wayland
-Replaces        : mangohud-common  mangohud-common-wayland  mangohud-common-x11  mangoapp  mangohud-x11  mangohud-wayland
-Installed Size  : 10.06 MiB
-Packager        : Campbell Jones <serebit@archlinux.org>
-Build Date      : Thu 08 Feb 2024 12:01:53 PM CST
-Install Date    : Thu 15 Feb 2024 10:17:28 AM CST
+Conflicts With  : mangohud  mangohud-common-git  mangoapp
+Replaces        : mangoapp
+Installed Size  : 17.64 MiB
+Packager        : Unknown Packager
+Build Date      : Tue 23 Apr 2024 10:52:46 AM CDT
+Install Date    : Tue 23 Apr 2024 10:57:42 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
-Validated By    : Signature
+Validated By    : None
 
 Name            : materia-gtk-theme
 Version         : 20210322-2
@@ -8011,6 +8033,28 @@ Install Date    : Tue 04 Jul 2023 06:02:17 PM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : None
+
+Name            : upower
+Version         : 1.90.4-1
+Description     : Abstraction for enumerating power devices, listening to device events and querying history and statistics
+Architecture    : x86_64
+URL             : https://upower.freedesktop.org
+Licenses        : GPL-2.0-or-later
+Groups          : None
+Provides        : libupower-glib.so=3-64
+Depends On      : gcc-libs  glib2  glibc  libgudev  libimobiledevice  libplist  libglib-2.0.so=0-64  libgobject-2.0.so=0-64  libgio-2.0.so=0-64
+Optional Deps   : usbmuxd: Read charge status of iOS devices
+Required By     : None
+Optional For    : None
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 762.48 KiB
+Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
+Build Date      : Mon 08 Apr 2024 11:50:17 AM CDT
+Install Date    : Tue 23 Apr 2024 10:23:39 AM CDT
+Install Reason  : Explicitly installed
+Install Script  : No
+Validated By    : Signature
 
 Name            : usbutils
 Version         : 017-1

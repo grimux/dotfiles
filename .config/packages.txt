@@ -144,6 +144,7 @@ lib32-gst-plugins-base
 lib32-gst-plugins-good
 lib32-gstreamer
 lib32-libxslt
+lib32-mangohud-git
 lib32-mpg123
 lib32-sdl2_mixer
 lib32-v4l-utils
@@ -172,7 +173,7 @@ mailutils
 make
 mame-tools
 man-pages
-mangohud
+mangohud-git
 materia-gtk-theme
 mediainfo
 mergerfs
@@ -345,6 +346,7 @@ ueberzug
 ums
 unrar
 update-grub
+upower
 usbutils
 vde2
 vim
