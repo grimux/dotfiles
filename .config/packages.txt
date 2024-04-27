@@ -246,7 +246,7 @@ protobuf
 protonhax
 protontricks
 protonup-git
-protonup-qt-bin
+protonup-qt
 ps3iso-utils-git
 puddletag-git
 pulseaudio
