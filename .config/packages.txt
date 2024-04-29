@@ -65,6 +65,7 @@ dxvk-bin
 eduke32
 efibootmgr
 espeak-ng
+evtest
 exfat-utils
 extundelete
 eza
@@ -340,6 +341,7 @@ ttf-jetbrains-mono
 ttf-joypixels
 ttf-liberation
 ttf-mononoki-nerd
+ttf-ms-win10-auto
 ttf-noto-nerd
 ttf-ubuntu-font-family
 ueberzug
@@ -351,7 +353,7 @@ usbutils
 vde2
 vim
 virtualbox
-virtualbox-guest-iso
+virtualbox-ext-oracle
 virtualbox-guest-utils
 viu
 vkd3d
