@@ -1,0 +1,187 @@
+#!/usr/bin/env bash
+#
+#
+#
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+set -euox pipefail
+#set -euo pipefail
+
+
+############
+### TODO ###
+#######################################################################
+# - Finish arguments section (if I even need them).
+# - Decide about `get_window_properties()` function, delete or keep.
+# - Finish help section.
+#######################################################################
+
+
+##############
+### Config ###
+##############
+
+# Steam names and IDs.
+steam_title="Steam Big Picture Mode"
+steam_class="steam"
+steam_window_id=""
+steam_desktop_id=""
+steam_proc_name="steam"
+
+# Last active window before running script.
+last_window_id=$(xdotool getactivewindow)
+
+
+##########################
+### Arguments and Help ###
+##########################
+
+#
+# Get arguments and set flags
+#
+function get_arguments() {
+	while getopts ":h" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Help section
+			h) help_section; exit ;;
+
+			# What to do if the argument is missing.
+			:) echo "Missing argument"; help_section; exit 1 ;;
+
+			# Catchall.  If command is not recognized.
+			*) usage; exit 1 ;;
+		esac
+	done
+}
+
+#
+# Help Section
+#
+function help_section() {
+	echo "A script to start Steam in Big Picture Mode"
+	echo
+	echo "Syntax: $(basename $0) (options) [-n] <playlist name> [-d] <video directory>"
+	echo "options:"
+	# Space offset: 19
+	echo "h                   : Print this help screen."
+	echo "r <playlist name>   : Remove playlist."
+	echo "a                   : Append to playlist."
+	echo
+	echo "arguments:"
+	echo "n                   : Name of the playlist to create (m3u)."
+	echo "d                   : Directory of video files (mkv)."
+}
+
+
+########################
+### Helper Functions ###
+########################
+
+#
+# Get window and desktop IDs for Steam.
+# Function not currently used, may remove later.
+#
+function get_window_properties() {
+	steam_desktop_id=$(xdotool search --class "steam" get_desktop_for_window)
+	steam_window_id=$(xdotool search --class "steam" getwindowpid)
+	echo "Steam's Desktop: $steam_desktop_id"
+	echo "Steam's Window ID: $steam_window_id"
+}
+
+#
+# Check if Steam is already running.
+#
+function is_steam_running() {
+	# Steam's process id.
+	local process_id
+	# Exit code for `pgrep` command.
+	# 0 means running, 1 means not running.
+	local status_code
+
+	# Store the process ID for Steam.  If it's not running, assign an ID of "0".
+	process_id=$(pgrep --exact "$steam_proc_name") || process_id=0
+
+	# Check the process ID.
+	# 0 means not running, anything else will be Steam's process ID.
+	if [ "$process_id" -eq 0 ]; then
+		status_code=1
+	else
+		status_code=0
+	fi
+
+	# Status code 0: Steam is running and has process ID
+	# Status code 1: Steam is not running.
+	return "$status_code"
+}
+
+#
+# Move focus to Steam.
+# Command will run every 5 seconds until success.
+# '%@' will try for all instances of window IDs.
+#
+function move_focus_to_steam() {
+	until xdotool search --class "$steam_class" windowactivate %@; do
+		sleep 5
+	done
+}
+
+#
+# Move to last window used before running the script.
+#
+function move_to_last_window() {
+	xdotool windowactivate "$last_window_id"
+}
+
+#
+# Start Steam in Big Picture Mode
+#
+function start_bigpicture() {
+	# Bigpicture will make it start in Big Picture mode.  Great for playing on TV or with controller.
+	steam -nochatui -nofriendsui -bigpicture &> /dev/null &
+}
+
+
+############
+### Main ###
+############
+function main() {
+
+	# Check if Steam is running.
+	# If not, start it in big picture mode.
+	if ! is_steam_running; then
+		echo "Starting Steam in Big Picture Mode."
+		start_bigpicture
+	# Otherwise, just tell us it's running.
+	else
+		echo "Steam is already running."
+		#exit 1
+	fi
+
+	# Move screen focus to Steam.
+	move_focus_to_steam
+}
+
+
+###############
+### Testing ###
+###############
+function testing() {
+	is_steam_running
+}
+
+
+#############
+### Start ###
+#############
+main
+#testing
