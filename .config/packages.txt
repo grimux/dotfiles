@@ -183,7 +183,7 @@ mkvtoolnix-cli
 mkvtoolnix-gui
 mpc
 mpd
-mpdris2
+mpdris2-git
 mpv
 mtpfs
 mupen64plus
@@ -324,6 +324,7 @@ texinfo
 texlive-basic
 texlive-formatsextra
 texlive-latexextra
+theforceengine-git
 thunderbird
 timeshift
 tk
