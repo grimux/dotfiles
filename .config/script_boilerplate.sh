@@ -49,16 +49,16 @@ function get_arguments() {
 	while getopts ":h" option; do
 		case $option in
 			# What to do if there is an invalid argument.
-			\?) echo "Error: Invalid option"; exit 1 ;;
+			\?) echo "Error: Invalid option"; exit 1;;
 
 			# Help section
-			h) help_section; exit ;;
+			h) help_section; exit;;
 
 			# What to do if the argument is missing.
-			:) echo "Missing argument"; help_section; exit 1 ;;
+			:) echo "Missing argument"; help_section; exit 1;;
 
 			# Catchall.  If command is not recognized.
-			*) usage; exit 1
+			*) usage; exit 1;;
 		esac
 	done
 }
@@ -239,4 +239,9 @@ else
 	echo "Stopping."
 fi
 
-
+#==================
+# Wait for keypress
+#==================
+function wait() {
+	read -p "Press any Enter to continue..."
+}
