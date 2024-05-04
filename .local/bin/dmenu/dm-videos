@@ -37,6 +37,7 @@ mpv_args=(--loop-file)
 # Option flags
 watch_later=0
 use_tv_mode=0
+movies_only=0
 
 #################
 ### Functions ###
@@ -46,11 +47,14 @@ use_tv_mode=0
 function help_section() {
 	# Help Message.  5 space offset.
 	echo "A script to open videos in mpv."
+	echo "By default, it will show all videos in "Videos" except for television shows."
+	echo
 	echo "usage:"
 	echo "    $(basename "$0") [-h|-w|-t]"
 	echo
 	echo "options:"
 	echo "h     Print this help screen."
+	echo "m     Show movies only."
 	echo "w     Enable watch later mode (default)."
 	echo "t     Use TV_Mode."
 }
@@ -58,13 +62,19 @@ function help_section() {
 # Get arguments and set flags
 function get_arguments() {
 	local option
-	while getopts ":hwt" option; do
+	while getopts ":hmwt" option; do
 		case $option in
 			# What to do if there is an invalid argument.
 			\?) echo "Error: Invalid option"; exit 1;;
 
 			# Help
 			h) help_section; exit;;
+
+			# Show movies only.
+			m) movies_only=1
+			readarray -d '' video_files < <(find "$video_base_dir/movies" '(' -iname '*.mkv' -o -iname '*.mp4' ')' -print0)
+			readarray -t video_names < <(basename --multiple "${video_files[@]}")
+			;;
 
 			# Save playlist position on exit.
 			w) watch_later=1; mpv_args+=(--save-position-on-quit); echo "Watch later mode: ON";;
@@ -80,7 +90,7 @@ function get_arguments() {
 function open_in_dmenu() {
 	# Piping the array into dmenu.
 	#printf '%s\n' "${video_names[@]}" | dmenu -i -l 20 -p 'Videos:'
-	printf '%s\n' "$(basename --multiple "${video_files[@]}")" | dmenu -i -l 20 -p 'Videos:'
+	printf '%s\n' "$(basename --multiple "${video_files[@]}")" | sort -h | dmenu -i -l 20 -p 'Videos:'
 }
 
 # Check if the playlist exists
