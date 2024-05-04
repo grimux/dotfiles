@@ -37,6 +37,7 @@ bright="0.60:0.45"					# Brightness for day:night
 ### Files ###
 conf_dir="$HOME/.config/redshift"
 hurt_conf_file="$conf_dir/hurt.conf"	# Configuration file for low mode.
+sunglasses_conf_file="$conf_dir/sunglasses.conf"
 normal_conf_file="$conf_dir/normal.conf"
 current_conf_file="$conf_dir/redshift.conf"
 
@@ -52,7 +53,8 @@ call_redshift="redshift-gtk"
 #################
 #
 function usage() {
-	echo "Do your eyes \"hurt\" or are they \"okay\"?";
+	echo "Do your eyes \"hurt\" or are they \"okay\"?"
+	echo "Or maybe you are using \"sunglasses\"?"
 }
 
 # Get the current status.
@@ -78,6 +80,24 @@ function set_to_low() {
 	# Start redshift using the normal configuration file.  Send all output to null.
 	$call_redshift &> /dev/null &
 }
+
+# Set redshift to sunglesses mode.
+# Creates a link to the hurt config file and names is "redshift.conf".
+function set_to_sunglasses() {
+	# Kill redshift if it is running.
+	kill_redshift
+
+	# Create a link to the hurt file.  The link is called "redshift.conf".
+	ln \
+		--force \
+		"$sunglasses_conf_file" \
+		"$current_conf_file"
+
+
+	# Start redshift using the normal configuration file.  Send all output to null.
+	$call_redshift &> /dev/null &
+}
+
 
 # Set redshift to low mode by using arguments.
 function set_to_low_args() {
@@ -106,6 +126,39 @@ function set_to_normal() {
 	$call_redshift &> /dev/null &
 }
 
+function set_redshift_mode() {
+	local mode
+	local mode_conf_file
+	mode="$1"
+
+	case "$mode" in
+		okay|ok|o) mode_conf_file="$normal_conf_file" ;;
+		sunglasses|sun|s) mode_conf_file="$sunglasses_conf_file" ;;
+		hurt|h) mode_conf_file="$hurt_conf_file" ;;
+		*) mode_conf_file=null; usage; return 1;;
+	esac
+
+	# Kill redshift if it is running.
+	kill_redshift
+
+	# Create a link to the mode file.  The link is called "redshift.conf".
+	ln \
+		--force \
+		"$mode_conf_file" \
+		"$current_conf_file"
+
+	# Start redshift using the default configuration file.  Send all output to null.
+	$call_redshift &> /dev/null &
+}
+
+function give_output() {
+	local mode
+	local emoji
+	local message
+
+	mode="$1"
+}
+
 # If redshift is found running, kill it.
 # Multiple instances of redshift running causes settings to stack and monitor flickering.
 # So it's important to ensure only one is ever running.
@@ -130,10 +183,13 @@ function main() {
 		"") usage; echo ; get_status;;
 
 		# If your eyes are hurting.
-		"hurt") echo "Sorry your eyes hurt...  Let me help."; set_to_low;;
+		hurt|h) echo "Sorry your eyes hurt...  Let me help."; set_to_low;;
+
+		# Sunglasses mode.
+		sunglasses|sun|s) echo "Be sure to put on your shades."; set_to_sunglasses;;
 
 		# If your eyes are okay.
-		"okay") echo "You must be feeling better!"; set_to_normal;;
+		okay|ok|o) echo "You must be feeling better!"; set_to_normal;;
 
 		# Anything else entered is not recognized.
 		*) echo "Sorry, I don't recognize that command."; usage; exit 1;;
@@ -141,8 +197,29 @@ function main() {
 }
 
 
+###############
+### Testing ###
+###############
+function testing() {
+	# Enable debug output
+	set -euox pipefail
+
+	# Local variables
+	local condition
+
+	# Initialize
+	condition="$1"
+
+	# Set redshift mode
+	set_redshift_mode "$condition"
+
+	# Give some terminal output.
+	give_output "$condition"
+}
+
 
 ####################
 ### Call to main ###
 ####################
 main "$@"
+#testing "$1"
