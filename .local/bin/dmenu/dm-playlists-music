@@ -3,8 +3,40 @@
 # A script for using my music playlists in mpd.
 # Uses mpc to load, configure, and play everything.
 #
+#
+############
+### TODO ###
+############
+#
+# - Fix bugs with undefined variables.
+# - Clean up code, there is much to improve on as this is an old script.
+# - Decide about `load_mpc` functions.
+# - Add more comments.
+# - Clean up existing comments and sections to current standard.
+# - Add way to read config file instead of script for the `playlist_ignore_random` array.
+# 	- Could just source a file to make it easy.
+# - Add some functions for controlling output to terminal and xorg.
+#
+############
 
-### Variables ###
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -eox pipefail
+set -eo pipefail
+#
+###################
+
+
+##############
+### Config ###
+##############
 #
 # MPD playlist directory
 playlist_dir="$HOME/.config/mpd/playlists"
@@ -19,8 +51,25 @@ playlist_files=($playlist_dir/*)
 # sed is used to strip the file extension.
 playlist_names=$(printf '%s\n' "${playlist_files[@]}" | awk -F'/' '{print $NF}' | sed 's/.m3u//')
 
+# Array of playlist names that, when called, will set `mpc random 0`, turning random mode off.
+# At some point this will be moved to a separate file in ".config".
+playlist_ignore_random=(
+	"blood"
+	"calm"
+	"darkside_flac"
+	"lunacid"
+	"meltdown"
+	"rare"
+	"silent_chill"
+	"silent_chill_redux"
+	"slim_shady"
+	"stardew"
+)
 
+
+#################
 ### Functions ###
+#################
 #
 # Function to open playlist in dmenu
 open_in_dmenu() {
@@ -69,7 +118,7 @@ load_mpc() {
 	# If a playlist name matches, disable random.
 	case $playlist_name in
 		# Playlists that I do not want randomized.
-		blood|calm|darkside_flac|meltdown|silent_chill|silent_chill_redux|slim_shady|stardew|rare)
+		blood|calm|darkside_flac|meltdown|lunacid|silent_chill|silent_chill_redux|slim_shady|stardew|rare)
 			# Disable random mode.
 			mpc random off > /dev/null
 			;;
@@ -90,7 +139,58 @@ load_mpc() {
 	mpc play
 }
 
+
+#########################
+### Testing Functions ###
+#########################
+#
+# New version of `load_mpc`.
+# This one uses the array created in the "config" section as a base to search through.
+# If the name of the playlist is in the array, random mode for `mpd` will be turned off.
+# I will keep both versions for now, until I feel confidant about this new one.
+load_mpc_new() {
+	# Argument passed is the location of the playlist file.
+	# $playlist_directory/$playlist_name.m3u
+	playlist_name="$1"
+
+	# Clear mpd playlist
+	mpc clear > /dev/null
+
+	# Logic to control if mpd should enable randomize mode or not.
+	# Uses the array from the config section.
+	# If a playlist name from the array matches the given `playlist_name`, disable random mode.
+	if [[ "${playlist_ignore_random[@]}" =~ "$playlist_name" ]]; then
+		# Disable random mode.
+		mpc random off > /dev/null
+	# Otherwise, turn random mode on.
+	else
+		# Enable random mode.
+		mpc random on > /dev/null
+	fi
+
+	# Enable repeat mode.
+	mpc repeat on > /dev/null
+
+	# Load the playlist
+	mpc load "$playlist_name"
+
+	# Play
+	mpc play
+}
+
+
+###############
+### Testing ###
+###############
+#
+testing() {
+	local some_variable
+}
+
+
+############
 ### Main ###
+############
 #
 main() {
 	# Check if the argument passed to the script is empty
@@ -107,15 +207,16 @@ main() {
 
 	# If the playlist exists, pass it to load_mpc function
 	if [ $does_playlist_exist -eq 1 ]; then
-		load_mpc $choice
+		load_mpc_new $choice
 	# If it doesn't exist, call the no_playlist function
 	else
 		no_playlist
 	fi
 }
 
-# Call main
-main "$@"
 
-### End ###
-exit 0
+#############
+### Start ###
+#############
+#testing "$@"
+main "$@"
