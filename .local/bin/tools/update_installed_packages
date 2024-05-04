@@ -38,29 +38,44 @@ function create_info_file() {
 		> "$package_info_file"
 }
 
+function update_git() {
+	$config add "$package_list_file"
+	$config add "$package_info_file"
+	$config commit -m "Installed packages update."
+}
+
 function check_file() {
 	local file_changed=0
-	if $config diff --exit-code $package_list_file > /dev/null 2>&1; then
-		echo 0
+	local file_to_check
+
+	file_to_check="$1"
+
+	if $config diff --exit-code $file_to_check > /dev/null 2>&1; then
+		file_changed="0"
 	else
-		echo 1
+		file_changed="1"
 	fi
 
+	echo "$file_changed"
 }
 
 
 function main() {
+	local has_list_file_changed
+	local has_info_file_changed
+
 	create_package_file
 	create_info_file
 
-	local has_file_changed=$(check_file)
+	# Pacman package list.
+	has_list_file_changed=$(check_file "$package_list_file")
+	has_info_file_changed=$(check_file "$package_info_file")
 
-	if [ $has_file_changed -eq 1 ]; then
-		echo "File has changed.  Adding and commiting..."
-		$config add "$package_list_file" "$package_info_file"
-		$config commit -m "Installed packages update."
+	if [ $has_list_file_changed -eq 1 ] || [ $has_info_file_changed -eq 1 ]; then
+		echo "File(s) have changed."
+		update_git
 	else
-		echo "File has not changed.  Aborting..."
+		echo "File(s) have not changed.  Aborting..."
 		exit 1
 	fi
 }
