@@ -122,7 +122,9 @@ local termfile     = terminal .. " --class ranger --title ranger -e ranger"
 local filemanager  = os.getenv("FILE") or "pcmanfm-qt"
 
 awful.util.terminal = terminal
-awful.util.tagnames = { "term", "www", "file", "email", "torr", "chat", "mus", "vid", "gfx" }
+--awful.util.tagnames = { "term", "www", "file", "email", "torr", "chat", "mus", "vid", "gfx" }
+awful.util.tagnames = { "term", "www", "file", "chat", "torr", "doc", "mus", "vid", "gfx" }
+--awful.util.tagnames = { " term", " www", " file", "󰚢 chat", " torr", "󰈙 doc", " mus", " vid", " game" }
 awful.layout.layouts = {
   awful.layout.suit.tile,
     awful.layout.suit.floating,
@@ -286,13 +288,14 @@ root.buttons(mytable.join(
 
 ))
 
-
 --[[
+-- Mouse buttons.
 clientbuttons = mytable.join(
     awful.button({ }, 6, function() awful.spawn("/dev/null") end), -- Scroll wheel left
     awful.button({ }, 7, function() awful.spawn("/dev/null") end), -- Scroll wheel right
-    awful.button({ }, 8, function() awful.spawn("screenshooter") end), -- Thumb button back
-    awful.button({ }, 9, function() awful.spawn("/dev/null") end) -- Thumb button forward
+  --awful.button({ }, 8, function() awful.spawn("screenshooter") end), -- Thumb button back
+    awful.button({ }, 9, function() awful.spawn("/dev/null") end), -- Thumb button forward
+    awful.button({ }, 167, function() awful.spawn("screenshooter") end)
 )
 --]]
 
@@ -505,6 +508,8 @@ globalkeys = mytable.join(
               { description = "toggle Tor Network", group = "scripts"}),
     awful.key({ modkey, "Shift"   }, "b",     function () awful.spawn("bt_battery_levels") end,
               { description = "bluetooth battery levels", group = "scripts"}),
+    awful.key({ modkey,           }, "F11",     function () awful.spawn("monitor-sleep toggle") end,
+              { description = "monitor-sleep toggle", group = "scripts"}),
 
     --awful.key({ modkey, }, "z", function () quake:toggle() end),
 
@@ -551,7 +556,7 @@ globalkeys = mytable.join(
      awful.util.spawn("volume_adjust up", false) end),
 
    -- Screenshot
-   awful.key({}, "Print", function () awful.spawn("screenshooter") end,
+   awful.key({}, "Print", function ()awful.spawn("screenshooter") end,
     { description = "Take a screenshot", group = "misc"}),
 
    -- Set Caps to escape
@@ -737,6 +742,7 @@ awful.rules.rules = {
           "DTA",  -- Firefox addon DownThemAll.
           "copyq",  -- Includes session name in class.
           "Godot_Engine",
+          "pcsx2-qt",
           "pinentry",
           "qalculate-gtk",
           "virt-manager",
@@ -744,6 +750,7 @@ awful.rules.rules = {
         class = {
           "Arandr",
           "Blueman-manager",
+          "Caffeine",
           "fury.bin",
           "Gpick",
           "Gzdoom",
@@ -804,15 +811,16 @@ awful.rules.rules = {
     { rule = { class = "Brave-browser" },  properties = { screen = 1, tag = awful.util.tagnames[2] } },
     { rule = { class = "Tor Browser" },    properties = { screen = 1, tag = awful.util.tagnames[2] } },
     -- file
-    -- email
+    -- chat
     { rule = { class = "thunderbird" },    properties = { screen = 1, tag = awful.util.tagnames[4] } },
+    { rule = { class = "discord" },        properties = { screen = 1, tag = awful.util.tagnames[4] } },
+    { rule = { class = "Signal" },         properties = { screen = 1, tag = awful.util.tagnames[4] } },
     -- torr
     { rule = { class = "qBittorrent" },    properties = { screen = 1, tag = awful.util.tagnames[5] } },
     { rule = { class = "Transmission-remote-gtk" },    properties = { screen = 1, tag = awful.util.tagnames[5] } },
     { rule = { class = "org-jdownloader-update-launcher-JDLauncher" },   properties = { screen = 1, tag = awful.util.tagnames[5] } },
-    -- chat
-    { rule = { class = "discord" },        properties = { screen = 1, tag = awful.util.tagnames[6] } },
-    { rule = { class = "Signal" },         properties = { screen = 1, tag = awful.util.tagnames[6] } },
+    -- doc
+    { rule = { class = "libreoffice" },    properties = { screen = 1, tag = awful.util.tagnames[6] } },
     -- mus
     { rule = { class = "cantata" },        properties = { screen = 1, tag = awful.util.tagnames[7] } },
     { rule = { class = "ncmpcpp" },        properties = { screen = 1, tag = awful.util.tagnames[7] } },  -- The class "ncmpcpp" is defined above by the "music" variable.  Class is set by calling the terminal.
@@ -929,6 +937,17 @@ client.connect_signal("property::ontop", function(c)
         c.border_color = beautiful.border_focus
         naughty.notify({ title = "Unpinned:", text = c.name })
     end
+end)
+
+-- Fix for fullscreen games and applications not covering the top wibar.
+client.connect_signal("property::fullscreen", function(c)
+  if c.fullscreen then
+    gears.timer.delayed_call(function()
+      if c.valid then
+        c:geometry(c.screen.geometry)
+      end
+    end)
+  end
 end)
 
 -- }}}
