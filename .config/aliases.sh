@@ -19,7 +19,7 @@ alias lu="lsd --sizesort --almost-all --total-size --long --group-directories-fi
 alias lss="/usr/bin/ls -1 --color=auto --group-directories-first"
 alias grep="grep --color=auto"
 alias searchtext="grep -R --color=auto"
-alias dir_size="du -d 1 -h | sort -h"
+alias dir-size="du -d 1 -h \"$1\" | sort -h"
 
 ## Config files ##
 alias cfa="$EDITOR ~/.config/aliases.sh"
@@ -29,10 +29,25 @@ alias cfz="$EDITOR ~/.zshrc"
 alias cfb="$EDITOR ~/Videos/playlists/bedtime.m3u"
 alias cfs="$EDITOR ~/.config/script_boilerplate.sh"
 alias cfawe="$EDITOR ~/.config/awesome/rc.lua"
+alias cfawet="$EDITOR ~/.config/awesome/theme.lua"
 alias cfd="$EDITOR ~/.config/gzdoom/mod_profiles.sh"
+alias cfpac="$EDITOR /etc/pacman.conf"
 
-alias cfgl="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto personal/gift-list\""
-alias cfbn="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto notes/behavioral_notes\""
+## Vimwiki Page Shortcuts ##
+#
+# Old Method
+#alias vwgl="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto personal/gift-list\""
+#alias vwbn="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto notes/behavioral_notes\""
+#alias vwtn="nvim -c \"VimwikiIndex\" -c \"VimwikiGoto personal/health-mental/therapy/emdr-notes\""
+#
+# New Method
+# neovim automatically knows that markdown files in the `vimwiki` directory should be used with the
+# `vimwiki` plugin, so all the `vimwiki` functionality should be loaded and avalible.  Use `:VimwikiIndex`
+# to access the home page.
+alias vwgl="nvim ~/vimwiki/personal/gift-list.md"
+alias vwbn="nvim ~/vimwiki/notes/behavioral_notes.md"
+alias vwtn="nvim ~/vimwiki/personal/health-mental/therapy/emdr-notes.md"
+alias diary="nvim -c VimwikiMakeDiaryNote"
 
 ## Program shortcuts ##
 alias define="sdcv"			# Dictionary
@@ -61,6 +76,10 @@ alias videos="ranger ~/Videos/playlists"
 alias fluffy="cd /mnt/s/modding/Fluffy_Mod_Manager; wine /mnt/s/modding/Fluffy_Mod_Manager/Modmanager.exe"
 alias autoremove="pacman -Qtdq | sudo pacman -Rns -"
 alias 7z_update="7z u -up1q0r2x1y2z1w2 -mx9 -mmt16"
+alias yayrm="yay -Rscn"
+alias pacrm="sudo pacman -Rscn"
+alias rebuild-qt-styleplugins="yay -S --rebuild --noconfirm qt5-styleplugins"
+alias test-mpv="mpv --input-test --force-window --idle"
 
 ## Dotfile alias ##
 # An alias to manage my dotfiles.
@@ -84,8 +103,8 @@ alias copy_files="rsync -rvhtU --info=progress2 --stats"
 
 ## Games ##
 #alias im_stuck="steam -applaunch 1010750 map e1m1"
-alias im_stuck="nblood"
-alias help_me="nblood"
+alias im_stuck="notblood"
+alias help_me="notblood"
 alias play_blood="lutris lutris:rungameid/60"
 alias jkdf2="openjkdf2"
 alias perfect-dark="lutris lutris:rungameid/252"
@@ -94,7 +113,9 @@ alias oot="lutris lutris:rungameid/61"
 ## Music ##
 alias dangan="mpc clear; mpc searchadd Title \"Into Free\"; mpc play; lyrics"
 alias meditation="mpv /mnt/s/music/meditation/jon_kabat_meditation.mp3"
-alias playback="mpc clear; mpc searchadd Artist \"Forth Right MC\"; mpc play"
+alias playback="mpc clear; mpc searchadd Artist \"Forth Right MC\"; mpc repeat 1; mpc play"
+alias isolated="mpc clear; mpc searchadd Album \"Disorder\" Title \"Isolated\"; mpc repeat 1; mpc play"
+alias n64-chill="mpv \"/mnt/v/relaxing/gaming/Relaxing Video Game Music (N64 Edition).mkv\""
 
 ## Video Playlists ##
 alias factorio="mpv $mpv_playlist_settings $video_playlist_dir/factorio_1.0_tuplex.m3u"
