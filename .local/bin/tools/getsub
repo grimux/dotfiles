@@ -8,10 +8,73 @@
 # 	Simple wrapper for `subdl`.  Uses my account, which is retrieved by pass.
 ##################################################################################
 
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+set -euox pipefail
+#set -euo pipefail
+
+opensubs_username="grimux"
+opensubs_password=""
+
+get_password() {
+	local exit_code
+
+	echo "Please enter password for \"pass\"..."
+
+	opensubs_password=$(pass show services/open-subtitles | head -n1)
+	exit_code="$?"
+
+	case "$exit_code" in
+		2) echo "Password cancelled."; exit 1;;
+		1) echo "Incorrect password."; exit 1;;
+		0) echo "Password accepted."; echo -e "\r\033[0K$opensubs_password";;
+	esac
+}
+
 # Call subdl with the corresponding arguments.
-subdl \
-	--username grimux \
-	--password $(pass show services/open-subtitles | head -n1) \
-	--download=most-downloaded \
-	--existing=overwrite \
-	"$@"
+use_subdl() {
+	subdl \
+		--username $opensubs_username \
+		--password $opensubs_password \
+		--download=most-downloaded \
+		--existing=overwrite \
+		"$@"
+}
+
+# Download subtitles using `subliminal`.
+use_subliminal() {
+
+	subliminal \
+		--opensubtitles
+	download \
+		--language en \
+		--refiner metadata \
+		--force \
+		--hearing-impaired \
+		"$@"
+
+}
+
+main() {
+	local username
+	local password
+	local video_files
+
+	username="$opensubs_username"
+	get_password
+
+	#shift $((OPTIND-2))
+	#video_files="$3"
+
+	#use_subliminal "$@"
+	use_subdl "$@"
+
+}
+
+main "$@"
