@@ -13,6 +13,7 @@ declare playlist_profiles=(
 	games
 	game_reviews
 	gdq_speedruns
+	game_chill
 )
 
 # All game videos.  Like a video game channel.
@@ -33,5 +34,11 @@ declare game_reviews=(
 
 # GDQ Speedruns.
 declare gdq_speedruns=(
+	gdq_speedruns
+)
+
+# Relaxing game videos.
+declare game_chill=(
+	dykg
 	gdq_speedruns
 )
