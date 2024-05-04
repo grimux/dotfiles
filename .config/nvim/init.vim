@@ -26,6 +26,8 @@ Plug 'chrisbra/Colorizer'
 Plug 'lambdalisue/suda.vim'
 Plug 'chrisbra/unicode.vim'
 Plug 'bling/vim-bufferline'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -119,6 +121,11 @@ map <leader>f :Ranger<CR>
 " Spellcheck
 map <leader>o :call SpellCheck()<CR>
 
+"map <leader>s :call ReSpell()<CR>
+map <F2> :setlocal spell \| call feedkeys("]s") \| :call feedkeys("z=")<CR>
+
+nmap <leader>w :SudaWrite<CR>
+
 " Easily disable highlighting
 map <leader>nh :nohlsearch<CR>
 
@@ -160,20 +167,15 @@ map <leader>c :w \| !make clean<CR>
 " Replace all is aliased to S.
 nnoremap S :%s//g<Left><Left>
 
-" Insert date and timestamp
-nnoremap <F5> "=strftime("%A, %B %d, %Y")<CR>P
-inoremap <F5> <C-R>=strftime("%A, %B %d, %Y")<CR>
-map <leader>d "=strftime("%A, %B %d, %Y")<CR>P
-nnoremap <F6> "=strftime("%I:%M %p")<CR>P
-inoremap <F6> <C-R>=strftime("%I:%M %p")<CR>
-map <leader>t "=strftime("%I:%M %p")<CR>P
-
 " Make current file executable.
 map <leader>x :!chmod +x %<CR><CR>
 
 " Set spaces for tabs
 map <leader>t :call TabsToSpaces()<CR>
 
+" Show custom keybinds
+map <leader>/ :call ShowMyKeybinds()<CR>
+"map <leader>/ :map <C-d>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Plugin Configuration
@@ -185,8 +187,7 @@ map <leader>mg :Magit<CR>
 map <leader>g :Goyo <BAR> set linebreak<CR>
 
 " vimwiki
-map <leader>wm :VimwikiAll2HTML<CR>
-map <leader>wa :VimwikiGoto personal/mental-health/autism/autism-notes<CR>
+nmap <leader>wm :VimwikiAll2HTML<CR>
 
 " Start Bracey (html live server)
 map <leader>bb :Bracey<CR>
@@ -217,12 +218,70 @@ function SpellCheck()
 	setlocal spell! spell?
 endfunction
 
+" Goto misspelled word
+" Need to finish writing this function as it does not work right now.
+function ReSpell()
+	setlocal spell
+	call feedkeys("gg")
+	call feedkeys("0")
+	let current_line = line(".")
+	let last_line = line("$")
+
+	while current_line <= last_line
+		let misspelled_word = spellbadword()
+		echo "Line:" current_line
+		echo "Bad Word:" misspelled_word
+
+		if misspelled_word == ['', '']
+			call feedkeys("j")
+			let current_line += 1
+			continue
+		else
+			"call spellbadword()
+			let current_word = expand("<cword>")
+			echo "Current word:" current_word
+			"call spellsuggest(current_word)
+		endif
+
+		"echo current_line
+		"call feedkeys("]s")
+		"call feedkeys("z=")
+		"let current_line = line(".")
+	endwhile
+endfunction
+
 " Set tabs to spaces
 function TabsToSpaces()
 	setlocal tabstop=4
 	setlocal expandtab
 	setlocal shiftwidth=4
 endfunction
+
+" Show keybinds in a searchable buffer
+function ShowMyKeybinds()
+	"filter /\,*./ map
+	lua require'telescope.builtin'.keymaps{}
+endfunction
+
+function! s:ShowMaps()
+	let old_reg = getreg("a")	     " save the current content of register a
+	let old_reg_type = getregtype("a") " save the type of the register as well
+try
+	redir @a			     " redirect output to register a
+	" Get the list of all key mappings silently, satisfy "Press ENTER to continue"
+	silent nmap | call feedkeys("\<CR>")
+	redir END			     " end output redirection
+	vnew				     " new buffer in window
+	put a				     " put content of register
+	" Sort on 4th character column which is the key(s)
+	"%!sort -k1.4,1.4
+finally				     " Execute even if exception is raised
+	call setreg("a", old_reg, old_reg_type) " restore register a
+endtry
+endfunction
+com! ShowMaps call s:ShowMaps()      " Enable :ShowMaps to call the function
+
+nnoremap \m :ShowMaps<CR>	     " Map keys to call the function
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Auto-Functions
@@ -231,6 +290,42 @@ endfunction
 autocmd! bufwritepost init.vim source $HOME/.config/nvim/init.vim
 " When my gift list is updateded, run the shell update script.
 autocmd! bufwritepost gift-list.md :silent !update_giftlist
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"--- Menus
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Run emenu command to show all avalible menus.
+nmap <F4> :emenu <C-Z>
+
+"--- Date Menu ---"
+"
+" Uses the strftime function to get the current date or time.
+" `"` - the register to place the return value in.
+" `<CR>` - to simulate pressing enter.
+" `P` - to simulate pressing `P` for paste.
+"
+" Full date format
+" ie: Monday, May 01, 2004
+amenu Date.Full "=strftime('%A, %B %d, %Y')<CR>P
+
+" Short date format
+" ie: 05/01/2004
+amenu Date.Short "=strftime('%m/%d/%Y')<CR>P
+
+" Current time
+" ie: 06:45 PM
+amenu Date.Time "=strftime('%I:%M %p')<CR>P
+
+" Open the Date menu.
+" Normal mode and insert mode are supported.
+nnoremap <leader>d :emenu Date.
+nnoremap <F5> :emenu Date.
+inoremap <F5> <C-O>:emenu Date.
+
+
+
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
