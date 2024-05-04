@@ -86,6 +86,8 @@ alias test-mpv="mpv --input-test --force-window --idle"
 alias config="git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
 alias cstat="clear; config status"
 alias cdiff="config diff; clear"
+alias cadd="config add"
+alias ccommit="config commit"
 
 ## yt-dlp ##
 alias yta="$yt_app $yt_config_location/audio_single"
