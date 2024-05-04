@@ -1,7 +1,21 @@
 #!/usr/bin/env bash
 #
+####################
 #
+# Name:
+# Author:
+# Description:
 #
+####################
+
+
+############
+### TODO ###
+############
+#
+# - Add more comments.
+#
+############
 
 ###################
 ### Fail Events ###
@@ -13,7 +27,14 @@
 #
 set -euox pipefail
 #set -euo pipefail
+#
+###################
 
+
+##################################
+### Arguments, Help, and Usage ###
+##################################
+#
 # Get arguments and set flags
 function get_arguments() {
 	while getopts ":h" option; do
@@ -37,15 +58,60 @@ function get_arguments() {
 function help_section() {
 	echo "A short description of script"
 	echo
-	echo "Syntax: $(basename $0) (options) [-n] <playlist name> [-d] <video directory>"
+	echo "Syntax: $(basename $0) (options) <arguments>"
 	echo "options:"
 	# Space offset: 19
 	echo "h                   : Print this help screen."
-	echo "r <playlist name>   : Remove playlist."
-	echo "a                   : Append to playlist."
 	echo
 	echo "arguments:"
-	echo "n                   : Name of the playlist to create (m3u)."
-	echo "d                   : Directory of video files (mkv)."
+	echo "d                   : Example."
 }
 
+# How to use the script.
+function usage() {
+	echo "$(basename $0) (options)"
+}
+
+
+##############
+### Config ###
+##############
+#
+
+
+#################
+### Functions ###
+#################
+#
+
+
+#########################
+### Testing Functions ###
+#########################
+#
+
+
+
+###############
+### Testing ###
+###############
+#
+function testing() {
+	local some_variable
+}
+
+
+############
+### Main ###
+############
+#
+function main() {
+	local some_variable
+}
+
+
+#############
+### Start ###
+#############
+#testing "$@"
+main "$@"
