@@ -11,6 +11,7 @@ mod_profile_array=(
 	ashes_ep2
 	arcade
 	castlevania
+	chex_quest
 	chill_doom
 	bloom
 	brutal_minecraft
@@ -148,6 +149,17 @@ function mod_profiles() {
 			cheats=""
 			skill=""
 			;;
+
+		# Chex Quest
+		chex_quest)
+			iwad=chex3.wad
+			wads=""
+			maps=""
+			savedir="$savedir/chex_quest"
+			cheats=""
+			skill=""
+			;;
+
 
 		countrycide)
 			iwad=DOOM2.WAD
