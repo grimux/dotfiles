@@ -52,6 +52,8 @@ theme.widget_mail                               = theme.confdir .. "/icons/mail.
 theme.widget_batt                               = theme.confdir .. "/icons/bat.png"
 theme.widget_clock                              = theme.confdir .. "/icons/clock.png"
 theme.widget_vol                                = theme.confdir .. "/icons/spkr.png"
+theme.widget_sleep                              = theme.confdir .. "/icons/moon.png"
+theme.widget_tvmode                             = theme.confdir .. "/icons/television.png"
 theme.taglist_squares_sel                       = theme.confdir .. "/icons/square_a.png"
 theme.taglist_squares_unsel                     = theme.confdir .. "/icons/square_b.png"
 theme.tasklist_plain_task_name                  = true
@@ -94,7 +96,11 @@ theme.titlebar_maximized_button_focus_active    = theme.confdir .. "/icons/title
 local markup = lain.util.markup
 
 
--- TV mode widget
+-------------------------
+-- My Personal Widgets --
+-------------------------
+--
+-- TV mode widget --
 -- Old watch method
 --local tv_mode_status = awful.widget.watch('tv_mode_status', 5)
 --
@@ -105,11 +111,17 @@ function get_tv_mode_status()
 end
 
 -- TV Mode widget and icon
+local tvmodeicon = wibox.widget({
+    widget = wibox.widget.imagebox,
+    image = theme.widget_tvmode,
+    visible = false
+})
+
 local tvmode_widget = wibox.widget ({
     widget = wibox.widget.textbox,
-    --text = string.format("%s", get_tv_status)
-    --text = string.format("%s", tv_status),
+    text = "TV Mode",
     opacity = 0.75,
+    visible = false
 })
 
 -- Signal to send for TV Mode.
@@ -117,15 +129,35 @@ awesome.connect_signal('update_tv_mode_status', function()
     local tv_status = get_tv_mode_status()
 
     if( tv_status ) then
-        tvmode_widget.text = "📺"
+        tvmodeicon.visible = true
+        tvmode_widget.visible = true
     else
-        tvmode_widget.text = ""
+        tvmodeicon.visible = false
+        tvmode_widget.visible = false
     end
 end)
 
--- Brown Noise widget (mpv)
--- Get the status of mpv.
-local brownnoiseicon = wibox.widget.imagebox()
+
+--
+-- Brown Noise widget (mpv) --
+--
+-- Brown noise widget and icon
+local brownnoiseicon = wibox.widget({
+    widget = wibox.widget.imagebox,
+    image = theme.widget_note_on,
+    visible = false
+})
+
+local brownnoise_widget = wibox.widget({
+    widget = wibox.widget.textbox,
+    text = "Brown Noise",
+    opacity = 0.75,
+    font = theme.font,
+    visible = false
+
+})
+
+-- Get the status for brown noise.
 function get_brown_noise_status()
     -- Check for running mpv process.
     local processName = "Brown_Noise_8%-Hours%.mp3"
@@ -135,44 +167,64 @@ function get_brown_noise_status()
     else
         return false
     end
-
-    -- Using file to detect if mpv is running.
-    --[[
-    local file = io.open(os.getenv("HOME") .. "/.cache/brown_noise_on","r")
-    if file ~= nil then
-        io.close(file)
-        return true
-    else
-        return false
-    end
-    --]]
 end
-
--- Brown noise widget and icon
-local brownnoise_widget = wibox.widget({
-    widget = wibox.widget.textbox,
-    --text = string.format("%s", get_brown_noise_status)
-    --text = string.format("%s", brown_noise_status),
-    opacity = 0.75,
-    --labelColor = { default = { 114, 77, 34 }, over = { 114, 77, 34 } },
-    --widget:set_markup(markup.fontfg(theme.font, "#eca4c4", "Brown Noise"))
-
-})
-brownnoise_widget.font = theme.font
 
 -- Signal to send for brown noise.
 awesome.connect_signal('update_brown_noise_status', function()
     local mpv_status = get_brown_noise_status()
 
     if( mpv_status ) then
-        brownnoiseicon:set_image(theme.widget_note_on)
-        brownnoise_widget.text = "Brown Noise"
+        brownnoiseicon.visible = true
+        brownnoise_widget.visible = true
     else
-        brownnoiseicon:set_image(nil)
-        brownnoise_widget.text = ""
+        brownnoiseicon.visible = false
+        brownnoise_widget.visible = false
     end
 end)
 
+
+--
+-- Monitor Sleep Status --
+--
+-- Monitor sleep icon imagebox.
+local monitorsleepicon = wibox.widget({
+    widget = wibox.widget.imagebox,
+    image = theme.widget_sleep,
+    visible = false
+})
+
+-- Monitor Sleep widget and icon
+local monitorsleep_widget = wibox.widget({
+    widget = wibox.widget.textbox,
+    text = "Sleep Off",
+    opacity = 0.75,
+    font = theme.font,
+    visible = false
+})
+
+-- Get the status of the monitor.
+function get_monitor_sleep_status()
+    local sleep_disabled = "DPMS is Enabled"
+    local xset_status = io.popen("xset q | grep \"DPMS is Enabled\""):read("*a")
+    if string.match(sleep_disabled, xset_status) then
+        return true
+    else
+        return false
+    end
+end
+
+-- Signal to send for monitor sleep status.
+awesome.connect_signal('update_monitor_sleep_status', function()
+    local monitor_sleep_status = get_monitor_sleep_status()
+
+    if( monitor_sleep_status ) then
+        monitorsleepicon.visible = true
+        monitorsleep_widget.visible = true
+    else
+        monitorsleepicon.visible = false
+        monitorsleep_widget.visible = false
+    end
+end)
 
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
@@ -403,8 +455,11 @@ function theme.at_screen_connect(s)
         nil,
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
+            monitorsleepicon,
+            monitorsleep_widget,
             brownnoiseicon,
             brownnoise_widget,
+            tvmodeicon,
             tvmode_widget,
             --mailicon,
             --theme.mail.widget,
