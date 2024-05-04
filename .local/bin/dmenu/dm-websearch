@@ -65,6 +65,7 @@ websearch[steamdb]="https://steamdb.info/search/?q="
 websearch[protondb]="https://www.protondb.com/search?q="
 websearch[pcgamingwiki]="https://www.pcgamingwiki.com/w/index.php?search="
 websearch[lutris]="https://lutris.net/games?q="
+websearch[dekudeals]="https://www.dekudeals.com/search?q="
 
 # Game Wikis
 websearch[dragonsdogmawiki]="https://dragonsdogma.fandom.com/wiki/Special:Search?query="
