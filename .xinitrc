@@ -112,6 +112,7 @@ function shared_settings() {
 
 	# Blankout screen after 15 minutes
 	xset s 900 &
+	xset dpms 900 900 900 &
 
 	# Start playerctl daemon, tracks recent media players and can control them with media keys.
 	playerctld daemon &
