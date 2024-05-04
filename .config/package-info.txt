@@ -784,7 +784,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : calibre
-Version         : 7.9.0-2
+Version         : 7.10.0-1
 Description     : Ebook management application
 Architecture    : x86_64
 URL             : https://calibre-ebook.com
@@ -799,10 +799,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : calibre-common  calibre-python3
 Replaces        : calibre-common  calibre-python3
-Installed Size  : 112.67 MiB
+Installed Size  : 112.72 MiB
 Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Fri 19 Apr 2024 01:10:32 AM CDT
-Install Date    : Sun 28 Apr 2024 02:07:50 PM CDT
+Build Date      : Fri 03 May 2024 03:03:24 AM CDT
+Install Date    : Fri 03 May 2024 11:54:01 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -1612,23 +1612,23 @@ Install Script  : No
 Validated By    : None
 
 Name            : eza
-Version         : 0.18.13-1
+Version         : 0.18.14-6
 Description     : A modern replacement for ls (community fork of exa)
 Architecture    : x86_64
 URL             : https://github.com/eza-community/eza
 Licenses        : MIT
 Groups          : None
 Provides        : exa
-Depends On      : gcc-libs  glibc  libgit2  libgit2.so=1.7-64
+Depends On      : gcc-libs  glibc  libgit2  zlib  libgit2.so  libz.so=1-64
 Optional Deps   : None
 Required By     : None
 Optional For    : None
 Conflicts With  : exa
 Replaces        : exa
-Installed Size  : 1142.57 KiB
+Installed Size  : 1692.89 KiB
 Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Thu 25 Apr 2024 10:56:54 AM CDT
-Install Date    : Sun 28 Apr 2024 02:07:52 PM CDT
+Build Date      : Fri 03 May 2024 08:00:17 AM CDT
+Install Date    : Fri 03 May 2024 11:54:01 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -2072,8 +2072,8 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : gendesk
-Version         : 1.0.9-3
-Description     : Utility for generating desktop files
+Version         : 1.0.9-4
+Description     : Utility for generating desktop files by specifying a minimum of information
 Architecture    : x86_64
 URL             : https://gendesk.roboticoverlords.org/
 Licenses        : MIT
@@ -2085,10 +2085,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 6.40 MiB
-Packager        : Jelle van der Waa <jelle@archlinux.org>
-Build Date      : Sun 01 May 2022 07:25:41 AM CDT
-Install Date    : Mon 27 Feb 2023 08:58:29 AM CST
+Installed Size  : 7.08 MiB
+Packager        : Alexander F. Rødseth <xyproto@archlinux.org>
+Build Date      : Wed 01 May 2024 01:08:16 PM CDT
+Install Date    : Fri 03 May 2024 11:54:01 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -2116,11 +2116,11 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : gimp
-Version         : 2.10.36-6
+Version         : 2.10.38-1
 Description     : GNU Image Manipulation Program
 Architecture    : x86_64
 URL             : https://www.gimp.org/
-Licenses        : GPL  LGPL
+Licenses        : GPL-3.0-or-later
 Groups          : None
 Provides        : None
 Depends On      : babl  cairo  fontconfig  freetype2  gcc-libs  gdk-pixbuf2  gegl  glib2  glibc  gtk2  harfbuzz  hicolor-icon-theme  iso-codes  json-glib  lcms2  libgexiv2  libmypaint  libunwind  mypaint-brushes1  pango  zlib  bzip2  libgudev  libheif  libjpeg-turbo  libjxl  libmng  libpng  librsvg  libtiff  libwebp  libwmf  libx11  libxcursor  libxext  libxfixes  libxmu  libxpm  openexr  openjpeg2  poppler-data  poppler-glib  xz  aalib
@@ -2130,12 +2130,12 @@ Optional Deps   : alsa-lib: for MIDI event controller module [installed]
                   gvfs: for HTTP/S support (and many other schemes) [installed]
 Required By     : None
 Optional For    : libjxl
-Conflicts With  : gimp-plugin-wavelet-decompose
-Replaces        : gimp-plugin-wavelet-decompose
-Installed Size  : 112.23 MiB
+Conflicts With  : None
+Replaces        : None
+Installed Size  : 112.67 MiB
 Packager        : Christian Heusel <gromit@archlinux.org>
-Build Date      : Sun 07 Apr 2024 06:33:28 PM CDT
-Install Date    : Thu 11 Apr 2024 05:03:44 PM CDT
+Build Date      : Thu 02 May 2024 08:14:04 PM CDT
+Install Date    : Fri 03 May 2024 11:54:02 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : Yes
 Validated By    : Signature
@@ -3563,7 +3563,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : libreoffice-fresh
-Version         : 24.2.2-3
+Version         : 24.2.3-1
 Description     : LibreOffice branch which contains new features and program enhancements
 Architecture    : x86_64
 URL             : https://www.libreoffice.org/
@@ -3592,10 +3592,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : libreoffice-still
 Replaces        : None
-Installed Size  : 411.20 MiB
-Packager        : Antonio Rojas <arojas@archlinux.org>
-Build Date      : Fri 05 Apr 2024 03:34:19 PM CDT
-Install Date    : Sun 28 Apr 2024 02:07:59 PM CDT
+Installed Size  : 411.19 MiB
+Packager        : Andreas Radke <andyrtr@archlinux.org>
+Build Date      : Thu 02 May 2024 02:51:44 PM CDT
+Install Date    : Fri 03 May 2024 11:54:05 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -3645,7 +3645,7 @@ Install Script  : Yes
 Validated By    : Signature
 
 Name            : linux
-Version         : 6.8.8.arch1-1
+Version         : 6.8.9.arch1-1
 Description     : The Linux kernel and modules
 Architecture    : x86_64
 URL             : https://github.com/archlinux/linux
@@ -3659,10 +3659,10 @@ Required By     : virtualbox-guest-utils
 Optional For    : base  libratbag
 Conflicts With  : None
 Replaces        : virtualbox-guest-modules-arch  wireguard-arch
-Installed Size  : 132.33 MiB
+Installed Size  : 132.52 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Sun 28 Apr 2024 10:59:47 AM CDT
-Install Date    : Wed 01 May 2024 12:25:11 PM CDT
+Build Date      : Thu 02 May 2024 12:49:46 PM CDT
+Install Date    : Fri 03 May 2024 11:54:06 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -3690,7 +3690,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : linux-headers
-Version         : 6.8.8.arch1-1
+Version         : 6.8.9.arch1-1
 Description     : Headers and scripts for building modules for the Linux kernel
 Architecture    : x86_64
 URL             : https://github.com/archlinux/linux
@@ -3703,10 +3703,10 @@ Required By     : None
 Optional For    : dkms
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 127.87 MiB
+Installed Size  : 127.88 MiB
 Packager        : Jan Alexander Steffens (heftig) <heftig@archlinux.org>
-Build Date      : Sun 28 Apr 2024 10:59:47 AM CDT
-Install Date    : Wed 01 May 2024 12:25:14 PM CDT
+Build Date      : Thu 02 May 2024 12:49:46 PM CDT
+Install Date    : Fri 03 May 2024 11:54:09 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -4393,23 +4393,23 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : nano
-Version         : 7.2-1
+Version         : 8.0-1
 Description     : Pico editor clone with enhancements
 Architecture    : x86_64
 URL             : https://www.nano-editor.org
-Licenses        : GPL
+Licenses        : GPL-3.0-or-later
 Groups          : None
 Provides        : None
-Depends On      : ncurses  file  sh
+Depends On      : ncurses  file  glibc
 Optional Deps   : None
 Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 2.51 MiB
+Installed Size  : 2.54 MiB
 Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Wed 18 Jan 2023 07:50:34 AM CST
-Install Date    : Thu 19 Jan 2023 03:17:04 PM CST
+Build Date      : Wed 01 May 2024 10:29:49 AM CDT
+Install Date    : Fri 03 May 2024 11:54:10 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -4574,7 +4574,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : newsboat
-Version         : 2.35-3
+Version         : 2.35-4
 Description     : RSS/Atom feed reader for text terminals
 Architecture    : x86_64
 URL             : https://newsboat.org/
@@ -4591,10 +4591,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : newsbeuter
-Installed Size  : 8.67 MiB
+Installed Size  : 8.64 MiB
 Packager        : T.J. Townsend <blakkheim@archlinux.org>
-Build Date      : Tue 02 Apr 2024 01:46:53 PM CDT
-Install Date    : Fri 05 Apr 2024 05:19:12 PM CDT
+Build Date      : Thu 02 May 2024 04:37:04 PM CDT
+Install Date    : Fri 03 May 2024 11:54:10 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -4778,29 +4778,29 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : nvidia-dkms
-Version         : 550.76-3
+Version         : 550.78-1
 Description     : NVIDIA drivers - module sources
 Architecture    : x86_64
 URL             : http://www.nvidia.com/
 Licenses        : custom
 Groups          : None
 Provides        : NVIDIA-MODULE  nvidia
-Depends On      : dkms  nvidia-utils=550.76  libglvnd
+Depends On      : dkms  nvidia-utils=550.78  libglvnd
 Optional Deps   : None
 Required By     : None
 Optional For    : None
 Conflicts With  : NVIDIA-MODULE  nvidia
 Replaces        : None
-Installed Size  : 68.30 MiB
+Installed Size  : 68.31 MiB
 Packager        : Sven-Hendrik Haase <svenstaro@archlinux.org>
-Build Date      : Wed 24 Apr 2024 05:26:38 PM CDT
-Install Date    : Thu 25 Apr 2024 09:19:44 AM CDT
+Build Date      : Thu 02 May 2024 03:36:33 PM CDT
+Install Date    : Fri 03 May 2024 11:54:10 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
 
 Name            : nvidia-settings
-Version         : 550.67-1
+Version         : 550.78-1
 Description     : Tool for configuring the NVIDIA graphics driver
 Architecture    : x86_64
 URL             : https://github.com/NVIDIA/nvidia-settings
@@ -4813,16 +4813,16 @@ Required By     : None
 Optional For    : nvidia-utils
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 1510.39 KiB
+Installed Size  : 1510.42 KiB
 Packager        : Sven-Hendrik Haase <svenstaro@archlinux.org>
-Build Date      : Sun 24 Mar 2024 09:03:21 PM CDT
-Install Date    : Thu 28 Mar 2024 05:13:03 PM CDT
+Build Date      : Thu 02 May 2024 03:37:47 PM CDT
+Install Date    : Fri 03 May 2024 11:54:10 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
-Validated By    : SHA-256 Sum  Signature
+Validated By    : Signature
 
 Name            : obs-studio
-Version         : 30.1.1-2
+Version         : 30.1.2-1
 Description     : Free, open source software for live streaming and recording
 Architecture    : x86_64
 URL             : https://obsproject.com
@@ -4841,10 +4841,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 22.15 MiB
-Packager        : Jonathan Steel <jsteel@archlinux.org>
-Build Date      : Fri 05 Apr 2024 05:44:03 AM CDT
-Install Date    : Sun 28 Apr 2024 02:08:04 PM CDT
+Installed Size  : 22.11 MiB
+Packager        : Sven-Hendrik Haase <svenstaro@archlinux.org>
+Build Date      : Thu 02 May 2024 03:30:49 PM CDT
+Install Date    : Fri 03 May 2024 11:54:10 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -7394,7 +7394,7 @@ Install Script  : No
 Validated By    : Signature
 
 Name            : system-config-printer
-Version         : 1.5.18-3
+Version         : 1.5.18-4
 Description     : A CUPS printer configuration tool and status applet
 Architecture    : x86_64
 URL             : https://github.com/OpenPrinting/system-config-printer
@@ -7411,8 +7411,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 8.09 MiB
 Packager        : Andreas Radke <andyrtr@archlinux.org>
-Build Date      : Sun 07 Apr 2024 10:21:12 AM CDT
-Install Date    : Sun 28 Apr 2024 02:08:07 PM CDT
+Build Date      : Fri 03 May 2024 10:09:26 AM CDT
+Install Date    : Fri 03 May 2024 11:54:10 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -7574,7 +7574,7 @@ Install Script  : Yes
 Validated By    : None
 
 Name            : thunderbird
-Version         : 115.10.1-1
+Version         : 115.10.2-1
 Description     : Standalone mail and news reader from mozilla.org
 Architecture    : x86_64
 URL             : https://www.thunderbird.net/
@@ -7589,10 +7589,10 @@ Required By     : None
 Optional For    : None
 Conflicts With  : None
 Replaces        : None
-Installed Size  : 212.41 MiB
+Installed Size  : 212.04 MiB
 Packager        : Leonidas Spyropoulos <artafinde@archlinux.org>
-Build Date      : Thu 18 Apr 2024 05:39:08 PM CDT
-Install Date    : Thu 25 Apr 2024 09:19:45 AM CDT
+Build Date      : Thu 02 May 2024 09:40:38 AM CDT
+Install Date    : Fri 03 May 2024 11:54:11 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
@@ -7622,7 +7622,7 @@ Install Script  : Yes
 Validated By    : Signature
 
 Name            : tk
-Version         : 8.6.14-2
+Version         : 8.6.14-3
 Description     : A windowing toolkit for use with tcl
 Architecture    : x86_64
 URL             : http://tcl.sourceforge.net/
@@ -7637,8 +7637,8 @@ Conflicts With  : None
 Replaces        : None
 Installed Size  : 12.17 MiB
 Packager        : Caleb Maclennan <alerque@archlinux.org>
-Build Date      : Mon 18 Mar 2024 03:40:17 PM CDT
-Install Date    : Tue 19 Mar 2024 10:06:44 AM CDT
+Build Date      : Thu 02 May 2024 01:39:53 AM CDT
+Install Date    : Fri 03 May 2024 11:54:11 AM CDT
 Install Reason  : Explicitly installed
 Install Script  : No
 Validated By    : Signature
