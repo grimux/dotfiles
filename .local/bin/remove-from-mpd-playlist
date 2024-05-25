@@ -1,0 +1,249 @@
+#!/usr/bin/env bash
+#
+# A script to remove the currently playing track in mpd from the corresponding playlist.
+#
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+
+### Config ###
+mpc_search_format="--format=\"%title%\""
+
+
+######################
+### Initialization ###
+######################
+#
+# Create and array of playlist names using `mpc`.
+readarray -t playlists_array < <(mpc lsplaylists)
+# The total amount of playlists.
+total_playlists="${#playlists_array[@]}"
+# Hash of currently playing queue.
+current_queue_hash="$(mpc --format="%file%" playlist | md5sum | awk '{print $1}')"
+
+
+#################
+### Functions ###
+#################
+#
+# Get arguments and set flags
+function get_arguments() {
+	while getopts ":h" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Help section
+			h) help_section; exit ;;
+
+			# What to do if the argument is missing.
+			:) echo "Missing argument"; help_section; exit 1 ;;
+
+			# Catchall.  If command is not recognized.
+			*) usage; exit 1
+		esac
+	done
+}
+
+# Help Section
+function help_section() {
+	echo "A short description of script"
+	echo
+	echo "Syntax: $(basename $0) (options) [-n] <playlist name> [-d] <video directory>"
+	echo "options:"
+	# Space offset: 19
+	echo "h			  : Print this help screen."
+	echo "r <playlist name>   : Remove playlist."
+	echo "a			  : Append to playlist."
+	echo
+	echo "arguments:"
+	echo "n			  : Name of the playlist to create (m3u)."
+	echo "d			  : Directory of video files (mkv)."
+}
+
+# Get the name of the current playlist.
+# It does this by matching the current queue's hash against the hashes of all playlist files.
+function get_playlist_name() {
+	local playlist_index=1
+	local playlist_hash
+
+
+	mpc lsplaylist | while read line
+	do
+		playlist_index="$(mpc --format="%file%" playlist $line | md5sum)"
+
+		if [ "$playlist_index" = "$current_queue" ]; then
+			#echo "Current playlist is $line"
+			echo "$line"
+			exit
+		fi
+
+	done
+}
+
+# A new variation of the previous function.
+# Get the name of the current playlist.
+# It does this by matching the current queue's hash against the hashes of all playlist files.
+function get_playlist_name_new() {
+	declare -i playlist_index=0
+	declare -i total_playlists_by_index=$(($total_playlists - 1))
+	local playlist_hash
+	local playlist_name
+
+	# Loop through playlist array and perform a hash check of the file.
+	for playlist_name in "${playlists_array[@]}"; do
+		# Hash for the provided playlist argument.
+		playlist_hash="$(mpc --format="%file%" playlist "${playlists_array[$playlist_index]}" | md5sum | awk '{print $1}')"
+
+		# If the hash matches the current queue, it is considered the playlist.
+		if [ "$current_queue_hash" = "$playlist_hash" ]; then
+			# Return playlist name.
+			echo "$playlist_name"
+			exit
+		# If there is no match, `playlist_name` will be returned as "null".
+		elif [ "$playlist_index" -eq "$total_playlists_by_index" ]; then
+			# Return null.
+			echo "null"
+		fi
+
+		# Increment index counter by 1.
+		playlist_index+=1
+	done
+}
+
+# Remove the track from the playlist and queue.
+function delete_song_from_playlist() {
+	local playlist
+	local position
+
+	playlist="$1"
+	position="$2"
+
+	# Remove song from playlist by its position.
+	mpc delplaylist $playlist $position
+
+	# Also remove the song from the current queue.
+	mpc del 0
+
+	# Message output (for testing).
+	#echo "Dry-run. Nothing will be deleted."
+}
+
+function check_playlist() {
+	local playlist_name
+	local queue_hash
+
+	playlist_name="${null:-$1}"
+	queue_hash="$(mpc --format=%title% playlist | md5sum)"
+	queue_hash=${queue_hash::-2}
+
+}
+
+# Prints out information about the track to be deleted.
+# The variables are inherited through the `main` or `testing` functions.
+function print_track_info() {
+	echo "--- Track Information ---"
+	echo "playlist: $playlist_name"
+	echo "song name: $song_name"
+	echo "position: $song_position"
+	echo "-------------------------"
+	echo
+
+}
+
+# Prompt for yes or no to continue with the operation.
+# Uses return value.  0 is yes, 1 is no.
+function yes_or_no() {
+	local choice
+	local prompt="$1"
+
+	while true; do
+		read -p "$prompt (y/n): " choice
+		case $choice in
+			[Yy]*) return 0;;
+			[Nn]*) return 1;;
+		esac
+	done
+}
+
+
+###############
+### Testing ###
+###############
+function testing() {
+	local playlist_name
+	local song_name
+	local song_position
+
+	# Ensure that the song dosen't change before it gets deleted.
+	mpc single 1 > /dev/null
+
+	#playlist_name="${null:-$1}"
+	playlist_name="$(get_playlist_name_new)"
+	song_position="$(mpc --format=%position% current)"
+	song_name="$(mpc --format=%title% current)"
+
+	# Check if the playlist actually exists.
+	# `playlist_name` will be set to "null" by the `get_playlist_name` function if there are no matches.
+	if [ "$playlist_name" == "null" ]; then
+		echo "Current queue does not match any playlist."
+		exit 1
+	fi
+
+	# Show some information about the track to be deleted.
+	print_track_info
+
+	# Prompt to continue with the deletion.
+	if yes_or_no "Would you like to remove the song?"; then
+		delete_song_from_playlist "$playlist_name" "$song_position"
+		echo "Track removed."
+	else
+		echo "Cancelled."
+	fi
+
+
+	# Disable single mode once deleted.
+	mpc single 0 > /dev/null
+}
+
+
+############
+### Main ###
+############
+function main() {
+	local playlist_name
+	local song_name
+	local song_position
+
+	#playlist_name="${null:-$1}"
+	playlist_name="$(get_playlist_name)"
+	song_position="$(mpc --format=%position% current)"
+	song_name="$(mpc --format=%title% current)"
+
+	#get_playlist_name
+	#check_playlist "game_chill"
+	echo "playlist: $playlist_name"
+	echo "song name: $song_name"
+	echo "position: $song_position"
+
+	if yes_or_no "Would you like to remove the song?"; then
+		delete_song_from_playlist "$playlist_name" "$song_position"
+	else
+		echo "Cancelled."
+	fi
+}
+
+
+#############
+### Start ###
+#############
+#main
+testing
