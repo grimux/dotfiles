@@ -3,6 +3,16 @@
 # A script to remove the currently playing track in mpd from the corresponding playlist.
 #
 
+############
+### TODO ###
+############
+#
+# - Add more comments.
+# - Decide on a function to use for getting the playlist name, there are three right now.
+#
+###########
+
+
 ###################
 ### Fail Events ###
 ###################
@@ -13,9 +23,8 @@
 #
 #set -euox pipefail
 set -euo pipefail
-
-### Config ###
-mpc_search_format="--format=\"%title%\""
+#
+###################
 
 
 ######################
@@ -28,11 +37,19 @@ readarray -t playlists_array < <(mpc lsplaylists)
 total_playlists="${#playlists_array[@]}"
 # Hash of currently playing queue.
 current_queue_hash="$(mpc --format="%file%" playlist | md5sum | awk '{print $1}')"
+# Check the current status of mpd.
+mpd_status=$(mpc status | grep -e paused -e playing) || mpd_status="Stopped"
 
+# If mpd is stopped, exit the script to avoid bugs.
+if [ "$mpd_status" == "Stopped" ]; then
+	echo "MPD is currently stopped."
+	echo "Nothing to do.  Exiting."
+	exit 1
+fi
 
-#################
-### Functions ###
-#################
+##################################
+### Arguments, Help, and Usage ###
+##################################
 #
 # Get arguments and set flags
 function get_arguments() {
@@ -55,20 +72,19 @@ function get_arguments() {
 
 # Help Section
 function help_section() {
-	echo "A short description of script"
+	echo "Remove the currently playing track in mpd from the queue and matching playlist."
 	echo
-	echo "Syntax: $(basename $0) (options) [-n] <playlist name> [-d] <video directory>"
+	echo "Syntax: $(basename $0) (options)"
 	echo "options:"
 	# Space offset: 19
 	echo "h			  : Print this help screen."
-	echo "r <playlist name>   : Remove playlist."
-	echo "a			  : Append to playlist."
-	echo
-	echo "arguments:"
-	echo "n			  : Name of the playlist to create (m3u)."
-	echo "d			  : Directory of video files (mkv)."
 }
 
+
+#################
+### Functions ###
+#################
+#
 # Get the name of the current playlist.
 # It does this by matching the current queue's hash against the hashes of all playlist files.
 function get_playlist_name() {
@@ -89,36 +105,6 @@ function get_playlist_name() {
 	done
 }
 
-# A new variation of the previous function.
-# Get the name of the current playlist.
-# It does this by matching the current queue's hash against the hashes of all playlist files.
-function get_playlist_name_new() {
-	declare -i playlist_index=0
-	declare -i total_playlists_by_index=$(($total_playlists - 1))
-	local playlist_hash
-	local playlist_name
-
-	# Loop through playlist array and perform a hash check of the file.
-	for playlist_name in "${playlists_array[@]}"; do
-		# Hash for the provided playlist argument.
-		playlist_hash="$(mpc --format="%file%" playlist "${playlists_array[$playlist_index]}" | md5sum | awk '{print $1}')"
-
-		# If the hash matches the current queue, it is considered the playlist.
-		if [ "$current_queue_hash" = "$playlist_hash" ]; then
-			# Return playlist name.
-			echo "$playlist_name"
-			exit
-		# If there is no match, `playlist_name` will be returned as "null".
-		elif [ "$playlist_index" -eq "$total_playlists_by_index" ]; then
-			# Return null.
-			echo "null"
-		fi
-
-		# Increment index counter by 1.
-		playlist_index+=1
-	done
-}
-
 # Remove the track from the playlist and queue.
 function delete_song_from_playlist() {
 	local playlist
@@ -132,9 +118,6 @@ function delete_song_from_playlist() {
 
 	# Also remove the song from the current queue.
 	mpc del 0
-
-	# Message output (for testing).
-	#echo "Dry-run. Nothing will be deleted."
 }
 
 function check_playlist() {
@@ -175,10 +158,98 @@ function yes_or_no() {
 }
 
 
+#########################
+### Testing Functions ###
+#########################
+#
+function test_delete() {
+	local playlist
+	local position
+
+	playlist="$1"
+	position="$2"
+
+	# Message output (for testing).
+	echo "Dry-run. Nothing will be deleted."
+}
+
+
+# A new variation of the previous function.
+# Get the name of the current playlist.
+# It does this by matching the current queue's hash against the hashes of all playlist files.
+function get_playlist_name_rev1() {
+	declare -i playlist_index=0
+	declare -i total_playlists_by_index=$(($total_playlists - 1))
+	local playlist_hash
+	local playlist_name
+
+	# Loop through playlist array and perform a hash check of the file.
+	for playlist_name in "${playlists_array[@]}"; do
+		# Hash for the provided playlist argument.
+		playlist_hash="$(mpc --format="%file%" playlist "${playlists_array[$playlist_index]}" | md5sum | awk '{print $1}')"
+
+		# If the hash matches the current queue, it is considered the playlist.
+		if [ "$current_queue_hash" = "$playlist_hash" ]; then
+			# Return playlist name.
+			echo "$playlist_name"
+			exit
+		# If there is no match, `playlist_name` will be returned as "null".
+		elif [ "$playlist_index" -eq "$total_playlists_by_index" ]; then
+			# Return null.
+			echo "null"
+		fi
+
+		# Increment index counter by 1.
+		playlist_index+=1
+	done
+}
+
+# Another variation to get the playlist name.  This one uses a `for` loop to go through the array.
+# If no match is found, returns "null" as the result.
+function get_playlist_name_rev2() {
+	#declare -i playlist_index=0
+	declare -i playlist_index
+	local playlist_hash
+	local playlist_name
+
+	# Loop through playlist array and perform a hash check of the file.
+	for (( playlist_index=0; playlist_index<$total_playlists; playlist_index++ )); do
+		# Hash for the provided playlist argument.
+		playlist_hash="$(mpc --format="%file%" playlist "${playlists_array[$playlist_index]}" | md5sum | awk '{print $1}')"
+
+		# If the hash matches the current queue, it is considered the playlist.
+		if [ "$current_queue_hash" = "$playlist_hash" ]; then
+			# Return playlist name.
+			playlist_name="${playlists_array[$playlist_index]}"
+			break
+		else
+			playlist_name="null"
+		fi
+
+	done
+
+	# Return result.
+	echo "$playlist_name"
+}
+
+
+
 ###############
 ### Testing ###
 ###############
 function testing() {
+	set -euox pipefail
+	local some_var
+}
+
+############
+### Main ###
+############
+function main() {
+	# Set bash debug mode.
+	#set -euox pipefail
+
+	# Local variables.
 	local playlist_name
 	local song_name
 	local song_position
@@ -187,7 +258,7 @@ function testing() {
 	mpc single 1 > /dev/null
 
 	#playlist_name="${null:-$1}"
-	playlist_name="$(get_playlist_name_new)"
+	playlist_name="$(get_playlist_name_rev2)"	# Currently testing out the different playlist functions.
 	song_position="$(mpc --format=%position% current)"
 	song_name="$(mpc --format=%title% current)"
 
@@ -203,22 +274,27 @@ function testing() {
 
 	# Prompt to continue with the deletion.
 	if yes_or_no "Would you like to remove the song?"; then
+		# Disable single mode right before deletion.  Avoids mpd stopping when the currently playing song is removed when using single mode.
+		mpc single 0 > /dev/null
+
+		# Delete from playlist by track position.
 		delete_song_from_playlist "$playlist_name" "$song_position"
+
+		# Test deletion.
+		#test_delete "$playlist_name" "$song_position"
+
+		# Output message.
 		echo "Track removed."
+
+	# If the choice is cancelled.
 	else
+		# Output message when cancelled.
 		echo "Cancelled."
 	fi
-
-
-	# Disable single mode once deleted.
-	mpc single 0 > /dev/null
 }
 
-
-############
-### Main ###
-############
-function main() {
+# Old main function.
+function main_old() {
 	local playlist_name
 	local song_name
 	local song_position
@@ -245,5 +321,6 @@ function main() {
 #############
 ### Start ###
 #############
-#main
-testing
+get_arguments "$@"
+main
+#testing
