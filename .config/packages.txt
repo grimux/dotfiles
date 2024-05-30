@@ -58,7 +58,6 @@ dosfstools
 downgrade
 dracula-cursors-git
 dracula-gtk-theme
-duckstation-git
 dunst
 dwarfs
 dxvk-bin
@@ -83,18 +82,21 @@ fuse2
 fuse3
 fuseiso
 fzf
+game-devices-udev
 gameconqueror
 gamemode
 gcc
 gdrive
 genact
 gendesk
+gerbera
 ghostscript
 gimp
 git
 gnome-font-viewer
 gnu-free-fonts
 gnucash
+go
 goverlay
 gparted
 gptfdisk
@@ -149,7 +151,6 @@ lib32-mangohud-git
 lib32-mpg123
 lib32-sdl2_mixer
 lib32-v4l-utils
-libff7tk-git
 libnewt
 libreoffice-fresh
 libtool
@@ -183,7 +184,8 @@ mkvtoolnix-cli
 mkvtoolnix-gui
 mpc
 mpd
-mpdris2-git
+mpd-mpris
+mpd-notification
 mpv
 mtpfs
 mupen64plus
@@ -231,7 +233,6 @@ pcsx2-git
 perl-image-exiftool
 perl-rename
 pev
-phantomjs
 picom
 piper
 pkgconf
@@ -240,6 +241,7 @@ playerctl
 plocate
 polymc
 postfix
+powerkit-git
 powerline-fonts
 ppsspp
 progress
@@ -272,6 +274,7 @@ python-pynvim
 qalculate-gtk
 qbittorrent
 qt5-styleplugins
+qt6gtk2
 qtpass
 quakespasm
 ranger
@@ -307,6 +310,7 @@ soundfont-fluid
 speech-dispatcher
 speedtest-cli
 sqlitebrowser
+sshpass
 starship
 steam
 steam-metadata-editor-git
@@ -349,12 +353,11 @@ ueberzug
 ums
 unrar
 update-grub
-upower
 usbutils
 vde2
+vi
 vim
 virtualbox
-virtualbox-ext-oracle
 virtualbox-guest-utils
 viu
 vkd3d
@@ -366,7 +369,6 @@ wine-gecko
 wine-mono
 wine-staging
 winetricks
-wkhtmltopdf
 wmctrl
 words
 xcb-util-errors
