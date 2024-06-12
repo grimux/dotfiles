@@ -6,4 +6,5 @@
 --add-metadata
 --embed-thumbnail
 --embed-subs
+--no-playlist
 --merge-output-format mkv
