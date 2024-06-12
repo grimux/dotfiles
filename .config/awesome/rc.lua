@@ -121,6 +121,13 @@ local music        = os.getenv("MUSIC") or "vlc"
 local termfile     = terminal .. " --class ranger --title ranger -e ranger"
 local filemanager  = os.getenv("FILE") or "pcmanfm-qt"
 
+-- Music control
+local music_toggle = "mpc toggle"
+local music_play   = "mpc play"
+local music_stop   = "mpc stop"
+local music_next   = "mpc next"
+local music_prev   = "mpc prev"
+
 awful.util.terminal = terminal
 --awful.util.tagnames = { "term", "www", "file", "email", "torr", "chat", "mus", "vid", "gfx" }
 awful.util.tagnames = { "term", "www", "file", "chat", "torr", "doc", "mus", "vid", "gfx" }
@@ -539,13 +546,13 @@ globalkeys = mytable.join(
 
    -- Media Keys
    awful.key({}, "XF86AudioPlay", function()
-     awful.util.spawn("playerctl play-pause", false) end),
+     awful.util.spawn(music_toggle, false) end),
    awful.key({}, "XF86AudioStop", function()
-     awful.util.spawn("playerctl stop", false) end),
+     awful.util.spawn(music_stop, false) end),
    awful.key({}, "XF86AudioNext", function()
-     awful.util.spawn("playerctl next", false) end),
+     awful.util.spawn(music_next, false) end),
    awful.key({}, "XF86AudioPrev", function()
-     awful.util.spawn("playerctl previous", false) end),
+     awful.util.spawn(music_prev, false) end),
 
    -- Volume Keys
    awful.key({}, "XF86AudioMute", function()
@@ -751,6 +758,7 @@ awful.rules.rules = {
           "Arandr",
           "Blueman-manager",
           "Caffeine",
+          "file-roller",
           "fury.bin",
           "Gpick",
           "Gzdoom",
@@ -760,7 +768,7 @@ awful.rules.rules = {
           "org-gdstash-ui-GDStashFrame", -- GDStash for Grim Dawn
           "java.*", -- Any java application
           "PolyMC", --
-          "Pavucontrol",
+          "pavucontrol",
           ".*exe",  -- Automatically float any window that containes "exe".  This works for most games or applications run through wine.
           "Raze",  -- The Raze sourceport.
           "SGDBoop",
