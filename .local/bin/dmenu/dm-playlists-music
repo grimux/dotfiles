@@ -132,6 +132,9 @@ load_mpc() {
 	# Enable repeat mode.
 	mpc repeat on > /dev/null
 
+	# Ensure single mode is off.
+	mpc single off > /dev/null
+
 	# Load the playlist
 	mpc load "$playlist_name"
 
@@ -170,6 +173,9 @@ load_mpc_new() {
 
 	# Enable repeat mode.
 	mpc repeat on > /dev/null
+
+	# Ensure single mode is off.
+	mpc single off > /dev/null
 
 	# Load the playlist
 	mpc load "$playlist_name"
