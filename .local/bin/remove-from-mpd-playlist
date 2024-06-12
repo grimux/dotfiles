@@ -290,6 +290,7 @@ function main() {
 	else
 		# Output message when cancelled.
 		echo "Cancelled."
+		mpc single 0 > /dev/null
 	fi
 }
 
