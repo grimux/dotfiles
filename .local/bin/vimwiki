@@ -1,0 +1,197 @@
+#!/usr/bin/env bash
+#
+####################
+#
+# Name:		vimwiki wrapper
+# Author:	Jake
+# Description:	A simple wrapper script to use vimwiki.  It can also create pdfs
+#		and generate the html webpage.
+#
+####################
+
+
+############
+### TODO ###
+############
+#
+# - Add more comments.
+#
+############
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+#
+###################
+
+
+##############
+### Config ###
+##############
+#
+vimwiki_directory="/mnt/s/documents/vimwiki"
+vimwiki_diary_index="$vimwiki_directory/diary/diary.md"
+vimwiki_diary_header="$vimwiki_directory/templates/diary_header.txt"
+
+vimwiki_message_timeout=3
+
+run_all_operations=0
+
+##################################
+### Arguments, Help, and Usage ###
+##################################
+#
+# Get arguments and set flags
+function get_arguments() {
+	while getopts ":ah" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Run all operations once finished in vimwiki.
+			a) run_all_operations=1;;
+
+			# Help section
+			h) help_section; exit ;;
+
+			# What to do if the argument is missing.
+			:) echo "Missing argument"; help_section; exit 1 ;;
+
+			# Catchall.  If command is not recognized.
+			*) usage; exit 1
+		esac
+	done
+}
+
+# Help Section
+function help_section() {
+	echo "A short description of script"
+	echo
+	echo "Syntax: $(basename $0) (options) <arguments>"
+	echo "options:"
+	# Space offset: 19
+	echo "h                   : Print this help screen."
+	echo
+	echo "commands:"
+	echo "git <argument>      : Run the specified git operation."
+	echo "make <argument>     : Run `make` for vimwiki.  Produces pdf files."
+	echo "html                : Generate html web pages."
+}
+
+# How to use the script.
+function usage() {
+	echo "$(basename $0) (options)"
+}
+
+
+#################
+### Functions ###
+#################
+#
+function vimwiki_make() {
+	local make_arguments="$@"
+	echo "Running make..."
+	make -C "$vimwiki_directory" "$make_arguments"
+	echo "Done."
+}
+
+function vimwiki_generate_html() {
+	echo "Generating HTML..."
+	#nvim -c "VimwikiIndex" -c "VimwikiAll2HTML" -c "sleep $vimwiki_message_timeout" -c "quit"
+	nvim -c "VimwikiIndex" -c "VimwikiAll2HTML" -c "quit"
+	echo "Done."
+}
+
+function vimwiki_generate_diary_index() {
+	echo "Generating diary index..."
+
+	nvim -c "VimwikiDiaryIndex" -c "VimwikiDiaryGenerateLinks" -c "quit"
+	#nvim -es "VimwikiDiaryIndex" -es "VimwikiDiaryGenerateLinks" -es "quit"
+
+	echo "Done."
+
+	echo "Inserting diary header..."
+
+	sed -i -e "2r $vimwiki_diary_header" "$vimwiki_diary_index"
+
+	echo "Done."
+
+}
+
+function vimwiki_diary() {
+	nvim -c "VimwikiMakeDiaryNote"
+}
+
+function vimwiki_git() {
+	local git_arguments="$@"
+	git -C "$vimwiki_directory" "$git_arguments"
+}
+
+function vimwiki_run_all() {
+	vimwiki_generate_diary_index
+	vimwiki_generate_html
+	vimwiki_make
+}
+
+
+#########################
+### Testing Functions ###
+#########################
+#
+
+
+
+###############
+### Testing ###
+###############
+#
+function testing() {
+	local some_variable
+}
+
+
+############
+### Main ###
+############
+#
+function main() {
+	local user_input
+
+	user_input="${1:-null}"
+
+	case "$user_input" in
+		"all")
+			vimwiki_run_all;;
+		"make")
+			vimwiki_make "${@:2}";;
+		"html")
+			vimwiki_generate_diary_index
+			vimwiki_generate_html;;
+		"git")
+			vimwiki_git "${@:2}";;
+		"diary")
+			vimwiki_diary
+			#vimwiki_generate_diary_index
+			#vimwiki_generate_html
+			#vimwiki_make
+			;;
+		"null") nvim -c "VimwikiIndex";;
+		*) echo "Invalid command: $user_input"; usage; exit 1;;
+	esac
+}
+
+
+#############
+### Start ###
+#############
+get_arguments "$@"
+shift "$((OPTIND-1))"
+#testing "$@"
+main "$@"
