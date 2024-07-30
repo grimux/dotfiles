@@ -17,6 +17,7 @@ base
 base-devel
 bash-completion
 bchunk
+bfg
 bind
 bison
 blackchocobo
@@ -55,6 +56,7 @@ dnsmasq
 dolphin-emu
 doom64ex-git
 dosfstools
+dotnet-runtime-6.0
 downgrade
 dracula-cursors-git
 dracula-gtk-theme
@@ -68,6 +70,7 @@ evtest
 exfat-utils
 extundelete
 eza
+fd
 feh
 file-roller
 filezilla
@@ -93,12 +96,15 @@ gerbera
 ghostscript
 gimp
 git
+gmtp
+gnome-disk-utility
 gnome-font-viewer
 gnu-free-fonts
 gnucash
 go
 goverlay
 gparted
+gpg-tui
 gptfdisk
 groff
 grsync
@@ -184,7 +190,6 @@ mkvtoolnix-cli
 mkvtoolnix-gui
 mpc
 mpd
-mpd-mpris
 mpd-notification
 mpv
 mtpfs
@@ -249,7 +254,6 @@ protobuf
 protonhax
 protontricks
 protonup-git
-protonup-qt
 ps3iso-utils-git
 puddletag-git
 pulseaudio
@@ -265,6 +269,7 @@ python-hid
 python-httplib2
 python-internetarchive
 python-mako
+python-mpd2
 python-mutagen
 python-oauth2client
 python-pathvalidate
@@ -282,8 +287,8 @@ raze
 rbdoom-3-bfg
 rclone
 redshift
+ripgrep
 rmg
-rpcs3-git
 rsync
 ruby
 rvm
@@ -317,7 +322,6 @@ steam-metadata-editor-git
 steamcmd
 strace
 subdl
-subliminal
 sudo
 sxiv
 sysstat
@@ -349,7 +353,7 @@ ttf-mononoki-nerd
 ttf-ms-win10-auto
 ttf-noto-nerd
 ttf-ubuntu-font-family
-ueberzug
+ueberzugpp
 ums
 unrar
 update-grub
@@ -369,6 +373,7 @@ wine-gecko
 wine-mono
 wine-staging
 winetricks
+wkhtmltopdf
 wmctrl
 words
 xcb-util-errors
@@ -459,10 +464,12 @@ xtrlock
 yad
 yay
 yaycache
+yazi
 yt-dlp
 zathura
 zathura-pdf-mupdf
 zenity
+zoxide
 zpaq
 zsh
 zsh-fast-syntax-highlighting-git
