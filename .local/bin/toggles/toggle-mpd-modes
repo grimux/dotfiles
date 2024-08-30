@@ -1,0 +1,220 @@
+#!/usr/bin/env bash
+#
+####################
+#
+# Name: Toggle mpd repeate, random, and single modes.
+# Author: Jake
+# Description: Toggle mpd's various modes.  Usefull to bind the script to keyboard shortcuts to allow
+#              changing of the modes quickly from the keyboard.
+#
+####################
+
+
+############
+### TODO ###
+############
+#
+# - Add more comments.
+#
+############
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+#
+###################
+
+
+##############
+### Config ###
+##############
+#
+user_input=""
+
+######################
+### Initialization ###
+######################
+#
+# Searches the output of `mpc status` for the word next to "single:".  Will be either "on" or "off".
+# Taken from: https://www.golinuxcloud.com/print-next-word-after-pattern-match-linux/
+repeat_mode_status="$(mpc status | grep --only-matching --perl-regexp 'repeat:\s\K\w+')"
+random_mode_status="$(mpc status | grep --only-matching --perl-regexp 'random:\s\K\w+')"
+single_mode_status="$(mpc status | grep --only-matching --perl-regexp 'single:\s\K\w+')"
+
+
+##################################
+### Arguments, Help, and Usage ###
+##################################
+#
+# Get arguments and set flags
+function get_arguments() {
+	while getopts ":ht:rzs" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Help section
+			h) help_section; exit ;;
+
+			# Toggle mode.
+			t) user_input="${OPTARG}";;
+
+			# Toggle repeat mode.
+			r) toggle_repeat_mode; exit;;
+
+			# Toggle random mode.
+			z) toggle_random_mode; exit;;
+
+			# Toggle single mode.
+			s) toggle_single_mode; exit;;
+
+			# What to do if the argument is missing.
+			:) echo "Missing argument"; help_section; exit 1 ;;
+
+			# Catchall.  If command is not recognized.
+			*) usage; exit 1
+		esac
+	done
+}
+
+# Help Section
+function help_section() {
+	echo "Toggle mpd modes."
+	echo
+	echo "Syntax: $(basename $0) (options) <arguments>"
+	echo "options:"
+	# Space offset: 19
+	echo "h                   : Print this help screen."
+	echo "t <mode>            : Toggle given mode."
+	echo "r                   : Toggle repeat mode."
+	echo "z                   : Toggle random mode."
+	echo "s                   : Toggle single mode."
+	echo
+	echo "arguments:"
+	echo "t                   : repeat, random, single."
+}
+
+# How to use the script.
+function usage() {
+	echo "$(basename $0) (options)"
+}
+
+
+#################
+### Functions ###
+#################
+#
+function single_mode_enable() {
+	mpc single on > /dev/null
+	echo "Single mode: ON"
+	notify-send "mpc" "Single mode: ON"
+}
+
+function single_mode_disable() {
+	echo "Disabling single mode for mpd."
+	mpc single off > /dev/null
+	notify-send "mpc" "Single mode: OFF"
+}
+
+function repeat_mode_enable() {
+	mpc repeat on
+}
+
+function repeat_mode_disable() {
+	mpc repeat off
+}
+
+function random_mode_enable() {
+	mpc random on
+}
+
+
+# Toggles #
+
+function toggle_repeat_mode() {
+	local status="$repeat_mode_status"
+	local message terminal
+
+	case "$status" in
+		"on") mpc repeat off; message="Repeat mode: OFF"; terminal="Turing repeat mode off...";;
+		"off") mpc repeat on; message="Repeat mode: ON"; terminal="Turing repeat mode on...";;
+	esac
+
+	echo "$terminal"
+	notify-send "mpc" "$message"
+}
+
+function toggle_random_mode() {
+	local status="$random_mode_status"
+	local message terminal
+
+	case "$status" in
+		"on") mpc random off; message="Random mode: OFF"; terminal="Turing random mode off...";;
+		"off") mpc random on; message="Random mode: ON"; terminal="Turing random mode on...";;
+	esac
+
+	echo "$terminal"
+	notify-send "mpc" "$message"
+}
+
+
+function toggle_single_mode() {
+	local status="$single_mode_status"
+	local message terminal
+
+	case "$status" in
+		"on") mpc single off; message="Single mode: OFF"; terminal="Turing single mode off...";;
+		"off") mpc single on; message="Single mode: ON"; terminal="Turing single mode on...";;
+	esac
+
+	echo "$terminal"
+	notify-send "mpc" "$message"
+}
+
+#########################
+### Testing Functions ###
+#########################
+#
+
+
+
+###############
+### Testing ###
+###############
+#
+function testing() {
+	local some_variable
+}
+
+
+############
+### Main ###
+############
+#
+function main() {
+	get_arguments "$@"
+
+	local user_command="$user_input"
+
+	case "$user_command" in
+		"repeat") toggle_repeat_mode;;
+		"random") toggle_random_mode;;
+		"single") toggle_single_mode;;
+		"") echo "No command given!"; help_section; exit 1;;
+		*) echo "Unknow option: $user_command"; exit 1;;
+	esac
+}
+
+
+#############
+### Start ###
+#############
+#testing "$@"
+main "$@"
