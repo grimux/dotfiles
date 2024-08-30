@@ -29,6 +29,7 @@ bluez-libs
 bluez-utils
 boost
 brave-bin
+brn-git
 browserpass
 btrfs-progs
 buildgdx
@@ -190,7 +191,6 @@ mkvtoolnix-cli
 mkvtoolnix-gui
 mpc
 mpd
-mpd-notification
 mpv
 mtpfs
 mupen64plus
@@ -254,6 +254,7 @@ protobuf
 protonhax
 protontricks
 protonup-git
+protonup-qt
 ps3iso-utils-git
 puddletag-git
 pulseaudio
@@ -312,6 +313,7 @@ soh-otr-gc_mq_d
 soh-otr-gc_nmq_d
 solaar
 soundfont-fluid
+source-highlight
 speech-dispatcher
 speedtest-cli
 sqlitebrowser
