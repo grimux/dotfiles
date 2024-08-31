@@ -28,6 +28,7 @@ Plug 'chrisbra/unicode.vim'
 Plug 'bling/vim-bufferline'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'freitass/todo.txt-vim'
 call plug#end()
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -85,6 +86,7 @@ set mouse=a
 set pastetoggle=<F8>
 set splitbelow splitright
 let mapleader = ","
+let maplocalleader = "t"
 set wildmode=longest,list,full
 autocmd FileType markdown set linebreak
 set autochdir
@@ -124,7 +126,8 @@ map <leader>o :call SpellCheck()<CR>
 "map <leader>s :call ReSpell()<CR>
 map <F2> :setlocal spell \| call feedkeys("]s") \| :call feedkeys("z=")<CR>
 
-nmap <leader>w :SudaWrite<CR>
+nmap <leader>w :write
+nmap <leader>sw :SudaWrite
 
 " Easily disable highlighting
 map <leader>nh :nohlsearch<CR>
@@ -197,6 +200,8 @@ map <leader>br :BraceyReload<CR>
 " Vim-Bufferline
 let g:bufferline_echo = 0
 
+" Todo.txt completed file.
+let g:todo_done_filename = 'todo.archive.txt'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Functions
@@ -283,6 +288,11 @@ com! ShowMaps call s:ShowMaps()      " Enable :ShowMaps to call the function
 
 nnoremap \m :ShowMaps<CR>	     " Map keys to call the function
 
+" Format XML files
+com! FormatXML :%!python3 -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"
+
+nnoremap = :FormatXML<Cr>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "--- Auto-Functions
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -341,6 +351,7 @@ let vimwiki_jake.syntax = 'markdown'
 let vimwiki_jake.ext = '.md'
 let vimwiki_jake.custom_wiki2html = 'vimwiki_markdown'
 let vimwiki_jake.html_filename_parameterization = 1
+let vimwiki_jake.diary_header = "Jake's Diary"
 let g:vimwiki_list = [vimwiki_jake]
 let g:vimwiki_global_ext = 0
 
