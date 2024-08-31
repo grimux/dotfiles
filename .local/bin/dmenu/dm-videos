@@ -76,6 +76,11 @@ function get_arguments() {
 			readarray -t video_names < <(basename --multiple "${video_files[@]}")
 			;;
 
+			t) music_videos_only=1
+			readarray -d '' video_files < <(find "$video_base_dir/music-videos" '(' -iname '*.mkv' -o -iname '*.mp4' ')' -print0)
+			readarray -t video_names < <(basename --multiple "${video_files[@]}")
+			;;
+
 			# Save playlist position on exit.
 			w) watch_later=1; mpv_args+=(--save-position-on-quit); echo "Watch later mode: ON";;
 
