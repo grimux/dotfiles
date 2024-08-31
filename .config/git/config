@@ -1,5 +1,6 @@
 [user]
 	name = grimux
 	email = jakerm13@gmail.com
+	signingkey = 97AE0D2F6BD2EEF2
 [protocol "file"]
 	allow = always
