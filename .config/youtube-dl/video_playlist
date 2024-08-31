@@ -6,3 +6,4 @@
 --embed-thumbnail
 --embed-subs
 --merge-output-format mkv
+--restrict-filename

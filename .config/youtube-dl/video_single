@@ -8,3 +8,4 @@
 --embed-subs
 --no-playlist
 --merge-output-format mkv
+--restrict-filename
