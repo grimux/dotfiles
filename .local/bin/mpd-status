@@ -14,38 +14,91 @@
 #set -euox pipefail
 set -euo pipefail
 
+##############
+### Config ###
+##############
+
+# Set the utility used to get track information.
+# Options: "mpc", "playerctl"
+status_utility="mpc"
+
 # Variables rely on playerctl
-artwork=$(playerctl metadata mpris:artUrl)
-artist=$(playerctl metadata artist)
-track=$(playerctl metadata title)
-album=$(playerctl metadata album)
+#artwork=$(playerctl metadata mpris:artUrl)
+#artist=$(playerctl metadata artist)
+#track=$(playerctl metadata title)
+#album=$(playerctl metadata album)
+
+# Varibales rely on mpc and ffmpeg.
+track=$(mpc --format=%title% current)
+artist=$(mpc --format=%artist% current)
+album=$(mpc --format=%album% current)
+#file=$(mpc --format="%file%" current)
+#artwork=$(ffmpeg -i $file -an -c:v copy)
 
 # How long the notification stays on screen.
 expiration=6500
 
-# Info for terminal output.
-info=$(playerctl metadata --format '{{title}} by {{artist}} from {{album}}')
-# File location.
-url=$(playerctl metadata xesam:url)
-# File name
-file=$(basename "$url")
 
-# The format of the message to print
-message=$(printf "Track: %s\nArtist: %s\nAlbum: %s\nFile: %s" "$track" "$artist" "$album" "$file")
+# MPD Status - Simple
+mpd_status_simple() {
+	# The format of the message to print
+	#message=$(printf "Track: %s\nArtist: %s\nAlbum: %s" "$track" "$artist" "$album")
+	message=$(mpc status)
 
-##########################
-### Output to terminal ###
-##########################
-#echo $artwork
-#echo $message
-echo Info: $info
-echo File: $file
+	# Print the message using notify-send
+	notify-send \
+		--expire-time="$expiration" \
+		"$message"
+}
 
-#####################################
-### Output to notification system ###
-#####################################
-# Print the message using notify-send
-notify-send \
-	--icon="$artwork" \
-	--expire-time="$expiration" \
-	"Currently Playing:" "$message"
+# MPD Status - Full
+mpd_status_full() {
+	# The format of the message to print
+	message=$(printf "Track: %s\nArtist: %s\nAlbum: %s\nFile: %s" "$track" "$artist" "$album" "$file")
+
+	# Print the message using notify-send
+	notify-send \
+		--icon="$artwork" \
+		--expire-time="$expiration" \
+		"Currently Playing:" "$message"
+}
+
+# Output to terminal
+mpd_status_terminal() {
+	local info url file
+	# Info for terminal output.
+	case "$status_utility" in
+		"mpc")
+			info=$(mpc status)
+			;;
+		"playerctl")
+			info=$(playerctl metadata --format '{{title}} by {{artist}} from {{album}}')
+			# File location.
+			url=$(playerctl metadata xesam:url)
+			# File name
+			file=$(basename "$url")
+			;;
+	esac
+
+	#echo $artwork
+	#echo $message
+	echo Info: $info
+	#echo File: $file
+}
+
+############
+### Main ###
+############
+
+main() {
+	mpd_status_simple
+	#mpd_status_full
+
+	mpd_status_terminal
+}
+
+
+#############
+### Start ###
+#############
+main
