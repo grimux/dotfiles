@@ -49,6 +49,7 @@ rsync_arguments=(
 	--inplace
 	--times
 	--perms
+	--copy-dirlinks
 )
 
 
@@ -214,7 +215,8 @@ main() {
 	done
 
 	### Make Playlists
-	make_playlists
+	#make_playlists
+	phone-convert-playlists
 
 	### Main call to rsync ###
 	# If rsync throws an error, tell the user
