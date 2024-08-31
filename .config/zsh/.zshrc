@@ -5,58 +5,10 @@
 #
 #
 ########################
-### Default programs ###
-########################
-export EDITOR="nvim"
-export READER="zathura"
-export FILE="ranger"
-export BROWSER="firefox"
-export MUSIC="cantata"
-#export MUSIC="alacritty --class ncmpcpp -e ncmpcpp"
-export PAGER="less"
-export LESS="--search-skip-screen --squeeze-blank-lines -rR --ignore-case --tabs=8"
-export FILE="pcmanfm-qt"
-export TERMINAL="alacritty"
-export TERMCMD="$TERMINAL"
-
-# Export GTK themes to Qt
-export QT_QPA_PLATFORMTHEME=gtk2
-#export QT_STYLE_OVERRIDE=kvantum
-#export GTK_USE_PORTAL=1
-
-# Directory for clipmenu.
-export CM_DIR="$HOME/.cache/clipmenu"
-
-############
-### Path ###
-############
-# Add .local/bin and a few subdirectories to PATH.
-if [ -d "$HOME/.local/bin" ] ; then
-	PATH="$HOME/.local/bin:$PATH"
-	#PATH="$HOME/.local/bin/laptop:$PATH"
-	PATH="$HOME/.local/bin/tools:$PATH"
-	PATH="$HOME/.local/bin/toggles:$PATH"
-	PATH="$HOME/.local/bin/phone:$PATH"
-	PATH="$HOME/.local/bin/fun:$PATH"
-	PATH="$HOME/.local/bin/peripherals:$PATH"
-	PATH="$HOME/.local/bin/statusbar:$PATH"
-	PATH="$HOME/.local/bin/dmenu:$PATH"
-	PATH="$HOME/.local/bin/games:$PATH"
-	PATH="$HOME/.local/bin/game-links:$PATH"
-	PATH="$HOME/.local/bin/steamdeck:$PATH"
-	PATH="$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH"
-fi
-
-########################
 ### General Settings ###
 ########################
 # Enable colors
 autoload -U colors && colors
-
-## History in .config/zsh: ##
-HISTSIZE=10000
-SAVEHIST=10000
-HISTFILE="$HOME/.cache/zsh/history"
 
 ## History searching
 # Begin typing command to search, then use up and down arrow keys.
@@ -76,8 +28,9 @@ else
 fi
 
 ## Basic auto/tab complete ##
-autoload -U compinit
+autoload -Uz compinit
 zstyle ':completion:*' menu select
+#zstyle ':completion::complete:*' gain-privileges 1
 zmodload zsh/complist
 compinit
 export LC_ALL=en_US.UTF-8
@@ -145,7 +98,7 @@ ranger() {
 }
 
 ## Use ranger to switch directories ##
-rangercd () {
+rangercd() {
 	tmp="$(mktemp)"
 	ranger --choosedir="$tmp" "$@"
 	if [ -f "$tmp" ]; then
@@ -162,40 +115,14 @@ __git_files () {
 	_wanted files expl 'local files' _files
 }
 
-## Vimwiki Function ##
-# This will either open vimwiki, or you can use git.
-# usage: vimwiki git
-vimwiki() {
-	if [[ $# == 0 ]]
-	then
-		nvim +'VimwikiIndex'
-	elif [[ $1 == 'git' ]]
-	then
-		git -C ~/vimwiki/ ${@:2}
-	else
-		echo 'Usage: vimwiki [git] [args ...]'
+# When exiting `yazi`, cd to the directory.
+function yy() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		cd -- "$cwd"
 	fi
-}
-
-# Countdown timer
-# pass time in seconds
-countdown() {
-	start="$(( $(date '+%s') + $1))"
-	while [ $start -ge $(date +%s) ]; do
-		time="$(( $start - $(date +%s) ))"
-		printf '%s\r' "$(date -u -d "@$time" +%H:%M:%S)"
-		sleep 0.1
-	done
-}
-
-# Stopwatch
-stopwatch() {
-	start=$(date +%s)
-	while true; do
-		time="$(( $(date +%s) - $start))"
-		printf '%s\r' "$(date -u -d "@$time" +%H:%M:%S)"
-		sleep 0.1
-	done
+	rm -f -- "$tmp"
 }
 
 ############################
@@ -225,9 +152,9 @@ fi
 ### Autostartx ###
 ##################
 # .xinit file to use
-XINITRC=$HOME/.xinitrc
+#XINITRC=$HOME/.xinitrc
 # If on tty1, and Xorg is not running, automatically startx with $XINITRC.
-[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
+#[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
 
 ################
 ### MangoHud ###
