@@ -60,12 +60,17 @@ alias boiler="$EDITOR ~/.config/script_boilerplate.sh"
 vimwiki_dir="$HOME/vimwiki"
 alias vw-gl="$EDITOR $vimwiki_dir/personal/gift-list.md"
 alias vw-bn="$EDITOR $vimwiki_dir/notes/behavioral_notes.md"
-alias vw-tn="$EDITOR $vimwiki_dir/personal/health-mental/therapy/emdr-notes.md"
+alias vw-tn="$EDITOR $vimwiki_dir/personal/health-mental/therapy/trauma-notes.md"
 alias vw-si="$EDITOR $vimwiki_dir/writing/script-ideas.md"
 alias vw-ct="$EDITOR $vimwiki_dir/writing/computer-todo.md"
 alias vw-gt="$EDITOR $vimwiki_dir/writing/general-todo.md"
-alias vw-ct="$EDITOR $vimwiki_dir/writing/computer-todo.md"
-alias diary="nvim -c VimwikiMakeDiaryNote"
+alias vw-st="$EDITOR $vimwiki_dir/writing/script-todo.md"
+alias diary="vimwiki diary"
+
+# Alternative names
+alias todo-comp=""
+alias todo-gen=""
+alias todo-script="$EDITOR $vimwiki_dir/writing/script-todo.md"
 #
 # Old Method
 #
@@ -81,11 +86,14 @@ alias diary="nvim -c VimwikiMakeDiaryNote"
 #######################
 #
 ################################################################
+alias bulkrename="brn"
 alias define="sdcv"			# Dictionary
 #alias copy="xclip -rmlastnl -selection clipboard"
 alias copy="xclip -selection clipboard"
 alias paste="xclip -selection clipboard -out"
 alias f="ranger"
+alias fterm="f"
+alias fterm2="yazi"
 alias ka="killall"
 alias ncm="ncmpcpp"			# Terminal music player for mpd
 alias pt="protontricks"
@@ -116,34 +124,48 @@ alias sysctl="systemctl --user"
 #
 ################################################################
 
+
+###################
 ## Dotfile alias ##
+###################
+#
+################################################################
+#
 # An alias to manage my dotfiles.
 alias config="git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
 alias cstat="clear; config status"
 alias cdiff="config diff; clear"
 alias cadd="config add"
 alias ccommit="config commit"
+#
+################################################################
+
 
 ##############
 ### yt-dlp ###
-################################################################
 ##############
 #
-# Variable shortcuts.
+################################################################
 #
-yt_app="yt-dlp --config-location"
+# Configs
 yt_config_location="~/.config/youtube-dl"
+yt_to_download_file="$yt_config_location/to-download.txt"
+#
+# Variable shortcuts.
+yt_app="yt-dlp"
+yt_app_config="--config-location $yt_config_location"
+yt_call="$yt_app $yt_app_config"
 #
 # Commands
+alias yta="$yt_call/audio_single"
+alias ytap="$yt_call/audio_playlist"
+alias ytas="$yt_call/audio_split"
+alias ytpod="$yt_call/podcast"
+alias ytv="$yt_call/video_single"
+alias ytvp="$yt_call/video_playlist"
+alias ytu="$yt_call/video_single --batch-file $yt_to_download_file && rm $yt_to_download_file"
+alias ytua="echo $1 >> $yt_to_download_file"
 #
-alias yta="$yt_app $yt_config_location/audio_single"
-alias ytap="$yt_app $yt_config_location/audio_playlist"
-alias ytas="$yt_app $yt_config_location/audio_split"
-alias ytpod="$yt_app $yt_config_location/podcast"
-alias ytv="$yt_app $yt_config_location/video_single"
-alias ytvp="$yt_app $yt_config_location/video_playlist"
-alias ytu="$yt_app $yt_config_location/video_single --batch-file $HOME/urls.txt && echo \"\" > $HOME/urls.txt"
-alias ytua="echo $1 >> $HOME/urls.txt"
 ################################################################
 
 
@@ -169,9 +191,12 @@ alias copy_files="rsync --archive --human-readable --verbose --info=progress2 --
 #alias im_stuck="steam -applaunch 1010750 map e1m1"
 alias im_stuck="lutris lutris:rungameid/27"
 alias help_me="lutris lutris:rungameid/27"
-alias play_blood="lutris lutris:rungameid/60"
+alias blood="lutris lutris:rungameid/27"
+alias cultic="steam_launcher 1684930"
+alias factorio="steam_launcher 427520"
 alias jkdf2="openjkdf2"
 alias pd="lutris lutris:rungameid/252"
+alias grim="steam_launcher 219990"
 alias perfect-dark="lutris lutris:rungameid/252"
 alias zelda-oot="lutris lutris:rungameid/61"
 alias zelda-mm="lutris lutris:rungameid/265"
@@ -226,6 +251,7 @@ alias v-twinpeaks="mpv $mpv_playlist_settings $video_playlist_dir/twin_peaks.m3u
 alias calm1="mpc pause; mpv --loop --fullscreen \"/mnt/v/relaxing/Autism_Calming_Sensory_Meltdown_Remedy_Soothing_Visuals-Super_Duper_Fun_Music.mkv\""
 alias calm2="mpc pause; mpv --loop --fullscreen \"/home/jake/Videos/relaxing/Autism Sensory Therapy Magic Meltdown Remedy™ Second Edition by SAND.mkv\""
 alias hl2-amb="mpc pause; mpv --loop --fullscreen --playlist=/mnt/v/playlists/hl2.m3u"
+alias emdr="mpc pause; mpv --loop --fullscreen --mute --start=10 --ab-loop-a=10 --ab-loop-b=611 \"/home/jake/Videos/health/isochronicalpha - EMDR Self Administered with 528Hz Harmonics.mkv\""
 #
 ################################################################
 

@@ -127,6 +127,7 @@ local music_play   = "mpc play"
 local music_stop   = "mpc stop"
 local music_next   = "mpc next"
 local music_prev   = "mpc prev"
+local music_status = "mpc status"
 
 awful.util.terminal = terminal
 --awful.util.tagnames = { "term", "www", "file", "email", "torr", "chat", "mus", "vid", "gfx" }
@@ -385,7 +386,7 @@ globalkeys = mytable.join(
     awful.key({ modkey, "Shift"   }, "Tab", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
 
-    -- Show/hide wibox
+    -- Show/hide wibox (Top and bottom borders
     awful.key({ modkey }, "b", function ()
             for s in screen do
                 s.mywibox.visible = not s.mywibox.visible
@@ -418,31 +419,87 @@ globalkeys = mytable.join(
     --awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
     --          {description = "show weather", group = "widgets"}),
 
-    -- MPD control
+    -----------------
+    -- MPD control --
+    -----------------
+    --
+    -- Pause/Play toggle
     awful.key({ altkey, "Control" }, "Up",
         function ()
             os.execute("mpc toggle")
             beautiful.mpd.update()
         end,
         {description = "mpc toggle", group = "mpd"}),
+
+    -- Stop
     awful.key({ altkey, "Control" }, "Down",
         function ()
             os.execute("mpc stop")
             beautiful.mpd.update()
         end,
         {description = "mpc stop", group = "mpd"}),
+
+    -- Previous song
     awful.key({ altkey, "Control" }, "Left",
         function ()
             os.execute("mpc prev")
             beautiful.mpd.update()
         end,
         {description = "mpc prev", group = "mpd"}),
+
+    -- Next song
     awful.key({ altkey, "Control" }, "Right",
         function ()
             os.execute("mpc next")
             beautiful.mpd.update()
         end,
         {description = "mpc next", group = "mpd"}),
+
+    -- Toggle repeat mode on/off
+    awful.key({ altkey, "Control"   }, "r",
+        function ()
+            awful.spawn("toggle-mpd-modes -r") -- My toggle script.
+        end,
+        {description = "toggle repeat mode", group = "mpd"}),
+
+    -- Toggle random mode on/off
+    awful.key({ altkey, "Control"   }, "z",
+        function ()
+            awful.spawn("toggle-mpd-modes -z") -- My toggle script.
+        end,
+        {description = "toggle random mode", group = "mpd"}),
+
+    -- Toggle single mode on/off
+    awful.key({ altkey, "Control"   }, "s",
+        function ()
+            awful.spawn("toggle-mpd-modes -s") -- My toggle script.
+        end,
+        {description = "toggle single mode", group = "mpd"}),
+
+    -- Show currently playing song in a notification.
+    awful.key({ altkey, "Control" }, "m",
+        function ()
+            awful.spawn("mpd-status")
+        end,
+        {description = "mpd status", group = "mpd"}),
+
+    -- Reset headset (Bose headphones) connection to help with sync problems.
+    -- Only applicable when using "Combined" sink.
+    -- Uses my "headset" script.
+    awful.key({ altkey, "Control" }, "h",
+        function ()
+        awful.spawn("headset sync")
+    end,
+    {description = "Sync headset", group = "mpd"}),
+
+    -- Run "lyrics-in-terminal" in a terminal window.
+    awful.key({ altkey, "Control" }, "l",
+        function ()
+            awful.spawn(terminal .. " --class lyrics-in-terminal --title lyrics-in-terminal -e lyrics")
+        end,
+        {description = "Show lyrics-in-terminal", group = "mpd"}),
+
+    -- Toggle MPD widget from lain.
     awful.key({ altkey }, "0",
         function ()
             local common = { text = "MPD widget ", position = "top_middle", timeout = 2 }
@@ -456,13 +513,10 @@ globalkeys = mytable.join(
             naughty.notify(common)
         end,
         {description = "mpd on/off", group = "widgets"}),
-    awful.key({ "Control" }, "m",
-        function ()
-    awful.spawn("mpd-status")
-  end,
-  {description = "mpd status", group = "mpd"}),
 
-    -- User programs
+
+
+    -- My program hotkeys.
     awful.key({ modkey,           }, "w",     function () awful.spawn(browser) end,
               { description = "browser", group = "programs"}),
     awful.key({ modkey, "Shift"   }, "w",     function () awful.spawn(browser .. htmlwiki) end,
@@ -489,54 +543,51 @@ globalkeys = mytable.join(
               { description = "pavucontrol", group = "programs"}),
 
 
-    -- Script Launching
+    -- Toggle Scripts
     awful.key({ modkey,           }, "F1",     function () awful.spawn("gametime") end,
-              { description = "gametime", group = "scripts"}),
-    awful.key({ modkey, "Shift"   }, "F1",     function () awful.spawn("play -d") end,
-              { description = "gametime", group = "scripts"}),
+              { description = "gametime", group = "toggles"}),
     awful.key({ modkey,        }, "F2",     function () awful.spawn("brown_noise -t") end,
-              { description = "brown noise", group = "scripts"}),
-    awful.key({ modkey,        }, "F5",     function ()
-          awful.spawn.with_line_callback("tv_mode toggle", {
-              exit = function()
-                  awesome.emit_signal('update_tv_mode_status')
-              end})
-    end,
-              { description = "TV mode toggle", group = "scripts"}),
+              { description = "brown noise", group = "toggles"}),
+    awful.key({ modkey,        }, "F5",     function () awful.spawn.with_line_callback("tv_mode toggle") end,
+              { description = "TV mode toggle", group = "toggles"}),
     awful.key({ modkey,        }, "F6",     function () awful.spawn("toggle-conky") end,
-              { description = "toggle conky", group = "scripts"}),
+              { description = "toggle conky", group = "toggles"}),
     awful.key({ modkey,        }, "F7",     function () awful.spawn("toggle-alpha") end,
-              { description = "toggle compositor", group = "scripts"}),
+              { description = "toggle compositor", group = "toggles"}),
     awful.key({ modkey,        }, "F8",     function () awful.spawn("audio-device-switch") end,
-              { description = "change audio output", group = "scripts"}),
+              { description = "change audio output", group = "toggles"}),
     awful.key({ modkey,        }, "F9",     function () awful.spawn("toggle-transmission") end,
-              { description = "toggle transmission", group = "scripts"}),
+              { description = "toggle transmission", group = "toggles"}),
     awful.key({ modkey,        }, "F10",     function () awful.spawn("toggle-tor") end,
-              { description = "toggle Tor Network", group = "scripts"}),
+              { description = "toggle Tor Network", group = "toggles"}),
+    awful.key({ modkey,           }, "F11",     function () awful.spawn("monitor-sleep toggle") end,
+              { description = "monitor-sleep toggle", group = "toggles"}),
+
+
+    -- Other scripts
     awful.key({ modkey, "Shift"   }, "b",     function () awful.spawn("bt_battery_levels") end,
               { description = "bluetooth battery levels", group = "scripts"}),
-    awful.key({ modkey,           }, "F11",     function () awful.spawn("monitor-sleep toggle") end,
-              { description = "monitor-sleep toggle", group = "scripts"}),
+
 
     --awful.key({ modkey, }, "z", function () quake:toggle() end),
 
    -- dmenu scripts
-    awful.key({ modkey, "Shift" }, "e",     function () awful.spawn("dm-confedit") end,
-              { description = "edit configs", group = "dmenu scripts"}),
-    awful.key({ modkey, "Shift" }, "s",     function () awful.spawn("dm-sounds") end,
-              { description = "soundscapes", group = "dmenu scripts"}),
     awful.key({ modkey }, "s",     function () awful.spawn("dm-websearch") end,
-              { description = "web search", group = "dmenu scripts"}),
+              { description = "web search", group = "dmenu"}),
     awful.key({ modkey, "Shift"   }, "m",     function () awful.spawn("dm-playlists-music") end,
-              { description = "music playlists", group = "dmenu scripts"}),
+              { description = "music playlists", group = "dmenu"}),
     awful.key({ modkey, "Shift"   }, "p",     function () awful.spawn("dm-playlists-videos") end,
-              { description = "video playlists", group = "dmenu scripts"}),
+              { description = "video playlists", group = "dmenu"}),
     awful.key({ modkey, "Shift"   }, "r",     function () awful.spawn("dm-relaxing-videos") end,
-              { description = "video playlists", group = "dmenu scripts"}),
+              { description = "relaxing videos", group = "dmenu"}),
     awful.key({ modkey, "Shift"   }, "v",     function () awful.spawn("dm-videos") end,
-              { description = "video playlists", group = "dmenu scripts"}),
-    awful.key({ modkey, "Shift"   }, "x",     function () awful.spawn("dm-g910") end,
-              { description = "keyboard profile", group = "dmenu scripts"}),
+              { description = "video playlists", group = "dmenu"}),
+    awful.key({ modkey, "Shift"   }, "F1",     function () awful.spawn("play -d") end,
+              { description = "lutris games", group = "dmenu"}),
+    awful.key({ modkey,         }, "space", function () awful.spawn("dmenu_run -i -p run:") end,
+              { description = "dmenu run", group = "dmenu"}),
+    awful.key({ modkey, "Shift" }, "space", function () awful.spawn("sudo dmenu_run -i -p sudo:") end,
+              { description = "sudo dmenu run", group = "dmenu"}),
 
 
    -- Functions
@@ -545,14 +596,15 @@ globalkeys = mytable.join(
     {description = "toggle showing the desktop", group = "client"}),
 
    -- Media Keys
-   awful.key({}, "XF86AudioPlay", function()
-     awful.util.spawn(music_toggle, false) end),
-   awful.key({}, "XF86AudioStop", function()
-     awful.util.spawn(music_stop, false) end),
-   awful.key({}, "XF86AudioNext", function()
-     awful.util.spawn(music_next, false) end),
-   awful.key({}, "XF86AudioPrev", function()
-     awful.util.spawn(music_prev, false) end),
+   awful.key({}, "XF86AudioPlay", function() awful.util.spawn(music_toggle, false) end,
+            {description = "mpc pause/play", group = "mpd"}),
+   awful.key({}, "XF86AudioStop", function() awful.util.spawn(music_stop, false) end,
+            {description = "mpc stop", group = "mpd"}),
+   awful.key({}, "XF86AudioNext", function() awful.util.spawn(music_next, false) end,
+            {description = "mpc next", group = "mpd"}),
+   awful.key({}, "XF86AudioPrev", function() awful.util.spawn(music_prev, false) end,
+            {description = "mpc previous", group = "mpd"}),
+
 
    -- Volume Keys
    awful.key({}, "XF86AudioMute", function()
@@ -574,14 +626,9 @@ globalkeys = mytable.join(
    awful.key({ modkey, altkey}, "l", function() awful.spawn("lock_kbm") end,
     { description = "Lock keyboard and mouse", group = "misc"}),
 
-  -- Dmenu
-  awful.key({ modkey,         }, "space", function () awful.spawn("dmenu_run -i -p run:") end,
-    { description = "dmenu", group = "dmenu scripts"}),
-  awful.key({ modkey, "Shift" }, "space", function () awful.spawn("sudo dmenu_run -i -p sudo:") end,
-    { description = "sudo dmenu", group = "dmenu scripts"}),
 
 
-
+    -- Open lau console to run lau code.
     awful.key({ modkey }, "x",
               function ()
                   awful.prompt.run {
@@ -940,12 +987,13 @@ end)
 client.connect_signal("property::ontop", function(c)
     if c.ontop then
         c.border_color = "#ff00ff"
-        naughty.notify({ title = "Pinned:", text = c.name })
+        --naughty.notify({ title = "Pinned window:", text = c.name })
     else
         c.border_color = beautiful.border_focus
-        naughty.notify({ title = "Unpinned:", text = c.name })
+        --naughty.notify({ title = "Unpinned window:", text = c.name })
     end
 end)
+
 
 -- Fix for fullscreen games and applications not covering the top wibar.
 client.connect_signal("property::fullscreen", function(c)
@@ -972,9 +1020,9 @@ awful.mouse.snap.edge_enabled = false
 --awful.spawn.with_shell("picom")
 
 -- Restore nitrogen
---awful.spawn.with_shell("nitrogen --restore")
+awful.spawn.with_shell("nitrogen --restore")
 -- Restore feh
-awful.spawn.with_shell("~/.fehbg")
+--awful.spawn.with_shell("~/.fehbg")
 
 -- Run custom signals for awesome/lain status bar
 awful.spawn.with_shell("~/.config/awesome/custom_signals.sh")
