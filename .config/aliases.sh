@@ -136,7 +136,7 @@ alias config="git --git-dir=$HOME/.local/share/dotfiles --work-tree=$HOME"
 alias cstat="clear; config status"
 alias cdiff="config diff; clear"
 alias cadd="config add"
-alias ccommit="config commit"
+alias ccommit="config commit; clear"
 #
 ################################################################
 
