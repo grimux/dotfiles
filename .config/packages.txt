@@ -97,6 +97,7 @@ gerbera
 ghostscript
 gimp
 git
+gitahead-git
 gmtp
 gnome-disk-utility
 gnome-font-viewer
@@ -296,6 +297,7 @@ rvm
 s-nail
 samba
 samrewritten-git
+scapy
 scrot
 sdcv
 sdl2_image
