@@ -36,6 +36,7 @@ alias cfa="$EDITOR ~/.config/aliases.sh"
 alias cfv="$EDITOR ~/.config/nvim/init.vim"
 alias cfx="$EDITOR ~/.xinitrc"
 alias cfz="$EDITOR ~/.config/zsh/.zshrc"
+alias cfp="$EDITOR ~/.config/zsh/.zprofile"
 alias cfb="$EDITOR ~/Videos/playlists/bedtime.m3u"
 alias cfs="$EDITOR ~/.config/script_boilerplate.sh"
 alias cfawe="$EDITOR ~/.config/awesome/rc.lua"
@@ -121,6 +122,7 @@ alias pacrm="sudo pacman -Rscn"
 alias test-mpv="mpv --input-test --force-window --idle"
 alias git-add-untracked="echo -e \"a\n*\nq\n\" | git add -i"
 alias sysctl="systemctl --user"
+alias slideshow-game="feh -rzsZFD 7 ~/Pictures/game-screenshots"
 #
 ################################################################
 
