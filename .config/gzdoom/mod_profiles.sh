@@ -126,7 +126,7 @@ function mod_profiles() {
 		# Chill Doom
 		chill_doom)
 			iwad=DOOM.WAD
-			wads="SmoothDoom.pk3 DoomMetalVol5.wad steve_flashlight.pk7 ketchup.pk3"
+			wads="SmoothDoom.pk3 IDKFAv2.wad steve_flashlight.pk7 ketchup.pk3"
 			maps="+map e1m1"
 			savedir="$savedir/chill_doom"
 			cheats="+buddha2 +give keys"
