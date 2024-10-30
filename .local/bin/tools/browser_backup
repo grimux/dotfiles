@@ -2,6 +2,10 @@
 #
 # A script to backup my firefox bookmarks.
 #
+# TODO:
+# - Switch from using 7zip to tar.  That way permissions are preserved.
+# - Fix restoring function to use tar and 7z.
+#
 
 # e - script stops on error
 # u - error if undefined variable
@@ -20,6 +24,7 @@ mode=${1-:null}
 jake_profile_name="ataneaoq.jake"
 tv_mode_profile_name="0wss9d6r.tv_mode"
 mozilla_profile_directory="$HOME/.mozilla/firefox"
+brave_profile_directory="$HOME/.config/BraveSoftware/Brave-Browser"
 jake_profile_directory="$mozilla_profile_directory/$jake_profile_name"
 tv_mode_profile_directory="$mozilla_profile_directory/$tv_mode_profile_name"
 
@@ -31,15 +36,19 @@ local_html_file="$jake_profile_directory/bookmarks.html"
 backup_directory="/mnt/x/my-settings/browsers"
 backup_database_file="$backup_directory/bookmarks_backup.sqlite"
 backup_html_file="$backup_directory/bookmarks.html"
-tv_mode_profile_backup="$backup_directory/tv_mode_profile.7z"
-jake_profile_backup="$backup_directory/jake_profile.7z"
+tv_mode_profile_backup_7z="$backup_directory/firefox_tv_mode_profile.tar.7z"
+tv_mode_profile_backup_tar="$backup_directory/firefox_tv_mode_profile.tar.gz"
+jake_profile_backup_7z="$backup_directory/firefox_jake_profile.tar.7z"
+jake_profile_backup_tar="$backup_directory/firefox_jake_profile.tar.gz"
+brave_profile_backup_7z="$backup_directory/brave_browser.tar.7z"
+brave_profile_backup_tar="$backup_directory/brave_browser.tar.gz"
 
 
 #################
 ### Functions ###
 #################
 # Help Section
-help_section() {
+function help_section() {
 	# Help Message.  4 space offset.
 	echo "A script to backup and restore Firefox profiles."
 	echo "usage:"
@@ -51,7 +60,7 @@ help_section() {
 }
 
 # Get arguments and set flags
-get_arguments() {
+function get_arguments() {
 	while getopts ":hr" option; do
 		case $option in
 			# What to do if there is an invalid argument.
@@ -69,64 +78,199 @@ get_arguments() {
 }
 
 # Script usage.
-usage() {
+function usage() {
 	echo "Usage: $(basename "$0") [-h|-r]"
 	echo
 }
 
+### header
+#
+# A nice header for information.  Pass in some text to display it.
+#
+function header() {
+	local text="$1"
+
+	echo "================================================"
+	echo "$text"
+	echo "------------------------------------------------"
+}
+
+### footer
+#
+# A footer to use after certain code execution to provide a nice "block" of info.
+# Use below a header obviously.
+#
+function footer() {
+	echo "================================================"
+	echo
+}
+
+#==========
+# Yes or No
+#==========
+
+#-------
+# Part A
+#-------
+# A simple function to return results based on a yes or no statement.
+# Notice the logic is reversed when returning integers as opposed to
+# echoing them.  Return 0 is success, return 1 is failure.
+function yes_or_no() {
+	local choice
+	local prompt="$1"
+
+	while true; do
+		read -p "$prompt (y/n): " choice
+		case $choice in
+			[Yy]*) return 0;;
+			[Nn]*) return 1;;
+		esac
+	done
+}
+
 # Bookmark database backup and html file copy.
-backup_bookmarks() {
+function backup_bookmarks() {
+	header "Backing up bookmarks from Firefox."
+
 	# Backup the firefox database file
+	echo "sqlite3 running..."
 	sqlite3 "$local_database_file" ".backup $backup_database_file"
+	echo "Done."
 
 	# Backup the auto-generated bookmarks.html file
+	echo "Coping file to backup location."
 	cp --verbose "$local_html_file" "$backup_html_file"
+	echo "Done"
+	footer
 }
 
 # Use 7zip to create/backup archives of my Firefox profiles.
-compress_and_backup_profiles() {
+function compress_and_backup_profiles() {
+	header "Compressing browser profiles."
+	echo
+
 	# Backup tv_mode profile with 7zip
-	7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$tv_mode_profile_backup" "$tv_mode_profile_directory"
+	header "Compressing Firefox: TV_Mode profile."
+	#compress_with_7z "$tv_mode_profile_backup_7z" "$tv_mode_profile_directory"
+	compress_with_tar "$tv_mode_profile_backup_tar" "$tv_mode_profile_directory"
+	footer
 
 	# Backup jake profile with 7zip.
-	7z u -up1q0r2x1y2z1w2 -mx9 -mmt16 "$jake_profile_backup" "$jake_profile_directory"
+	header "Compressing Firefox: jake profile."
+	#compress_with_7z "$jake_profile_backup_7z" "$jake_profile_directory"
+	compress_with_tar "$jake_profile_backup_tar" "$jake_profile_directory"
+	footer
+
+	# Backup Brave browser.
+	header "Compressing Brave Browser."
+	#compress_with_7z "$brave_profile_backup_7z" "$brave_profile_directory"
+	compress_with_tar "$brave_profile_backup_tar" "$brave_profile_directory"
+	footer
 }
 
-# Check if firefox is running.
-check_for_firefox() {
-	local firefox_process
+function compress_with_7z() {
+	local zip7_file="$1"
+	local directory="$2"
+	tar cf - "$directory" | 7z a -si -up1q0r2x1y2z1w2 -mx9 -mmt16 "$zip7_file" "$directory"
 
-	firefox_process=$(pgrep "firefox")
+}
 
-	if [ -n "$firefox_process" ]; then
+function compress_with_tar() {
+	local tar_file="$1"
+	local directory="$2"
+	tar --create --verbose --gzip --atime-preserve --same-permissions --directory="$directory/.." --same-owner --file="$tar_file" $(basename "$directory")
+}
+
+function check_browser_processes() {
+	local process_to_check=$(pgrep "$1")
+
+	if [ -n "$process_to_check" ]; then
 		echo 1
 	else
 		echo 0
 	fi
 }
 
+function check_backup() {
+	local profile_to_check="$1"
+	local exists=0
+
+	if [ -f "$profile_to_check" ]; then
+		exists=1
+	else
+		exists=0
+	fi
+
+	echo "$exists"
+
+}
+
+function restart_browsers() {
+	if [ "$is_firefox_running" -eq 1 ]; then
+		echo "Starting Firefox..."
+		nohup firefox > /dev/null &
+	fi
+
+	if [ "$is_brave_running" -eq 1 ]; then
+		echo "Starting Brave..."
+		nohup brave > /dev/null &
+	fi
+}
+
 # Restore bookmarks and profiles.
-restore_browser_profiles() {
+function restore_browser_profiles() {
+	local choice
+	local backups=(
+		$tv_mode_profile_backup_tar
+		$jake_profile_backup_tar
+		$brave_profile_backup_tar
+	)
+
 	# Give a small message and warn about deletion.
-	echo "Profile restoration."
-	echo "Profiles will be deleted before restoring."
-	read -rp "Continue? (y/n): " choice
+	header "Profile restoration."
+	echo
+	echo "------------------------------------------"
+	echo "Profiles will be deleted before restoring!"
+	echo "------------------------------------------"
+	echo
 
 	# If the backup archives do not exist, tell us and abort the restoration.
-	if [ ! -f "$jake_profile_backup" ] || [ ! -f "$tv_mode_profile_backup" ]; then
-		echo "Backup profile(s) not found."
-		choice="n"
+	for browser in ${backups[@]}; do
+		#check_backup "$browser"
+		if [ -f "$browser" ]; then
+			echo "Backup found for: $browser"
+		else
+			echo "Backup for $browser not found.  Try backing-up first."
+			echo "Aborting"
+			exit 1
+		fi
+	done
+
+	echo
+
+	# To continue?
+	if ! yes_or_no "Would you like to continue? (y/n): "; then
+		echo "Aborting..."
+		footer
+		exit 1
 	fi
 
 	# Case to determine if we should restore or not.
-	case "$choice" in
-		Y|y) rm -rf "$jake_profile_directory"; rm -rf "$tv_mode_profile_directory";;
-		N|n) echo "Aborting restore."; exit 1;;
-	esac
+	header "Removing browser profiles..."
+	rm -rf "$jake_profile_directory"
+	rm -rf "$tv_mode_profile_directory"
+	rm -rf "$brave_profile_directory"
+	echo "Done."
+	footer
+	echo
 
 	# Restore the profiles using 7zip extraction.
-	7z x -o"$mozilla_profile_directory" "$jake_profile_backup"
-	7z x -o"$mozilla_profile_directory" "$tv_mode_profile_backup"
+	header "Decompressing archives..."
+	7za x -so "$jake_profile_backup_tar" | tar -x --directory="$mozilla_profile_directory" -f -
+	7za x -so "$tv_mode_profile_backup_tar" | tar -x --directory="$mozilla_profile_directory" -f -
+	7za x -so "$brave_profile_backup_tar" | tar -x --directory="$brave_profile_directory" -f -
+	echo "Done."
+	footer
 
 }
 
@@ -138,11 +282,19 @@ main() {
 	get_arguments "$@"
 
 	local is_firefox_running
-	is_firefox_running=$(check_for_firefox)
+	local is_brave_running
+	is_firefox_running=$(check_browser_processes "firefox")
+	is_brave_running=$(check_browser_processes "brave")
 
 	if [ "$is_firefox_running" -eq 1 ]; then
 		echo "Closing Firefox..."
 		pkill "firefox"
+		sleep 0.75
+	fi
+
+	if [ "$is_brave_running" -eq 1 ]; then
+		echo "Closing Brave..."
+		pkill "brave"
 		sleep 0.75
 	fi
 
@@ -153,10 +305,7 @@ main() {
 	# Compress and backup the profiles using 7zip.
 	compress_and_backup_profiles
 
-	if [ "$is_firefox_running" -eq 1 ]; then
-		echo "Starting Firefox..."
-		nohup firefox > /dev/null &
-	fi
+	#restart_browsers
 }
 
 main "$@"
