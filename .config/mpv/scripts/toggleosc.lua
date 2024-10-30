@@ -6,7 +6,7 @@
 -- default key: o
 -- default OSC state: auto
 local settings = {
-  key_toggle = "o",
+  key_toggle = "shift+o",
   is_auto = true
 }
 
