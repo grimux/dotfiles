@@ -30,16 +30,25 @@ set -euo pipefail
 ### Config ###
 ##############
 #
-### Temp/Brightness ###
-temp="2100:2100"					# Temperature for day:night
-bright="0.60:0.45"					# Brightness for day:night
-
 ### Files ###
-conf_dir="$HOME/.config/redshift"
-hurt_conf_file="$conf_dir/hurt.conf"	# Configuration file for low mode.
-sunglasses_conf_file="$conf_dir/sunglasses.conf"
-normal_conf_file="$conf_dir/normal.conf"
-current_conf_file="$conf_dir/redshift.conf"
+base_dir="$HOME/.config/redshift"
+conf_dir="configs"
+
+# Array of conf files with full path.
+conf_files_full=($base_dir/$conf_dir/*)
+conf_files_short=($(basename --multiple ${conf_files_full[@]}))
+
+#options=$(basename --multiple ${conf_files_full[@]})
+
+# Preset config profiles.
+# These also have a separate file for "high" or "low".
+hurt_conf_file="hurt_high.conf"
+sunglasses_conf_file="sunglasses.conf"
+normal_conf_file="normal_high.conf"
+
+# Default conf file Redshift uses.
+# Desired settings are written to this file.
+default_conf_file="redshift.conf"
 
 ### Call to redshift ###
 # Can be either "redshift-gtk" to get the tray icon, or just "redshift".
@@ -55,6 +64,7 @@ call_redshift="redshift-gtk"
 function usage() {
 	echo "Do your eyes \"hurt\" or are they \"okay\"?"
 	echo "Or maybe you are using \"sunglasses\"?"
+	echo "You can also select which config to use with \"choose\"."
 }
 
 # Get the current status.
@@ -64,79 +74,30 @@ function get_status() {
 	redshift -p
 }
 
-# Set redshift to hurt mode.
-# Creates a link to the hurt config file and names is "redshift.conf".
-function set_to_low() {
-	# Kill redshift if it is running.
-	kill_redshift
-
-	# Create a link to the hurt file.  The link is called "redshift.conf".
-	ln \
-		--force \
-		"$hurt_conf_file" \
-		"$current_conf_file"
-
-
-	# Start redshift using the normal configuration file.  Send all output to null.
-	$call_redshift &> /dev/null &
-}
-
-# Set redshift to sunglesses mode.
-# Creates a link to the hurt config file and names is "redshift.conf".
-function set_to_sunglasses() {
-	# Kill redshift if it is running.
-	kill_redshift
-
-	# Create a link to the hurt file.  The link is called "redshift.conf".
-	ln \
-		--force \
-		"$sunglasses_conf_file" \
-		"$current_conf_file"
-
-
-	# Start redshift using the normal configuration file.  Send all output to null.
-	$call_redshift &> /dev/null &
-}
-
-
-# Set redshift to low mode by using arguments.
-function set_to_low_args() {
-	# Call redshift and apply the settings.
-	$call_redshift \
-		-r \
-		-t "$temp" \
-		-b "$bright" \
-		&> /dev/null \
-		&
-}
-
-# Set redshift to normal mode.
-# Creates a link to the normal config file and names is "redshift.conf".
-function set_to_normal() {
-	# Kill redshift if it is running.
-	kill_redshift
-
-	# Create a link to the normal file.  The link is called "redshift.conf".
-	ln \
-		--force \
-		"$normal_conf_file" \
-		"$current_conf_file"
-
-	# Start redshift using the default configuration file.  Send all output to null.
-	$call_redshift &> /dev/null &
-}
-
+# Set the mode for Redshift, using conf files.
+# This function will link the desired mode to Redshift's default conf file "redshift.conf".
 function set_redshift_mode() {
-	local mode
-	local mode_conf_file
-	mode="$1"
+	# Local variables.
+	local chosen_conf_file="$@"
+	local does_conf_exist=0
 
-	case "$mode" in
-		okay|ok|o) mode_conf_file="$normal_conf_file" ;;
-		sunglasses|sun|s) mode_conf_file="$sunglasses_conf_file" ;;
-		hurt|h) mode_conf_file="$hurt_conf_file" ;;
-		*) mode_conf_file=null; usage; return 1;;
-	esac
+	# Loop through array of conf files and compare them to the chosen conf file.
+	# Sets a flag if the conf exists.
+	for file in "${conf_files_short[@]}"; do
+		if [[ $file = $chosen_conf_file ]]; then
+			does_conf_exist=1
+			break
+		else
+			does_conf_exist=0
+		fi
+	done
+
+	# Check if the chosen conf file exists within the array.
+	# If not, exit.
+	if [ "$does_conf_exist" -eq 0 ]; then
+		echo "No conf file was found for \"$chosen_conf_file\"."
+		exit 1
+	fi
 
 	# Kill redshift if it is running.
 	kill_redshift
@@ -144,11 +105,22 @@ function set_redshift_mode() {
 	# Create a link to the mode file.  The link is called "redshift.conf".
 	ln \
 		--force \
-		"$mode_conf_file" \
-		"$current_conf_file"
+		"$base_dir/$conf_dir/$chosen_conf_file" \
+		"$base_dir/$default_conf_file"
 
 	# Start redshift using the default configuration file.  Send all output to null.
 	$call_redshift &> /dev/null &
+}
+
+# Used to set a configuration file.  Chosen with fzf.
+function choose_with_menu() {
+	local choice
+	local label="Please choose a Redshift configuration file."
+
+	#cd "$base_dir/$conf_dir/"
+
+	choice=$(printf '%s\n' "${conf_files_short[@]}" | fzf --cycle --layout=reverse-list --border=rounded --border-label="$label")
+	set_redshift_mode "$choice"
 }
 
 function give_output() {
@@ -174,22 +146,24 @@ function kill_redshift() {
 ### Main ###
 ############
 function main() {
-	# My current condition, passed as an argument.
-	local condition="$@"
+	# My current option, passed as an argument.
+	local option="$@"
 
 	# Main logic.  Only two possible arguments; "okay" and "hurt".
-	case "$condition" in
+	case "$option" in
 		# If no argument, show status.
 		"") usage; echo ; get_status;;
 
 		# If your eyes are hurting.
-		hurt|h) echo "Sorry your eyes hurt...  Let me help."; set_to_low;;
+		hurt|h) echo "Sorry your eyes hurt...  Let me help."; set_redshift_mode "$hurt_conf_file";;
 
 		# Sunglasses mode.
-		sunglasses|sun|s) echo "Be sure to put on your shades."; set_to_sunglasses;;
+		sunglasses|sun|s) echo "Be sure to put on your shades."; set_redshift_mode "$sunglasses_conf_file";;
 
 		# If your eyes are okay.
-		okay|ok|o) echo "You must be feeling better!"; set_to_normal;;
+		okay|ok|o) echo "You must be feeling better!"; set_redshift_mode "$normal_conf_file";;
+
+		choose|select|c) echo "Please choose a setting."; choose_with_menu;;
 
 		# Anything else entered is not recognized.
 		*) echo "Sorry, I don't recognize that command."; usage; exit 1;;
@@ -205,16 +179,16 @@ function testing() {
 	set -euox pipefail
 
 	# Local variables
-	local condition
+	local option
 
 	# Initialize
-	condition="$1"
+	option="$1"
 
 	# Set redshift mode
-	set_redshift_mode "$condition"
+	set_redshift_mode "$option"
 
 	# Give some terminal output.
-	give_output "$condition"
+	give_output "$option"
 }
 
 
