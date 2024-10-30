@@ -16,12 +16,18 @@ drop_in_file=/etc/systemd/system/getty@tty1.service.d/autologin.conf
 backup_file=$HOME/.config/system-wide/autologin.conf
 
 # Autostartx variables
-shell_profile="$HOME/.zshrc"
+#shell_profile="$HOME/.zshrc"
+#shell_profile="${ZDOTDIR:-$HOME}/.zshrc"
+shell_profile="${ZDOTDIR:-$HOME}/.zprofile"
 search_term_sed='\/dev\/tty1'
 search_term_grep="^#.*/dev/tty1"
 
+# Set initial status for flags.
+autologin_status=0
+autostartx_status=0
+
 # Help Section
-help_section() {
+function help_section() {
 	# Variable to store the name of the script.  For convenience.
 	local sn=$(basename $0)
 
@@ -29,36 +35,50 @@ help_section() {
 	echo "A script to toggle automatic PC login."
 	echo
 	echo "usage:"
-	echo "    $(basename $0) [h]"
-	echo "    $(basename $0) [-s|h|t]"
-	echo "    $(basename $0) [-s|h|t]"
+	echo "    $(basename $0) (option) [command]"
 	echo
 	echo "options:"
-	echo "s     Show current status."
-	echo "h     Print this help screen."
-	echo "t     Toggle the status."
+	echo "     s        : Show current status."
+	echo "     h        : Print this help screen."
+	echo "     t        : Toggle the status."
+	echo
+	echo "commands:"
+	echo "     on       : Turn on autologin/autostartx."
+	echo "     off      : Turn off autologin/autostartx."
+	echo "     toggle   : Toggle the current status."
 	echo
 	echo "This script relies upon $backup_file.  Please make sure it is present."
 	echo
 	echo "Check this link for more details:"
 	echo
-	echo "    https://wiki.archlinux.org/title/Getty#Automatic_login_to_virtual_console"
+	echo "     https://wiki.archlinux.org/title/Getty#Automatic_login_to_virtual_console"
 	echo
 }
 
+function does_config_exist() {
+	local file
+	file="$backup_file"
+
+	if [ ! -f "$file" ]; then
+		echo "Drop-in file for autologin not found!"
+		echo "Should be here: $backup_file"
+		exit 1
+	fi
+}
+
 # Enable autologin by copying the file from my .config to the system location
-autologin_enable() {
-	sudo cp $backup_file $drop_in_file
+function autologin_enable() {
+	sudo cp "$backup_file" "$drop_in_file"
 }
 
 # Disable autologin by removing the system drop in file
-autologin_disable() {
-	sudo rm $drop_in_file
+function autologin_disable() {
+	sudo rm "$drop_in_file"
 }
 
 # Enable autostartx by uncommenting a line in .zprofile
 # sed expression will search for $search_term_sed, and remove the leading #.
-autostartx_enable() {
+function autostartx_enable() {
 	sed \
 		--in-place \
 		--expression="/$search_term_sed/s/^#//g" \
@@ -68,7 +88,7 @@ autostartx_enable() {
 
 # Disable autostartx by commenting out a line in .zprofile
 # sed expression will search for $search_term_sed, add # to the beginning of the line.
-autostartx_disable() {
+function autostartx_disable() {
 	sed \
 		--in-place \
 		--expression="/$search_term_sed/s/^/#/g" \
@@ -78,7 +98,7 @@ autostartx_disable() {
 # Check the status of autologin
 # Return 1 if autologin is enabled
 # Return 0 if autologin is disabled
-autologin_status() {
+function get_autologin_status() {
 	if [ -f $drop_in_file ]; then
 		echo 1
 	else
@@ -89,88 +109,156 @@ autologin_status() {
 # Check the status of autostartx
 # Return 1 if autostartx is enabled
 # Return 0 is autostartx is disabled
-autostartx_status() {
+function get_autostartx_status() {
+	local is_line_commented
+
 	grep "$search_term_grep" $shell_profile > /dev/null
 	is_line_commented=$?
 
-	if [ $is_line_commented -eq 1 ]; then
+	if [ "$is_line_commented" -eq 1 ]; then
 		echo 1
 	else
 		echo 0
 	fi
 }
 
-# Get the status of both autologin and autostartx
-# Display the results
-get_status() {
+# Get current status of autologin/startx.
+function get_status() {
 	# Check status of autologin
-	is_autologin_enabled=$(autologin_status)
+	autologin_status=$(get_autologin_status)
 
 	# Check status of autostartx
-	is_autostartx_enabled=$(autostartx_status)
+	autostartx_status=$(get_autostartx_status)
+}
 
+
+
+# Get the status of both autologin and autostartx
+# Display the results
+function print_status() {
 	echo "=== Current Status ==="
 
 	# Logic to control message for autologin status
-	if [ $is_autologin_enabled -eq 1 ]; then
+	if [ "$autologin_status" -eq 1 ]; then
 		echo "Autologin: enabled"
 	else
 		echo "Autologin: disabled"
 	fi
 
 	# Logic to control message for autostartx status
-	if [ $is_autostartx_enabled -eq 1 ]; then
+	if [ "$autostartx_status" -eq 1 ]; then
 		echo "Autostartx: enabled"
 	else
 		echo "Autostartx: disabled"
 	fi
 }
 
-toggle_login() {
+function autologin_on() {
+	# Check if autologin/autostartx is already enabled.
+	if [ "$autologin_status" -eq 1 ] || [ "$autostartx_status" -eq 1 ]; then
+		echo "Autologin and autostartx is already enabled."
+		echo "Cancelling..."
+		exit 1
+	fi
+
+	# Display message.
+	echo "Enabling autologin..."
+
+	# Add the drop-in file
+	autologin_enable && echo "Done."
+
+	# Display message
+	echo "Enabling autostartx..."
+
+	# Enable autostartx
+	autostartx_enable && echo "Done."
+}
+
+function autologin_off() {
+	# Check if autologin/autostartx is already disabled.
+	if [ "$autologin_status" -eq 0 ] || [ "$autostartx_status" -eq 0 ]; then
+		echo "Autologin and autostartx is already disabled."
+		echo "Cancelling..."
+		exit 1
+	fi
+	# Display message.
+	echo "Disabling autologin..."
+
+	# Remove the drop-in file
+	autologin_disable && echo "Done."
+
+	# Display message.
+	echo "Disabling autostartx..."
+
+	# Disable autostartx
+	autostartx_disable && echo "Done."
+}
+
+function autologin_toggle() {
 	# Look for drop-in file
 	if [ -f $drop_in_file ]; then
-		# Remove the drop-in file
-		echo "Disabling autologin..."
-		autologin_disable && echo "Done."
-
-		# Disable autostartx
-		echo "Disabling autostartx..."
-		autostartx_disable && echo "Done."
+		autologin_off
 	else
-		# Add the drop-in file
-		echo "Enabling autologin..."
-		autologin_enable && echo "Done."
-
-		# Enable autostartx
-		echo "Enabling autostartx..."
-		autostartx_enable && echo "Done."
+		autologin_on
 	fi
-	echo
 }
 
 # Entry Point
 # Get arguments
-while getopts ":sht" option; do
-	case $option in
-		s)
-			get_status
-			exit
-			;;
-		h)
-			help_section
-			;;
-		t)
-			toggle_login
-			;;
-		\?)
-			echo "Error: Invalid option"
-			exit
-			;;
-	esac
-done
+function get_arguments() {
+	while getopts ":sht" option; do
+		case $option in
+			s)
+				get_status
+				exit
+				;;
+			h)
+				help_section
+				;;
+			t)
+				toggle_login
+				;;
+			\?)
+				echo "Error: Invalid option"
+				exit
+				;;
+		esac
+	done
+}
 
-# If the script is run with no options, just return the current status.
+function main() {
+	local user_command
+	user_command="${1:-status}"
+
+	case "$user_command" in
+		off)
+			autologin_off;;
+		on)
+			autologin_on;;
+		toggle)
+			autologin_toggle;;
+		status)
+			print_status;;
+		\?)
+			echo "Error: Invalid command!"
+			help_section
+			exit 1;;
+	esac
+
+}
+
+# Get status of autologin.
 get_status
+
+# Get arguments (options) passed to the script.
+get_arguments "$@"
+
+# Strip out any options.
+shift $((OPTIND-1))
+
+
+# Call to main function.
+main "$@"
 
 # All done
 exit
