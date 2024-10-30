@@ -28,8 +28,8 @@
 # o pipefail - script fails if command piped fails
 # x - output each line (debug)
 #
-#set -euox pipefail
-set -euo pipefail
+set -euox pipefail
+#set -euo pipefail
 
 
 
@@ -370,6 +370,10 @@ function pause() {
 
 }
 
+function signal_awesome_systray() {
+	awesome-client 'awesome.'
+}
+
 
 
 
@@ -499,7 +503,19 @@ function restore_wallpaper() {
 # Restart awesomewm.  This is to rearanged windows when leaving TV mode.
 function restart_awesome() {
 	# The following command will echo the awesome restart function into awesome-client
-	echo 'awesome.restart()' | awesome-client
+	#echo 'awesome.restart()' | awesome-client
+	awesome-client 'awesome.restart()'
+	#pkill -HUP awesome
+	some_var=""
+}
+
+# Send a signal to awesome, telling it to update the status bar.
+function signal_awesome() {
+	echo "Sending signal to awesome-wm..."
+	awesome-client 'awesome.emit_signal("update_tv_mode_status")'
+	#awesome-client 'awesome.emit_signal("move_systray")'
+	#awesome-client 'awesome.emit_signal("widget::layout_changed")'
+	#awesome-client 'awesome.emit_signal("widget::redraw_needed")'
 }
 
 # Reset the device name of the TV in pulseaudio
@@ -536,7 +552,8 @@ function get_arguments() {
 function main() {
 	# Store the currently active window so we can switch back to it after opening firefox.
 	local previously_active_window
-	previously_active_window=$(get_current_window)
+	previously_active_window=$(get_current_window) || previously_active_window="none"
+	#previously_active_window="none"
 
 	# Variable for any commands passed to the script.
 	local user_command
@@ -562,7 +579,9 @@ function main() {
 	esac
 
 	# Return focus to the previous window.
-	xdotool windowactivate "$previously_active_window"
+	if [ "$previously_active_window" != "none" ]; then
+		xdotool windowactivate "$previously_active_window"
+	fi
 
 	# Recheck flag to see which mode we are in.
 	#is_tv_mode_on=$(get_current_mode)
@@ -572,15 +591,18 @@ function main() {
 		get_debug_info
 	fi
 
-	# Ensure that the wallpaper is okay.
-	restore_wallpaper
-
 	# Ensure the TV has the proper sink name in pulseaudio
 	#reset_tv_name
 
+	# Send signal to `awesome` to update the status bar.
+	signal_awesome
+
 	# Ensure that windows are positioned according to my awesomewm config by restarting awesome
-	# This function currently has a bug and won't work properly.
 	#restart_awesome
+
+	# Ensure that the wallpaper is okay.
+	restore_wallpaper
+
 }
 
 ####################
