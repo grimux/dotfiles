@@ -42,6 +42,7 @@ chromium
 clipmenu
 cmake
 conky
+coolercontrol-bin
 cronie
 crystal
 cups
@@ -103,7 +104,9 @@ gnome-disk-utility
 gnome-font-viewer
 gnu-free-fonts
 gnucash
+gnuplot
 go
+godot
 goverlay
 gparted
 gpg-tui
@@ -166,7 +169,9 @@ libxcrypt-compat
 linux
 linux-firmware
 linux-headers
+linux-steam-integration
 linuxconsole
+liquidctl
 lld
 lmms
 lsd
@@ -267,7 +272,6 @@ python-aioconsole
 python-charset-normalizer
 python-cogapp
 python-crc8
-python-hid
 python-httplib2
 python-internetarchive
 python-mako
