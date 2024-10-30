@@ -1,8 +1,25 @@
 #!/usr/bin/env bash
 #
-# Script for launching my game launchers
+####################
 #
+# Name: gametime
+# Author: Jake
+# Description: A script to launch Steam and Lutris.
+#
+####################
 
+
+############
+### TODO ###
+############
+#
+# - Implement other "picker" programs, such as `zenity` and `fzf`.
+#
+############
+
+###################
+### Fail Events ###
+###################
 # e - script stops on error
 # u - error if undefined variable
 # o pipefail - script fails if command piped fails
@@ -10,16 +27,89 @@
 #
 #set -euox pipefail
 set -euo pipefail
+#
+###################
 
+
+##############
+### Config ###
+##############
+use_mangohud=1
+use_bigpicture=0
+
+choose_interactively=1
+menu_application="dmenu"
+#menu_application="fzf"
+#menu_application="zenity"
+
+is_steam_running=0
+is_lutris_running=0
+steam_process_id=0
+lutris_process_id=0
+
+# Start minimized
+minimize_lutris=0
+minimize_steam=0
 
 
 ########################
 ### Global Variables ###
 ########################
+steam_binary="steam-runtime"
+steam_process_name="steam"
+lutris_process_name="python3 /usr/bin/lutris"
 
-is_steam_running=0
-is_lutris_running=0
 
+##############################
+### Help, arguments, usage ###
+##############################
+# Get arguments and set flags
+function get_arguments() {
+	while getopts ":hcmb" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1;;
+
+			# Help section
+			h) help_section; exit;;
+
+			# Choose options interactively.
+			c) choose_interactively=1;;
+
+			# Start minimized.
+			m) minimize_lutris=1; minimize_steam=1;;
+
+			# Use Steam's Big Picture mode.
+			b) use_bigpicture=1;;
+
+			# What to do if the argument is missing.
+			:) echo "Missing argument"; help_section; exit 1;;
+
+			# Catchall.  If command is not recognized.
+			*) usage; exit 1;;
+		esac
+	done
+}
+
+# Help Section
+function help_section() {
+	echo "A script to launch Lutris and Steam."
+	echo
+	echo "Syntax: $(basename $0) (options) [-n] <playlist name> [-d] <video directory>"
+	echo "options:"
+	# Space offset: 19
+	echo "     h                   : Print this help screen."
+	echo "     c                   : Choose interactively."
+	echo "     m                   : Start minimized."
+	echo "     b                   : Use Steam's Big Picture mode."
+	echo
+}
+
+# How to use the script.
+function usage() {
+	echo "Usage:"
+	echo "$(basename $0) (options)"
+}
 
 
 #################
@@ -29,89 +119,250 @@ is_lutris_running=0
 # Function to launch Steam.
 # You can decide if you want it minimized or not, or to use MangoHud or not.
 function launch_steam() {
+	echo "Starting Steam..."
+
+	local launch_arguments
+	local command
+
+	run_command="$steam_binary"
+	launch_arguments=("-nochatui" "-nofriendsui")
+
+	# Check if the global flag for big picture mode is set.
+	if [ "$use_bigpicture" -eq 1 ]; then
+		echo "Using Big Picture mode."
+		launch_arguments+=("-bigpicture")
+	fi
+
+	if [ "$minimize_steam" -eq 1 ]; then
+		echo "Minimizing Steam..."
+		launch_arguments+=("-silent")
+	fi
+
+	# Check if we should use Mangohud with Steam globally.
+	# If so, set the "command" variable to include it.
+	if [ "$use_mangohud" -eq 1 ]; then
+		echo "Using Mangohud."
+		run_command="mangohud $steam_binary"
+	fi
+
+	# Silently patch steam with modifications done with steam-metadata-editor
+	#patch_steam_custom_metadata
+
+	# Run Steam with its launch arguments.
+	$run_command "${launch_arguments[@]}" &> /dev/null &
+
+}
+
+# Old function to launch Steam.  Kept as a backup and while working on the new function.
+# You must choose one of the launch options below and uncomment it.
+function launch_steam_old() {
 	# Silently patch steam with modifications done with steam-metadata-editor
 	steammetadataeditor --silent
 	sleep 1
 	steammetadataeditor --silent
 
 	# Launch steam with no chat or friends list open.
+	#steam -nochatui -nofriendsui &> /dev/null &
+
 	# Silent will make it minimized to sys-tray.
 	#steam -nochatui -nofriendsui -silent &> /dev/null &
-	steam -nochatui -nofriendsui &> /dev/null &
+
+	# Bigpicture will make it start in Big Picture mode.  Great for playing on TV or with controller.
+	#steam -nochatui -nofriendsui -bigpicture &> /dev/null &
 
 	# Launch steam with manghud and the same options.
-	#mangohud steam-runtime -nochatui -nofriendsui -silent &> /dev/null &
+	mangohud steam -nochatui -nofriendsui &> /dev/null &
 }
 
 # Function to launch Lutris.
 # By default it will be minimized by using `wmctrl`.
 function launch_lutris() {
+	echo "Starting Lutris..."
+
 	# Launch lutris
 	lutris &> /dev/null &
 
 	sleep 2
 
-	# Uses wmctrl to minimize lutris.
-	# This loop will try running the command until it succeeds.
-	until wmctrl -r lutris -b add,hidden; do
-		echo "Waiting for lutris..."
-		sleep 1
-	done
+	# Check to see if we should minimize Lutris.
+	# Uses wmctrl to minimize Lutris.
+	if [ "$minimize_lutris" -eq 1 ]; then
+		echo "Minimizing Lutris..."
+		# This loop will try running the command until it succeeds.
+		until wmctrl -r lutris -b add,hidden; do
+			echo "Waiting for lutris to start..."
+			sleep 1
+		done
+	fi
+
 }
 
 # Function to launch the launchers.
 # Will send a notification.
+# TODO: Add some logic to control which launchers to start.  And determine which way to launch Steam.
 function launch_launchers() {
 	# Send a notification.
-	notify-send "gametime" "Starting Steam and Lutris..."
+	#notify-send "gametime" "Starting Steam and Lutris..."
+	send_notification_simple "start"
 
+	# normal, minimized, big-picture
 	launch_steam
 	launch_lutris
 
 
 }
 
-# Function to get the process id of Steam and Lutris.
-# It will return the process id.
-function get_process_id() {
-	local launcher_name="$1"
-	local process_id=$(pgrep --full "$launcher_name")
-
-	echo "$process_id"
-}
-
 # Kill the launchers.
 # Will check first to see if the process is running or not.
 # If we try to `pkill` a process that doesn't exist, the script exits prematurely
 function kill_launchers() {
-	notify-send "gametime" "Killing Steam and Lutris..."
+	#notify-send "gametime" "Quiting Steam and Lutris..."
+	send_notification_simple "stop"
 
-	[[ "$is_steam_running" -eq 1 ]] && pkill --full "steam"
-	[[ "$is_lutris_running" -eq 1 ]] && pkill --full "lutris"
+	# Close Steam.
+	#pkill --exact "$steam_process_name"
+	if [ "$is_steam_running" -eq 1 ]; then
+		echo "Stopping Steam."
+		pkill --exact "$steam_process_name"
+		echo "Waiting for Steam to close..."
+		tail --pid=$steam_process_id --follow /dev/null
+	fi
+
+	# Close Lutris.
+	#pkill --full "$lutris_process_name"
+	if [ "$is_lutris_running" -eq 1 ]; then
+		echo "Stopping Lutris"
+		pkill --full "$lutris_process_name"
+	fi
+
+
+}
+
+# Choose which launchers to max/minimize using an application, such as dmenu or fzf.
+function choose_with_menu() {
+	# Declare and initialize variables.
+	local choice="null"
+	local application="$menu_application"
+	local application_arguments="null"
+
+	# Prompt for the menu application.
+	local prompt="Launcher: "
+
+	# Array of possible choices.
+	local options=(
+		"big-picture"
+		"lutris"
+		"steam"
+		"both"
+	)
+
+	# Wether to use `dmenu` or `fzf`.
+	# Currently, dmenu is the only working one.
+	case "$application" in
+		"dmenu") application_arguments="-i -l 5 -p $prompt";;
+		"fzf") application_arguments="";;
+		"zenity") application_arguments="";;
+		*) echo "Error: not a recognized menu application"; exit 1;;
+	esac
+
+	# Save the choice from the user into this variable.
+	choice=$(printf '%s\n' "${options[@]}" | $application $application_arguments)
+
+	# What to do based off the user choice variable.
+	case "$choice" in
+		"lutris") minimize_lutris=0; minimize_steam=1;;
+		"steam") minimize_lutris=1; minimize_steam=0;;
+		"big-picture") minimize_lutris=1; minimize_steam=0; use_bigpicture=1;;
+		"both") minimize_lutris=0; minimize_steam=0;;
+	esac
+}
+
+# Silently patch steam with modifications done with steam-metadata-editor
+function patch_steam_custom_metadata() {
+	echo "Patching Steam metadata..."
+	steammetadataeditor --silent
+	sleep 1
+	steammetadataeditor --silent
 }
 
 # Check for already running processes.  Set a flag
 function check_processes() {
-	# Local variables to hold the process ID of Steam and Lutris.
-	# These variables will be empty (-z) if the process is not running.
-	local lutris_process=$(get_process_id "lutris")
-	local steam_process=$(get_process_id "steam")
+	echo "Checking for processes..."
+
+	# Run the pgrep command to check for running processes.
+	# If the command fails, the process variable is set to 0.
+	steam_process_id=$(pgrep --exact "$steam_process_name") || steam_process_id=0
+	lutris_process_id=$(pgrep --full "$lutris_process_name") || lutris_process_id=0
 
 	# Check the lutris process.
+	# If 0, not running.
 	# If running, set to 1.
-	if [ -z "$lutris_process" ]; then
+	if [ "$lutris_process_id" -eq 0 ]; then
+		echo "Lutris is not running."
 		is_lutris_running=0
 	else
+		echo "Lutris is running."
 		is_lutris_running=1
 	fi
 
 	# Check the Steam process.
+	# If 0, not running.
 	# If running, set to 1.
-	if [ -z "$steam_process" ]; then
+	if [ "$steam_process_id" -eq 0 ]; then
+		echo "Steam is not running."
 		is_steam_running=0
 	else
+		echo "Steam is running."
 		is_steam_running=1
 	fi
+
+}
+
+function send_notification() {
+	local message
+	local program
+	local title
+	local steam_status
+	local lutris_status
+
+	status="$1"
+	program="$2"
+	title="Game Time"
+
+	case "$status" in
+		start) message="Starting up: $program".;;
+		stop) ;;
+		"") ;&
+		*) message="Error with notification"; exit 1;;
+	esac
+}
+
+function send_notification_simple() {
+	local message=""
+	local title
+	local status
+
+	status="$1"
+	title="Game Time"
+
+	case "$status" in
+		start) message="Starting up game lanuchers...";;
+		stop) message="Closing game launchers.";;
+		"") ;&
+		*) message="Error with notification"; exit 1;;
+	esac
+
+	if [ "$status" == "start" ]; then
+		[ "$use_bigpicture" -eq 1 ] && message="$message\nStarting Steam in Big Picture mode..."
+		[ "$minimize_lutris" -eq 1 ] && message="$message\nLutris will be minimized..."
+		[ "$minimize_steam" -eq 1 ] && message="$message\nSteam will be minimized..."
+	fi
+
+
+	#echo "$title:"
+	#echo -e "$message"
+
+	notify-send "$title" "$message"
 }
 
 
@@ -123,14 +374,63 @@ function main() {
 	# Check for running processes for Steam and Lutris
 	check_processes
 
+	get_arguments "$@"
+	shift $((OPTIND-1))
+
+	# If either of them is running, kill it and exit.
+	if [ $is_steam_running -eq 1 ] || [ $is_lutris_running -eq 1 ]; then
+		kill_launchers
+		exit
+	fi
+
+	# If choose_interactively mode is set.
+	if [ "$choose_interactively" -eq 1 ]; then
+		choose_with_menu
+	fi
+
+	# Launch the game launchers, according to the flags.
+	launch_launchers
+
+	echo "All done!"
+}
+
+
+###############
+### Testing ###
+###############
+function testing() {
+	set -euox pipefail
+
+	local is_steam_running
+	local is_lutris_running
+	local steam_mode
+	local lutris_mode
+
+	#is_steam_running=$(check_process "steam")
+	#is_lutris_running=$(check_process "lutris")
+
+	check_processes
+
 	# If either of them is running, kill it.
 	if [ $is_steam_running -eq 1 ] || [ $is_lutris_running -eq 1 ]; then
 		kill_launchers
-	# Otherwise, launch them.
-	else
-		launch_launchers
+		send_notification_simple "stop"
+		exit
 	fi
+
+	steam_mode=${1:-normal}
+	lutris_mode="minimized"
+
+	launch_steam "$steam_mode"
+
+	#launch_lutris "$lutris_mode"
+
+	send_notification_simple "start"
 }
 
-### Call to main ###
+
+#############
+### Start ###
+#############
 main "$@"
+#testing "$@"
