@@ -21,6 +21,8 @@ set -euo pipefail
 # - Move config section to separate file.
 # - Add ability to restore special save circumstance.
 # - Break up some code into smaller functions (ex. yes_or_no function)
+# - Add ability to silence any games that have not changed; only show games that are being backed up.
+# - Fix up the code in the `check_directory` function.
 #
 ###########################################################
 
@@ -52,8 +54,9 @@ size_of_data_block=3
 # Rsync arguments
 rsync_arguments=(
 	--recursive
+	--archive
 	--verbose
-	--times
+	--info=flist0,stats0
 	--human-readable
 	--delete
 	--modify-window=1
@@ -105,6 +108,10 @@ function footer() {
 	echo "================================================"
 }
 
+### Pause and wait for input.
+function wait() {
+	read -p "Press Enter to continue..."
+}
 # A simple function to return results based on a yes or no statement.
 # Notice the logic is reversed when returning integers as opposed to
 # echoing them.  Return 0 is success, return 1 is failure.
@@ -167,26 +174,51 @@ function list_games() {
 	footer
 }
 
-# A function to check wether a directory exists or not, and if it is empty.
+# A function to check whether a directory exists or not, and if it is empty.
 # Returns 0 if it does not exist, 1 if it exists, 2 if it exists and is empty.
 function check_directory() {
 	# Variable for the directory to check, passed to the function.
 	local directory="$1"
+	local backup="${2:-default}"
+
+	local save_exist
+	local backup_exist
+	local are_directories_same
+	local is_directory_empty
 
 	# Initialize the status to zero.
-	local status=0
-
+	local status
 
 	# Check if the pc save directory exists.
 	if [ -d "$directory" ]; then
 		# Check if directory if empty using the find command.
 		# It will return the directory path if it is empty.
-		local is_empty=$(find "$directory" -maxdepth 0 -type d -empty)
+		#local is_empty=$(find "$directory" -maxdepth 0 -type d -empty)
+		#local different_files
+
+
+		if [ -z $(find "$directory" -maxdepth 0 -type d -empty -true) ]; then
+			is_directory_empty=false
+		else
+			is_directory_empty=true
+		fi
+
+
+		#if [ "$is_directory_empty" = true ]; then
+
+		#if [ -d "$backup" ]; then
+		#	backup_exist=1
+		#	different_files=$(diff --recursive "$directory" "$backup") && different_files="none"
+		#fi
 
 		# If the variable is a non-zero string, meaning the directory is empty.
-		if [ -n "$is_empty" ]; then
+		if "$is_directory_empty"; then
 			# Set status to 2, exists but empty.
 			status=2
+			#is_empty=1
+		#elif [ "$different_files" == "none" ]; then
+		#	status=4
+		#	directories_same=1
 		else
 			# Set status to 1, exists and ready to sync.
 			status=1
@@ -204,11 +236,13 @@ function check_directory() {
 		fi
 	fi
 
+
 	# Return the status of the directory.
 	# 0: Does not exist
 	# 1: Exists
 	# 2: Exists but empty
 	# 3: Perform a special sync
+	# 4: Directories are identical and the game can be skipped.
 	echo "$status"
 }
 
@@ -221,6 +255,12 @@ function backup_saves() {
 	local title
 	local pc_save
 	local backup_save
+	local directory_check
+	local are_saves_same
+	local message=""
+	local run_sync
+	local sync_type
+	declare -i games_skipped=0
 
 	# If dry-run mode is set, add it to the arguments for rsync.
 	if [ "$dry_run_mode" -eq 1 ]; then
@@ -243,34 +283,73 @@ function backup_saves() {
 		backup_save="${save_locations[$index+2]}"
 
 		# Add a header that will display the game's title.
-		header "Syncing $title"
+		#header "Syncing $title"
+
+		# Add some output if we are using dry-run mode, to make it clear.
+		#[[ "$dry_run_mode" -eq 1 ]] && echo "(DRY-RUN)"
 
 		# Check the status of the directory.
 		# 0: Does not exist.
 		# 1: Exists and ready to sync.
 		# 2: Exists but empty.
-		directory_status=$(check_directory "$pc_save")
+		# 3: Specific file save.
+		# 4: No changes in save files.
+		directory_status=$(check_directory "$pc_save" "$backup_save")
 
 
 		# Case logic on what to do depending on the directory status.
 		case "$directory_status" in
 			0)
-				echo "PC save directory/files do not exist. Try restoring it."
-				echo "Skipping..."
+				#echo "PC save directory/files do not exist. Try restoring it."
+				#echo "Skipping..."
+				message="PC save directory/files do not exist. Try restoring it.\nSkipping..."
+				sync_type=0
 				;;
 			1)
 				# Call to rsync
-				rsync ${rsync_arguments[@]} "$pc_save/" "$backup_save"
+				#rsync ${rsync_arguments[@]} "$pc_save/" "$backup_save"
+				#run_sync=$(rsync "${rsync_arguments[@]}" "$pc_save/" "$backup_save")
+				sync_type=1
 				;;
 			2)
-				echo "PC save directory is empty.  Try restoring it."
-				echo "Skipping..."
+				#echo "PC save directory is empty.  Try restoring it."
+				#echo "Skipping..."
+				message="PC save directory is empty.  Try restoring it.\nSkipping..."
+				sync_type=0
 				;;
 			3)
 				# Call to special save backup function.
-				backup_special_saves "$pc_save" "$backup_save"
+				#backup_special_saves "$pc_save" "$backup_save"
+				#run_sync=$(backup_special_saves "$pc_save" "$backup_save")
+				message="Special backup needed for this game."
+				sync_type=2
+				;;
+			4)
+				# No changes in save files.
+				#continue
+				#run_sync=$(continue)
+				message="No changes."
+				sync_type=3
+				games_skipped+=1
 				;;
 		esac
+
+		[[ "$sync_type" -eq 3 ]] && continue
+
+		# Add a header that will display the game's title.
+		header "Syncing $title"
+
+		# Add some output if we are using dry-run mode, to make it clear.
+		[[ "$dry_run_mode" -eq 1 ]] && echo "(DRY-RUN)"
+
+		case "$sync_type" in
+			0) echo "$message";;
+			1) rsync ${rsync_arguments[@]} "$pc_save/" "$backup_save";;
+			2) backup_special_saves "$pc_save" "$backup_save";;
+			3) echo "$message";;
+		esac
+
+		#rsync "$run_sync"
 
 
 		# Add a footer.
@@ -282,6 +361,11 @@ function backup_saves() {
 
 
 	done
+
+	if [ "$games_skipped" -gt 0 ]; then
+		echo "Some games were skipped because there was no difference."
+		echo "Total skipped: $games_skipped"
+	fi
 }
 
 # A function to backup saves that share the same directory as other files.
@@ -743,7 +827,7 @@ function main() {
 		# Prompt the user if they would like to run the script for real.
 		# If not, give some output and exit with error.
 		# If yes, continue with the script.
-		yes_or_no "Would you like to run the script for real?" || (echo "Cancelling..."; exit 1)
+		yes_or_no "Would you like to run the script for real?" || (echo "Cancelling..."; return 1)
 
 		# Give some output.
 		echo "Running for real..."
