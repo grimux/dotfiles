@@ -1,13 +1,42 @@
 #!/usr/bin/env bash
 #
-# xinit script
+# xinit script for Xorg.
 #
-# by: Jake "grimux"
+# by: Jake
 #
 
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+set -eo pipefail
+
+
+##################
+### User Input ###
+##################
 # Set awesome as the default, otherwise the argument passed will be the session.
 session=${1:-awesome}
 
+
+##############
+### Config ###
+##############
+#
+# Flag for debug mode.
+# When enabled, only loads the bare minimum of things, using Awesome.
+DEBUG=0
+
+
+################
+### Sessions ###
+################
+#
 # AwesomeWM config
 function awesome() {
 	# Picom for transparency
@@ -30,12 +59,13 @@ function awesome() {
 	redshift-gtk &
 	#redshift &
 
-	# Fix for steam
-	#/usr/lib/xdg-desktop-portal-gtk &
-	#/usr/lib/xdg-desktop-portal-lxqt &
-	#/usr/lib/xdg-desktop-portal &
+	# Start Universal Media Server
+	ums &
 
 	export XDG_SESSION_TYPE='x11'
+	export XDG_CURRENT_DESKTOP='gtk'
+	#export XDG_CURRENT_DESKTOP='awesome'
+	#export XDG_CURRENT_DESKTOP='LXQt'
 
 	# Start awesome
 	exec awesome
@@ -77,7 +107,20 @@ function plasma() {
 	exec startplasma-x11
 }
 
-# General settings shared by all configs.
+# Debug mode
+function debug_session() {
+	export XDG_SESSION_TYPE='x11'
+	export XDG_CURRENT_DESKTOP='gtk'
+
+	exec awesome
+}
+
+
+#######################
+### Shared Settings ###
+#######################
+#
+# General settings shared by all session types.
 function shared_settings() {
 	# ID names from xrandr for my TV and PC monitor.
 	local monitor_id="DVI-D-0"
@@ -86,23 +129,9 @@ function shared_settings() {
 	# Set TV (hdmi) to be the same as main monitor
 	xrandr --output $tv_id --same-as $monitor_id &
 
-	# music player daemon
-	# Check if the pid file exists, if not, start mpd.
-	# If file exists and size greater than zero (-s), skip.
-	[ ! -s ~/.local/share/mpd/pid ] && mpd
-
-	# Start Universal Media Server
-	ums &
-
 	# OpenRGB for PC's RGB lighting.
 	#openrgb --server --profile Rainbow.orp --startminimized &
 	openrgb --server --profile default_profile --startminimized &
-
-	# control mpd with playerctl
-	#mpDris2 &
-
-	# Set caps lock to escape
-	#setxkbmap -option caps:escape &
 
 	# Turn on the numlock
 	numlockx on &
@@ -114,8 +143,48 @@ function shared_settings() {
 	xset s 900 &
 	xset dpms 900 900 900 &
 
+}
+
+
+########################
+### Unsused Settings ###
+########################
+#
+# Some settings that I'm not currently using, but want to keep in case I need them again.
+# These settings are from "shared_settings", and are removed to simplfy the function.
+function unsused_settings() {
+	# music player daemon
+	# Note: currently using systemd user service.
+	# Check if the pid file exists, if not, start mpd.
+	# If file exists and size greater than zero (-s), skip.
+	[ ! -s ~/.local/share/mpd/pid ] && mpd
+	[[ $(pgrep mpd) ]] && mpd &
+
+	# mpd notifications
+	# Note: currently using systemd user service.
+	#mpd-notification &
+
+	# control mpd with playerctl
+	mpDris2 &
+
+	# Set caps lock to escape
+	setxkbmap -option caps:escape &
+
+	# Gerbera media server
+	gerbera --daemon &
+
+	# Power Management
+	powerkit &
+
 	# Start playerctl daemon, tracks recent media players and can control them with media keys.
 	playerctld daemon &
+
+	# From: awesome session
+	# Fix for steam
+	/usr/lib/xdg-desktop-portal-gtk &
+	/usr/lib/xdg-desktop-portal-lxqt &
+	/usr/lib/xdg-desktop-portal &
+
 }
 
 # Source the startup scripts for X11.
@@ -129,18 +198,47 @@ function source_startup_files() {
 	fi
 }
 
-# Source all startup scripts for X11.
-# Contains an important one to set DISPLAY properly.
-source_startup_files
 
-# Run the shared settings first.
-shared_settings
+############
+### Main ###
+############
+# Main function.
+# Contains startup scripts, shared settings, and case statement to determine desktop environment.
+function main() {
+	# Source all startup scripts for X11.
+	# Contains an important one to set DISPLAY properly.
+	source_startup_files
 
-# Switch to determine which window manager we want to execute.
-case "$session" in
-	awesome|awm	) awesome;;
-	dwm		) dwm;;
-	gnome		) gnome;;
-	plasma|kde	) plasma;;
-	*		) echo "Session not found." && exit 1
-esac
+	# Run the shared settings first.
+	shared_settings
+
+	# Switch to determine which window manager we want to execute.
+	case "$session" in
+		awesome|awm	) awesome;;
+		dwm		) dwm;;
+		gnome		) gnome;;
+		plasma|kde	) plasma;;
+		*		) echo "Session not found." && exit 1
+	esac
+}
+
+
+#############
+### Debug ###
+#############
+# Called below if "debug" is passed as the session name.
+# Only loads very minimal things to help in debugging problems.
+function main_debug() {
+	set -euox pipefail
+	debug_session
+}
+
+# Check for debug mode.
+# Call main otherwise.
+if [ "$session" == "debug" ]; then
+	DEBUG=1
+	main_debug
+	exit 1
+fi
+
+main
