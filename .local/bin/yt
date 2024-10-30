@@ -1,7 +1,32 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #
-# A wrapper for yt-dlp
+####################
 #
+# Name:	yt
+# Author: grimux
+#
+# Description:
+# 	A wrapper for `yt-dlp` to download videos the way I like.  Uses configs found in ".config/youtube-dl".
+# 	Currently a work in progess and is using testing functions.
+#
+# Dependencies:
+# 	yt-dlp (AUR)
+# 	totalsize (pipx)
+#
+####################
+
+
+############
+### TODO ###
+############
+#
+# - Add more comments.
+#
+############
+
+###################
+### Fail Events ###
+###################
 # e - script stops on error
 # u - error if undefined variable
 # o pipefail - script fails if command piped fails
@@ -9,18 +34,22 @@
 #
 #set -euox pipefail
 set -euo pipefail
-
-
+#
+###################
 
 
 ##############
 ### Config ###
 ##############
 # Directory location for downloading videos.
-video_download_location="$HOME/Videos/yt-dlp"
+# The variable "$YT_VDIR" is set from `.zprofile`.
+#video_download_location="$HOME/Videos/yt-dlp"
+video_download_location="$YT_VDIR"
 
 # Directory location for downloading audio.
-audio_download_location="$HOME/Music/yt-dlp"
+# The variable "$YT_ADIR" is set from `.zprofile`.
+#audio_download_location="$HOME/Music/yt-dlp"
+audio_download_location="$YT_ADIR"
 
 ## Output type ##
 # Output format for yt-dlp to use when downloading playlists.
@@ -58,6 +87,25 @@ batch_file=""
 url=""
 
 
+######################
+### Testing Config ###
+######################
+# All the variables needed for testing mode.  Testing mode is used when debugging or trying new features without compromising the original functions.
+# Testing mode.  Will use testing functions instead of main ones.
+testing_mode=1
+
+# Binary setup.
+binary="yt-dlp"
+binary_config_dir="$HOME/.config/youtube-dl"
+binary_to_download_file="$binary_config_dir/to_download.txt"
+
+# Config files
+audio_single_config="$binary_config_dir/audio_single"
+audio_playlist_config="$binary_config_dir/audio_playlist"
+audio_split_config="$binary_config_dir/audio_split"
+podcast_config="$binary_config_dir/podcast"
+video_single_config="$binary_config_dir/video_single"
+video_playlist_config="$binary_config_dir/video_playlist"
 
 
 ########################
@@ -86,7 +134,7 @@ yt_arguments=(
 ### Functions ###
 #################
 # Help Section
-help_section() {
+function help_section() {
 	echo "A wrapper for yt-dlp and playlist management."
 	echo
 	echo "Syntax: $(basename $0) [-h|a|z] [-o] <output directory> [-c] <name of archive> [-p] <name of m3u> [-r] <resolution> -u <URL>"
@@ -109,7 +157,7 @@ help_section() {
 # First argument passed should be the prefered resolution.
 # Second argument is the URL of the playlist.
 # If no resolution is specified, 1080p will be used.
-get_playlist_size_easy() {
+function get_playlist_size_easy() {
 	# Call to totalsize.  It is a python script that will calculate the total size
 	# of the URL provided.
 	totalsize \
@@ -118,7 +166,7 @@ get_playlist_size_easy() {
 }
 
 # List out the archives from the archive directory.
-list_archives() {
+function list_archives() {
 	local archives
 	archives=($archive_directory/*)
 
@@ -128,7 +176,7 @@ list_archives() {
 }
 
 # Download the video, either a single video or playlist.
-download_video() {
+function download_video() {
 	# Call to yt-dlp.
 	yt-dlp --paths $video_download_location ${yt_arguments[@]} ${url[@]}
 
@@ -136,12 +184,12 @@ download_video() {
 }
 
 # Function used to create m3u playlists for use with UMS and mpv.
-create_m3u_playlist() {
+function create_m3u_playlist() {
 	echo "Creating Playlist."
 }
 
 # Check if the provided resolution (-r) is supported by the script.
-check_resolution() {
+function check_resolution() {
 	# Array of supported resolutions.
 	local supported_resolutions=(1080 720 480)
 
@@ -155,7 +203,7 @@ check_resolution() {
 }
 
 # Get arguments and set flags
-get_arguments() {
+function get_arguments() {
 	while getopts ":o:lu:hpr:a:xszb:" option; do
 		case $option in
 			# What to do if there is an invalid argument.
@@ -199,8 +247,122 @@ get_arguments() {
 	done
 }
 
+
+#########################
+### Testing Functions ###
+#########################
+# Testing and work in progress get args function.
+function test_get_arguments() {
+	while getopts ":hv:a:i:s:u:d" option; do
+		case "$option" in
+			h) test_help_menu;;
+
+			v) $binary --config-location "$video_single_confg" "${OPTARG}";;
+
+			a) $binary --config-location "$audio_single_config" "${OPTARG}";;
+
+			i) $binary --config-location "$video_single_config" "${OPTARG}";;
+
+			s) $binary --config-location "$audio_single_config" "${OPTARG}";;
+
+			u) test_add_to_download "${OPTARG}";;
+
+			d) test_download_batch;;
+
+			:) test_handle_error "url";;
+
+			\?) test_handle_error "cmd";;
+		esac
+	done
+
+	# Leave the script.
+	#exit
+}
+
+function test_handle_error() {
+	local errno="$1"
+
+	# Case to determine which message to display, based on the given error.
+	case "$errno" in
+		"url") echo "Error: Missing url!";;
+		"cmd") echo "Error: Unknown command!";;
+	esac
+
+	# Warning that the script will close.
+	echo "The script will now close."
+
+	# Not sure which is best to use, return 1 or exit 1.
+	return 1
+}
+
+# Test help menu
+function test_help_menu() {
+	# Space offset: 5,10
+	echo "$(basename $0), a simple wrapper for yt-dlp."
+	echo
+	echo "Syntax: $(basename $0) <command> (url)"
+	echo "options:"
+	echo "     h         : Print this test help screen."
+	echo
+	echo "single downloads:"
+	echo "     v <url>   : Download a single video. Uses \"video_single\" config."
+	echo "     a <url>   : Download audio from a single video. Uses \"audio_single\" config."
+	echo
+	echo "playlist downloads:"
+	echo "     i <url>   : Download a video playlist. Uses \"video_playlist\" config."
+	echo "     s <url>   : Download an audio playlist. Uses \"audio_playlist\" config."
+	echo
+	echo "batch download:"
+	echo "     u <url>   : Add a video's url to the file \"to_download.txt\".  You can download later using \`-d\`."
+	echo "     d         : Download all videos in the \"to_download.txt\" file."
+	echo
+}
+
+function test_download_audio_single() {
+	local var
+}
+
+function test_download_audio_playlist() {
+	local var
+}
+
+function test_download_video_single() {
+	local var
+}
+
+function test_download_video_playlist() {
+	local var
+}
+
+function test_download_batch() {
+	local batch_file="$binary_to_download_file"
+	local config_file="$video_single_config"
+
+	echo "Downloading videos from batch file: $batch_file"
+
+	$binary --config-location "$config_file" --batch-file "$batch_file" && rm -v "$batch_file"
+}
+
+function test_add_to_download() {
+	local batch_file="$binary_to_download_file"
+	local url="$1"
+
+	if [ -f "$batch_file" ]; then
+		echo "Adding \"$url\" to file."
+		echo "$url" >> "$batch_file"
+	else
+		echo "Creating file and adding \"$url\"."
+		echo "$url" > "$batch_file"
+	fi
+
+	echo "Done."
+}
+
+
+##################
 ### Main logic ###
-main() {
+##################
+function main() {
 	get_arguments "$@"
 	# If the url variable is empty, tell us with an error.
 	if [ -z "$url" ] && [ -z "$batch_file" ]; then
@@ -256,9 +418,50 @@ main() {
 
 }
 
-# Main testing function
-main_testing() {
-	get_arguments "$@"
+
+###############
+### Testing ###
+###############
+function testing() {
+	local debug_mode=1
+
+	# Test message.
+	echo "########################"
+	echo "### Testing Mode: ON ###"
+	echo "########################"
+
+	# Check to see if debugging mode is activated.
+	if [ "$debug_mode" -eq 1 ]; then
+		# Message for debugging.
+		echo
+		echo Script output will be set for debugging.
+		echo
+
+		# Set script output for debugging mode.
+		set -euox pipefail
+
+	fi
+
+	# Call to get script arguments.
+	test_get_arguments "$@"
 }
-main "$@"
-#main_testing "$@"
+
+
+
+#############
+### Start ###
+#############
+# Case statement to check for testing mode.
+# This will be used to determine which main function to execute.
+case "$testing_mode" in
+	1) testing "$@";;
+	0) main "$@";;
+	*)
+		echo "Variable \"testing_mode\" is out of range. Should be 0 or 1.";
+		echo "Current setting: $testing_mode";
+		exit 1;;
+esac
+
+# Old way to call main functions.
+#testing "$@"
+#main "$@"
