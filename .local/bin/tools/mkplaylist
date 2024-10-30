@@ -11,8 +11,8 @@
 # o pipefail - script fails if command piped fails
 # x - output each line (debug)
 #
-#set -euox pipefail
-set -euo pipefail
+set -euox pipefail
+#set -euo pipefail
 
 ############
 ### TODO ###
@@ -24,7 +24,8 @@ set -euo pipefail
 # - Decide about append mode, keep or not.
 # - Implement more than mkv searching.
 # - Finish continue prompt.
-#
+# - Change create_m3u function to take arguments.
+# - Rewrite main function to print playlist and insert ums header.
 
 #################
 ### Variables ###
@@ -32,7 +33,6 @@ set -euo pipefail
 #
 playlist_directory="/mnt/v/playlists"
 playlist_array=($playlist_directory/*)
-playlist_header="#EXTM3U"
 playlist_name=""
 base_video_directory="/mnt/v"
 video_directory=""
@@ -41,6 +41,10 @@ video_extensions="-name *.mkv -o -name *.avi -o -name *.mp4"
 
 shuffle_mode=0
 append_mode=0
+relative_path=0
+use_interactive_mode=0
+
+declare -a playlist_info=""
 
 
 #########################
@@ -63,43 +67,55 @@ function usage() {
 # Help Section
 function help_section() {
 	echo "A script to create video playlists."
+	echo "When working with a playlist name, its extention can be omitted.  This script uses .m3u by default."
 	echo
-	echo "Syntax: $(basename $0) (options) [-n] <playlist name> [-d] <video directory>"
+	echo "Syntax: $(basename $0) (options) command <playlist name> (arguments)"
 	echo "options:"
-	echo "h                   : Print this help screen."
-	echo "s <playlist name>   : Shuffle a playlist."
-	echo "u <playlist name>   : Unshuffle/sort a playlist."
-	echo "l                   : List playlists."
-	echo "e                   : Open playlist directory in ranger."
-	echo "r <playlist name>   : Remove playlist."
-	echo "a                   : Append to playlist."
-	echo "g <playlist name>   : Auto-generate playlist from profile."
+	#echo "c                   : Create a playlist."
+	echo "     h                   : Print this help screen."
+	echo "     l                   : List playlists."
+	echo "     f                   : Open playlist directory in ranger."
+	echo "     a                   : Append to playlist."
+	echo "     i                   : Interactive mode."
+	echo
+	echo "commands:"
+	echo "     n <playlist name>   : Name of playlist to create or append, no extension."
+	echo "     s <playlist name>   : Shuffle a playlist."
+	echo "     u <playlist name>   : Unshuffle/sort a playlist."
+	echo "     r <playlist name>   : Remove playlist."
+	echo "     g <playlist name>   : Auto-generate playlist from profile."
 	echo
 	echo "arguments:"
-	echo "n   : Name of the playlist to create (m3u)."
-	echo "d   : Directory of video files (mkv)."
+	echo "     d <video directory> : Directory to use when creating a playlist.  Only needed for \"-n\"."
 	echo
 	echo "Playlists are saved in: $playlist_directory"
 }
 
 # Get arguments and set flags
 function get_arguments() {
-	while getopts ":d:n:s:u:hlg:ear:" option; do
+	while getopts ":c::d:n:s:u:hlg:fear:i" option; do
 		case $option in
 			# Append to playlist.
 			a) append_mode=1; echo "Append mode: ON";;
+
+			# Create a playlist.
+			c) #playlist_info+=($OPTARG);;
+			echo "Not implemented"; exit 1;;
 
 			# Playlist mode.
 			d) video_directory="${OPTARG}";;
 
 			# Open playlist directory in ranger.
-			e) open_in_ranger; exit;;
+			f) open_in_ranger; exit;;
 
 			# Auto-generate playlist.
 			g) auto_generate_playlist "${OPTARG}"; exit;;
 
 			# Help menu.
 			h) help_section; exit;;
+
+			# Interactive mode.
+			i) interactive_mode; exit;;
 
 			# List playlists.
 			l) list_playlists; exit;;
@@ -111,7 +127,7 @@ function get_arguments() {
 			r) remove_playlist "${OPTARG}"; exit;;
 
 			# Shuffle playlist.
-			s) shuffle_playlist "$playlist_directory/${OPTARG}.m3u"; exit;;
+			s) shuffle_playlist "$playlist_directory/${OPTARG}"; exit;;
 
 			# Unshuffle/sort playlist.
 			u) unshuffle_playlist "$playlist_directory/${OPTARG}.m3u"; exit;;
@@ -184,9 +200,9 @@ function check_playlists() {
 
 # Remove playlist
 function remove_playlist() {
-	local playlist=$1
+	local playlist_file=$1
 
-	rm --force --verbose "$playlist_directory/$playlist.m3u"
+	rm --force --verbose "$playlist_file"
 }
 
 # Create m3u playlist file.
@@ -195,11 +211,26 @@ function create_m3u() {
 	local playlist_file="$playlist_directory/$playlist_name.m3u"
 
 	# Output.
-	echo "Creating playlist for: $playlist_name"
+	echo "Creating playlist for: $playlist_name.m3u"
 
 	# If append mode is off, create a new playlist file with the header for UMS.
 	if [ $append_mode -eq 0 ]; then
-		echo "$playlist_header" > "$playlist_file"
+		remove_playlist "$playlist_file"
+	fi
+
+	# Check if we should use paths relative to the playlist.
+	# Useful for mpv save position feature.
+	if [ $relative_path -eq 1 ]; then
+		#cd "$playlist_directory"
+		#video_directory="../"
+		echo "Not finished."
+		exit 1
+	fi
+
+	if [ -z "$video_directory" ]; then
+		echo "Please use \"-n\" to specify a directory."
+		usage
+		exit 1
 	fi
 
 	# Create m3u file using the find command
@@ -207,6 +238,9 @@ function create_m3u() {
 
 	# Final output.
 	echo "Playlist created."
+
+	insert_ums_header "$playlist_file"
+	print_playlist "$playlist_file"
 }
 
 # A function used to automatically generate playlists based on profiles found in
@@ -258,8 +292,10 @@ function auto_generate_playlist() {
 	# Sort the playlist file alphabetically.
 	unshuffle_playlist "$playlist_file"
 
+	#insert_ums_header "$playlist_file"
+
 	# Print out the playlist.
-	print_playlist "$playlist_file"
+	#print_playlist "$playlist_file"
 }
 
 # Used to print out a given playlist.  Expects just a name and not a full path.
@@ -268,7 +304,7 @@ function print_playlist() {
 	local playlist_name
 
 	playlist_file="$1"
-	playlist_name="$(basename --suffix .m3u $playlist_file)"
+	playlist_name="$(basename $playlist_file)"
 
 	echo "Printing playlist"
 	echo
@@ -283,13 +319,33 @@ function shuffle_playlist() {
 	local playlist_file
 	local playlist_name
 
-	playlist_file="$1"
-	playlist_name="$(basename --suffix .m3u $playlist_file)"
+	playlist_file="$1.m3u"
+	playlist_name="$(basename $playlist_file)"
 
 	echo "Shuffling: $playlist_name"
 	shuf "$playlist_file" --output "$playlist_file"
 
+	insert_ums_header "$playlist_file"
+
 	print_playlist "$playlist_file"
+}
+
+# Shuffle a playlist using shuf.  Creates a new file "shuf" file.
+function create_shuffled_playlist() {
+	local playlist_file
+	local playlist_name
+	local playlist_shuffled_file
+
+	playlist_file="$1.m3u"
+	playlist_shuffled_file="$1.shuf.m3u"
+	playlist_name="$(basename $playlist_shuffled_file)"
+
+	echo "Shuffling: $playlist_name"
+	shuf "$playlist_file" --output "$playlist_shuffled_file"
+
+	insert_ums_header "$playlist_shuffled_file"
+
+	print_playlist "$playlist_shuffled_file"
 }
 
 # Unshuffle/sort a playlist using sort.  Replaces playlist file directly.
@@ -298,12 +354,57 @@ function unshuffle_playlist() {
 	local playlist_name
 
 	playlist_file="$1"
-	playlist_name="$(basename --suffix .m3u $playlist_file)"
+	playlist_name="$(basename $playlist_file)"
 
 	echo "Sorting: $(basename $playlist_file)"
 	sort "$playlist_file" --output "$playlist_file"
 
+	insert_ums_header "$playlist_file"
+
 	print_playlist "$playlist_file"
+
+}
+
+# Use interactive mode to add or remove videos from playlists.
+function interactive_mode() {
+	local option_choice
+	local video_choice
+	local prompt="Option:"
+	local menu_program="dmenu"
+	local program_args=""
+	declare -a options=("add" "remove" "delete")
+
+	case "$menu_program" in
+		dmenu) program_args="-i -l 20 -p $prompt";;
+		fzf) program_args="";;
+		*) exit 1;;
+	esac
+
+	option_choice=$(printf '%s\n' "${options[@]}" | $menu_program $program_args)
+
+	case "$option_choice" in
+		add) append_mode=1; video_choice=$(dm-videos -r);;
+		remove) ;;
+		delete) ;;
+	esac
+
+	echo "$video_choice"
+
+}
+
+# Insert a header for UMS to read .m3u playlists.
+# Uses sed to insert a line at the very top.
+# This function should be called whenever a playlist is generated.
+function insert_ums_header() {
+	local playlist_file
+	local playlist_header
+	local temp_file
+
+	playlist_file="$1"
+	playlist_header="#EXTM3U"
+
+	sed --in-place --null-data 's/\#EXTM3U\n//' "$playlist_file"
+	sed --in-place '1s/^/\#EXTM3U\n/' "$playlist_file"
 
 }
 
@@ -334,6 +435,7 @@ function footer() {
 ############
 #
 main() {
+	local does_playlist_exist
 	get_arguments "$@"
 
 	if [ "$OPTIND" -eq 1 ]; then
@@ -347,10 +449,11 @@ main() {
 	if [ $does_playlist_exist -eq 1 ]; then
 		echo "Playlist already exists."
 		#to_continue=$(would_you_like_to_continue)
-		[[ $to_continue -eq 0 ]] && exit 1
+		#[[ "$to_continue" -eq 0 ]] && exit 1
 	fi
 
 	create_m3u
+
 }
 
 ####################
