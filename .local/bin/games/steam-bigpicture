@@ -11,8 +11,8 @@
 # o pipefail - script fails if command piped fails
 # x - output each line (debug)
 #
-set -euox pipefail
-#set -euo pipefail
+#set -euox pipefail
+set -euo pipefail
 
 
 ############
@@ -27,6 +27,10 @@ set -euox pipefail
 ##############
 ### Config ###
 ##############
+
+use_mangohud=0
+
+steam_binary="steam-runtime"
 
 # Steam names and IDs.
 steam_title="Steam Big Picture Mode"
@@ -130,8 +134,11 @@ function is_steam_running() {
 # '%@' will try for all instances of window IDs.
 #
 function move_focus_to_steam() {
-	until xdotool search --class "$steam_class" windowactivate %@; do
-		sleep 5
+	# Try to run the following command until it succeeds.
+	# '%8' is to tell `xdotool` that the eighth "window" is the window we want to focus on,
+	# all other windows are just created for Steam.  `%8` seems to always be the correct one.
+	until xdotool search --class "$steam_class" windowactivate %8; do
+		sleep 2
 	done
 }
 
@@ -146,8 +153,16 @@ function move_to_last_window() {
 # Start Steam in Big Picture Mode
 #
 function start_bigpicture() {
+	local run_command
+
+	run_command="$steam_binary"
+
+	# Check if we should use Mangohud with Steam globally.
+	# If so, set the "bin" variable to include it.
+	[[ "$use_mangohud" -eq 1 ]] && run_command="mangohud $steam_binary"
+
 	# Bigpicture will make it start in Big Picture mode.  Great for playing on TV or with controller.
-	steam -nochatui -nofriendsui -bigpicture &> /dev/null &
+	$run_command -nochatui -nofriendsui -bigpicture &> /dev/null &
 }
 
 
@@ -155,6 +170,10 @@ function start_bigpicture() {
 ### Main ###
 ############
 function main() {
+	local arg
+	arg=${1:-null}
+
+	[[ "$arg" == "-m" ]] && use_mangohud=1; echo "Using Mangohud."
 
 	# Check if Steam is running.
 	# If not, start it in big picture mode.
@@ -183,5 +202,5 @@ function testing() {
 #############
 ### Start ###
 #############
-main
+main "$@"
 #testing
