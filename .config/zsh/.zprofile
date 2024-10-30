@@ -38,6 +38,15 @@ export HISTFILE="$HOME/.cache/zsh/history"
 # Needs the `ssh-agent` service to be running.
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
+
+#####################
+### Script Config ###
+#####################
+# yt-dlp Download locations.
+export YT_VDIR="/mnt/x/videos/yt-dlp"
+export YT_ADIR="$HOME/Music/yt-dlp"
+export YT_ARCHIVE="$HOME/Videos/yt-dlp/urls.archive.txt"
+
 ############
 ### Path ###
 ############
