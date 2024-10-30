@@ -226,6 +226,14 @@ awesome.connect_signal('update_monitor_sleep_status', function()
     end
 end)
 
+-- Signal to move system tray to primary screen.
+awesome.connect_signal('move_systray', function()
+    screen.primary = awful.screen.focused()
+    wibox.widget.systray():set_screen("primary")
+    wibox.widget.systray():emit_signal("widget::redraw_needed")
+    wibox.widget.systray():emit_signal("widget::layout_changed")
+end)
+
 -- Textclock
 os.setlocale(os.getenv("LANG")) -- to localize the clock
 local clockicon = wibox.widget.imagebox(theme.widget_clock)
@@ -417,6 +425,9 @@ function theme.at_screen_connect(s)
     gears.wallpaper.maximized(wallpaper, s, true)
     --]]
 
+    -- System tray
+    --s.mysystray = wibox.widget.systray()
+
     -- Tags
     awful.tag(awful.util.tagnames, s, awful.layout.layouts[1])
 
@@ -486,6 +497,7 @@ function theme.at_screen_connect(s)
             --bat.widget,
             clockicon,
             mytextclock,
+            --s.mysystray,
             wibox.widget.systray(),
         },
     }

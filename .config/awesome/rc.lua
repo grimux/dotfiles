@@ -548,7 +548,7 @@ globalkeys = mytable.join(
               { description = "gametime", group = "toggles"}),
     awful.key({ modkey,        }, "F2",     function () awful.spawn("brown_noise -t") end,
               { description = "brown noise", group = "toggles"}),
-    awful.key({ modkey,        }, "F5",     function () awful.spawn.with_line_callback("tv_mode toggle") end,
+    awful.key({ modkey,        }, "F5",     function () awful.spawn("tv_mode toggle") end,
               { description = "TV mode toggle", group = "toggles"}),
     awful.key({ modkey,        }, "F6",     function () awful.spawn("toggle-conky") end,
               { description = "toggle conky", group = "toggles"}),
@@ -626,6 +626,9 @@ globalkeys = mytable.join(
    awful.key({ modkey, altkey}, "l", function() awful.spawn("lock_kbm") end,
     { description = "Lock keyboard and mouse", group = "misc"}),
 
+    awful.key({ modkey, altkey }, "j", function()
+	    wibox.widget.systray():set_screen(awful.screen.focused())
+    end, {description = "Move the system tray to the primary screen", group = "screen"}),
 
 
     -- Open lau console to run lau code.
@@ -1020,9 +1023,9 @@ awful.mouse.snap.edge_enabled = false
 --awful.spawn.with_shell("picom")
 
 -- Restore nitrogen
-awful.spawn.with_shell("nitrogen --restore")
+--awful.spawn.with_shell("nitrogen --restore")
 -- Restore feh
---awful.spawn.with_shell("~/.fehbg")
+awful.spawn.with_shell("~/.fehbg")
 
 -- Run custom signals for awesome/lain status bar
 awful.spawn.with_shell("~/.config/awesome/custom_signals.sh")
