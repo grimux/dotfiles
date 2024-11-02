@@ -1,0 +1,402 @@
+#!/usr/bin/env bash
+#
+####################
+#
+# Name: Chat
+# Author: The Jake System
+# Description: A small application that tries to simulate an online chatting program.
+#
+####################
+
+
+############
+### TODO ###
+############
+#
+# - Add more comments.
+#
+############
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+#set -euox pipefail
+set -euo pipefail
+#
+###################
+
+
+##############
+### Config ###
+##############
+#
+PROGNAME="$(basename $0)"
+LOGDIR="$HOME/Documents/writing/$PROGNAME"
+LASTMSG="$LOGDIR/last_message.log"
+LOGS=($LOGDIR/*)
+
+
+######################
+### Initialization ###
+######################
+#
+USERS=(Stephanie Jake Olivia Jeffery Angela Frank)
+MESSAGE=""
+USER=""
+TODAY="$(date +'%Y-%m-%d')"
+MENU_OPTIONS=("msg" "user" "log" "quit")
+
+# If the chat logs directory does not exist, create it.
+if [ ! -d "$LOGDIR" ]; then
+	mkdir "$LOGDIR"
+fi
+
+##################################
+### Arguments, Help, and Usage ###
+##################################
+#
+# Get arguments and set flags
+function get_arguments() {
+	while getopts ":hu:m:pli" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Help section
+			h) help_section; exit ;;
+
+			# Interactive mode.
+			i) interactive_mode; exit;;
+
+			# Print last message.
+			l) get_last_message; exit;;
+
+			# Set user.
+			u) USER="${OPTARG}";;
+
+			# Message to send.
+			m) MESSAGE="${OPTARG}";;
+
+			# Print latest log file.
+			p) print_log_less; exit;;
+
+			# What to do if the argument is missing.
+			:) echo "Missing argument"; help_section; exit 1 ;;
+
+			# Catchall.  If command is not recognized.
+			*) usage; exit 1
+		esac
+	done
+}
+
+# Help Section
+function help_section() {
+	echo "A short description of script"
+	echo
+	echo "Syntax: $(basename $0) (options) <arguments>"
+	echo "options:"
+	# Space offset: 19
+	echo "h                   : Print this help screen."
+	echo
+	echo "arguments:"
+	echo "d                   : Example."
+}
+
+# How to use the script.
+function usage() {
+	echo "$(basename $0) (options)"
+}
+
+
+#################
+### Functions ###
+#################
+#
+function open_chat() {
+	local user
+	local last_message
+
+	clear
+
+	user="$1"
+	last_message=$(get_last_message)
+
+	echo "Logging into chat: $user"
+	echo "Welcome!"
+	echo
+
+	echo "----------------"
+	echo "| Last Message |"
+	echo "----------------"
+	echo "$last_message"
+	echo "----------------"
+	echo
+
+	return
+}
+
+function close_chat() {
+	local user="$1"
+	echo "Logging out of chat: $user"
+	echo "Bye!"
+	exit
+}
+
+function write_message() {
+	local user="$1"
+	local message
+
+	echo "Enter blank line to cancel."
+	echo
+
+	if [ -n "$MESSAGE" ]; then
+		message="$MESSAGE"
+	else
+		read -p "$user: " message
+	fi
+
+
+	if [ -z "$message" ]; then
+		echo "Empty message. Cancelling..."
+		return
+	fi
+
+	write_log "$user" "$message"
+
+	return
+}
+
+function write_log() {
+	local user
+	local message
+	local formatted_message
+	local today
+	local time
+	local log_file
+
+	user="$1"
+	message="$2"
+	today="$TODAY"
+	time="$(date +'%I:%M:%S %p')"
+	log_file="$LOGDIR/$today.log"
+
+	# Message formatted to be used in the log file.
+	formatted_message="$user:\n$message\n$time\n"
+
+	# If today's log file does not exist, make it.
+	if [ ! -f "$log_file" ]; then
+		touch "$log_file"
+	fi
+
+	# Add formatted message to log file.
+	echo -e "$formatted_message" >> "$log_file"
+
+	# Update the last message sent.
+	echo -e "$formatted_message" > "$LASTMSG"
+
+	return
+}
+
+function print_log() {
+	local log_file
+	local today
+
+	today="$TODAY"
+	log_file="$LOGDIR/$today.log"
+
+	if [ ! -f "$log_file" ]; then
+		echo "No log found for today!"
+		read -p "Press Enter to look at old logs."
+		log_file=$(choose_with_fzf "Logs" "${LOGS[@]}")
+	fi
+
+	echo "------------------"
+	echo "| $(basename $log_file) |"
+	echo "------------------"
+
+	cat "$log_file"
+
+	return
+}
+
+function print_log_less() {
+	local log_file
+	local header
+	local arguments=("--use-color")
+
+	log_file="$LOGDIR/$TODAY.log"
+	header="--- $(basename $log_file) ---"
+
+	{ echo -e "$header\n"; cat "$log_file"; } | less "${arguments[@]}"
+}
+
+function select_user() {
+	local user=$(choose_with_fzf "Select user:" "${USERS[@]}")
+	echo "$user"
+}
+
+function select_option() {
+	local option=$(choose_with_fzf "Current user: $user" "${MENU_OPTIONS[@]}")
+	echo "$option"
+}
+
+
+########################
+### Helper Functions ###
+########################
+#
+# Choose an option using fzf.
+# Arg1 = Prompt
+# Arg2 = Array of choices.
+function choose_with_fzf() {
+	local prompt="${1}"
+	shift
+	local choices=("${@}")
+	local fzf_arguments="--ignore-case --cycle --border=rounded"
+	local fzf_label="--border-label=$prompt"
+
+	printf '%s\n' "${choices[@]}" | fzf $fzf_arguments "$fzf_label"
+
+	return
+}
+
+# Old method of getting the last message, using a separate file.
+function get_last_message_from_file() {
+	local last_message
+
+	while read line; do
+		last_message+="$line\n"
+	done < "$LASTMSG"
+
+	echo -e "$last_message"
+
+	return
+}
+
+# Get the last message from the most recent log file.
+# Uses `tail`.
+function get_last_message() {
+	local last_message
+	local today
+	local log_file
+
+	today="$TODAY"
+	log_file="$LOGDIR/$today.log"
+
+	last_message="$(tail -n4 $log_file)"
+
+	echo "$last_message"
+
+	return
+}
+
+function menu_selection() {
+	local choice="$1"
+
+	case "$choice" in
+		msg) open_chat "$user"; write_message "$user";;
+		user) user=$(select_user);;
+		log) print_log_less;;
+		quit) close_chat "$user";;
+	esac
+
+}
+
+function validate_user() {
+	local user="$1"
+	local is_valid=0
+
+	for item in "${USERS[@]}"; do
+		if [ "$user" == "$item" ]; then
+			is_valid=1
+			break
+		fi
+	done
+
+	if [ "$is_valid" -eq 0 ]; then
+		echo "That is not a valid user."
+		exit 1
+	fi
+
+}
+
+#########################
+### Testing Functions ###
+#########################
+#
+function interactive_mode() {
+	local user=""
+	local option=""
+
+	# Loop while the user variable is empty.
+	# This protects against and empty user variable.
+	while [ -z "$user" ]; do
+		user=$(select_user)
+	done
+
+	# Loop to control the interactive menu.
+	while true; do
+		option=$(select_option)
+		menu_selection "$option"
+	done
+}
+
+
+###############
+### Testing ###
+###############
+#
+function testing() {
+	local user=""
+	local option=""
+
+}
+
+
+############
+### Main ###
+############
+#
+function main() {
+	local user
+	local option
+	if [ -n "$USER" ]; then
+		user="$USER"
+		validate_user "$user"
+	else
+		# Set user by selecting with a function.
+		user="$(select_user)"
+	fi
+
+	# Check if user is blank, if so close chat.
+	if [ -z "$user" ]; then
+		close_chat "$user"
+		break
+	fi
+
+	# Set option from the menu.
+	option="$(select_option)"
+
+	# Check if option is blank, if so close chat.
+	if [ -z "$option" ]; then
+		close_chat "$user"
+		break
+	fi
+
+	# Choose an option from the menu.
+	menu_selection "$option"
+
+}
+
+
+#############
+### Start ###
+#############
+get_arguments "$@"
+#testing "$@"
+main "$@"
