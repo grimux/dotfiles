@@ -14,6 +14,9 @@
 ############
 #
 # - Add more comments.
+# - Find way to exit while loop with ctrl+c
+# - Integrate testing function into main.
+# - Decide what to do with the interactive_mode function.
 #
 ############
 
@@ -45,7 +48,7 @@ LOGS=($LOGDIR/*)
 ### Initialization ###
 ######################
 #
-USERS=(Stephanie Jake Olivia Jeffery Angela Frank)
+USERS=(Jake Stephanie Olivia Jeffery Angela Frank ?)
 MESSAGE=""
 USER=""
 TODAY="$(date +'%Y-%m-%d')"
@@ -82,34 +85,39 @@ function get_arguments() {
 			# Message to send.
 			m) MESSAGE="${OPTARG}";;
 
-			# Print latest log file.
-			p) print_log_less; exit;;
+			# Choose a log file to print.
+			p) print_log_with_pager; exit;;
 
 			# What to do if the argument is missing.
-			:) echo "Missing argument"; help_section; exit 1 ;;
+			:) echo "Missing argument"; help_section; exit 1;;
 
 			# Catchall.  If command is not recognized.
-			*) usage; exit 1
+			*) usage; exit 1;;
 		esac
 	done
 }
 
 # Help Section
 function help_section() {
-	echo "A short description of script"
+	echo "A script chat application for me and my alters."
 	echo
-	echo "Syntax: $(basename $0) (options) <arguments>"
+	echo "Syntax: $PROGNAME (options) <arguments>"
 	echo "options:"
-	# Space offset: 19
-	echo "h                   : Print this help screen."
+	# Space offset: 5-8
+	echo "     h        : Print this help screen."
+	echo "     i        : Use interactive mode."
+	echo "     l        : Display last message."
+	echo "     p        : Choose a log file to view."
 	echo
+	echo "$PROGNAME can be run in-line to quickly send a message.  Just use the following arguments."
 	echo "arguments:"
-	echo "d                   : Example."
+	echo "     u        : username."
+	echo "     m        : Message."
 }
 
 # How to use the script.
 function usage() {
-	echo "$(basename $0) (options)"
+	echo "$PROGNAME (options)"
 }
 
 
@@ -120,8 +128,6 @@ function usage() {
 function open_chat() {
 	local user
 	local last_message
-
-	clear
 
 	user="$1"
 	last_message=$(get_last_message)
@@ -142,11 +148,13 @@ function open_chat() {
 
 function close_chat() {
 	local user="$1"
+	clear
 	echo "Logging out of chat: $user"
 	echo "Bye!"
 	exit
 }
 
+# Write a message as the given user.
 function write_message() {
 	local user="$1"
 	local message
@@ -171,6 +179,7 @@ function write_message() {
 	return
 }
 
+# Write chat history to log file.
 function write_log() {
 	local user
 	local message
@@ -202,12 +211,17 @@ function write_log() {
 	return
 }
 
-function print_log() {
-	local log_file
+function print_log_in_terminal() {
+	local log_file=""
 	local today
 
 	today="$TODAY"
-	log_file="$LOGDIR/$today.log"
+
+	if [ -z "$log_file" ]; then
+		log_file="$LOGDIR/$today.log"
+	else
+		log_file="$@"
+	fi
 
 	if [ ! -f "$log_file" ]; then
 		echo "No log found for today!"
@@ -224,25 +238,49 @@ function print_log() {
 	return
 }
 
-function print_log_less() {
+# Print a log using a pager.
+function print_log_with_pager() {
 	local log_file
 	local header
-	local arguments=("--use-color")
+	local pager_arguments=("--use-color")
 
-	log_file="$LOGDIR/$TODAY.log"
+	#log_file="$LOGDIR/$TODAY.log"
+
+	# Choose a log file to view.
+	log_file="$(choose_log)"
+
+	# Check if the chosen log is valid.  If not return with error.
+	if [ -z "$log_file" ]; then
+		echo "No log chosen."
+		return 1
+	fi
+
+	# A header to display at the top.
 	header="--- $(basename $log_file) ---"
 
-	{ echo -e "$header\n"; cat "$log_file"; } | less "${arguments[@]}"
+	# Send the header and log file into `less`.
+	{ echo -e "$header\n"; cat "$log_file"; } | $PAGER "${pager_arguments[@]}"
+
+	return
+}
+
+function choose_log() {
+	local all_logs=($LOGDIR/*)
+	local chosen_log_file=$(choose_with_fzf "Select a log to view:" "${all_logs[@]}")
+	echo "$chosen_log_file"
+	return
 }
 
 function select_user() {
 	local user=$(choose_with_fzf "Select user:" "${USERS[@]}")
 	echo "$user"
+	return
 }
 
 function select_option() {
 	local option=$(choose_with_fzf "Current user: $user" "${MENU_OPTIONS[@]}")
 	echo "$option"
+	return
 }
 
 
@@ -257,7 +295,14 @@ function choose_with_fzf() {
 	local prompt="${1}"
 	shift
 	local choices=("${@}")
-	local fzf_arguments="--ignore-case --cycle --border=rounded"
+	local fzf_arguments=" \
+		--ignore-case \
+		--cycle \
+		--border=double \
+		--height=50% \
+		--layout=reverse-list \
+		--margin=5%,2%,2%,5% \
+		--info=default"
 	local fzf_label="--border-label=$prompt"
 
 	printf '%s\n' "${choices[@]}" | fzf $fzf_arguments "$fzf_label"
@@ -288,7 +333,11 @@ function get_last_message() {
 	today="$TODAY"
 	log_file="$LOGDIR/$today.log"
 
-	last_message="$(tail -n4 $log_file)"
+	if [ ! -f "$log_file" ]; then
+		last_message="There are no logs for today."
+	else
+		last_message="$(tail -n4 $log_file)"
+	fi
 
 	echo "$last_message"
 
@@ -298,10 +347,12 @@ function get_last_message() {
 function menu_selection() {
 	local choice="$1"
 
+	#open_chat "$user"
+
 	case "$choice" in
-		msg) open_chat "$user"; write_message "$user";;
+		msg) write_message "$user";;
 		user) user=$(select_user);;
-		log) print_log_less;;
+		log) print_log_with_pager;;
 		quit) close_chat "$user";;
 	esac
 
@@ -334,13 +385,14 @@ function interactive_mode() {
 	local option=""
 
 	# Loop while the user variable is empty.
-	# This protects against and empty user variable.
+	# This protects against an empty user variable.
 	while [ -z "$user" ]; do
 		user=$(select_user)
 	done
 
 	# Loop to control the interactive menu.
 	while true; do
+		open_chat "$user"
 		option=$(select_option)
 		menu_selection "$option"
 	done
@@ -352,9 +404,7 @@ function interactive_mode() {
 ###############
 #
 function testing() {
-	local user=""
-	local option=""
-
+	set -x
 }
 
 
@@ -362,7 +412,8 @@ function testing() {
 ### Main ###
 ############
 #
-function main() {
+function main_old() {
+	clear
 	local user
 	local option
 	if [ -n "$USER" ]; then
@@ -372,6 +423,8 @@ function main() {
 		# Set user by selecting with a function.
 		user="$(select_user)"
 	fi
+
+	open_chat "$user"
 
 	# Check if user is blank, if so close chat.
 	if [ -z "$user" ]; then
@@ -391,6 +444,27 @@ function main() {
 	# Choose an option from the menu.
 	menu_selection "$option"
 
+}
+
+function main() {
+	local user=""
+	local option=""
+
+	# Loop while the user variable is empty.
+	# This protects against an empty user variable.
+	while [ -z "$user" ]; do
+		clear
+		echo "Please select a user."
+		user=$(select_user)
+	done
+
+	# Loop to control the interactive menu.
+	while true; do
+		clear
+		open_chat "$user"
+		option=$(select_option)
+		menu_selection "$option"
+	done
 }
 
 
