@@ -38,10 +38,17 @@ export HISTFILE="$HOME/.cache/zsh/history"
 # Needs the `ssh-agent` service to be running.
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 
+# dotbare dotfiles managment
+export DOTBARE_DIR="$HOME/.local/share/dotfiles"
+export DOTBARE_TREE="$HOME"
+
+export WINEPREFIXDIR="$HOME/.local/share/wineprefixes"
 
 #####################
 ### Script Config ###
 #####################
+# Script config location.
+export SCRIPT_CONFIG="$HOME/.config/script_config.sh"
 # yt-dlp Download locations.
 export YT_VDIR="/mnt/x/videos/yt-dlp"
 export YT_ADIR="$HOME/Music/yt-dlp"
