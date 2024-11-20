@@ -45,14 +45,17 @@ function awesome() {
 	# Start policy kit
 	lxsession &
 
+
+	### Wallpaper is now set within AwesomeWM. ###
+
 	# Restore wallpaper using Nitrogen
 	#nitrogen --restore &
 
 	# Restore wallpaper using feh
-	~/.fehbg &
+	#~/.fehbg &
 
 	# Run custom signals for awesome/lain status bar
-	~/.config/awesome/custom_signals.sh &
+	#~/.config/awesome/custom_signals.sh &
 
 	# Redshift for bluelight filter
 	# Use either the gtk tray icon or not.  Use `redshift -p` to check status.
