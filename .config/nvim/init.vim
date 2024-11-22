@@ -223,6 +223,12 @@ function SpellCheck()
 	setlocal spell! spell?
 endfunction
 
+" Format json file.
+" Uses `jq` to format a single line json file.
+function FormatJson()
+	%!jq
+endfunction
+
 " Goto misspelled word
 " Need to finish writing this function as it does not work right now.
 function ReSpell()
