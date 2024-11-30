@@ -42,7 +42,6 @@ chromium
 clipmenu
 cmake
 conky
-coolercontrol-bin
 cronie
 crystal
 cups
@@ -171,7 +170,6 @@ linux-firmware
 linux-headers
 linux-steam-integration
 linuxconsole
-liquidctl
 lld
 lmms
 lsd
@@ -197,6 +195,7 @@ mkvtoolnix-cli
 mkvtoolnix-gui
 mpc
 mpd
+mpdris2-git
 mpv
 mtpfs
 mupen64plus
@@ -250,6 +249,7 @@ pkgconf
 pkgfile
 playerctl
 plocate
+pluralnotes-bin
 polymc
 postfix
 powerkit-git
@@ -282,6 +282,7 @@ python-pathvalidate
 python-pip
 python-pipx
 python-pynvim
+python-weasyprint
 qalculate-gtk
 qbittorrent
 qt5-styleplugins
