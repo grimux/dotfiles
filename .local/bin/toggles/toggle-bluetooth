@@ -124,15 +124,37 @@ function usage() {
 #################
 #
 function power_on() {
-	echo "Bluetooth: ON"
-	notify-send "Bluetoothctl" "Bluetooth: ON"
-	bluetoothctl power on > /dev/null
+	trap "handle_error \"Cannont power on\"" ERR
+	#bluetoothctl power on > /dev/null
+	bluetoothctl power on
+	print_message "Bluetoothctl" "Power: ON"
+	return
 }
 
 function power_off() {
-	echo "Bluetooth: OFF"
-	notify-send "Bluetoothctl" "Bluetooth: OFF"
-	bluetoothctl power off > /dev/null
+	trap "handle_error Cannont power off" ERR
+	#bluetoothctl power off > /dev/null
+	bluetoothctl power off
+	print_message "Bluetoothctl" "Power: OFF"
+	return
+}
+
+function handle_error() {
+	local error_message="$1"
+
+	print_message "Bluetoothctl Error" "$error_message"
+
+	exit 1
+}
+
+function print_message() {
+	local summary="$1"
+	local body="$2"
+
+	echo "$summary - $body"
+	notify-send "$summary" "$body"
+
+	return
 }
 
 #########################
