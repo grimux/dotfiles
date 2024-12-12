@@ -227,11 +227,10 @@ awesome.connect_signal('update_monitor_sleep_status', function()
 end)
 
 -- Signal to move system tray to primary screen.
+-- Used in the `tv_mode` script to move the systray around.
 awesome.connect_signal('move_systray', function()
-    screen.primary = awful.screen.focused()
-    wibox.widget.systray():set_screen("primary")
-    wibox.widget.systray():emit_signal("widget::redraw_needed")
-    wibox.widget.systray():emit_signal("widget::layout_changed")
+    local primary_screen = awful.screen.focused()
+    wibox.widget.systray():set_screen(primary_screen)
 end)
 
 -- Textclock
@@ -423,7 +422,7 @@ function theme.at_screen_connect(s)
         wallpaper = wallpaper(s)
     end
     gears.wallpaper.maximized(wallpaper, s, true)
-    --]]
+    ]]
 
     -- System tray
     --s.mysystray = wibox.widget.systray()
