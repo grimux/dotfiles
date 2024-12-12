@@ -88,5 +88,5 @@ fi
 # .xinit file to use
 XINITRC="$HOME/.xinitrc"
 # If on tty1, and Xorg is not running, automatically startx with $XINITRC.
-[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
+#[ "$(tty)" = "/dev/tty1" ] && ! pidof -s Xorg >/dev/null 2>&1 && exec startx "$XINITRC"
 
