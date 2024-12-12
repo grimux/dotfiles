@@ -28,7 +28,7 @@ set -euo pipefail
 ### Config ###
 ##############
 
-use_mangohud=0
+use_mangohud=1
 
 steam_binary="steam-runtime"
 
@@ -40,7 +40,7 @@ steam_desktop_id=""
 steam_proc_name="steam"
 
 # Last active window before running script.
-last_window_id=$(xdotool getactivewindow)
+#last_window_id=$(xdotool getactivewindow)
 
 
 ##########################
@@ -137,9 +137,11 @@ function move_focus_to_steam() {
 	# Try to run the following command until it succeeds.
 	# '%8' is to tell `xdotool` that the eighth "window" is the window we want to focus on,
 	# all other windows are just created for Steam.  `%8` seems to always be the correct one.
-	until xdotool search --class "$steam_class" windowactivate %8; do
-		sleep 2
-	done
+	#until xdotool search --class "$steam_class" windowactivate %8; do
+	#	sleep 2
+	#done
+
+	wmctrl -s 8
 }
 
 #
@@ -165,6 +167,14 @@ function start_bigpicture() {
 	$run_command -nochatui -nofriendsui -bigpicture &> /dev/null &
 }
 
+function quit_steam() {
+	local steam_process_id=$(pgrep --exact "$steam_process_name")
+	local steam_process_name="$steam_proc_name"
+
+	pkill --exact "$steam_process_name"
+	tail --pid="$steam_process_id" --follow /dev/null
+}
+
 
 ############
 ### Main ###
@@ -179,11 +189,13 @@ function main() {
 	# If not, start it in big picture mode.
 	if ! is_steam_running; then
 		echo "Starting Steam in Big Picture Mode."
+		notify-send "Steam" "Starting Steam in Big Picture Mode."
 		start_bigpicture
 	# Otherwise, just tell us it's running.
 	else
-		echo "Steam is already running."
-		#exit 1
+		echo "Shutting down..."
+		notify-send "Steam" "Shutting down..."
+		quit_steam
 	fi
 
 	# Move screen focus to Steam.
