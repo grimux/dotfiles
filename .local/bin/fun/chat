@@ -42,16 +42,18 @@ PROGNAME="$(basename $0)"
 LOGDIR="$HOME/Documents/writing/$PROGNAME"
 LASTMSG="$LOGDIR/last_message.log"
 LOGS=($LOGDIR/*)
+USEVIM=1
 
 
 ######################
 ### Initialization ###
 ######################
 #
-USERS=(Jake Stephanie Olivia Jeffery Angela Frank ?)
+USERS=(Jake NumberOne Stephanie Olivia Jeffery Angela Frank ?)
 MESSAGE=""
 USER=""
 TODAY="$(date +'%Y-%m-%d')"
+TODAYS_LOG="$LOGDIR/$TODAY.log"
 MENU_OPTIONS=("msg" "user" "log" "quit")
 
 # If the chat logs directory does not exist, create it.
@@ -65,10 +67,13 @@ fi
 #
 # Get arguments and set flags
 function get_arguments() {
-	while getopts ":hu:m:pli" option; do
+	while getopts ":fhu:m:pli" option; do
 		case $option in
 			# What to do if there is an invalid argument.
 			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Fast mode.
+			f) fast_mode; exit;;
 
 			# Help section
 			h) help_section; exit ;;
@@ -165,7 +170,8 @@ function write_message() {
 	if [ -n "$MESSAGE" ]; then
 		message="$MESSAGE"
 	else
-		read -p "$user: " message
+		#read -p "$user: " message
+		message=$(vipe --suffix log)
 	fi
 
 
@@ -304,8 +310,9 @@ function choose_with_fzf() {
 		--margin=5%,2%,2%,5% \
 		--info=default"
 	local fzf_label="--border-label=$prompt"
+	local fzf_preview=""
 
-	printf '%s\n' "${choices[@]}" | fzf $fzf_arguments "$fzf_label"
+	printf '%s\n' "${choices[@]}" | fzf $fzf_arguments --preview="$fzf_preview" "$fzf_label"
 
 	return
 }
@@ -395,6 +402,19 @@ function interactive_mode() {
 		open_chat "$user"
 		option=$(select_option)
 		menu_selection "$option"
+	done
+}
+
+function fast_mode() {
+	local user="none"
+	local option=""
+	clear
+
+	while true; do
+		user=$(select_user)
+		[ -z "$user" ] && break
+		open_chat "$user"
+		menu_selection "msg"
 	done
 }
 
