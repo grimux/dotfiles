@@ -44,6 +44,8 @@ alias cfawet="$EDITOR ~/.config/awesome/theme.lua"
 alias cfd="$EDITOR ~/.config/gzdoom/mod_profiles.sh"
 alias cfpac="$EDITOR /etc/pacman.conf"
 alias boiler="$EDITOR ~/.config/script_boilerplate.sh"
+alias cfds="$EDITOR ~/.config/game/decksync.cfg"
+alias cfgs="$EDITOR ~/.config/game/game_save_locations.cfg"
 #
 ################################################################
 
