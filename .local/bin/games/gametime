@@ -47,6 +47,9 @@ is_lutris_running=0
 steam_process_id=0
 lutris_process_id=0
 
+launch_lutris=0
+launch_steam=1
+
 # Start minimized
 minimize_lutris=0
 minimize_steam=0
@@ -151,6 +154,8 @@ function launch_steam() {
 	# Run Steam with its launch arguments.
 	$run_command "${launch_arguments[@]}" &> /dev/null &
 
+	return
+
 }
 
 # Old function to launch Steam.  Kept as a backup and while working on the new function.
@@ -206,10 +211,15 @@ function launch_launchers() {
 	send_notification_simple "start"
 
 	# normal, minimized, big-picture
-	launch_steam
-	launch_lutris
+	if [ "$launch_steam" -eq 1 ]; then
+		launch_steam
+	fi
 
+	if [ "$launch_lutris" -eq 1 ]; then
+		launch_lutris
+	fi
 
+	return
 }
 
 # Kill the launchers.
@@ -235,7 +245,7 @@ function kill_launchers() {
 		pkill --full "$lutris_process_name"
 	fi
 
-
+	return
 }
 
 # Choose which launchers to max/minimize using an application, such as dmenu or fzf.
@@ -392,6 +402,8 @@ function main() {
 	launch_launchers
 
 	echo "All done!"
+
+	return
 }
 
 
