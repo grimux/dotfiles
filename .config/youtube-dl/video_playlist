@@ -1,5 +1,5 @@
 --paths "$YT_VDIR"
---output "%(channel)s/%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s"
+--output "%(channel)s/%(playlist)s/%(playlist_autonumber)s - %(title)s.%(ext)s"
 --format "bestvideo[height<=1080]+bestaudio"
 --sponsorblock-remove sponsor
 --add-metadata
