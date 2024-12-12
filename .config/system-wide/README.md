@@ -1,12 +1,10 @@
 System Configuration Files
 ==========================
 
-<<!--
 TODO
 ----
 - Add descriptions.
 - Check for other system-wide config files and move them to new location.
--->>
 
 These are system wide configuration files (in the form of `systemd` drop-in files mostly).  They are saved here and can be applied using a as of now (Sunday, February 11, 2024) not written yet.  Though I might change my mind.
 
