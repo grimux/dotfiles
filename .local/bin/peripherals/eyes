@@ -25,6 +25,21 @@
 #set -euox pipefail
 set -euo pipefail
 
+# Source the main script config file.
+# Its location is exported by the shell profile.
+# HOME/.config/script_config.sh
+if [ ! -f "$SCRIPT_CONFIG" ]; then
+	echo "The configuration script is missing!"
+	echo "Should be at: \"HOME/.config/script_config.sh\"."
+	exit 1
+else
+	source "$SCRIPT_CONFIG"
+fi
+
+# Sourced Variables
+hurt_conf_file="$HURT_CONF"
+normal_conf_file="$OKAY_CONF"
+
 
 ##############
 ### Config ###
@@ -42,9 +57,7 @@ conf_files_short=($(basename --multiple ${conf_files_full[@]}))
 
 # Preset config profiles.
 # These also have a separate file for "high" or "low".
-hurt_conf_file="hurt_high.conf"
 sunglasses_conf_file="sunglasses.conf"
-normal_conf_file="normal_high.conf"
 
 # Default conf file Redshift uses.
 # Desired settings are written to this file.
