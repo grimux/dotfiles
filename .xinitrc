@@ -13,6 +13,7 @@
 # u - error if undefined variable
 # o pipefail - script fails if command piped fails
 # x - output each line (debug)
+# E - same as: `-o errexit -o errtrace`.  Needed for `trap` command.
 #
 set -eo pipefail
 
@@ -61,9 +62,6 @@ function awesome() {
 	# Use either the gtk tray icon or not.  Use `redshift -p` to check status.
 	redshift-gtk &
 	#redshift &
-
-	# Start Universal Media Server
-	ums &
 
 	export XDG_SESSION_TYPE='x11'
 	export XDG_CURRENT_DESKTOP='gtk'
@@ -181,6 +179,10 @@ function unsused_settings() {
 
 	# Start playerctl daemon, tracks recent media players and can control them with media keys.
 	playerctld daemon &
+
+	# Start Universal Media Server
+	# Currently using systemd service.
+	ums &
 
 	# From: awesome session
 	# Fix for steam
