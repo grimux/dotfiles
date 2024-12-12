@@ -35,7 +35,7 @@ function send_notification() {
 
 function move_screenshot_to_pictures() {
 	local screenshot="$@"
-	mv "$screenshot" $(xdg-user-dir PICTURES)
+	mv "$screenshot" "$(xdg-user-dir PICTURES)/screenshots"
 }
 
 function take_screenshot() {
@@ -79,7 +79,7 @@ function main() {
 		--thumb 20 \
 		--monitor 0 \
 		--exec \
-		'xclip -selection clipboard -t image/png -i "$f"; mv "$f" $$(xdg-user-dir PICTURES); notify-send --expire-time='$timeout' --icon "$m" "Screenshot Taken\n$f"; rm --force "$m"'
+		'xclip -selection clipboard -t image/png -i "$f"; mv "$f" $$(xdg-user-dir PICTURES)/screenshots; notify-send --expire-time='$timeout' --icon "$m" "Screenshot Taken\n$f"; rm --force "$m"'
 
 
 	# Check to see if `scrot` completed successfully.
