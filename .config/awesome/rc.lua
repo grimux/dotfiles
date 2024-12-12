@@ -122,19 +122,36 @@ local termfile     = terminal .. " --class ranger --title ranger -e ranger"
 local filemanager  = os.getenv("FILE") or "pcmanfm-qt"
 
 -- Music control
-local music_toggle = "mpc toggle"
-local music_play   = "mpc play"
-local music_stop   = "mpc stop"
-local music_next   = "mpc next"
-local music_prev   = "mpc prev"
-local music_status = "mpc status"
+-- mpc
+--local music_toggle = "mpc toggle"
+--local music_play   = "mpc play"
+--local music_stop   = "mpc stop"
+--local music_next   = "mpc next"
+--local music_prev   = "mpc prev"
+--local music_status = "mpc status"
+
+-- playerctl
+local music_toggle = "playerctl play-pause"
+local music_play   = "playerctl play"
+local music_stop   = "playerctl stop"
+local music_next   = "playerctl next"
+local music_prev   = "playerctl previous"
+local music_status = "playerctl status"
 
 awful.util.terminal = terminal
 --awful.util.tagnames = { "term", "www", "file", "email", "torr", "chat", "mus", "vid", "gfx" }
 awful.util.tagnames = { "term", "www", "file", "chat", "torr", "doc", "mus", "vid", "gfx" }
 --awful.util.tagnames = { " term", " www", " file", "󰚢 chat", " torr", "󰈙 doc", " mus", " vid", " game" }
+
+--[[
+    ###############
+    ### Layouts ###
+    ###############
+--]]
+
+--awful.layout.append_default_layout = {
 awful.layout.layouts = {
-  awful.layout.suit.tile,
+    awful.layout.suit.tile,
     awful.layout.suit.floating,
     --awful.layout.suit.tile.left,
     --awful.layout.suit.tile.bottom,
@@ -157,6 +174,7 @@ awful.layout.layouts = {
     --lain.layout.termfair,
     --lain.layout.termfair.center
 }
+
 
 lain.layout.termfair.nmaster           = 3
 lain.layout.termfair.ncol              = 1
@@ -256,6 +274,45 @@ end)
 
 -- {{{ Screen
 
+-- {{{ Wallpaper
+--[[
+screen.connect_signal("request::wallpaper", function(s)
+    awful.wallpaper {
+        screen = s,
+        --bg     = "#0000ff",
+        widget = {
+            {
+                image  = gears.filesystem.get_random_file_from_dir("/mnt/s/pictures/wallpapers/dt", {".jpg", ".png", ".svg"}, true), -- Random wallpaper
+                --image     = beautiful.wallpaper, -- Static wallpaper
+                image     = awful.spawn("random-wallpaper"), -- Random wallpaper using my script.
+                upscale   = true,
+                downscale = true,
+                widget    = wibox.widget.imagebox,
+            },
+            valign = "center",
+            halign = "center",
+            tiled  = false,
+            widget = wibox.container.tile,
+        }
+    }
+end)
+]]
+
+--[[
+-- Random wallpaper timer.
+gears.timer {
+    timeout   = 1800,
+    autostart = true,
+    callback  = function()
+        for s in screen do
+            s:emit_signal("request::wallpaper")
+        end
+    end,
+}
+]]
+
+
+--[[ Old Method
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", function(s)
     -- Wallpaper
@@ -268,6 +325,8 @@ screen.connect_signal("property::geometry", function(s)
         gears.wallpaper.maximized(wallpaper, s, true)
     end
 end)
+]]
+-- }}}
 
 -- No borders when rearranging only 1 non-floating or maximized client
 screen.connect_signal("arrange", function (s)
@@ -541,6 +600,9 @@ globalkeys = mytable.join(
               { description = "pavucontrol", group = "programs"}),
     awful.key({ modkey, "Shift"   }, "z",     function () awful.spawn("filezilla") end,
               { description = "pavucontrol", group = "programs"}),
+    awful.key({ modkey,           }, "d",     function () awful.spawn("discord") end,
+              { description = "discord", group = "programs"}),
+
 
 
     -- Toggle Scripts
@@ -562,11 +624,14 @@ globalkeys = mytable.join(
               { description = "toggle Tor Network", group = "toggles"}),
     awful.key({ modkey,           }, "F11",     function () awful.spawn("monitor-sleep toggle") end,
               { description = "monitor-sleep toggle", group = "toggles"}),
+    awful.key({ modkey, "Shift"   }, "b",     function () awful.spawn("toggle-bluetooth") end,
+              { description = "toggle bluetooth on/off", group = "toggles"}),
+
 
 
     -- Other scripts
-    awful.key({ modkey, "Shift"   }, "b",     function () awful.spawn("bt_battery_levels") end,
-              { description = "bluetooth battery levels", group = "scripts"}),
+    awful.key({ modkey, "Shift"   }, "s",     function () awful.spawn("steam-bigpicture") end,
+              { description = "Start Steam in Big-Picture mode", group = "scripts"}),
 
 
     --awful.key({ modkey, }, "z", function () quake:toggle() end),
@@ -626,8 +691,9 @@ globalkeys = mytable.join(
    awful.key({ modkey, altkey}, "l", function() awful.spawn("lock_kbm") end,
     { description = "Lock keyboard and mouse", group = "misc"}),
 
-    awful.key({ modkey, altkey }, "j", function()
-	    wibox.widget.systray():set_screen(awful.screen.focused())
+   -- Move systray to the currently selected screen.
+   awful.key({ modkey, altkey }, "j", function()
+        wibox.widget.systray():set_screen(awful.screen.focused())
     end, {description = "Move the system tray to the primary screen", group = "screen"}),
 
 
@@ -1022,10 +1088,13 @@ awful.mouse.snap.edge_enabled = false
 -- Restart picom to avoid visual bugs
 --awful.spawn.with_shell("picom")
 
--- Restore nitrogen
+-- Restore wallpaper
+-- With nitrogen
 --awful.spawn.with_shell("nitrogen --restore")
--- Restore feh
-awful.spawn.with_shell("~/.fehbg")
+-- With feh
+--awful.spawn.with_shell("~/.fehbg")
+-- With script
+awful.spawn.with_shell("wallpaper-set")
 
 -- Run custom signals for awesome/lain status bar
 awful.spawn.with_shell("~/.config/awesome/custom_signals.sh")
