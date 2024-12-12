@@ -17,8 +17,10 @@ Plug 'francoiscabrol/ranger.vim'
 Plug 'dracula/vim'
 Plug 'joshdick/onedark.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-eunuch'
 Plug 'drewtempelmeyer/palenight.vim'
 Plug 'vimwiki/vimwiki'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 "Plug 'turbio/bracey.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'chrisbra/Colorizer'
@@ -124,7 +126,8 @@ map <leader>f :Ranger<CR>
 map <leader>o :call SpellCheck()<CR>
 
 "map <leader>s :call ReSpell()<CR>
-map <F2> :setlocal spell \| call feedkeys("]s") \| :call feedkeys("z=")<CR>
+"map <F2> :setlocal spell \| call feedkeys("]s") \| :call feedkeys("z=")<CR>
+nnoremap <F2> :<C-U>setlocal lcs=tab:>-,trail:-,eol:$ list! list? <CR>
 
 nmap <leader>w :write
 nmap <leader>sw :SudaWrite
@@ -193,9 +196,9 @@ map <leader>g :Goyo <BAR> set linebreak<CR>
 nmap <leader>wm :VimwikiAll2HTML<CR>
 
 " Start Bracey (html live server)
-map <leader>bb :Bracey<CR>
-map <leader>bs :BraceyStop<CR>
-map <leader>br :BraceyReload<CR>
+"map <leader>bb :Bracey<CR>
+"map <leader>bs :BraceyStop<CR>
+"map <leader>br :BraceyReload<CR>
 
 " Vim-Bufferline
 let g:bufferline_echo = 0
@@ -266,6 +269,20 @@ function TabsToSpaces()
 	setlocal tabstop=4
 	setlocal expandtab
 	setlocal shiftwidth=4
+endfunction
+
+" Spaces to tabs
+function SpacesToTabs()
+	setlocal tabstop=4
+	setlocal noexpandtab
+	%retab!
+endfunction
+
+
+" Reorder numbered list.
+function! ReNumberList() range
+	execute a:firstline .. ',' .. a:lastline .. 's/[0-9]*\./0./'
+	execute "normal! gvg\<C-A>"
 endfunction
 
 " Show keybinds in a searchable buffer
