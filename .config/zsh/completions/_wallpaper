@@ -1,0 +1,15 @@
+#compdef wallpaper
+
+_wallpaper() {
+	local -a commands
+	commands=(
+		'info:see wallpaper info'
+		'set:set the given file as a wallpaper'
+		'redraw:redraw the current wallpaper'
+		'random:pick a random wallpaper'
+		'history:pick a wallpaper from history file'
+	)
+	_describe 'wallpaper' commands
+}
+
+_wallpaper "$@"

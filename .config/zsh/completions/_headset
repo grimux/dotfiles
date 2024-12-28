@@ -1,0 +1,18 @@
+#compdef headset
+
+_headset() {
+	local -a commands
+	commands=(
+		'audio:switch to audio mode'
+		'connect:connect headset'
+		'disconnect:disconnect headset'
+		'toggle:toggle connection'
+		'call:switch to call mode'
+		'status:show headset status'
+		'sync:attempt to sync audio/video'
+		'reset:reset headset'
+	)
+	_describe 'headset' commands
+}
+
+_headset "$@"

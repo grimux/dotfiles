@@ -1,0 +1,14 @@
+#compdef eyes
+
+_eyes() {
+	local -a subcommands
+	subcommands=(
+		'hurt:hurt mode'
+		'sunglasses:sunglasses mode'
+		'okay:okay mode'
+		'choose:choose with fzf'
+	)
+	_describe 'eyes' subcommands
+}
+
+_eyes "$@"

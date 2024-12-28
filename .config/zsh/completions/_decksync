@@ -1,0 +1,22 @@
+#compdef decksync
+
+_decksync() {
+	local -a commands subcmds
+	commands=(
+		'backup:Backup game saves'
+		'archive:Compress game archives'
+		'restore:Restore a save'
+		'delete:Delete a save'
+		'revert:Delete then restore a save'
+		'list:List games'
+		'upload:Upload saves to Google Drive'
+	)
+	subcmds=(
+		'(- : *)'{-h,--help}'[print help screen]'
+		'(- : *)'{-l,--list}'[list games]'
+		'(- : *)'{-n,--dry-run}'[Dry-run mode]'
+	)
+	_arguments -s -S : $subcmds
+}
+
+_decksync "$@"
