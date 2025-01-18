@@ -1,0 +1,97 @@
+#
+# Configuration file for beets
+#   More info: https://beets.readthedocs.io/en/stable/reference/config.html
+#
+
+# Global Options
+directory: ~/Workspace/music-test
+library: ~/Workspace/music-test/beets.db
+ignore_hidden: yes
+threaded: yes
+original_date: no
+asciify_paths: yes
+
+# Importer Options
+import:
+  write: yes
+  copy: yes
+  move: no
+  log: beetslog.txt
+  bell: yes
+
+# UI Options
+ui:
+  color: yes
+
+# MusicBrainz Options
+musicbrainz:
+  enabled: yes
+  extra_tags: [year, country, label]
+  genres: yes
+
+# Autotagger
+match:
+  preferred:
+    countries: ['US', 'GB|UK']
+
+# Path Format Configuration
+paths:
+  default: $genre/$albumartist/$album/$track $title
+  singleton: Singletons/$artist - $title
+  comp: $genre/$album/$track $title
+  albumtype:soundtrack: Soundtracks/$album/$track $title
+
+
+# Plugins
+# Added plugins to beets for more functionality.
+#   More info: https://beets.readthedocs.io/en/stable/plugins/index.html
+plugins: chroma fromfilename lyrics mpdstats fetchart embedart discogs lastgenre scrub
+
+
+# Plugin Config
+
+# Scrub
+scrub:
+  auto: yes
+
+# LastGenre
+lastgenre:
+  auto: yes
+  canonical: no
+  fallback: ''
+  force: yes
+
+# ImportAdded
+#importadded:
+#  preserve_mtimes: yes
+#  preserve_write_mtimes: yes
+
+# Discogs
+discogs:
+  user_token: ipMGzoVjnKiXWqPHsydDGODesojXAbMgYZMVzxXi
+
+# FetchArt
+fetchart:
+  auto: yes
+  cover_names: front back
+  sources: google *
+  google_key: AIzaSyCKWQ9e_uEPowFF9BjEX2GmXXA62Wv6SFk
+
+# Acustic fingerprinting
+chroma:
+  auto: yes
+
+# Lyrics
+lyrics:
+  fallback: ''
+  google_API_key: AIzaSyCKWQ9e_uEPowFF9BjEX2GmXXA62Wv6SFk
+  auto: yes
+  force: no
+# sources: tekstowo genius google
+  sources: *
+
+# mpd stats
+mpd:
+  host: localhost
+  port: 6600
+  rating: yes
