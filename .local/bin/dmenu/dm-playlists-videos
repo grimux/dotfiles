@@ -38,6 +38,15 @@ watch_later=0
 shuffle_mode=0
 use_tv_mode=0
 
+#
+# The font family and size.
+# "monospace" for default system monospace font.
+# 30pt size is good for readability on TV.
+# Default size: 10
+#
+dmenu_font="monospace"
+dmenu_font_size="30"
+
 #################
 ### Functions ###
 #################
@@ -82,7 +91,7 @@ get_arguments() {
 # Function to open playlist in dmenu
 open_in_dmenu() {
 	# Piping the array into dmenu.
-	printf '%s\n' "${playlist_names[@]}" | dmenu -i -l 20 -p 'Video Playlist:'
+	printf '%s\n' "${playlist_names[@]}" | dmenu -i -fn "$dmenu_font:size=$dmenu_font_size" -l 20 -p 'Video Playlist:'
 }
 
 # Check if the playlist exists
