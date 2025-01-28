@@ -3,8 +3,10 @@
 _wallpaper() {
 	local -a commands
 	commands=(
+		'choose:choose a wallpaper'
 		'info:see wallpaper info'
 		'set:set the given file as a wallpaper'
+		'theme:set theme for random wallpapers'
 		'redraw:redraw the current wallpaper'
 		'random:pick a random wallpaper'
 		'history:pick a wallpaper from history file'
