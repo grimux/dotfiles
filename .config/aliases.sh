@@ -42,6 +42,7 @@ alias cfs="$EDITOR ~/.config/script_boilerplate.sh"
 alias cfawe="$EDITOR ~/.config/awesome/rc.lua"
 alias cfawet="$EDITOR ~/.config/awesome/theme.lua"
 alias cfd="$EDITOR ~/.config/gzdoom/mod_profiles.sh"
+alias cffstab="$EDITOR /etc/fstab"
 alias cfpac="$EDITOR /etc/pacman.conf"
 alias boiler="$EDITOR ~/.config/script_boilerplate.sh"
 alias cfds="$EDITOR ~/.config/game/decksync.cfg"
@@ -90,6 +91,7 @@ alias todo-script="$EDITOR $vimwiki_dir/writing/script-todo.md"
 #
 ################################################################
 alias bulkrename="brn"
+alias copyasym="cp --archive --symbolic-link --recursive"
 alias define="sdcv"			# Dictionary
 #alias copy="xclip -rmlastnl -selection clipboard"
 alias copy="xclip -selection clipboard"
@@ -198,12 +200,16 @@ alias help_me="lutris lutris:rungameid/27"
 alias blood="lutris lutris:rungameid/27"
 alias cultic="steam_launcher 1684930"
 alias factorio="steam_launcher 427520"
+alias gothic="lutris lutris:rungameid/375"
+alias sh2="lutris lutris:rungameid/14"
+alias grim="steam_launcher 219990"
+#alias hl2="steam_launcher 220"
+alias hl2="lutris lutris:rungameid/356"
 alias jkdf2="openjkdf2"
 alias pd="lutris lutris:rungameid/252"
-alias grim="steam_launcher 219990"
 alias perfect-dark="lutris lutris:rungameid/252"
-alias zelda-oot="lutris lutris:rungameid/61"
 alias zelda-mm="lutris lutris:rungameid/265"
+alias zelda-oot="lutris lutris:rungameid/61"
 #
 ################################################################
 
@@ -246,6 +252,17 @@ alias v-twinpeaks="mpv $mpv_playlist_settings $video_playlist_dir/twin_peaks.m3u
 ################################################################
 
 
+###################
+## Video Streams ##
+###################
+#
+################################################################
+#
+#alias stream-gdq="mpv --ytdl-format=best https://www.twitch.tv/gamesdonequick"
+#alias stream-ecdysis="mpv --ytdl-format=best https://www.twitch.tv/Ecdycis"
+alias stream-gdq="streamlink twitch.tv/gamesdonequick"
+alias stream-ecdysis="streamlink twitch.tv/Ecdycis"
+
 ###############
 ### Helpful ###
 ###############
@@ -266,10 +283,12 @@ alias emdr="mpc pause; mpv --loop --fullscreen --mute --start=10 --ab-loop-a=10 
 #
 ################################################################
 #
-alias gc="cd /mnt/x/game-stuff/game-collection"
-alias steamdir="cd $HOME/.steam/steam"
-alias bin="cd $HOME/.local/bin"
-alias wallpaper="ranger $HOME/Pictures/game-screenshots"
+alias gc="rangercd /mnt/x/game-stuff/game-collection"
+alias steamdir="rangercd $HOME/.steam/steam"
+alias bin="rangercd $HOME/.local/bin"
+alias repos="rangercd $HOME/.local/repos"
+alias conf="rangercd $HOME/.config"
+alias screenshots="rangercd $HOME/Pictures/game-screenshots"
 #
 ################################################################
 
