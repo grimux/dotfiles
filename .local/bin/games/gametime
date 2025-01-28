@@ -37,7 +37,7 @@ set -euo pipefail
 use_mangohud=1
 use_bigpicture=0
 
-choose_interactively=1
+choose_interactively=0
 menu_application="dmenu"
 #menu_application="fzf"
 #menu_application="zenity"
@@ -47,12 +47,12 @@ is_lutris_running=0
 steam_process_id=0
 lutris_process_id=0
 
-launch_lutris=0
+launch_lutris=1
 launch_steam=1
 
 # Start minimized
 minimize_lutris=0
-minimize_steam=0
+minimize_steam=1
 
 
 ########################
