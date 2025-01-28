@@ -166,7 +166,7 @@ function unsused_settings() {
 	#mpd-notification &
 
 	# control mpd with playerctl
-	mpDris2 &
+	#mpDris2 &
 
 	# Set caps lock to escape
 	setxkbmap -option caps:escape &
