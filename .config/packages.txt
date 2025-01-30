@@ -18,6 +18,7 @@ base
 base-devel
 bash-completion
 bchunk
+beep
 beets
 bfg
 bind
@@ -31,7 +32,7 @@ bluez-libs
 bluez-utils
 boost
 brave-bin
-brn-git
+brn2-git
 browserpass
 btrfs-progs
 buildgdx
@@ -44,18 +45,22 @@ chromium
 clipmenu
 cmake
 conky
+controllermap
 cronie
 crystal
 cups
 cups-pdf
 darkplaces
 dconf-editor
+dcraw
 dhcpcd
 dialog
 discord
 dkms
 dmidecode
 dnsmasq
+docker
+docker-compose
 dolphin-emu
 doom64ex-git
 dosfstools
@@ -75,9 +80,11 @@ eza
 fd
 feh
 file-roller
+filelight
 filezilla
 firefox
 flac1.3
+flaresolverr-bin
 flatpak
 flex
 flips
@@ -93,7 +100,6 @@ gcc
 gdrive
 genact
 gendesk
-gerbera
 ghostscript
 gimp
 git
@@ -145,6 +151,10 @@ innoextract
 iptables-nft
 jdk17-openjdk
 jdownloader2
+jellyfin-media-player
+jellyfin-mpv-shim
+jellyfin-server
+jellyfin-web
 jmtpfs
 jpdfbookmarks
 jq
@@ -224,6 +234,7 @@ nvidia-dkms
 nvidia-settings
 obs-studio
 openbsd-netcat
+opengothic
 openrgb-bin
 openssh
 openssl-1.1
@@ -266,6 +277,7 @@ protonhax
 protontricks
 protonup-git
 protonup-qt
+prowlarr-bin
 ps3iso-utils-git
 puddletag-git
 pulseaudio
@@ -277,6 +289,7 @@ python-aioconsole
 python-charset-normalizer
 python-cogapp
 python-crc8
+python-discogs-client
 python-httplib2
 python-internetarchive
 python-mako
@@ -287,6 +300,7 @@ python-pathvalidate
 python-pip
 python-pipx
 python-pyacoustid
+python-pylast
 python-pynvim
 python-weasyprint
 qalculate-gtk
@@ -295,12 +309,15 @@ qt5-styleplugins
 qt6gtk2
 qtpass
 quakespasm
+radarr-bin
 ranger
 rapid-photo-downloader
 raze
 rbdoom-3-bfg
 rclone
+re3-git
 redshift
+reflector
 ripgrep
 rmg
 rsync
@@ -326,6 +343,7 @@ soh-otr-exporter
 soh-otr-gc_mq_d
 soh-otr-gc_nmq_d
 solaar
+sonarr-bin
 soundfont-fluid
 source-highlight
 speech-dispatcher
@@ -337,9 +355,12 @@ steam
 steam-metadata-editor-git
 steamcmd
 strace
+streamlink
 subdl
 sudo
 sxiv
+syncthing
+syncthingtray
 sysstat
 system-config-printer
 terminus-font
@@ -370,7 +391,7 @@ ttf-ms-win10-auto
 ttf-noto-nerd
 ttf-ubuntu-font-family
 ueberzugpp
-ums
+unison
 unrar
 update-grub
 usbutils
@@ -397,6 +418,7 @@ xclip
 xdelta3
 xdg-desktop-portal-gtk
 xdg-desktop-portal-lxqt
+xdg-ninja
 xdg-user-dirs
 xf86-video-vesa
 xonotic
