@@ -116,27 +116,27 @@ local cycle_prev   = true  -- cycle with only the previously focused client or a
 local editor       = os.getenv("EDITOR") or "nvim"
 local browser      = os.getenv("BROWSER") or "firefox"
 local htmlwiki     = " ~/vimwiki/_site/index.html"
---local music        = terminal .. " --class ncmpcpp --title ncmpcpp -e ncmpcpp"
+--local termmusic    = terminal .. " --class ncmpcpp -e ncmpcpp"
 local music        = os.getenv("MUSIC") or "vlc"
 local termfile     = terminal .. " --class ranger --title ranger -e ranger"
 local filemanager  = os.getenv("FILE") or "pcmanfm-qt"
 
 -- Music control
 -- mpc
---local music_toggle = "mpc toggle"
---local music_play   = "mpc play"
---local music_stop   = "mpc stop"
---local music_next   = "mpc next"
---local music_prev   = "mpc prev"
---local music_status = "mpc status"
+local music_toggle = "mpc toggle"
+local music_play   = "mpc play"
+local music_stop   = "mpc stop"
+local music_next   = "mpc next"
+local music_prev   = "mpc prev"
+local music_status = "mpc status"
 
 -- playerctl
-local music_toggle = "playerctl play-pause"
-local music_play   = "playerctl play"
-local music_stop   = "playerctl stop"
-local music_next   = "playerctl next"
-local music_prev   = "playerctl previous"
-local music_status = "playerctl status"
+--local music_toggle = "playerctl play-pause"
+--local music_play   = "playerctl play"
+--local music_stop   = "playerctl stop"
+--local music_next   = "playerctl next"
+--local music_prev   = "playerctl previous"
+--local music_status = "playerctl status"
 
 awful.util.terminal = terminal
 --awful.util.tagnames = { "term", "www", "file", "email", "torr", "chat", "mus", "vid", "gfx" }
@@ -200,15 +200,15 @@ awful.util.taglist_buttons = mytable.join(
 )
 
 awful.util.tasklist_buttons = mytable.join(
-     awful.button({ }, 1, function(c)
-         if c == client.focus then
-             c.minimized = true
-         else
-             c:emit_signal("request::activate", "tasklist", { raise = true })
-         end
+    awful.button({ }, 1, function(c)
+        if c == client.focus then
+            c.minimized = true
+        else
+            c:emit_signal("request::activate", "tasklist", { raise = true })
+        end
      end),
      awful.button({ }, 3, function()
-         awful.menu.client_list({ theme = { width = 250 } })
+        awful.menu.client_list({ theme = { width = 250 } })
      end),
      awful.button({ }, 4, function() awful.client.focus.byidx(1) end),
      awful.button({ }, 5, function() awful.client.focus.byidx(-1) end)
@@ -343,6 +343,9 @@ end)
 -- Create a wibox for each screen and add it
 awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) end)
 
+-- Auto DPI scaling
+--awful.screen.set_auto_dpi_enabled( true )
+
 -- }}}
 
 -- {{{ Mouse bindings
@@ -425,8 +428,8 @@ globalkeys = mytable.join(
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
 
-  -- Layout Sizing
-  awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
+    -- Layout Sizing
+    awful.key({ modkey,           }, "l",     function () awful.tag.incmwfact( 0.05)          end,
               {description = "increase master width factor", group = "layout"}),
     awful.key({ modkey,           }, "h",     function () awful.tag.incmwfact(-0.05)          end,
               {description = "decrease master width factor", group = "layout"}),
@@ -439,11 +442,11 @@ globalkeys = mytable.join(
     awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
 
-  -- Layout cycling
-  awful.key({ modkey,           }, "Tab", function () awful.layout.inc( 1)                end,
-              {description = "select next", group = "layout"}),
+    -- Layout cycling
+    awful.key({ modkey,           }, "Tab", function () awful.layout.inc( 1)                end,
+                {description = "select next", group = "layout"}),
     awful.key({ modkey, "Shift"   }, "Tab", function () awful.layout.inc(-1)                end,
-              {description = "select previous", group = "layout"}),
+                {description = "select previous", group = "layout"}),
 
     -- Show/hide wibox (Top and bottom borders
     awful.key({ modkey }, "b", function ()
@@ -538,18 +541,15 @@ globalkeys = mytable.join(
     -- Show currently playing song in a notification.
     awful.key({ altkey, "Control" }, "m",
         function ()
-            awful.spawn("mpd-status")
+            awful.spawn("songinfo")
         end,
         {description = "mpd status", group = "mpd"}),
 
     -- Reset headset (Bose headphones) connection to help with sync problems.
     -- Only applicable when using "Combined" sink.
     -- Uses my "headset" script.
-    awful.key({ altkey, "Control" }, "h",
-        function ()
-        awful.spawn("headset sync")
-    end,
-    {description = "Sync headset", group = "mpd"}),
+    awful.key({ altkey, "Control" }, "h", function () awful.spawn("headset toggle") end,
+        {description = "Sync headset", group = "mpd"}),
 
     -- Run "lyrics-in-terminal" in a terminal window.
     awful.key({ altkey, "Control" }, "l",
@@ -602,6 +602,9 @@ globalkeys = mytable.join(
               { description = "pavucontrol", group = "programs"}),
     awful.key({ modkey,           }, "d",     function () awful.spawn("discord") end,
               { description = "discord", group = "programs"}),
+    awful.key({ altkey, "Control" }, "j",     function () awful.spawn("jellyfinmediaplayer --desktop --windowed") end,
+              { description = "Jellyfin Media Player", group = "programs"}),
+
 
 
 
@@ -610,13 +613,11 @@ globalkeys = mytable.join(
               { description = "gametime", group = "toggles"}),
     awful.key({ modkey,        }, "F2",     function () awful.spawn("brown_noise -t") end,
               { description = "brown noise", group = "toggles"}),
-    awful.key({ modkey,        }, "F5",     function () awful.spawn("tv_mode toggle") end,
-              { description = "TV mode toggle", group = "toggles"}),
     awful.key({ modkey,        }, "F6",     function () awful.spawn("toggle-conky") end,
               { description = "toggle conky", group = "toggles"}),
     awful.key({ modkey,        }, "F7",     function () awful.spawn("toggle-alpha") end,
               { description = "toggle compositor", group = "toggles"}),
-    awful.key({ modkey,        }, "F8",     function () awful.spawn("audio-device-switch") end,
+    awful.key({ modkey,        }, "F8",     function () awful.spawn("audio-device-switch next") end,
               { description = "change audio output", group = "toggles"}),
     awful.key({ modkey,        }, "F9",     function () awful.spawn("toggle-transmission") end,
               { description = "toggle transmission", group = "toggles"}),
@@ -632,6 +633,8 @@ globalkeys = mytable.join(
     -- Other scripts
     awful.key({ modkey, "Shift"   }, "s",     function () awful.spawn("steam-bigpicture") end,
               { description = "Start Steam in Big-Picture mode", group = "scripts"}),
+    awful.key({ modkey,        }, "F5",     function () awful.spawn("jellyfin-tv") end,
+              { description = "Jellyfin TV", group = "scripts"}),
 
 
     --awful.key({ modkey, }, "z", function () quake:toggle() end),
@@ -647,6 +650,8 @@ globalkeys = mytable.join(
               { description = "relaxing videos", group = "dmenu"}),
     awful.key({ modkey, "Shift"   }, "v",     function () awful.spawn("dm-videos") end,
               { description = "video playlists", group = "dmenu"}),
+    awful.key({ modkey, "Shift"   }, "t",     function () awful.spawn("dm-videos -m") end,
+              { description = "theatre (movies)", group = "dmenu"}),
     awful.key({ modkey, "Shift"   }, "F1",     function () awful.spawn("play -d") end,
               { description = "lutris games", group = "dmenu"}),
     awful.key({ modkey,         }, "space", function () awful.spawn("dmenu_run -i -p run:") end,
@@ -1094,7 +1099,7 @@ awful.mouse.snap.edge_enabled = false
 -- With feh
 --awful.spawn.with_shell("~/.fehbg")
 -- With script
-awful.spawn.with_shell("wallpaper-set")
+awful.spawn.with_shell("wallpaper redraw")
 
 -- Run custom signals for awesome/lain status bar
 awful.spawn.with_shell("~/.config/awesome/custom_signals.sh")
