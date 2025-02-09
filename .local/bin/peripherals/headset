@@ -266,7 +266,6 @@ function handle_error() {
 ###############
 #
 function testing() {
-	set -x
 	# Local variable to store the command in.
 	local user_command="$@"
 	local is_headset_connected=$(get_headset_info "Connected")
