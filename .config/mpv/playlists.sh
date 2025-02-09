@@ -14,31 +14,37 @@ declare playlist_profiles=(
 	game_reviews
 	gdq_speedruns
 	game_chill
+	to_watch
 )
 
 # All game videos.  Like a video game channel.
 declare games=(
-	documentary
-	dykg
-	essays
-	gdq_speedruns
-	misc
-	reviews
+	games/documentary
+	games/dykg
+	games/essays
+	games/gdq_speedruns
+	games/misc
+	games/reviews
 )
 
 # Essays and reviews.
 declare game_reviews=(
-	essays
-	reviews
+	games/essays
+	games/reviews
 )
 
 # GDQ Speedruns.
 declare gdq_speedruns=(
-	gdq_speedruns
+	games/gdq_speedruns
 )
 
 # Relaxing game videos.
 declare game_chill=(
 	dykg
 	gdq_speedruns
+)
+
+# Downloaded videos not yet watched or organized.
+declare to_watch=(
+	yt-dlp
 )
