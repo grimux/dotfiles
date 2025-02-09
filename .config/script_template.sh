@@ -17,6 +17,7 @@
 #
 ############
 
+
 ###################
 ### Fail Events ###
 ###################
@@ -25,16 +26,49 @@
 # o pipefail - script fails if command piped fails
 # x - output each line (debug)
 #
+# These events can be removed and readded to the script at any point.
+# Ex: "set +e" to remove auto exit on error, "set -e" to add it back.
+#
 set -euox pipefail
 #set -euo pipefail
 #
 ###################
 
 
+########################
+### Sourced Settings ###
+#########################################################################################
+#
+# All the variables and settings used for this script.  Sourced from Config File.
+#
+
+#########################################################################################
+
+
+
 ##############
 ### Config ###
 ##############
 #
+
+
+##########################
+### Source Config File ###
+#########################################################################################
+#
+# The variable "SCRIPT_CONFIG" is exported by the shell.  It contains various settings
+# for our scripts.
+#
+# Check if the script config file exists, if so source it.  Otherwise exit with error.
+if [ ! -f "$SCRIPT_CONFIG" ]; then
+	echo "The configuration script is missing!"
+	echo "Should be at: \"HOME/.config/script_config.sh\"."
+	exit 1
+else
+	source "$SCRIPT_CONFIG"
+fi
+#
+#########################################################################################
 
 
 ######################

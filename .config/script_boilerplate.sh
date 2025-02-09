@@ -245,3 +245,32 @@ fi
 function wait() {
 	read -p "Press any Enter to continue..."
 }
+
+
+#######################
+### Choosing Things ###
+#######################
+#
+# Choose an option using fzf.
+# Arg1 = Prompt
+# Arg2 = Array of choices.
+function choose_with_fzf() {
+	local prompt="${1}"
+	shift
+	local choices=("${@}")
+	local fzf_arguments=" \
+		--ignore-case \
+		--cycle \
+		--border=double \
+		--height=50% \
+		--layout=reverse-list \
+		--margin=5%,2%,2%,5% \
+		--info=default"
+	local fzf_label="--border-label=$prompt"
+	local fzf_preview=""
+
+	printf '%s\n' "${choices[@]}" | fzf $fzf_arguments --preview="$fzf_preview" "$fzf_label"
+
+	return
+}
+
