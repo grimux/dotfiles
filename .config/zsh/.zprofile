@@ -6,9 +6,9 @@
 export EDITOR="nvim"
 export READER="zathura"
 export FILE="ranger"
-export BROWSER="firefox"
-export MUSIC="cantata"
-#export MUSIC="alacritty --class ncmpcpp -e ncmpcpp"
+export BROWSER="brave"
+#export MUSIC="cantata"
+export MUSIC="alacritty --class ncmpcpp -e ncmpcpp"
 export PAGER="less"
 export LESS="--search-skip-screen --squeeze-blank-lines -rR --ignore-case --tabs=8"
 export FILE="pcmanfm-qt"
@@ -42,7 +42,11 @@ export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
 export DOTBARE_DIR="$HOME/.local/share/dotfiles"
 export DOTBARE_TREE="$HOME"
 
+# Wine prefix directory.
 export WINEPREFIXDIR="$HOME/.local/share/wineprefixes"
+
+# IP address for local network
+export IP=$(ip address | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p')
 
 #####################
 ### Script Config ###
