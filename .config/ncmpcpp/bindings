@@ -430,8 +430,6 @@ def_key "h"
     master_screen
 def_key "l"
     next_column
-def_key "l"
-  slave_screen
 
 
 def_key "."
