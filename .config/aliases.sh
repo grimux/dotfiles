@@ -127,6 +127,7 @@ alias test-mpv="mpv --input-test --force-window --idle"
 alias git-add-untracked="echo -e \"a\n*\nq\n\" | git add -i"
 alias sysctl="systemctl --user"
 alias slideshow-game="feh -rzsZFD 7 ~/Pictures/game-screenshots"
+alias jellyfin-restart="sudo systemctl restart jellyfin.service"
 #
 ################################################################
 
@@ -171,6 +172,10 @@ alias ytv="$yt_call/video_single"
 alias ytvp="$yt_call/video_playlist"
 alias ytu="$yt_call/video_single --batch-file $yt_to_download_file && rm $yt_to_download_file"
 alias ytua="echo $1 >> $yt_to_download_file"
+
+# Aliases for the archival yt-dlp scripts.
+alias yt-update="/mnt/s/media/youtube-test/My\ Scripts/Update.sh"
+alias yt-watchlater="/mnt/s/media/youtube-test/My\ Scripts/Update.sh -w"
 #
 ################################################################
 
