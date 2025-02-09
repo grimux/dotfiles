@@ -1,9 +1,46 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+####################
+#
+# Name: headset
+# Author: Jake
+# Description: A script to manage our bluetooth headset.
+#
+####################
 
 
-#################
-### Variables ###
-#################
+############
+### TODO ###
+############
+#
+# - Add more comments.
+# - Clean up old code.
+# - Finish implementing the `headset__mode_audio` and `headset__mode_call` functions.
+#
+############
+
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+# These events can be removed and readded to the script at any point.
+# Ex: "set +e" to remove auto exit on error, "set -e" to add it back.
+#
+#set -euxo pipefail
+set -euo pipefail
+#
+###################
+
+
+##############
+### Config ###
+##############
+#
 # Get the ID of the headset using awk.  -- Not currently used.
 # Dynamic
 #bluetooth_id=$(pactl list cards short | awk '/bluez/{print $2}')
@@ -12,14 +49,16 @@
 # hard-coded.
 headset_id="bluez_card.60_AB_D2_42_83_3F"
 
+headset_mac_address="60:AB:D2:42:83:3F"
+
 # Phrases in `pactl` for setting the headset modes.
 audio_mode="a2dp_sink"
 call_mode="handsfree_head_unit"
 
 
-#################
-### Functions ###
-#################
+######################
+### Help and Usage ###
+######################
 # Help Section
 function help_section() {
 	echo "A script to manage my bluetooth headset."
@@ -27,50 +66,128 @@ function help_section() {
 	echo "Syntax: $(basename $0) <command>"
 	echo "commands:"
 	# Space offset: 19
-	echo "     audio     : Switch to audio mode."
-	echo "     call      : Switch to call mode."
-	echo "     toggle    : Toggle current mode."
-	echo "     status    : Show current mode."
+	echo "     connect    : Connect headset."
+	echo "     disconnect : Disconnect headset."
+	echo "     toggle     : Connect/disconnect toggle."
+	echo "     sync       : Attempt to sync audio/video."
+	echo "     reset      : Reset headset."
+	echo "     audio      : Switch to audio mode (calls)."
+	echo "     call       : Switch to call mode (HiFi Audio)."
+	echo "     mode       : Change current mode (HiFi Audio or calls)."
+	echo "     status     : Show current mode."
 }
 
+function usage() {
+	return
+}
+
+
+#########################
+### Headset Functions ###
+#########################
+#
 # A function that attempts to sync audio back up with video.  It does this by switching the headset
 # on and off.
-function headset_sync() {
+function headset__sync() {
 	local current_status=$(get_headset_mode)
 
-	echo "Syncing headset..."
 	pactl set-card-profile "$headset_id" $current_status
 	pactl set-card-profile "$headset_id" off
 	pactl set-card-profile "$headset_id" $current_status
 }
 
-function headset_reset() {
-	echo "Turning it off and on again..."
+function headset__reset() {
 	pactl set-card-profile "$headset_id" $audio_mode
 	pactl set-card-profile "$headset_id" off
 	pactl set-card-profile "$headset_id" $audio_mode
 }
 
 # A function to print out a nice report for the headset's status.
-function headset_status() {
-	local current_status=$(get_headset_mode)
-	local report=""
+function headset__status() {
+	local current_mode=$(get_headset_mode)
+	local is_connected=$(get_headset_info "Connected")
+	local headset_name=$(get_headset_info "Name")
 
-	case "$current_status" in
-		"$audio_mode") report="Audio";;
-		"$call_mode") report="Call";;
-		*) report="Error with getting status."
-	esac
-
-	echo "Current mode:"
-	echo "$report"
+	echo "Name: $headset_name"
+	echo "Connected: $is_connected"
+	echo "Current mode: $current_mode"
 }
 
+# Connect the headset.
+function headset__connect() {
+	echo "Be sure the headset is powered on."
+	bluetoothctl connect $headset_mac_address
+	return
+}
+
+# Disconnect the headset.
+function headset__disconnect() {
+	bluetoothctl disconnect $headset_mac_address
+	return
+}
+
+# Toggle the connection of the headset.
+function headset__toggle_connection() {
+	local is_connected=$(get_headset_info "Connected")
+	case "$is_connected" in
+		"yes") headset__disconnect;;
+		"no") headset__connect;;
+	esac
+	return
+}
+
+# Toggle the connection of the headset.
+function headset__mode_audio() {
+	# Command to pactl.  Uses the unique id and phrase from the Variables section.
+	pactl set-card-profile "$headset_id" $call_mode
+	return
+}
+
+# Command to set the headset to call mode.
+function headset__mode_call() {
+	# Command to pactl.  Uses the unique id and phrase from the Variables section.
+	pactl set-card-profile "$headset_id" $call_mode
+	return
+}
+
+
+# A function to toggle the current headset mode.
+function headset__change_mode() {
+	local headset__mode=$(get_headset_mode)
+
+	# Tell the user of the switch
+	echo "Changing headset mode...";
+
+	# Logic to control the toggle.
+	if [ "$headset_mode" == "$audio_mode" ]; then
+		set_call_mode
+	else
+		set_audio_mode
+	fi
+
+}
+
+##############################
+### Getting Info Functions ###
+##############################
+#
 # Command to get the status of the headset.
 function get_headset_mode() {
 	pactl list cards | grep -i --after-context=20 "$headset_id" | awk '/Active Profile/{print $3}'
 }
 
+function get_headset_info() {
+	local search="$1"
+	[[ -z "$search" ]] && handle_error "missing_search_term"
+	bluetoothctl info $headset_mac_address | awk -v pat="$search" '$0~pat {print $2}'
+	return
+}
+
+
+################
+### Set Mode ###
+################
+#
 # Command to set the headset to call mode.
 function set_call_mode() {
 	# Command to pactl.  Uses the unique id and phrase from the Variables section.
@@ -89,39 +206,123 @@ function set_audio_mode() {
 	echo "Audio mode activated"
 }
 
-# A function to toggle the current headset mode.
-function toggle_headset() {
-	local headset_status=$(get_headset_mode)
 
-	# Tell the user of the switch
-	echo "Toggling headset...";
+#######################
+### Display Message ###
+#######################
+#
+function display_message() {
+	local status_code="$1"
 
-	# Logic to control the toggle.
-	if [ "$headset_status" == "$audio_mode" ]; then
-		set_call_mode
-	else
-		set_audio_mode
-	fi
+	# Display a title for notification and terminal output.
+	local title_notification="=== Headset Script ==="
+	local title_terminal="Headset Script"
 
+	# Variable for the message to display.
+	local message
+
+	# Logic to determine which type of message to send.  This depends on the
+	# argument passed by the user.
+	case "$status_code" in
+		"connect") message="Connecting to headset...";;
+		"disconnect") message="Disconnecting from headset";;
+		"call") message="Switching to call mode...";;
+		"audio") message="Switching to audio mode...";;
+		"status") message=$(headset__status);;
+		"sync") message="Syncing headset...";;
+		"mode") message="Switching mode...";;
+		"toggle") message="Toggling headset connection...";;
+		"reset") message="Resetting headset...";;
+		*) handle_error "connected_no"; exit 1;;
+	esac
+
+	echo "$title_terminal: $message"
+	notify-send "$title_notification" "$message"
+
+	return
 }
 
+######################
+### Error Handling ###
+######################
+#
+function handle_error() {
+	local error_name="$1"
+
+	local error_title="Error"
+	case "$error_name" in
+		"connected_no") echo "$error_title: the headset is not connected";;
+		"connected_yes") echo "$error_title: the headset is already connected";;
+		"missing_search_term") echo "$error_title: \`get_headset_info\` missing search term";;
+		"invalid_command") echo "$error_title: invalid command";;
+	esac
+
+	exit 1
+}
+
+
+###############
+### Testing ###
+###############
+#
+function testing() {
+	set -x
+	# Local variable to store the command in.
+	local user_command="$@"
+	local is_headset_connected=$(get_headset_info "Connected")
+
+	# Determine which commands are avalible based on whether the headset is connected or not.
+	if [ "$is_headset_connected" == "yes" ]; then
+		# Avalible commands when the headset is connected.
+		case "$user_command" in
+			"") help_section; exit;;
+			"audio") set_audio_mode;;
+			"call") set_call_mode;;
+			"disconnect") headset__disconnect;;
+			"mode") headset__change_mode;;
+			"status") headset__status;;
+			"sync") headset__sync;;
+			"toggle") headset__toggle_connection;;
+			"reset") headset__reset;;
+			*) handle_error "invalid_command";;
+		esac
+	# If the headset is disconnected.
+	else
+		# Avalible commands when the headset is disconnected.
+		case "$user_command" in
+			"") headset__status; echo; help_section; exit;;
+			"connect") headset__connect;;
+			"status") headset__status;;
+			"toggle") headset__toggle_connection;;
+			*) handle_error "invalid_command"; exit 1;;
+		esac
+	fi
+
+	display_message "$user_command"
+
+	return
+}
 
 ############
 ### Main ###
 ############
+#
 function main() {
 	# Local variable to store the command in.
 	local user_command="$@"
 
 	# Logic to control which command does what.
 	case "$user_command" in
-		"") headset_status; echo; help_section; exit;;
+		"") headset__status; echo; help_section; exit;;
 		"audio") set_audio_mode;;
 		"call") set_call_mode;;
-		"status") headset_status;;
-		"toggle") toggle_headset;;
-		"sync") headset_sync;;
-		"reset") headset_reset;;
+		"connect") headset__connect;;
+		"disconnect") headset__disconnect;;
+		"toggle") headset__toggle_connection;;
+		"status") headset__status;;
+		"mode") headset__change_mode;;
+		"sync") headset__sync;;
+		"reset") headset__reset;;
 		"help") help_section;;
 		*) echo "Invalid command."; help_section; exit 1;;
 	esac
@@ -130,4 +331,5 @@ function main() {
 #############
 ### Begin ###
 #############
-main "$@"
+testing "$@"
+#main "$@"
