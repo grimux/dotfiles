@@ -1,16 +1,171 @@
-#!/bin/sh
-# Taken from archwiki
+#!/usr/bin/env bash
+#
+####################
+#
+# Name:
+# Author:
+# Description:
+#
+####################
+
+
+############
+### TODO ###
+############
+#
+# - Add more comments.
+#
+############
+
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+# These events can be removed and readded to the script at any point.
+# Ex: "set +e" to remove auto exit on error, "set -e" to add it back.
+#
+#set -euox pipefail
+set -euo pipefail
+#
+###################
+
+
+##############
+### Config ###
+##############
+#
+readonly MUSIC_DIR="$HOME/Music"
+readonly PREVIEW_DIR="$XDG_DATA_HOME/mpd/previews"
+
+
+######################
+### Initialization ###
+######################
+#
+
+
+##################################
+### Arguments, Help, and Usage ###
+##################################
+#
+# Get arguments and set flags
+function get_arguments() {
+	while getopts ":h" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Help section
+			h) help_section; exit ;;
+
+			# What to do if the argument is missing.
+			:) echo "Missing argument"; help_section; exit 1 ;;
+
+			# Catchall.  If command is not recognized.
+			*) usage; exit 1
+		esac
+	done
+}
+
+# Help Section
+function help_section() {
+	echo "A short description of script"
+	echo
+	echo "Syntax: $(basename $0) (options) <arguments>"
+	echo "options:"
+	# Space offset: 19
+	echo "h                   : Print this help screen."
+	echo
+	echo "arguments:"
+	echo "d                   : Example."
+}
+
+# How to use the script.
+function usage() {
+	echo "$(basename $0) (options)"
+}
+
+
+#################
+### Functions ###
+#################
+#
+function send_message() {
+	return
+}
+
+function handle_error() {
+	local error_code="$1"
+	return
+}
+
+#########################
+### Testing Functions ###
+#########################
+#
+
+
+
+###############
+### Testing ###
+###############
+#
+function testing() {
+	local some_variable
+}
+
+
+########################
+### Archwiki version ###
+########################
+#
 # https://wiki.archlinux.org/title/Ncmpcpp#With_album_art
 #
 # Displays currently playing song info in a notification, with album art.
+function archwiki_version() {
+	local music_dir="$MUSIC_DIR"
+	local previewdir="$PREVIEW_DIR"
+	local filename="$(mpc --format "$music_dir"/%file% current)"
+	local previewname="$previewdir/$(mpc --format %album% current | base64).png"
+	
+	# `ffmpeg` will fail with an error if the song file has no cover metadata.  So disabling error
+	# protection is necessary for the script to continue.  The error has no effect on functionality.
+	set +e
+
+	# If the image already exists, do nothing.  If it does not, create it with `ffmpeg`.
+	[ -e "$previewname" ] || ffmpeg -y -i "$filename" -an -vf scale=128:128 "$previewname" > /dev/null 2>&1
+
+	# Re-enable error protection.
+	set -e
+	
+	# Send notification.
+	notify-send \
+		--replace-id=27072 \
+		"Now Playing" \
+		"$(mpc --format '%title% \n%artist% - %album%' current)" \
+		--icon="$previewname"
+
+	return
+}
+
+
+############
+### Main ###
+############
 #
-set -euo pipefail
+function main() {
+	local some_variable
+}
 
-music_dir="$HOME/Music"
-previewdir="$XDG_CONFIG_HOME/mpd/previews"
-filename="$(mpc --format "$music_dir"/%file% current)"
-previewname="$previewdir/$(mpc --format %album% current | base64).png"
 
-[ -e "$previewname" ] || ffmpeg -y -i "$filename" -an -vf scale=128:128 "$previewname" > /dev/null 2>&1
-
-notify-send -r 27072 "Now Playing" "$(mpc --format '%title% \n%artist% - %album%' current)" -i "$previewname"
+#############
+### Start ###
+#############
+#testing "$@"
+archwiki_version
+#main "$@"
