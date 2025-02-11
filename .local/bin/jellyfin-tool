@@ -1,0 +1,232 @@
+#!/usr/bin/env bash
+#
+####################
+#
+# Name: jellyfin-tool
+# Author: Jake
+# Description: Control and backup commands for Jellyfin.
+#
+####################
+
+
+###################
+### Fail Events ###
+###################
+# e - script stops on error
+# u - error if undefined variable
+# o pipefail - script fails if command piped fails
+# x - output each line (debug)
+#
+# These events can be removed and readded to the script at any point.
+# Ex: "set +e" to remove auto exit on error, "set -e" to add it back.
+#
+#set -euox pipefail
+set -euo pipefail
+#
+###################
+
+
+##############
+### Config ###
+##############
+#
+#--- Systemctl Service ---#
+readonly JELLYFIN_SERVICE_NAME="jellyfin.service"
+
+#--- Jellyfin Tizen (Samsung TV) ---#
+readonly SAMSUNG_55_IP="10.10.10.5"
+
+##################################
+### Arguments, Help, and Usage ###
+##################################
+#
+# Get arguments and set flags
+function get_arguments() {
+	while getopts ":h" option; do
+		case $option in
+			# What to do if there is an invalid argument.
+			\?) echo "Error: Invalid option"; exit 1 ;;
+
+			# Help section
+			h) help_section; exit ;;
+
+			# What to do if the argument is missing.
+			:) echo "Missing argument"; help_section; exit 1 ;;
+
+			# Catchall.  If command is not recognized.
+			*) usage; exit 1
+		esac
+	done
+}
+
+# Help Section
+function help_section() {
+	echo "Create a backup of Jellyfin's data"
+	echo
+	echo "Syntax: $(basename $0)"
+}
+
+# How to use the script.
+function usage() {
+	echo "$(basename $0)"
+}
+
+
+######################
+### Main Functions ###
+######################
+#
+function jellyfin__power() {
+	local server="$JELLYFIN_SERVICE_NAME"
+
+	# Use `systemctl` to check if Jellyfin is running.
+	# Returns exit code for status.
+	# 0: active
+	# 1: inactive
+	if systemctl is-active --quiet $server; then
+		echo "Shutting down $server..."
+		sudo systemctl stop $server
+	else
+		echo "Starting up $server..."
+		sudo systemctl start $server
+	fi
+
+	# Say it's done.
+	echo "Done."
+
+	return
+}
+
+function jellyfin__restart() {
+	# Local variable for Jellyfin's service name.
+	local server="$JELLYFIN_SERVICE_NAME"
+
+	# Show some output.
+	echo "Restarting $server..."
+
+	# Restart Jellyfin via `systemd`.
+	sudo systemctl restart $server
+
+	# Show some output.
+	echo "Done."
+
+	return
+}
+
+function jellyfin__tizen_install() {
+	local tv_ip="$SAMSUNG_55_IP"
+
+	# Start docker to use the updater.
+	systemctl start docker
+
+	# Sleep for a second.
+	sleep 1
+
+	# Run docker command to download and install latest Tizen build.
+	# Need ip address of TV.
+	docker run --rm ghcr.io/georift/install-jellyfin-tizen $tv_ip
+
+	# Sleep for three seconds.
+	sleep 3
+
+	# Shutdown docker.
+	systemctl stop docker.service docker.socket
+
+	return
+}
+
+function jellyfin__backup() {
+	local DATE=$(date +"%Y-%m-%d")
+	local VERSION=$(pacman -Q jellyfin-server | awk '{print $NF}')
+	local JELLYFINDIR="/var/lib/jellyfin"
+	local BACKUPDIR="/mnt/x/backups/jellyfin"
+
+	local filename="jellyfin."$DATE"_"$VERSION".tar.gz"
+
+	#cd "$BACKUPDIR"
+
+	if [ -f "$BACKUPDIR/$filename" ]; then
+		echo "Backup for today already exists.  It will be removed."
+		rm "$BACKUPDIR/$filename"
+		echo "Done."
+	fi
+
+	echo "Creating backup..."
+
+	tar \
+		--create \
+		--ignore-failed-read \
+		--absolute-names \
+		--file="$BACKUPDIR/$filename" \
+		--preserve-permissions \
+		--gzip \
+		"$JELLYFINDIR"
+
+	echo "Backup created."
+	stat "$BACKUPDIR/$filename"
+	echo "Done."
+
+	return
+}
+
+# Open Jellyfin Media Player, turn off monitor sleep, switch audio to TV.
+# This function will also wait for the media player to close, then it will
+# restore sleep and audio.
+function jellyfin__tv() {
+	echo "Starting jellyfin-tv, enjoy!"
+
+	# Disable monitor sleeping with script.
+	# `jellyfinmediaplayer` does not inhibit screen sleep so this is necessary.
+	monitor-sleep off
+
+	# Switch output sink to TV.
+	audio-device-switch "TV"
+
+	# Check if the process is already running, if so set pid.  If not, set pid to 0.
+	pid=$(pgrep --full jellyfinmediaplayer) || pid=0
+
+	# Logic to check pid state.
+	if [ "$pid" -eq 0 ]; then
+		# Start the media player in fullscreen and TV mode.
+		jellyfinmediaplayer --fullscreen --tv &
+
+		# Wait for the media player to close.
+		# `$!` is the pid of last command.
+		wait $!
+	else
+		# Wait for the media player to close.
+		# Use `tail` to watch the pid.
+		tail --pid=$pid -f /dev/null
+	fi
+
+	# Reenable monitor sleeping.
+	monitor-sleep on
+
+	# Switch output sink back to PC.
+	audio-device-switch "PC"
+
+	return
+}
+
+
+############
+### Main ###
+############
+#
+function main() {
+	local user_command="$1"
+
+	case "$user_command" in
+		backup) jellyfin__backup;;
+		tv) jellyfin__tv;;
+		power) jellyfin__power;;
+		restart) jellyfin__restart;;
+	esac
+
+	return
+}
+
+#############
+### Start ###
+#############
+main "$@"
